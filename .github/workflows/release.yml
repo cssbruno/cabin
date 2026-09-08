@@ -46,10 +46,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
+          flags=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then flags+=(--prerelease --latest=false); fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 --clobber
+            gh release edit "$RELEASE_TAG" "${flags[@]}"
           else
             gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 \
-              --verify-tag --title "Cabin ${RELEASE_TAG#v}" \
+              --verify-tag --title "Cabin ${RELEASE_TAG#v}" "${flags[@]}" \
               --notes 'Signed Cabin APK. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'
           fi
