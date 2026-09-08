@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_fan">Fan</string>
+    <string name="widget_rear_climate">Rear climate</string>
+    <string name="widget_seats">Seats</string>
+    <string name="widget_defrost">Defrost</string>
+    <string name="widget_driver">Driver</string>
+    <string name="widget_passenger">Passenger</string>
+    <string name="widget_heat">Heat</string>
+    <string name="widget_cooling">Cooling</string>
+    <string name="widget_front">Front</string>
+    <string name="widget_rear">Rear</string>
+    <string name="projection_restore">Exit full screen</string>
+    <string name="widget_drag_resize">Drag to resize widget</string>
+    <string name="widget_refresh_climate">Refresh A/C data</string>
+</resources>

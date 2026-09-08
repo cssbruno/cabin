@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_guide">Setup guide</string>
+    <string name="setup_first_time">First-time setup</string>
+    <string name="setup_close">Close guide</string>
+    <string name="setup_step">Step %1$d of %2$d</string>
+    <string name="setup_parked">I am parked and ready to configure or test</string>
+    <string name="setup_usb_title">1. Connect the USB adapter</string>
+    <string name="setup_usb_body">Plug the supported Carlinkit adapter into the head unit’s USB data port. Accept Android’s USB access prompt when it appears. Keep the adapter connected while pairing.</string>
+    <string name="setup_usb_ready">Android currently permits access to an adapter.</string>
+    <string name="setup_usb_check">Check the USB cable, data port and Android prompt. Refresh only checks the current status; it does not grant USB access.</string>
+    <string name="setup_refresh">Refresh status</string>
+    <string name="setup_phone_title">2. Pair your phone</string>
+    <string name="setup_phone_body">For wireless projection, enable Bluetooth and Wi-Fi on your phone. In the phone’s Bluetooth settings, select the adapter name and accept its pairing and CarPlay or Android Auto prompts. For wired projection, connect the phone to the adapter’s phone USB port with a data cable.</string>
+    <string name="setup_phone_ready">Phone projection is currently connected.</string>
+    <string name="setup_phone_check">Keep the phone unlocked while accepting prompts. Already paired phones appear in Settings → Phones. Connect phone resumes a phone connection you previously paused.</string>
+    <string name="setup_connect">Connect phone</string>
+    <string name="setup_connect_failed">Unable to start connection. Open Connection help and check app permissions.</string>
+    <string name="setup_audio_title">3. Choose audio routing</string>
+    <string name="setup_audio_body">Adapter audio plays through Cabin over USB. Vehicle Bluetooth sends audio directly from your phone to the car; pair the phone with the vehicle for that route. These choices are saved for the next adapter connection.</string>
+    <string name="setup_audio_adapter">Adapter audio</string>
+    <string name="setup_audio_bluetooth">Vehicle Bluetooth</string>
+    <string name="setup_microphone_body">For the adapter route, choose the microphone source. Head-unit microphone needs Android permission. Phone / adapter microphone depends on the connected hardware. Vehicle Bluetooth controls its own call audio.</string>
+    <string name="setup_mic_app">Head-unit microphone</string>
+    <string name="setup_mic_phone">Phone / adapter microphone</string>
+    <string name="setup_save_audio">Save for next connection</string>
+    <string name="setup_saving">Saving…</string>
+    <string name="setup_audio_saved">Saved. The current session is unchanged. New audio settings apply when the adapter next connects.</string>
+    <string name="setup_save_failed">Could not save audio settings. Try again.</string>
+    <string name="setup_permissions_title">4. Optional permissions</string>
+    <string name="setup_permissions_body">Open the Android app page, then Permissions. Allow Microphone to use the head-unit microphone. Allow precise Location if you choose head-unit GPS forwarding in adapter settings.</string>
+    <string name="setup_permissions_optional">You can finish without these permissions. They do not block phone projection; the phone can provide its own navigation. This guide does not enable GPS forwarding.</string>
+    <string name="setup_open_permissions">Open app permissions</string>
+    <string name="setup_permissions_unavailable">Open Android Settings → Apps → Cabin → Permissions.</string>
+    <string name="setup_done_title">5. Guide complete</string>
+    <string name="setup_done_body">Reopen this guide from Connection help or Settings → Phones. Use Connection help for observed status, permission fixes and parked audio tests.</string>
+    <string name="setup_done_unconnected">Projection is not confirmed yet. Finishing the guide does not start a connection or certify the adapter.</string>
+    <string name="setup_back">Previous step</string>
+    <string name="setup_next">Next step</string>
+    <string name="setup_finish">Finish guide</string>
+    <string name="setup_stop_tests">Stop session for audio tests</string>
+    <string name="setup_tests_idle">Audio tests require a stopped session and your parked confirmation. Stopping ends USB, phone audio and projection until you choose Connect phone.</string>
+</resources>

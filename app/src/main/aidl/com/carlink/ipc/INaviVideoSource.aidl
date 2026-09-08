@@ -6,7 +6,7 @@ import com.carlink.ipc.INaviVideoSink;
 /**
  * Producer of the CPC200 AltVideo (USB MsgType 0x2C) navigation stream.
  *
- * Implemented by zeno.carlink (carlink_native) and exposed via a bound
+ * Implemented by zeno.carlink (cabin_native) and exposed via a bound
  * Service. Consumers register sinks; the producer broadcasts demuxed frames
  * to every registered sink.
  *

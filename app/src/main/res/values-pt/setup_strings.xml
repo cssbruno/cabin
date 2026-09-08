@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_guide">Guia de configuração</string>
+    <string name="setup_first_time">Primeira configuração</string>
+    <string name="setup_close">Fechar guia</string>
+    <string name="setup_step">Etapa %1$d de %2$d</string>
+    <string name="setup_parked">Estou estacionado e pronto para configurar ou testar</string>
+    <string name="setup_usb_title">1. Conecte o adaptador USB</string>
+    <string name="setup_usb_body">Conecte o adaptador Carlinkit compatível à porta USB de dados da central. Aceite a solicitação de acesso USB do Android quando aparecer. Mantenha o adaptador conectado durante o pareamento.</string>
+    <string name="setup_usb_ready">O Android permite acesso a um adaptador neste momento.</string>
+    <string name="setup_usb_check">Verifique o cabo USB, a porta de dados e a solicitação do Android. Atualizar apenas consulta o estado atual; não concede acesso USB.</string>
+    <string name="setup_refresh">Atualizar estado</string>
+    <string name="setup_phone_title">2. Pareie seu celular</string>
+    <string name="setup_phone_body">Para projeção sem fio, ative Bluetooth e Wi-Fi no celular. Nas configurações de Bluetooth do celular, selecione o nome do adaptador e aceite as solicitações de pareamento e do CarPlay ou Android Auto. Para projeção com fio, conecte o celular à porta USB do adaptador com um cabo de dados.</string>
+    <string name="setup_phone_ready">A projeção do celular está conectada.</string>
+    <string name="setup_phone_check">Mantenha o celular desbloqueado ao aceitar as solicitações. Celulares já pareados aparecem em Configurações → Celulares. Conectar celular retoma uma conexão que você pausou.</string>
+    <string name="setup_connect">Conectar celular</string>
+    <string name="setup_connect_failed">Não foi possível iniciar a conexão. Abra Ajuda de conexão e verifique as permissões do aplicativo.</string>
+    <string name="setup_audio_title">3. Escolha a saída de áudio</string>
+    <string name="setup_audio_body">O áudio pelo adaptador passa pelo Cabin via USB. Bluetooth do veículo envia o áudio diretamente do celular para o carro; pareie o celular com o veículo para usar essa saída. As escolhas são salvas para a próxima conexão do adaptador.</string>
+    <string name="setup_audio_adapter">Áudio pelo adaptador</string>
+    <string name="setup_audio_bluetooth">Bluetooth do veículo</string>
+    <string name="setup_microphone_body">Para a saída pelo adaptador, escolha a origem do microfone. O microfone da central precisa da permissão do Android. O microfone do celular / adaptador depende do equipamento conectado. O Bluetooth do veículo controla seu próprio áudio de chamadas.</string>
+    <string name="setup_mic_app">Microfone da central</string>
+    <string name="setup_mic_phone">Microfone do celular / adaptador</string>
+    <string name="setup_save_audio">Salvar para a próxima conexão</string>
+    <string name="setup_saving">Salvando…</string>
+    <string name="setup_audio_saved">Salvo. A sessão atual continua igual. O novo áudio será aplicado na próxima conexão do adaptador.</string>
+    <string name="setup_save_failed">Não foi possível salvar o áudio. Tente novamente.</string>
+    <string name="setup_permissions_title">4. Permissões opcionais</string>
+    <string name="setup_permissions_body">Abra a página do aplicativo no Android e entre em Permissões. Permita Microfone para usar o microfone da central. Permita Localização precisa se escolher o envio do GPS da central nas configurações do adaptador.</string>
+    <string name="setup_permissions_optional">Você pode concluir sem essas permissões. Elas não bloqueiam a projeção; o celular pode fornecer sua própria navegação. Este guia não ativa o envio de GPS.</string>
+    <string name="setup_open_permissions">Abrir permissões do aplicativo</string>
+    <string name="setup_permissions_unavailable">Abra Configurações do Android → Aplicativos → Cabin → Permissões.</string>
+    <string name="setup_done_title">5. Guia concluído</string>
+    <string name="setup_done_body">Reabra este guia em Ajuda de conexão ou Configurações → Celulares. Use Ajuda de conexão para consultar o estado, corrigir permissões e testar o áudio com o carro estacionado.</string>
+    <string name="setup_done_unconnected">A projeção ainda não foi confirmada. Concluir o guia não inicia uma conexão nem certifica o adaptador.</string>
+    <string name="setup_back">Etapa anterior</string>
+    <string name="setup_next">Próxima etapa</string>
+    <string name="setup_finish">Concluir guia</string>
+    <string name="setup_stop_tests">Parar sessão para testar áudio</string>
+    <string name="setup_tests_idle">Os testes de áudio exigem a sessão parada e sua confirmação de que está estacionado. Parar encerra USB, áudio do celular e projeção até você escolher Conectar celular.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cabin</string>
+    <string name="widget_description">Connectez en arrière-plan ou ouvrez la projection compacte du téléphone</string>
+    <string name="widget_content_description">Ouvrir la projection du téléphone dans Cabin</string>
+    <string name="widget_carplay_icon">CarPlay</string>
+    <string name="widget_live">Projection en direct</string>
+    <string name="widget_carplay_title">Cabin</string>
+    <string name="widget_default_status">Prêt à connecter</string>
+    <string name="widget_connect">CONNECTER</string>
+    <string name="background_channel_name">Projection en arrière-plan</string>
+    <string name="background_channel_description">Maintient la connexion de l’adaptateur CarPlay lorsque Cabin est fermé</string>
+    <string name="background_notification_title">Cabin actif en arrière-plan</string>
+    <string name="background_stop">Déconnecter</string>
+</resources>

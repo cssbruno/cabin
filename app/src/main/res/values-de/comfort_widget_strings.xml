@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_fan">Gebläse</string>
+    <string name="widget_rear_climate">Fondklima</string>
+    <string name="widget_seats">Sitze</string>
+    <string name="widget_defrost">Enteisung</string>
+    <string name="widget_driver">Fahrer</string>
+    <string name="widget_passenger">Beifahrer</string>
+    <string name="widget_heat">Heizung</string>
+    <string name="widget_cooling">Kühlung</string>
+    <string name="widget_front">Vorne</string>
+    <string name="widget_rear">Hinten</string>
+    <string name="projection_restore">Vollbild verlassen</string>
+    <string name="widget_drag_resize">Zum Ändern der Widget-Größe ziehen</string>
+    <string name="widget_refresh_climate">Klimadaten aktualisieren</string>
+</resources>

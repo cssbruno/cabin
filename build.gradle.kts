@@ -1,4 +1,4 @@
-// Top-level build file for Carlink Native Android App
+// Top-level build file for Cabin Native Android App
 
 plugins {
     id("com.android.application") version "9.0.0" apply false

@@ -1,5 +1,5 @@
 # ============================================================================
-# Carlink Native — ProGuard / R8 Rules
+# Cabin Native — ProGuard / R8 Rules
 # ============================================================================
 # Referenced by: app/build.gradle.kts  (release { proguardFiles(...) })
 # These rules are required when isMinifyEnabled is set to true.
@@ -21,37 +21,37 @@
 # diagnostics, and any future name-based protocol usage.
 
 # Command IDs (H→A, A→H, P→A→H bidirectional commands)
--keepclassmembers class com.carlink.protocol.CommandMapping {
+-keepclassmembers class com.cabin.protocol.CommandMapping {
     <fields>;
 }
 
 # Message type IDs (header type field)
--keepclassmembers class com.carlink.protocol.MessageType {
+-keepclassmembers class com.cabin.protocol.MessageType {
     <fields>;
 }
 
 # Audio stream control commands
--keepclassmembers class com.carlink.protocol.AudioCommand {
+-keepclassmembers class com.cabin.protocol.AudioCommand {
     <fields>;
 }
 
 # Connected phone/device type identifiers
--keepclassmembers class com.carlink.protocol.PhoneType {
+-keepclassmembers class com.cabin.protocol.PhoneType {
     <fields>;
 }
 
 # Media metadata type identifiers
--keepclassmembers class com.carlink.protocol.MediaType {
+-keepclassmembers class com.cabin.protocol.MediaType {
     <fields>;
 }
 
 # Touch event action types
--keepclassmembers class com.carlink.protocol.MultiTouchAction {
+-keepclassmembers class com.cabin.protocol.MultiTouchAction {
     <fields>;
 }
 
 # Adapter filesystem paths for config files
--keepclassmembers class com.carlink.protocol.FileAddress {
+-keepclassmembers class com.cabin.protocol.FileAddress {
     <fields>;
 }
 
@@ -61,44 +61,44 @@
 # InitMode.name is passed directly to MessageSerializer.generateInitSequence()
 # which compares against literal strings "MINIMAL_ONLY", "MINIMAL_PLUS_CHANGES".
 # This is the most critical rule — obfuscation here silently breaks init.
--keepclassmembers class com.carlink.ui.settings.AdapterConfigPreference$InitMode {
+-keepclassmembers class com.cabin.ui.settings.AdapterConfigPreference$InitMode {
     <fields>;
 }
 
 # Audio source, mic source, WiFi band, call quality — these map to adapter
 # command codes. Names used in logging and config persistence.
--keepclassmembers class com.carlink.ui.settings.AudioSourceConfig {
+-keepclassmembers class com.cabin.ui.settings.AudioSourceConfig {
     <fields>;
 }
--keepclassmembers class com.carlink.ui.settings.MicSourceConfig {
+-keepclassmembers class com.cabin.ui.settings.MicSourceConfig {
     <fields>;
 }
--keepclassmembers class com.carlink.ui.settings.WiFiBandConfig {
+-keepclassmembers class com.cabin.ui.settings.WiFiBandConfig {
     <fields>;
 }
--keepclassmembers class com.carlink.ui.settings.CallQualityConfig {
+-keepclassmembers class com.cabin.ui.settings.CallQualityConfig {
     <fields>;
 }
--keepclassmembers class com.carlink.ui.settings.MediaDelayConfig {
+-keepclassmembers class com.cabin.ui.settings.MediaDelayConfig {
     <fields>;
 }
 
 # ----------------------------------------------------------------------------
 # 3. App state and logging enums
 # ----------------------------------------------------------------------------
-# CarlinkManager.State.name is serialized in getPerformanceStats().
--keepclassmembers class com.carlink.CarlinkManager$State {
+# CabinManager.State.name is serialized in getPerformanceStats().
+-keepclassmembers class com.cabin.CabinManager$State {
     <fields>;
 }
 
 # Logger.Level.name.first() extracts V/D/I/W/E for on-device log file
 # format (FileLogManager.kt:161). Wrong characters break log parsing.
--keepclassmembers class com.carlink.logging.Logger$Level {
+-keepclassmembers class com.cabin.logging.Logger$Level {
     <fields>;
 }
 
 # Logger.LogLevel — used alongside Logger.Level for preset filtering.
--keepclassmembers class com.carlink.logging.Logger$LogLevel {
+-keepclassmembers class com.cabin.logging.Logger$LogLevel {
     <fields>;
 }
 
@@ -125,11 +125,11 @@
 # ----------------------------------------------------------------------------
 # If kotlinx-serialization is added later, uncomment:
 # -keepattributes *Annotation*, InnerClasses
-# -keep,includedescriptorclasses class com.carlink.**$$serializer { *; }
-# -keepclassmembers class com.carlink.** {
+# -keep,includedescriptorclasses class com.cabin.**$$serializer { *; }
+# -keepclassmembers class com.cabin.** {
 #     *** Companion;
 # }
-# -keepclasseswithmembers class com.carlink.** {
+# -keepclasseswithmembers class com.cabin.** {
 #     kotlinx.serialization.KSerializer serializer(...);
 # }
 

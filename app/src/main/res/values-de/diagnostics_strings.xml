@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Audio- und GPS-Prüfungen</string>
+    <string name="diagnostics_description">Jede Prüfung selbst starten. Prüfungen stoppen beim Verlassen dieser Ansicht. Audio und Standort werden nicht gespeichert.</string>
+    <string name="diagnostics_parked_idle">Parken bestätigen und Projektionsverbindung stoppen, um Prüfungen zu aktivieren.</string>
+    <string name="diagnostics_audio_note">Mikrofon: 5 Sekunden Live-Pegelanzeige. Lautsprecher: leise Töne links, dann rechts mit aktueller Medienlautstärke. Andere Medien können pausieren. Prüft Android-Audio, nicht Telefon- oder Adaptermikrofon.</string>
+    <string name="diagnostics_microphone">Mikrofon testen</string>
+    <string name="diagnostics_speakers">Lautsprecher testen</string>
+    <string name="diagnostics_gps">GPS-Fix prüfen</string>
+    <string name="diagnostics_stop">Prüfung stoppen</string>
+    <string name="diagnostics_permissions">Prüfberechtigungen öffnen</string>
+    <string name="diagnostics_permissions_note">Mikrofon- und genaue Standortberechtigung sind für die jeweiligen Prüfungen nötig. Lautsprechertests benötigen keine davon.</string>
+    <string name="diagnostics_mic_level">Eingangspegel: %1$d%%</string>
+    <string name="diagnostics_mic_peak">Höchster Eingangspegel: %1$d%%</string>
+    <string name="diagnostics_clipping">Eingang hat Übersteuerung erreicht. Leiser sprechen oder vom Mikrofon entfernen.</string>
+    <string name="diagnostics_listening">Hört 5 Sekunden zu. Normal sprechen.</string>
+    <string name="diagnostics_playing">Wiedergabe links, dann rechts. Mit Prüfung stoppen vorzeitig beenden.</string>
+    <string name="diagnostics_waiting_gps">Wartet bis zu 22 Sekunden auf aktuellen GPS-Fix. Freie Sicht zum Himmel hilft.</string>
+    <string name="diagnostics_mic_finished">Prüfung beendet. Wechselnder Pegel bestätigt Audiodaten; flache Anzeige kann Stille, falschen Eingang oder Systembeschränkung bedeuten.</string>
+    <string name="diagnostics_speakers_finished">Töne gesendet. Bestätige, dass beide Seiten hörbar waren. Falls nicht, Medienlautstärke und Audioausgabe des Autoradios prüfen.</string>
+    <string name="diagnostics_gps_finished">Aktueller GPS-Fix empfangen. Gemeldete Genauigkeit: ±%1$d m. Prüft das Autoradio, nicht GPS-Übertragung zum Telefon.</string>
+    <string name="diagnostics_stopped">Prüfung gestoppt.</string>
+    <string name="diagnostics_permission_needed">Berechtigung fehlt oder wurde entzogen. Berechtigungen öffnen und erneut versuchen.</string>
+    <string name="diagnostics_unavailable">Prüfung nicht verfügbar. Für Audio Anrufe beenden und Ausgabe prüfen. Für GPS Android-Standort aktivieren und GPS-Empfänger im Autoradio prüfen.</string>
+    <string name="diagnostics_timeout">Kein Ergebnis innerhalb des Zeitlimits. Für GPS freie Sicht zum Himmel suchen und erneut versuchen. Beweist keinen Hardwarefehler.</string>
+    <string name="diagnostics_mic_no_samples">Mikrofon liefert keine Audiodaten mehr. Berechtigung und Eingang prüfen, dann erneut versuchen. Dies unterscheidet sich von stillen Audiodaten.</string>
+    <string name="diagnostics_speakers_stalled">Android-Audiowiedergabe hängt. Medienausgabe prüfen und erneut versuchen; die Wiedergabe beider Töne konnte nicht bestätigt werden.</string>
+</resources>

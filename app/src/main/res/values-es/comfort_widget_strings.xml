@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_fan">Ventilador</string>
+    <string name="widget_rear_climate">Clima trasero</string>
+    <string name="widget_seats">Asientos</string>
+    <string name="widget_defrost">Desempañado</string>
+    <string name="widget_driver">Conductor</string>
+    <string name="widget_passenger">Pasajero</string>
+    <string name="widget_heat">Calefacción</string>
+    <string name="widget_cooling">Refrigeración</string>
+    <string name="widget_front">Delantero</string>
+    <string name="widget_rear">Trasero</string>
+    <string name="projection_restore">Salir de pantalla completa</string>
+    <string name="widget_drag_resize">Arrastra para cambiar el tamaño del widget</string>
+    <string name="widget_refresh_climate">Actualizar datos del aire acondicionado</string>
+</resources>

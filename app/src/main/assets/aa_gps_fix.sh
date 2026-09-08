@@ -2,7 +2,7 @@
 # /tmp/aa_gps_fix.sh — NMEA divisor patch for ARMAndroidAuto
 # Patches double constant from broken 600000.0 to correct 60.0 at vaddr 0x55f04
 # Uses only system tools (/bin/pidof, /bin/dd, /usr/bin/printf) — zero deps.
-# Author: lvalentinzeno (carlink_native RE session, May 2026)
+# Author: lvalentinzeno (cabin_native RE session, May 2026)
 
 VADDR_HEX=55f04
 LOG=/tmp/aa_gps_fix.log

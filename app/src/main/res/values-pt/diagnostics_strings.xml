@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Testes de áudio e GPS</string>
+    <string name="diagnostics_description">Inicie cada teste manualmente. Os testes param ao sair desta tela. Nenhum áudio ou localização é salvo.</string>
+    <string name="diagnostics_parked_idle">Confirme que está estacionado e pare a conexão de projeção para habilitar os testes.</string>
+    <string name="diagnostics_audio_note">Microfone: medidor de nível por 5 segundos. Alto-falantes: tons suaves à esquerda e à direita, no volume de mídia atual. Outras mídias podem pausar durante os testes de áudio. Os testes verificam o áudio do Android, não o microfone do celular ou do adaptador.</string>
+    <string name="diagnostics_microphone">Testar microfone</string>
+    <string name="diagnostics_speakers">Testar alto-falantes</string>
+    <string name="diagnostics_gps">Verificar sinal GPS</string>
+    <string name="diagnostics_stop">Parar teste</string>
+    <string name="diagnostics_permissions">Abrir permissões dos testes</string>
+    <string name="diagnostics_permissions_note">Os testes de microfone e GPS precisam, respectivamente, das permissões de microfone e localização precisa. O teste dos alto-falantes não precisa delas.</string>
+    <string name="diagnostics_mic_level">Nível de entrada: %1$d%%</string>
+    <string name="diagnostics_mic_peak">Maior nível de entrada: %1$d%%</string>
+    <string name="diagnostics_clipping">O áudio atingiu o limite de saturação. Fale mais baixo ou afaste-se do microfone.</string>
+    <string name="diagnostics_listening">Ouvindo por 5 segundos. Fale normalmente.</string>
+    <string name="diagnostics_playing">Reproduzindo à esquerda e depois à direita. Toque em Parar teste para encerrar.</string>
+    <string name="diagnostics_waiting_gps">Aguardando uma posição GPS recente por até 22 segundos. Um local com céu aberto ajuda.</string>
+    <string name="diagnostics_mic_finished">Teste concluído. A variação do nível confirma a recepção de áudio. Um medidor parado pode indicar silêncio, entrada incorreta ou restrição do sistema.</string>
+    <string name="diagnostics_speakers_finished">Tons enviados. Confirme se ouviu os dois lados. Se não ouviu nada, verifique o volume de mídia e a saída de áudio da central.</string>
+    <string name="diagnostics_gps_finished">Posição GPS recente recebida. Precisão informada: ±%1$d m. O teste verifica a central, não o envio do GPS ao celular.</string>
+    <string name="diagnostics_stopped">Teste interrompido.</string>
+    <string name="diagnostics_permission_needed">A permissão está ausente ou foi revogada. Abra as permissões e tente novamente.</string>
+    <string name="diagnostics_unavailable">Teste indisponível. Para áudio, encerre chamadas e verifique a saída de áudio. Para GPS, ative a localização no Android e verifique se a central tem receptor GPS.</string>
+    <string name="diagnostics_timeout">Nenhum resultado dentro do prazo. Para GPS, procure um local com céu aberto e tente novamente. Isso não comprova uma falha no equipamento.</string>
+    <string name="diagnostics_mic_no_samples">O microfone parou de enviar amostras de áudio. Verifique a permissão e a entrada do microfone e tente novamente. Isso é diferente de receber áudio silencioso.</string>
+    <string name="diagnostics_speakers_stalled">A reprodução de áudio do Android parou de avançar. Verifique a saída de mídia e tente novamente. O teste não conseguiu confirmar a reprodução dos dois tons.</string>
+</resources>

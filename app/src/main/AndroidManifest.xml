@@ -4,11 +4,15 @@
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BIND_APPWIDGET" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <!-- Required by connectedDevice foreground service type on Android 14+ -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -50,18 +54,28 @@
          services have no host. -->
     <uses-feature
         android:name="android.hardware.type.automotive"
-        android:required="true" />
+        android:required="${automotiveFeatureRequired}" />
     <!-- Car App Library Templates Host. The cluster CarAppService is bound and
          surface-provisioned by com.google.android.apps.automotive.templates.host
          (live-verified on the AAOS emulator: renderer_service holds an open
-         ConnectionRecord to CarlinkClusterService). Declared required per Play AAOS
+         ConnectionRecord to CabinClusterService). Declared required per Play AAOS
          review; every certified AAOS build — including GM — ships the Templates Host. -->
     <uses-feature
         android:name="android.software.car.templates_host"
-        android:required="true" />
+        android:required="${templatesHostFeatureRequired}" />
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="false" />
+
+    <!-- TEYES TPRO's exported vehicle-data service. Package visibility is scoped;
+         no broad QUERY_ALL_PACKAGES permission. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <package android:name="com.syu.ms" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -70,9 +84,10 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CarlinkNative"
+        android:theme="@style/Theme.CabinNative"
         tools:targetApi="35">
 
         <!-- Main Activity -->
@@ -81,8 +96,9 @@
             android:exported="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.CarlinkNative.Fullscreen"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.CabinNative.Fullscreen"
             android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
@@ -117,20 +133,51 @@
                 android:value="true" />
         </activity>
 
-        <!-- Hidden CarAppActivity — exists solely to trigger Templates Host binding.
-             NOT a launcher. Lives in separate task. Excluded from recents.
-             MainActivity remains the primary UI. -->
-        <activity
-            android:name="androidx.car.app.activity.CarAppActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:taskAffinity="zeno.carlink.templates"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        <activity-alias
+            android:name="com.carlink.launcher.CarlinkHome"
+            android:targetActivity="com.cabin.MainActivity"
+            android:exported="true"
+            android:label="@string/launcher_entry_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Keep existing pinned app shortcuts working across the namespace rename. -->
+        <activity-alias
+            android:name="com.carlink.MainActivity"
+            android:targetActivity="com.cabin.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
+
+        <!-- Optional launcher widget. AAOS launchers that implement AppWidgetHost can
+             surface it; launchers without widget hosting simply ignore this receiver.
+             RemoteViews cannot host video, so tapping it opens the same MainActivity
+             SurfaceView in a compact panel over the launcher. -->
+        <receiver
+            android:name=".widget.CabinWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
             <meta-data
-                android:name="distractionOptimized"
-                android:value="true" />
-        </activity>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/cabin_widget_info" />
+        </receiver>
+
+        <!-- Widget-triggered headless projection owner. It immediately promotes itself
+             to a connected-device foreground service, keeps USB/audio/media alive with
+             no Activity, and shares its live CabinManager when MainActivity opens. -->
+        <service
+            android:name=".background.CabinProjectionService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|location|microphone" />
 
         <!-- Media3 MediaLibraryService for AAOS Integration.
              Dual intent-filter: the modern `androidx.media3.session.MediaLibraryService`
@@ -141,7 +188,7 @@
              MediaLibraryService is backwards-compatible with legacy MediaBrowserCompat
              clients, so declaring both actions covers both controller generations. -->
         <service
-            android:name=".media.CarlinkMediaBrowserService"
+            android:name=".media.CabinMediaBrowserService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback|connectedDevice"
             tools:ignore="ExportedService">
@@ -149,10 +196,10 @@
                 <action android:name="androidx.media3.session.MediaLibraryService" />
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
-            <!-- AAOS CarLauncher opt-in. Required because carlink is BOTH a launcher
+            <!-- AAOS CarLauncher opt-in. Required because cabin is BOTH a launcher
                  app and an MBS: MediaSource.isMediaTemplate() classifies dual-role
                  apps as "non media template" unless this explicit opt-in is present.
-                 Without it the homescreen Media card hides carlink, and any source
+                 Without it the homescreen Media card hides cabin, and any source
                  re-election after a force-close fails to promote zeno.carlink (which
                  in turn leaves ClusterHome with nothing to mirror). -->
             <meta-data
@@ -166,7 +213,7 @@
 
         <!-- Cluster Navigation CarAppService (headless — no UI on main display) -->
         <service
-            android:name=".cluster.CarlinkClusterService"
+            android:name=".cluster.CabinClusterService"
             android:enabled="false"
             android:exported="true"
             tools:ignore="ExportedService">
@@ -187,7 +234,7 @@
              to match.
 
              Service is exported and present in all builds; it is inert on release
-             APKs and on real devices because the gate in CarlinkManager prevents
+             APKs and on real devices because the gate in CabinManager prevents
              naviScreenInfo from being sent — without that, the adapter never emits
              0x2C and no consumer binds. Cost of leaving it exported on prod: zero. -->
         <service
@@ -203,7 +250,7 @@
              cards. Per developer.android.com/training/cars/media/configure-manifest. -->
         <meta-data
             android:name="androidx.car.app.TintableAttributionIcon"
-            android:resource="@drawable/ic_carlink_attribution" />
+            android:resource="@drawable/ic_cabin_attribution" />
 
         <!-- Required at application level — Templates Host reads minCarApiLevel
              from application metadata, not from service element -->
@@ -216,13 +263,8 @@
             android:name="com.android.automotive.application.DISTRACTION_OPTIMIZED"
             android:value="true" />
 
-        <!-- Shim for Templates Host's unregistered ClusterIconContentProvider.
-             Authority is per-flavor (manifestPlaceholder, see app/build.gradle.kts):
-               sideload → GM literal authority; Templates Host calls land here.
-               play     → applicationId-suffixed authority; avoids Play Console
-                          "authority in use by other developers" rejection.
-                          NavigationStateManager runtime guard detects the GM
-                          authority is unowned and disables AA bitmap icons. -->
+        <!-- Retain Cabin's existing private cluster-icon authority for upgrade compatibility.
+             This does not claim the manufacturer Templates Host authority. -->
         <provider
             android:name=".provider.ClusterIconShimProvider"
             android:authorities="${clusterIconAuthority}"

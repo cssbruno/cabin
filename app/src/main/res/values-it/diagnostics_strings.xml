@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Controlli audio e GPS</string>
+    <string name="diagnostics_description">Avvia ogni controllo manualmente. Si interrompono quando esci da questa schermata. Audio e posizione non vengono salvati.</string>
+    <string name="diagnostics_parked_idle">Conferma di essere parcheggiato e interrompi la proiezione per abilitare i controlli.</string>
+    <string name="diagnostics_audio_note">Microfono: indicatore del livello per 5 secondi. Altoparlanti: toni bassi a sinistra e poi a destra al volume attuale. Altri contenuti potrebbero fermarsi. Verifica l’audio Android, non il microfono del telefono o dell’adattatore.</string>
+    <string name="diagnostics_microphone">Testa microfono</string>
+    <string name="diagnostics_speakers">Testa altoparlanti</string>
+    <string name="diagnostics_gps">Verifica fix GPS</string>
+    <string name="diagnostics_stop">Interrompi controllo</string>
+    <string name="diagnostics_permissions">Apri permessi dei controlli</string>
+    <string name="diagnostics_permissions_note">Microfono e posizione precisa sono necessari per i rispettivi controlli. Gli altoparlanti non richiedono nessuno dei due.</string>
+    <string name="diagnostics_mic_level">Livello ingresso: %1$d%%</string>
+    <string name="diagnostics_mic_peak">Livello ingresso massimo: %1$d%%</string>
+    <string name="diagnostics_clipping">L’ingresso ha raggiunto la saturazione. Parla più piano o allontanati dal microfono.</string>
+    <string name="diagnostics_listening">Ascolto per 5 secondi. Parla normalmente.</string>
+    <string name="diagnostics_playing">Riproduzione a sinistra, poi a destra. Tocca Interrompi controllo per terminare prima.</string>
+    <string name="diagnostics_waiting_gps">Attesa fino a 22 secondi per un fix GPS recente. Una vista libera del cielo aiuta.</string>
+    <string name="diagnostics_mic_finished">Controllo terminato. Un livello variabile conferma campioni audio; un livello piatto può indicare silenzio, ingresso errato o restrizione di sistema.</string>
+    <string name="diagnostics_speakers_finished">Toni inviati. Conferma di aver sentito entrambi i lati. Se non hai sentito nulla, controlla volume multimediale e percorso audio dell’autoradio.</string>
+    <string name="diagnostics_gps_finished">Fix GPS recente ricevuto. Precisione segnalata: ±%1$d m. Verifica l’autoradio, non l’invio GPS al telefono.</string>
+    <string name="diagnostics_stopped">Controllo interrotto.</string>
+    <string name="diagnostics_permission_needed">Permesso mancante o revocato. Apri i permessi e riprova.</string>
+    <string name="diagnostics_unavailable">Controllo non disponibile. Per l’audio, termina le chiamate e controlla il percorso audio. Per il GPS, attiva la posizione Android e verifica che l’autoradio abbia un ricevitore GPS.</string>
+    <string name="diagnostics_timeout">Nessun risultato entro il limite. Per il GPS, cerca una vista libera del cielo e riprova. Non dimostra un guasto hardware.</string>
+    <string name="diagnostics_mic_no_samples">Il microfono ha smesso di fornire campioni. Controlla permesso e ingresso, poi riprova. È diverso dal ricevere audio silenzioso.</string>
+    <string name="diagnostics_speakers_stalled">La riproduzione audio Android si è bloccata. Controlla l’uscita multimediale e riprova; non è stato possibile confermare la riproduzione di entrambi i toni.</string>
+</resources>

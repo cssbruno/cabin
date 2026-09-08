@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Pruebas de audio y GPS</string>
+    <string name="diagnostics_description">Inicia cada prueba manualmente. Se detienen al salir de esta pantalla. No se guarda audio ni ubicación.</string>
+    <string name="diagnostics_parked_idle">Confirma que estás estacionado y detén la proyección para habilitar las pruebas.</string>
+    <string name="diagnostics_audio_note">Micrófono: medidor de nivel de 5 segundos. Altavoces: tonos suaves izquierdo y derecho al volumen multimedia actual. Otros contenidos pueden pausarse. Se prueba el audio Android, no el micrófono del teléfono o adaptador.</string>
+    <string name="diagnostics_microphone">Probar micrófono</string>
+    <string name="diagnostics_speakers">Probar altavoces</string>
+    <string name="diagnostics_gps">Comprobar posición GPS</string>
+    <string name="diagnostics_stop">Detener prueba</string>
+    <string name="diagnostics_permissions">Abrir permisos de pruebas</string>
+    <string name="diagnostics_permissions_note">Se necesitan permisos de micrófono y ubicación precisa para sus respectivas pruebas. Los altavoces no requieren ninguno.</string>
+    <string name="diagnostics_mic_level">Nivel de entrada: %1$d%%</string>
+    <string name="diagnostics_mic_peak">Nivel máximo de entrada: %1$d%%</string>
+    <string name="diagnostics_clipping">La entrada alcanzó la saturación. Habla más bajo o aléjate del micrófono.</string>
+    <string name="diagnostics_listening">Escuchando durante 5 segundos. Habla normalmente.</string>
+    <string name="diagnostics_playing">Reproduciendo izquierda y luego derecha. Toca Detener prueba para terminar antes.</string>
+    <string name="diagnostics_waiting_gps">Esperando hasta 22 segundos una posición GPS reciente. Ayuda tener el cielo despejado a la vista.</string>
+    <string name="diagnostics_mic_finished">Prueba terminada. Un nivel cambiante confirma muestras de audio; un medidor plano puede indicar silencio, entrada incorrecta o restricción del sistema.</string>
+    <string name="diagnostics_speakers_finished">Tonos enviados. Confirma que oíste ambos lados. Si no oíste nada, revisa el volumen multimedia y la ruta de audio de la unidad.</string>
+    <string name="diagnostics_gps_finished">Posición GPS reciente recibida. Precisión indicada: ±%1$d m. Comprueba la unidad, no el envío de GPS al teléfono.</string>
+    <string name="diagnostics_stopped">Prueba detenida.</string>
+    <string name="diagnostics_permission_needed">Falta un permiso o fue revocado. Abre los permisos y reintenta.</string>
+    <string name="diagnostics_unavailable">Prueba no disponible. Para audio, termina las llamadas y revisa la ruta. Para GPS, activa la ubicación Android y comprueba que la unidad tenga receptor GPS.</string>
+    <string name="diagnostics_timeout">Sin resultado a tiempo. Para GPS, busca una vista despejada del cielo y reintenta. No demuestra una avería del hardware.</string>
+    <string name="diagnostics_mic_no_samples">El micrófono dejó de entregar muestras. Revisa permiso y ruta de entrada y reintenta. Esto es distinto de recibir audio silencioso.</string>
+    <string name="diagnostics_speakers_stalled">La reproducción de Android dejó de avanzar. Revisa la salida multimedia y reintenta; no se pudo confirmar que ambos tonos se reprodujeran.</string>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_guide">Guide de configuration</string>
+    <string name="setup_first_time">Première configuration</string>
+    <string name="setup_close">Fermer le guide</string>
+    <string name="setup_step">Étape %1$d sur %2$d</string>
+    <string name="setup_parked">Je suis garé et prêt à configurer ou tester</string>
+    <string name="setup_usb_title">1. Branchez l’adaptateur USB</string>
+    <string name="setup_usb_body">Branchez l’adaptateur Carlinkit compatible sur le port USB de données de l’autoradio. Acceptez la demande d’accès USB Android. Gardez l’adaptateur branché pendant l’association.</string>
+    <string name="setup_usb_ready">Android autorise actuellement l’accès à un adaptateur.</string>
+    <string name="setup_usb_check">Vérifiez câble USB, port de données et demande Android. Actualiser vérifie seulement l’état ; il n’accorde pas l’accès USB.</string>
+    <string name="setup_refresh">Actualiser l’état</string>
+    <string name="setup_phone_title">2. Associez le téléphone</string>
+    <string name="setup_phone_body">Pour la projection sans fil, activez Bluetooth et Wi-Fi sur le téléphone. Sélectionnez l’adaptateur dans les réglages Bluetooth et acceptez l’association ainsi que CarPlay ou Android Auto. Pour la projection filaire, reliez le téléphone au port USB téléphone de l’adaptateur avec un câble de données.</string>
+    <string name="setup_phone_ready">La projection du téléphone est actuellement connectée.</string>
+    <string name="setup_phone_check">Gardez le téléphone déverrouillé pour accepter les demandes. Les téléphones associés apparaissent dans Réglages → Téléphones. Connecter le téléphone reprend une connexion suspendue.</string>
+    <string name="setup_connect">Connecter le téléphone</string>
+    <string name="setup_connect_failed">Impossible de lancer la connexion. Ouvrez Aide à la connexion et vérifiez les autorisations.</string>
+    <string name="setup_audio_title">3. Choisissez le chemin audio</string>
+    <string name="setup_audio_body">L’audio de l’adaptateur passe par Cabin en USB. Le Bluetooth du véhicule envoie le son directement du téléphone à la voiture ; associez-les pour ce choix. Ces options sont enregistrées pour la prochaine connexion de l’adaptateur.</string>
+    <string name="setup_audio_adapter">Audio de l’adaptateur</string>
+    <string name="setup_audio_bluetooth">Bluetooth du véhicule</string>
+    <string name="setup_microphone_body">Pour l’adaptateur, choisissez le microphone. Celui de l’autoradio nécessite une autorisation Android. Celui du téléphone/adaptateur dépend du matériel. Le Bluetooth du véhicule gère son propre audio d’appel.</string>
+    <string name="setup_mic_app">Microphone de l’autoradio</string>
+    <string name="setup_mic_phone">Microphone téléphone / adaptateur</string>
+    <string name="setup_save_audio">Enregistrer pour la prochaine connexion</string>
+    <string name="setup_saving">Enregistrement…</string>
+    <string name="setup_audio_saved">Enregistré. La session actuelle reste inchangée. Les nouveaux réglages audio s’appliqueront à la prochaine connexion de l’adaptateur.</string>
+    <string name="setup_save_failed">Impossible d’enregistrer les réglages audio. Réessayez.</string>
+    <string name="setup_permissions_title">4. Autorisations facultatives</string>
+    <string name="setup_permissions_body">Ouvrez la page de l’application Android, puis Autorisations. Autorisez Microphone pour celui de l’autoradio. Autorisez la localisation précise si vous choisissez la transmission GPS de l’autoradio dans les réglages de l’adaptateur.</string>
+    <string name="setup_permissions_optional">Vous pouvez terminer sans ces autorisations. Elles ne bloquent pas la projection ; le téléphone peut assurer la navigation. Ce guide n’active pas la transmission GPS.</string>
+    <string name="setup_open_permissions">Ouvrir les autorisations de l’application</string>
+    <string name="setup_permissions_unavailable">Ouvrez Réglages Android → Applications → Cabin → Autorisations.</string>
+    <string name="setup_done_title">5. Guide terminé</string>
+    <string name="setup_done_body">Rouvrez ce guide depuis Aide à la connexion ou Réglages → Téléphones. L’aide fournit l’état observé, les corrections d’autorisations et les tests audio à l’arrêt.</string>
+    <string name="setup_done_unconnected">La projection n’est pas encore confirmée. Terminer le guide ne lance pas de connexion et ne certifie pas l’adaptateur.</string>
+    <string name="setup_back">Étape précédente</string>
+    <string name="setup_next">Étape suivante</string>
+    <string name="setup_finish">Terminer le guide</string>
+    <string name="setup_stop_tests">Arrêter la session pour les tests audio</string>
+    <string name="setup_tests_idle">Les tests audio nécessitent une session arrêtée et votre confirmation de stationnement. Arrêter coupe USB, audio du téléphone et projection jusqu’à Connecter le téléphone.</string>
+</resources>

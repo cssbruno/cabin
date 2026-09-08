@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base theme -->
-    <style name="Theme.CarlinkNative" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.CabinNative" parent="android:Theme.Material.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/black</item>
@@ -13,7 +13,7 @@
          layoutInDisplayCutoutMode is set at runtime per DisplayMode instead of
          hard-coded here, so SYSTEM_UI_VISIBLE respects the cutout envelope while
          immersive modes extend into it. -->
-    <style name="Theme.CarlinkNative.Fullscreen" parent="Theme.CarlinkNative">
+    <style name="Theme.CabinNative.Fullscreen" parent="Theme.CabinNative">
         <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_language_title">Idioma</string>
+    <string name="app_language_detail">Elige el idioma de la aplicación. La pantalla se recarga para aplicar tu elección.</string>
+    <string name="app_language_system">Seguir el sistema</string>
+</resources>

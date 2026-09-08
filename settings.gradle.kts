@@ -17,5 +17,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "carlink-native"
+rootProject.name = "cabin-native"
 include(":app")

@@ -3,10 +3,10 @@ package com.carlink.ipc
 import android.os.RemoteCallbackList
 import android.os.RemoteException
 import android.os.SystemClock
-import com.carlink.BuildConfig
-import com.carlink.logging.Logger
-import com.carlink.logging.logDebug
-import com.carlink.logging.logInfo
+import com.cabin.BuildConfig
+import com.cabin.logging.Logger
+import com.cabin.logging.logDebug
+import com.cabin.logging.logInfo
 
 /**
  * Forwards CPC200-CCPA AltVideo (USB MsgType 0x2C) frames to bound consumer sinks.
@@ -38,7 +38,7 @@ class NaviVideoForwarder {
     private var frameCount = 0L
     private var lastFrameLogMs = 0L
 
-    /** Set by CarlinkManager from the same value sent in naviScreenInfo BoxSettings. */
+    /** Set by CabinManager from the same value sent in naviScreenInfo BoxSettings. */
     fun setRequestedFps(fps: Int) {
         configuredFps = fps
     }
@@ -248,7 +248,7 @@ class NaviVideoForwarder {
  * the process — there is no teardown path because the forwarder owns no
  * resources (RemoteCallbackList cleans itself via linkToDeath).
  *
- * [enabled] is the runtime gate that's set ONCE at CarlinkManager startup
+ * [enabled] is the runtime gate that's set ONCE at CabinManager startup
  * based on `BuildConfig.DEBUG && PlatformDetector.isAaosEmulator()`. When
  * false, UsbDeviceWrapper drops 0x2C frames (defense in depth — the adapter
  * shouldn't be emitting them anyway, because MessageSerializer also gates the

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_guide">Einrichtungsanleitung</string>
+    <string name="setup_first_time">Ersteinrichtung</string>
+    <string name="setup_close">Anleitung schließen</string>
+    <string name="setup_step">Schritt %1$d von %2$d</string>
+    <string name="setup_parked">Ich habe geparkt und bin bereit zum Einrichten oder Testen</string>
+    <string name="setup_usb_title">1. USB-Adapter anschließen</string>
+    <string name="setup_usb_body">Unterstützten Carlinkit-Adapter am USB-Datenanschluss des Autoradios anschließen. Androids USB-Zugriff bestätigen, sobald die Abfrage erscheint. Adapter während der Kopplung angeschlossen lassen.</string>
+    <string name="setup_usb_ready">Android erlaubt derzeit Zugriff auf einen Adapter.</string>
+    <string name="setup_usb_check">USB-Kabel, Datenanschluss und Android-Abfrage prüfen. Aktualisieren prüft nur den Status und erteilt keinen USB-Zugriff.</string>
+    <string name="setup_refresh">Status aktualisieren</string>
+    <string name="setup_phone_title">2. Telefon koppeln</string>
+    <string name="setup_phone_body">Für drahtlose Projektion Bluetooth und WLAN am Telefon aktivieren. In den Bluetooth-Einstellungen den Adapter wählen und Kopplungs- sowie CarPlay-/Android-Auto-Abfragen bestätigen. Für kabelgebundene Projektion das Telefon mit einem Datenkabel am Telefon-USB-Anschluss des Adapters anschließen.</string>
+    <string name="setup_phone_ready">Telefonprojektion ist derzeit verbunden.</string>
+    <string name="setup_phone_check">Telefon zum Bestätigen entsperrt lassen. Gekoppelte Telefone stehen unter Einstellungen → Telefone. Telefon verbinden setzt eine zuvor pausierte Verbindung fort.</string>
+    <string name="setup_connect">Telefon verbinden</string>
+    <string name="setup_connect_failed">Verbindung konnte nicht gestartet werden. Verbindungshilfe öffnen und App-Berechtigungen prüfen.</string>
+    <string name="setup_audio_title">3. Audioausgabe wählen</string>
+    <string name="setup_audio_body">Adapteraudio läuft über USB durch Cabin. Fahrzeug-Bluetooth sendet Audio direkt vom Telefon zum Auto; dafür Telefon mit dem Fahrzeug koppeln. Die Auswahl gilt bei der nächsten Adapterverbindung.</string>
+    <string name="setup_audio_adapter">Adapteraudio</string>
+    <string name="setup_audio_bluetooth">Fahrzeug-Bluetooth</string>
+    <string name="setup_microphone_body">Für Adapteraudio die Mikrofonquelle wählen. Das Autoradio-Mikrofon benötigt Android-Berechtigung. Telefon-/Adaptermikrofon hängt von der Hardware ab. Fahrzeug-Bluetooth verwaltet sein Anrufaudio selbst.</string>
+    <string name="setup_mic_app">Autoradio-Mikrofon</string>
+    <string name="setup_mic_phone">Telefon-/Adaptermikrofon</string>
+    <string name="setup_save_audio">Für nächste Verbindung speichern</string>
+    <string name="setup_saving">Wird gespeichert…</string>
+    <string name="setup_audio_saved">Gespeichert. Aktuelle Sitzung unverändert. Neue Audioeinstellungen gelten bei der nächsten Adapterverbindung.</string>
+    <string name="setup_save_failed">Audioeinstellungen konnten nicht gespeichert werden. Erneut versuchen.</string>
+    <string name="setup_permissions_title">4. Optionale Berechtigungen</string>
+    <string name="setup_permissions_body">Android-App-Seite und dann Berechtigungen öffnen. Mikrofon für das Autoradio-Mikrofon erlauben. Genauen Standort erlauben, wenn GPS-Weiterleitung in den Adaptereinstellungen gewählt wird.</string>
+    <string name="setup_permissions_optional">Du kannst ohne diese Berechtigungen abschließen. Sie blockieren die Projektion nicht; das Telefon kann selbst navigieren. Diese Anleitung aktiviert keine GPS-Weiterleitung.</string>
+    <string name="setup_open_permissions">App-Berechtigungen öffnen</string>
+    <string name="setup_permissions_unavailable">Android-Einstellungen → Apps → Cabin → Berechtigungen öffnen.</string>
+    <string name="setup_done_title">5. Anleitung abgeschlossen</string>
+    <string name="setup_done_body">Anleitung über Verbindungshilfe oder Einstellungen → Telefone erneut öffnen. Die Verbindungshilfe zeigt Status, Berechtigungshilfe und Audiotests im geparkten Fahrzeug.</string>
+    <string name="setup_done_unconnected">Projektion noch nicht bestätigt. Abschließen startet keine Verbindung und zertifiziert den Adapter nicht.</string>
+    <string name="setup_back">Vorheriger Schritt</string>
+    <string name="setup_next">Nächster Schritt</string>
+    <string name="setup_finish">Anleitung abschließen</string>
+    <string name="setup_stop_tests">Sitzung für Audiotests stoppen</string>
+    <string name="setup_tests_idle">Audiotests erfordern eine gestoppte Sitzung und Parkbestätigung. Stopp beendet USB, Telefon-Audio und Projektion bis zur Auswahl von Telefon verbinden.</string>
+</resources>

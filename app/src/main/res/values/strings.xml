@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Carlink</string>
+    <string name="app_name">Cabin</string>
+    <string name="widget_description">Connect in the background or open compact phone projection</string>
+    <string name="widget_content_description">Open Cabin phone projection</string>
+    <string name="widget_carplay_icon">CarPlay</string>
+    <string name="widget_live">Projection is live</string>
+    <string name="widget_carplay_title">Cabin</string>
+    <string name="widget_default_status">Ready to connect</string>
+    <string name="widget_connect">CONNECT</string>
+    <string name="background_channel_name">Background projection</string>
+    <string name="background_channel_description">Keeps the CarPlay adapter connected while Cabin is closed</string>
+    <string name="background_notification_title">Cabin running in background</string>
+    <string name="background_stop">Disconnect</string>
 </resources>

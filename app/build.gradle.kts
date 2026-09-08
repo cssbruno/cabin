@@ -6,30 +6,24 @@ plugins {
 }
 
 android {
-    namespace = "com.carlink"
+    namespace = "com.cabin"
     compileSdk = 36
 
-    // Owner identity for the cluster icon ContentProvider hook (issue #6).
-    // A FORK changes ONLY ownerApplicationId below — applicationId and the play-flavor
-    // cluster icon authority both follow it automatically.
+    // Keep the installed application identity so existing data and upgrades remain valid.
     val ownerApplicationId = "zeno.carlink"
-    val gmClusterIconAuthority =
-        "com.google.android.apps.automotive.templates.host.ClusterIconContentProvider"
-
-//###############################################
-//###############################################
-//###############################################
 
     defaultConfig {
         applicationId = ownerApplicationId
-        minSdk = 29
+        minSdk = 27
         targetSdk = 36
-        versionCode = 145
-        versionName = "1.0.0"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 147
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "1.0.0"
+        buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
+        manifestPlaceholders["clusterIconAuthority"] = "$ownerApplicationId.teyes.ClusterIconContentProvider"
+        buildConfigField("String", "CLUSTER_ICON_AUTHORITY", "\"$ownerApplicationId.teyes.ClusterIconContentProvider\"")
+        manifestPlaceholders["automotiveFeatureRequired"] = "false"
+        manifestPlaceholders["templatesHostFeatureRequired"] = "false"
 
-//###############################################
-//###############################################
-//###############################################
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -38,63 +32,24 @@ android {
         }
     }
 
+    signingConfigs {
+        if (providers.environmentVariable("CABIN_KEYSTORE_PATH").isPresent) {
+            create("cabinRelease") {
+                storeFile = file(providers.environmentVariable("CABIN_KEYSTORE_PATH").get())
+                storePassword = providers.environmentVariable("CABIN_KEYSTORE_PASSWORD").get()
+                keyAlias = "cabin"
+                keyPassword = providers.environmentVariable("CABIN_KEYSTORE_PASSWORD").get()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("cabinRelease")
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
-        }
-    }
-
-    // Distribution split (cluster icon ContentProvider authority — issue #6):
-    //   NOTE: this hook only renders icons on the gminfo3.7 platform (Info 3.7, AAOS 12).
-    //   The authority is orphaned/claimable on the GM VCU platform too (Bosch VCUNH1, EV/newer-ICE
-    //   on AAOS 14 — same unmodified Google Templates Host, firmware-verified), but there it is
-    //   BYPASSED: GM's VMSPlugin force-renders the cluster glyph from a maneuver-type enum
-    //   (setManeuverType), so the app bitmap is masked regardless — the shim is futile on VCUNH1.
-    //   See documents/reference/gminfo/projection/cluster_navigation.md (2026-06-06 firmware-verified).
-    //   sideload → APK, installed directly on the head unit and never uploaded to Play,
-    //              so the Play Console authority-uniqueness check never applies. Always
-    //              claims GM's Templates Host ClusterIconContentProvider authority, so the
-    //              GM hook works on-device for anyone (owner or fork).
-    //   play     → AAB for the Play Store. The OWNER (first publisher to claim the GM
-    //              authority) keeps the GM literal — Google accepts it, and GM AAOS, which
-    //              only ever calls that authority, delivers the maneuver bitmaps to the
-    //              cluster. A FORK (any other applicationId) automatically falls back to an
-    //              applicationId-derived authority so its bundle passes the Play Console
-    //              "authority in use by other developers" check. GM never calls that
-    //              derived authority, so a fork's Play build gets no maneuver icons in the
-    //              cluster — it shows text navigation only. The GM hook is permanently
-    //              fork-unavailable on Play; only the first claimant can own it.
-    //              NavigationStateManager.initialize() probes the GM literal at runtime and,
-    //              when it isn't claimable, the cluster falls back to text-only navigation
-    //              (no icons) — so the probe must stay the GM literal, NOT this per-flavor value.
-    flavorDimensions += "distribution"
-
-    productFlavors {
-        create("sideload") {
-            dimension = "distribution"
-            manifestPlaceholders["clusterIconAuthority"] = gmClusterIconAuthority
-            buildConfigField(
-                "String",
-                "CLUSTER_ICON_AUTHORITY",
-                "\"$gmClusterIconAuthority\""
-            )
-        }
-        create("play") {
-            dimension = "distribution"
-            // Owner → GM literal (icons render on the owner's Play app). Fork → its own
-            // applicationId-derived authority (uploads, but renders type-based icons).
-            val playClusterIconAuthority =
-                if (ownerApplicationId == "zeno.carlink") gmClusterIconAuthority
-                else "$ownerApplicationId.ClusterIconContentProvider"
-            manifestPlaceholders["clusterIconAuthority"] = playClusterIconAuthority
-            buildConfigField(
-                "String",
-                "CLUSTER_ICON_AUTHORITY",
-                "\"$playClusterIconAuthority\""
             )
         }
     }
@@ -128,18 +83,7 @@ android {
         // with microphone timing - Timer.scheduleAtFixedRate works reliably.
         // See documents/revisions.txt [19], [21] for history.
         disable += "DiscouragedApi"
-        disable += "Instantiatable"  // CarAppActivity from app-automotive AAR — false positive
         disable += "InvalidUsesTagAttribute"  // "navigation" is valid for Car App Library nav apps
-    }
-}
-
-// Drop playDebug — Play Console rejects debuggable bundles, and there is no
-// reason to build/install/run a debug variant tied to the play flavor. Result:
-// Build Variants panel and the Generate Signed Bundle / APK wizard show only
-// sideloadDebug, sideloadRelease, playRelease.
-androidComponents {
-    beforeVariants(selector().withName("playDebug")) { variant ->
-        variant.enable = false
     }
 }
 
@@ -204,13 +148,15 @@ dependencies {
 
     // Car App Library for AAOS cluster navigation (Templates Host)
     implementation("androidx.car.app:app:1.7.0")
-    implementation("androidx.car.app:app-automotive:1.7.0")
+    // Cabin targets Android 8.1+ head units; omit the API-29 Automotive host Activity.
 
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
     testImplementation("androidx.test:core:1.7.0")
     testImplementation("androidx.test.ext:junit:1.3.0")
+    testImplementation("androidx.compose.ui:ui-test-junit4")
+    testImplementation("androidx.test.espresso:espresso-core:3.7.0")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2026.03.00"))
@@ -218,4 +164,3 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
-

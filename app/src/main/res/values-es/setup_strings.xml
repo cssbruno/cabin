@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_guide">Guía de configuración</string>
+    <string name="setup_first_time">Primera configuración</string>
+    <string name="setup_close">Cerrar guía</string>
+    <string name="setup_step">Paso %1$d de %2$d</string>
+    <string name="setup_parked">Estoy estacionado y listo para configurar o probar</string>
+    <string name="setup_usb_title">1. Conecta el adaptador USB</string>
+    <string name="setup_usb_body">Conecta el adaptador Carlinkit compatible al puerto USB de datos de la unidad. Acepta el aviso de acceso USB de Android cuando aparezca. Mantén el adaptador conectado durante la vinculación.</string>
+    <string name="setup_usb_ready">Android permite acceder a un adaptador.</string>
+    <string name="setup_usb_check">Revisa cable USB, puerto de datos y aviso de Android. Actualizar solo comprueba el estado; no concede acceso USB.</string>
+    <string name="setup_refresh">Actualizar estado</string>
+    <string name="setup_phone_title">2. Vincula el teléfono</string>
+    <string name="setup_phone_body">Para proyección inalámbrica, activa Bluetooth y Wi-Fi en el teléfono. Selecciona el adaptador en los ajustes Bluetooth y acepta los avisos de vinculación y CarPlay o Android Auto. Para conexión por cable, conecta el teléfono al puerto USB del adaptador destinado al teléfono con un cable de datos.</string>
+    <string name="setup_phone_ready">La proyección del teléfono está conectada.</string>
+    <string name="setup_phone_check">Mantén el teléfono desbloqueado al aceptar avisos. Los teléfonos vinculados aparecen en Ajustes → Teléfonos. Conectar teléfono reanuda una conexión pausada.</string>
+    <string name="setup_connect">Conectar teléfono</string>
+    <string name="setup_connect_failed">No se pudo iniciar la conexión. Abre Ayuda de conexión y revisa los permisos.</string>
+    <string name="setup_audio_title">3. Elige la ruta de audio</string>
+    <string name="setup_audio_body">El audio del adaptador se reproduce en Cabin por USB. Bluetooth del vehículo envía el audio directamente del teléfono al coche; vincula el teléfono al vehículo para esa opción. Se guarda para la próxima conexión del adaptador.</string>
+    <string name="setup_audio_adapter">Audio del adaptador</string>
+    <string name="setup_audio_bluetooth">Bluetooth del vehículo</string>
+    <string name="setup_microphone_body">Para la ruta del adaptador, elige el micrófono. El de la unidad necesita permiso Android. El del teléfono/adaptador depende del hardware. Bluetooth del vehículo gestiona su propio audio de llamadas.</string>
+    <string name="setup_mic_app">Micrófono de la unidad</string>
+    <string name="setup_mic_phone">Micrófono del teléfono / adaptador</string>
+    <string name="setup_save_audio">Guardar para la próxima conexión</string>
+    <string name="setup_saving">Guardando…</string>
+    <string name="setup_audio_saved">Guardado. La sesión actual no cambia. Los ajustes nuevos se aplicarán cuando el adaptador vuelva a conectarse.</string>
+    <string name="setup_save_failed">No se pudieron guardar los ajustes de audio. Reintenta.</string>
+    <string name="setup_permissions_title">4. Permisos opcionales</string>
+    <string name="setup_permissions_body">Abre la página de la aplicación en Android y luego Permisos. Permite Micrófono para usar el de la unidad. Permite Ubicación precisa si eliges reenviar el GPS de la unidad en los ajustes del adaptador.</string>
+    <string name="setup_permissions_optional">Puedes terminar sin estos permisos. No bloquean la proyección; el teléfono puede navegar por sí mismo. Esta guía no activa el reenvío GPS.</string>
+    <string name="setup_open_permissions">Abrir permisos de la aplicación</string>
+    <string name="setup_permissions_unavailable">Abre Ajustes de Android → Aplicaciones → Cabin → Permisos.</string>
+    <string name="setup_done_title">5. Guía completada</string>
+    <string name="setup_done_body">Reabre la guía desde Ayuda de conexión o Ajustes → Teléfonos. Ayuda de conexión muestra el estado, soluciones de permisos y pruebas de audio estacionado.</string>
+    <string name="setup_done_unconnected">La proyección aún no está confirmada. Terminar la guía no inicia la conexión ni certifica el adaptador.</string>
+    <string name="setup_back">Paso anterior</string>
+    <string name="setup_next">Paso siguiente</string>
+    <string name="setup_finish">Terminar guía</string>
+    <string name="setup_stop_tests">Detener sesión para probar audio</string>
+    <string name="setup_tests_idle">Las pruebas de audio requieren detener la sesión y confirmar que estás estacionado. Detener finaliza USB, audio del teléfono y proyección hasta elegir Conectar teléfono.</string>
+</resources>

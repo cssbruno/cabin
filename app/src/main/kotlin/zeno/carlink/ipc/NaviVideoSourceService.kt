@@ -8,11 +8,11 @@ import com.carlink.ipc.INaviVideoSource
 import com.carlink.ipc.NaviVideoSingleton
 
 /**
- * Bound Service that exposes the carlink_native AltVideo (USB 0x2C) stream
+ * Bound Service that exposes the cabin_native AltVideo (USB 0x2C) stream
  * to other apps over AIDL.
  *
  * Class FQN deliberately lives under `zeno.carlink.ipc` (matching the
- * applicationId, not the Kotlin namespace `com.carlink`) so the ComponentName
+ * applicationId, not the Kotlin namespace `com.cabin`) so the ComponentName
  * the consumer binds to —
  *   ComponentName("zeno.carlink", "zeno.carlink.ipc.NaviVideoSourceService")
  * — resolves correctly. The AIDL interfaces themselves stay under

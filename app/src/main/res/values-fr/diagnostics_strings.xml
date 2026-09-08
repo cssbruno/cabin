@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Vérifications audio et GPS</string>
+    <string name="diagnostics_description">Lancez chaque vérification vous-même. Elles s’arrêtent en quittant cet écran. Aucun son ni emplacement n’est enregistré.</string>
+    <string name="diagnostics_parked_idle">Confirmez le stationnement et arrêtez la projection pour activer les vérifications.</string>
+    <string name="diagnostics_audio_note">Microphone : niveau en direct pendant 5 secondes. Haut-parleurs : sons faibles à gauche puis à droite au volume actuel. Les autres médias peuvent être mis en pause. Teste l’audio Android, pas le microphone du téléphone ou de l’adaptateur.</string>
+    <string name="diagnostics_microphone">Tester le microphone</string>
+    <string name="diagnostics_speakers">Tester les haut-parleurs</string>
+    <string name="diagnostics_gps">Vérifier la position GPS</string>
+    <string name="diagnostics_stop">Arrêter la vérification</string>
+    <string name="diagnostics_permissions">Ouvrir les autorisations des vérifications</string>
+    <string name="diagnostics_permissions_note">Microphone et localisation précise sont requis pour leurs tests respectifs. Les haut-parleurs ne nécessitent aucun des deux.</string>
+    <string name="diagnostics_mic_level">Niveau d’entrée : %1$d%%</string>
+    <string name="diagnostics_mic_peak">Niveau d’entrée maximal : %1$d%%</string>
+    <string name="diagnostics_clipping">L’entrée a atteint la saturation. Parlez moins fort ou éloignez-vous du microphone.</string>
+    <string name="diagnostics_listening">Écoute pendant 5 secondes. Parlez normalement.</string>
+    <string name="diagnostics_playing">Lecture à gauche puis à droite. Touchez Arrêter la vérification pour finir plus tôt.</string>
+    <string name="diagnostics_waiting_gps">Attente de 22 secondes maximum pour une position GPS récente. Une vue dégagée du ciel aide.</string>
+    <string name="diagnostics_mic_finished">Vérification terminée. Un niveau variable confirme des échantillons audio ; un niveau plat peut indiquer silence, mauvaise entrée ou restriction système.</string>
+    <string name="diagnostics_speakers_finished">Sons envoyés. Confirmez avoir entendu les deux côtés. Sinon, vérifiez le volume multimédia et le chemin audio de l’autoradio.</string>
+    <string name="diagnostics_gps_finished">Position GPS récente reçue. Précision signalée : ±%1$d m. Vérifie l’autoradio, pas la transmission GPS au téléphone.</string>
+    <string name="diagnostics_stopped">Vérification arrêtée.</string>
+    <string name="diagnostics_permission_needed">Autorisation absente ou révoquée. Ouvrez les autorisations, puis réessayez.</string>
+    <string name="diagnostics_unavailable">Vérification indisponible. Pour l’audio, terminez les appels et vérifiez le chemin audio. Pour le GPS, activez la localisation Android et vérifiez la présence d’un récepteur GPS dans l’autoradio.</string>
+    <string name="diagnostics_timeout">Aucun résultat dans le délai. Pour le GPS, cherchez une vue dégagée du ciel et réessayez. Cela ne prouve pas une panne matérielle.</string>
+    <string name="diagnostics_mic_no_samples">Le microphone ne fournit plus d’échantillons. Vérifiez l’autorisation et l’entrée, puis réessayez. Cela diffère d’un audio silencieux.</string>
+    <string name="diagnostics_speakers_stalled">La lecture audio Android n’avance plus. Vérifiez la sortie multimédia et réessayez ; la lecture des deux sons n’a pas été confirmée.</string>
+</resources>

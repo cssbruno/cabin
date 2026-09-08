@@ -1,0 +1,51 @@
+name: Release APK
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Build signed APK (no tests)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CABIN_KEYSTORE_BASE64 }}
+          CABIN_KEYSTORE_PASSWORD: ${{ secrets.CABIN_KEYSTORE_PASSWORD }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_BASE64"
+          test -n "$CABIN_KEYSTORE_PASSWORD"
+          export CABIN_KEYSTORE_PATH="$RUNNER_TEMP/cabin-release.jks"
+          trap 'rm -f "$CABIN_KEYSTORE_PATH"' EXIT
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$CABIN_KEYSTORE_PATH"
+          chmod 600 "$CABIN_KEYSTORE_PATH"
+          export CABIN_VERSION_NAME="${RELEASE_TAG#v}"
+          export CABIN_VERSION_CODE="$((1000 + RELEASE_NUMBER))"
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --no-daemon --no-configuration-cache --console=plain
+          cp app/build/outputs/apk/release/app-release.apk cabin.apk
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify cabin.apk
+          sha256sum cabin.apk > cabin.apk.sha256
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 \
+            --verify-tag --title "Cabin ${RELEASE_TAG#v}" \
+            --notes 'Signed Cabin APK. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'

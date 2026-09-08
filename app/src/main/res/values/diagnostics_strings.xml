@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostics_title">Audio and GPS checks</string>
+    <string name="diagnostics_description">Start each check yourself. Checks stop when you leave this screen. No audio or location is saved.</string>
+    <string name="diagnostics_parked_idle">Confirm you are parked and stop the projection connection to enable checks.</string>
+    <string name="diagnostics_audio_note">Microphone: a 5-second live level meter. Speakers: quiet left, then right tones at your current media volume. Other media may pause during audio checks. These check Android audio, not the phone or adapter microphone.</string>
+    <string name="diagnostics_microphone">Test microphone</string>
+    <string name="diagnostics_speakers">Test speakers</string>
+    <string name="diagnostics_gps">Check GPS fix</string>
+    <string name="diagnostics_stop">Stop check</string>
+    <string name="diagnostics_permissions">Open check permissions</string>
+    <string name="diagnostics_permissions_note">Microphone and precise location permissions are needed for their respective checks. Speaker testing needs neither.</string>
+    <string name="diagnostics_mic_level">Input level: %1$d%%</string>
+    <string name="diagnostics_mic_peak">Highest input level: %1$d%%</string>
+    <string name="diagnostics_clipping">The input reached clipping level. Try speaking more softly or moving away from the microphone.</string>
+    <string name="diagnostics_listening">Listening for 5 seconds. Speak normally.</string>
+    <string name="diagnostics_playing">Playing left, then right. Tap Stop check to end early.</string>
+    <string name="diagnostics_waiting_gps">Waiting up to 22 seconds for a fresh GPS fix. A clear view of the sky helps.</string>
+    <string name="diagnostics_mic_finished">Check finished. A changing level confirms audio samples; a flat meter can mean silence, the wrong input, or a system restriction.</string>
+    <string name="diagnostics_speakers_finished">Tones sent. Confirm that you heard both sides. If you heard nothing, check media volume and the head-unit audio route.</string>
+    <string name="diagnostics_gps_finished">Fresh GPS fix received. Reported accuracy: ±%1$d m. This checks the head unit, not GPS delivery to the phone.</string>
+    <string name="diagnostics_stopped">Check stopped.</string>
+    <string name="diagnostics_permission_needed">Permission is missing or was revoked. Open permissions, then try again.</string>
+    <string name="diagnostics_unavailable">Check unavailable. For audio, finish any call and check the audio route. For GPS, enable Android location and check that the head unit has a GPS receiver.</string>
+    <string name="diagnostics_timeout">No result before the time limit. For GPS, move to a clear view of the sky and try again. This does not prove a hardware fault.</string>
+    <string name="diagnostics_mic_no_samples">The microphone stream stopped delivering samples. Check microphone permission and the input route, then try again. This differs from receiving silent audio.</string>
+    <string name="diagnostics_speakers_stalled">Android audio playback stopped making progress. Check the media output route and try again; the test could not confirm that both tones played.</string>
+</resources>
