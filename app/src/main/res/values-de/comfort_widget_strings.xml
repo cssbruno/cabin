@@ -13,4 +13,5 @@
     <string name="projection_restore">Vollbild verlassen</string>
     <string name="widget_drag_resize">Zum Ändern der Widget-Größe ziehen</string>
     <string name="widget_refresh_climate">Klimadaten aktualisieren</string>
+    <string name="fan_select_speed">Gebläsestufe auswählen</string>
 </resources>

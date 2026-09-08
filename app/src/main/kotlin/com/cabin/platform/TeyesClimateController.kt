@@ -27,6 +27,7 @@ data class TeyesClimateState(
     val doorsAvailable: Boolean = false,
     val controlsSupported: Boolean = false,
     val controlsAvailable: Boolean = false,
+    val fanControlsAvailable: Boolean = false,
     val controlUnavailableReason: String? = null,
     val profileId: Int = 0,
     val vehicleDataLayout: TeyesVehicleDataLayout = TeyesVehicleDataLayout.LEGACY,
@@ -278,7 +279,7 @@ class TeyesClimateController(
 
     fun setFan(level: Int) {
         val safeLevel = level.coerceIn(1, 7)
-        postControl {
+        postControl(fanOnly = true) {
             if (isAlternateProfile()) {
                 command(107, intArrayOf(25, safeLevel))
             } else {
@@ -361,6 +362,7 @@ class TeyesClimateController(
                 doorsAvailable = (36..41).all { values.containsKey(it) },
                 controlsSupported = TeyesClimateControlPolicy.supports(profile),
                 controlsAvailable = TeyesClimateControlPolicy.canControl(moduleBinder != null, profile, values),
+                fanControlsAvailable = TeyesClimateControlPolicy.canControlFan(moduleBinder != null, profile, values),
                 controlUnavailableReason =
                     when {
                         moduleBinder == null -> appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected)
@@ -407,7 +409,7 @@ class TeyesClimateController(
             )
     }
 
-    private fun postControl(action: () -> Unit) {
+    private fun postControl(fanOnly: Boolean = false, action: () -> Unit) {
         if (closed.get()) return
         handler.post {
             if (closed.get()) return@post
@@ -416,7 +418,7 @@ class TeyesClimateController(
             publishState()
             // The legacy fallback did not identify its supported numeric profile.
             // Never treat an arbitrary vehicle profile as a Honda control interface.
-            if (mutableState.value.controlsAvailable) action()
+            if (if (fanOnly) mutableState.value.fanControlsAvailable else mutableState.value.controlsAvailable) action()
         }
     }
 

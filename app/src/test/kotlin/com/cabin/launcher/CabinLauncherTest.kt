@@ -374,6 +374,30 @@ class CabinLauncherTest {
         assertEquals(1, refreshes)
     }
 
+    @Test fun `fan widget selects an exact speed and retains reported feedback`() {
+        val state = androidx.compose.runtime.mutableStateOf(TeyesClimateState(
+            connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 262465, availableCodes = setOf(35), fanControlsAvailable = true, fanLevel = 3))
+        var command: Int? = null
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(250.dp).height(240.dp)) {
+                    VehicleComfortWidget(DashboardModule.FAN, state.value, ClimateWidgetActions(onFan = { command = it })) {}
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Select fan speed").performClick()
+        compose.onNodeWithContentDescription("Fan 6/7").performClick()
+        assertEquals(6, command)
+        compose.onNodeWithText("Fan 3/7").assertIsDisplayed()
+        compose.runOnIdle { state.value = state.value.copy(fanLevel = 6) }
+        compose.onNodeWithText("Fan 6/7").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Select fan speed").performClick()
+        compose.runOnIdle { state.value = state.value.copy(health = com.cabin.platform.TeyesTelemetryHealth.STALE) }
+        compose.onNodeWithContentDescription("Fan 7/7").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Increase fan speed").assertIsNotEnabled()
+    }
+
     private fun assertPage(label: String) {
         compose.onNodeWithTag("launcher-pages").assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, label))
     }

@@ -104,6 +104,19 @@ class TeyesClimateBinderIntegrationTest {
     }
 
     @Test
+    fun `fresh fan feedback permits fan commands without an AC update`() {
+        emit(1000, 1048874)
+        emit(21, 3)
+        assertTrue(controller.state.value.fanControlsAvailable)
+        assertFalse(controller.state.value.controlsAvailable)
+        controller.setFan(6)
+        controller.setAc(true)
+        drain()
+        assertEquals(listOf(105 to listOf(173, 6)), context.module.commands)
+        assertEquals(3, controller.state.value.fanLevel)
+    }
+
+    @Test
     fun `retry replaces callback owner and rejects old cached feedback`() {
         emit(1000, 1048874)
         emit(11, 1)

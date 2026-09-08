@@ -55,6 +55,9 @@ internal object TeyesClimateControlPolicy {
         }
     }
 
+    fun canControlFan(connected: Boolean, profile: Int, freshValues: Map<Int, Int>): Boolean =
+        connected && supports(profile) && freshValues[fanCode(profile)]?.let { it in 0..7 } == true
+
     fun canControl(
         connected: Boolean,
         profile: Int,

@@ -1018,7 +1018,6 @@ internal fun ClimatePanel(
     val controlsEnabled = state.controlsAvailable
     val colors = MaterialTheme.colorScheme
     val acKnown = (if (state.profileId == 262465) 30 else 24) in state.availableCodes
-    val fanKnown = (if (state.profileId == 262465) 35 else 29) in state.availableCodes
     val selectedAirflow = selectedClimateAirflow(state)
     BoxWithConstraints(modifier = modifier.background(colors.surfaceContainer)) {
         val compactHeader = maxHeight < 220.dp
@@ -1077,7 +1076,7 @@ internal fun ClimatePanel(
                         ClimateTemperature(stringResource(R.string.label_right), state.rightTemperature, state.fahrenheit)
                     }
                 }
-                if (!controlsEnabled) {
+                if (!controlsEnabled && !fanSpeedEnabled(state)) {
                     Text(
                         text = state.controlUnavailableReason ?: stringResource(R.string.climate_readonly),
                         color = colors.onSurfaceVariant,
@@ -1111,24 +1110,7 @@ internal fun ClimatePanel(
                         )
                     }
 
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FilledTonalButton(
-                            onClick = { onSetFan?.invoke((state.fanLevel - 1).coerceAtLeast(1)) },
-                            enabled = controlsEnabled && fanKnown && onSetFan != null && state.fanLevel > 1,
-                            modifier = Modifier.heightIn(min = 56.dp).semantics { contentDescription = resources.getString(R.string.climate_fan_lower) },
-                        ) { Text("−", style = MaterialTheme.typography.titleLarge) }
-                        Text(
-                            text = if (fanKnown) stringResource(R.string.climate_fan_level, state.fanLevel) else stringResource(R.string.climate_fan_unknown),
-                            color = colors.onSurface,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.widthIn(min = 80.dp),
-                        )
-                        FilledTonalButton(
-                            onClick = { onSetFan?.invoke((state.fanLevel + 1).coerceAtMost(7)) },
-                            enabled = controlsEnabled && fanKnown && onSetFan != null && state.fanLevel < 7,
-                            modifier = Modifier.heightIn(min = 56.dp).semantics { contentDescription = resources.getString(R.string.climate_fan_higher) },
-                        ) { Text("+", style = MaterialTheme.typography.titleLarge) }
-                    }
+                    FanSpeedControls(state, onSetFan, Modifier.width(280.dp))
                 }
 
                 Row(

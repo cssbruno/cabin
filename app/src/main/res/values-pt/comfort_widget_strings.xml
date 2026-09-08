@@ -13,4 +13,5 @@
     <string name="projection_restore">Sair da tela cheia</string>
     <string name="widget_drag_resize">Arraste para redimensionar o widget</string>
     <string name="widget_refresh_climate">Atualizar dados do ar-condicionado</string>
+    <string name="fan_select_speed">Selecionar velocidade do ventilador</string>
 </resources>

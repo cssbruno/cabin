@@ -67,14 +67,16 @@ internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateSt
                 }, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.primary)
                 if (!compact) Text(title, Modifier.weight(1f).padding(start = 8.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleMedium)
                 else Spacer(Modifier.weight(1f))
-                if (module == DashboardModule.CLIMATE && actions.onRefresh != null) IconButton(actions.onRefresh, Modifier.size(56.dp)) {
+                if (module in setOf(DashboardModule.CLIMATE, DashboardModule.FAN) && actions.onRefresh != null) IconButton(actions.onRefresh, Modifier.size(56.dp)) {
                     Icon(Icons.Default.Refresh, stringResource(R.string.widget_refresh_climate))
                 }
                 if (module == DashboardModule.CLIMATE) IconButton(onClimate, Modifier.size(56.dp)) {
                     Icon(Icons.Default.Tune, stringResource(R.string.climate_open_controls))
                 }
             }
-            rows.chunked(if (module == DashboardModule.SEATS) 2 else rows.size).forEach { row ->
+            if (module == DashboardModule.FAN) {
+                com.cabin.ui.FanSpeedControls(state, actions.onFan, Modifier.fillMaxWidth())
+            } else rows.chunked(if (module == DashboardModule.SEATS) 2 else rows.size).forEach { row ->
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     row.forEach { (label, value) ->
                         Column(Modifier.weight(1f).semantics(mergeDescendants = true) { contentDescription = label }, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -87,7 +89,7 @@ internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateSt
             if (module == DashboardModule.CLIMATE && !compact) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                     IconButton({ actions.onFan?.invoke((state.fanLevel - 1).coerceAtLeast(1)) }, Modifier.size(56.dp),
-                        enabled = state.controlsAvailable && known(fanCode) && actions.onFan != null && state.fanLevel > 1) {
+                        enabled = (state.fanControlsAvailable || state.controlsAvailable) && known(fanCode) && actions.onFan != null && state.fanLevel > 1) {
                         Icon(Icons.Default.Remove, stringResource(R.string.climate_fan_lower))
                     }
                     FilledTonalButton({ actions.onAc?.invoke(!state.ac) }, Modifier.heightIn(min = 56.dp),
@@ -96,7 +98,7 @@ internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateSt
                         Text(stringResource(if (!known(acCode)) R.string.climate_ac_unknown else if (state.ac) R.string.climate_ac_on else R.string.climate_ac_off), maxLines = 1)
                     }
                     IconButton({ actions.onFan?.invoke((state.fanLevel + 1).coerceAtMost(7)) }, Modifier.size(56.dp),
-                        enabled = state.controlsAvailable && known(fanCode) && actions.onFan != null && state.fanLevel < 7) {
+                        enabled = (state.fanControlsAvailable || state.controlsAvailable) && known(fanCode) && actions.onFan != null && state.fanLevel < 7) {
                         Icon(Icons.Default.Add, stringResource(R.string.climate_fan_higher))
                     }
                 }

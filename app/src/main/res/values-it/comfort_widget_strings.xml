@@ -13,4 +13,5 @@
     <string name="projection_restore">Esci da schermo intero</string>
     <string name="widget_drag_resize">Trascina per ridimensionare il widget</string>
     <string name="widget_refresh_climate">Aggiorna i dati del climatizzatore</string>
+    <string name="fan_select_speed">Seleziona la velocità della ventola</string>
 </resources>

@@ -13,4 +13,5 @@
     <string name="projection_restore">Salir de pantalla completa</string>
     <string name="widget_drag_resize">Arrastra para cambiar el tamaño del widget</string>
     <string name="widget_refresh_climate">Actualizar datos del aire acondicionado</string>
+    <string name="fan_select_speed">Seleccionar velocidad del ventilador</string>
 </resources>
