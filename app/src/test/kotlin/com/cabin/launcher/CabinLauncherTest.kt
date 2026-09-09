@@ -229,7 +229,7 @@ class CabinLauncherTest {
         assertFalse(manager.projectionSessionRequested)
         compose.onNodeWithContentDescription("Edit layout").performClick()
         compose.onNodeWithTag("module-PROJECTION-1").performClick()
-        compose.onNodeWithText("2 × 2").performClick()
+        compose.onNodeWithText("2 × 2").performScrollTo().performClick()
         compose.onAllNodesWithText("Done").onLast().performClick()
         compose.onNodeWithContentDescription("Done").performClick()
         val after = compose.onNodeWithTag("persistent-projection-frame").fetchSemanticsNode().boundsInRoot
@@ -396,6 +396,33 @@ class CabinLauncherTest {
         compose.runOnIdle { state.value = state.value.copy(health = com.cabin.platform.TeyesTelemetryHealth.STALE) }
         compose.onNodeWithContentDescription("Fan 7/7").assertDoesNotExist()
         compose.onNodeWithContentDescription("Increase fan speed").assertIsNotEnabled()
+    }
+
+    @Test fun `long press drag swaps widgets and a second drag uses their new positions`() {
+        compose.setContent {
+            CabinTheme {
+                CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() })
+            }
+        }
+        compose.onNodeWithTag("page-dot-1").performClick()
+        val first = compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot
+        val second = compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("module-RPM-4").performTouchInput {
+            down(center)
+            advanceEventTime(800)
+            moveBy(androidx.compose.ui.geometry.Offset(second.left - first.left, 0f), 500)
+            up()
+        }
+        assertEquals(second.left, compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot.left, 2f)
+        assertEquals(first.left, compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot.left, 2f)
+        compose.onNodeWithTag("module-RPM-4").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset(first.left - second.left, 0f), 500)
+            up()
+        }
+        assertEquals(first.left, compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot.left, 2f)
+        compose.onNodeWithContentDescription("Done").performClick()
+        screenshot("launcher-fine-grid")
     }
 
     private fun assertPage(label: String) {

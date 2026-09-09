@@ -47,8 +47,8 @@ internal fun WidgetResizeHandle(tile: DashboardTile, cellWidth: Dp, cellHeight: 
                 onDrag = { change, amount ->
                     change.consume()
                     delta += amount
-                    preview = (start.width + (delta.x / cell.x).roundToInt()).coerceIn(1, 4 - start.x) to
-                        (start.height + (delta.y / cell.y).roundToInt()).coerceIn(1, 2 - start.y)
+                    preview = (start.width + (delta.x / cell.x).roundToInt()).coerceIn(1, DASHBOARD_COLUMNS - start.x) to
+                        (start.height + (delta.y / cell.y).roundToInt()).coerceIn(1, DASHBOARD_ROWS - start.y)
                 })
         }, contentAlignment = Alignment.Center) {
         val size = preview

@@ -18,7 +18,7 @@ class DashboardLayoutTest {
     @Before fun reset() { context.getSharedPreferences("carlink_dashboard_v1", 0).edit().clear().commit() }
     @Test fun `every module supports all grid sizes and persists its dimensions`() {
         DashboardModule.entries.forEach { module ->
-            for (height in 1..2) for (width in 1..4) {
+            for (height in 1..DASHBOARD_ROWS) for (width in 1..DASHBOARD_COLUMNS) {
                 reset()
                 val p = prefs()
                 if (module == DashboardModule.PROJECTION) {
@@ -36,26 +36,50 @@ class DashboardLayoutTest {
     @Test fun `corner resizing rejects overlap and never edits CarPlay`() {
         val p = prefs()
         val original = p.state.value
-        assertFalse(p.resizeInPlace(4, 3, 1))
+        assertFalse(p.resizeInPlace(4, 5, 2))
         assertFalse(p.resizeInPlace(1, 2, 2))
         assertEquals(original, p.state.value)
         assertTrue(p.resizeInPlace(5, 1, 1))
         assertEquals(original.tiles.filter { it.id != 5 }, p.state.value.tiles.filter { it.id != 5 })
-        assertEquals(2, p.state.value.tiles.first { it.id == 5 }.x)
+        assertEquals(4, p.state.value.tiles.first { it.id == 5 }.x)
         assertEquals(1, prefs().state.value.tiles.first { it.id == 5 }.width)
+    }
+
+    @Test fun `legacy grid migrates once without changing relative placement`() {
+        context.getSharedPreferences("carlink_dashboard_v1", 0).edit().putString("0.1.LEGACY",
+            """{"pages":1,"tiles":[{"id":1,"kind":"SPEED","page":0,"x":2,"y":1,"w":2,"h":1}]}""").commit()
+        val p = prefs()
+        assertEquals(DashboardTile(1, DashboardModule.SPEED, 0, 4, 2, 4, 2), p.state.value.tiles.single())
+        assertTrue(p.resizeInPlace(1, 3, 1))
+        assertEquals(p.state.value, prefs().state.value)
+    }
+
+    @Test fun `drop swaps widgets and rejects CarPlay displacement and invalid drops`() {
+        val p = prefs()
+        val before = p.state.value
+        assertTrue(p.drop(4, 4, 0))
+        assertEquals(4, p.state.value.tiles.first { it.id == 4 }.x)
+        assertEquals(0, p.state.value.tiles.first { it.id == 5 }.x)
+        assertEquals(p.state.value, prefs().state.value)
+        val swapped = p.state.value
+        assertFalse(p.drop(1, 1, 0))
+        assertFalse(p.drop(2, 0, 0))
+        assertFalse(p.drop(4, 8, 0))
+        assertEquals(swapped, p.state.value)
+        assertEquals(before.tiles.first { it.id == 1 }, swapped.tiles.first { it.id == 1 })
     }
 
     @Test fun `grid rejects overlap overflow and duplicate projection`() {
         val defaults = DashboardLayout()
         assertTrue(validDashboard(defaults))
         assertFalse(validDashboard(defaults.copy(tiles = defaults.tiles + DashboardTile(20, DashboardModule.CLOCK, 0, 0, 0, 1, 1))))
-        assertFalse(validDashboard(defaults.copy(tiles = listOf(DashboardTile(1, DashboardModule.MEDIA, 0, 3, 1, 2, 1)))))
+        assertFalse(validDashboard(defaults.copy(tiles = listOf(DashboardTile(1, DashboardModule.MEDIA, 0, 7, 3, 2, 1)))))
         assertFalse(validDashboard(defaults.copy(tiles = defaults.tiles + DashboardTile(21, DashboardModule.PROJECTION, 2, 0, 0, 2, 2), pages = 3)))
     }
     @Test fun `resize retains neighbors and failed mutations retain layout`() {
         val p = prefs()
         val before = p.state.value
-        assertFalse(p.resize(1, 4, 2))
+        assertFalse(p.resize(1, 8, 4))
         assertEquals(before, p.state.value)
         assertTrue(p.resize(1, 2, 2))
         assertEquals(before.tiles.filter { it.id != 1 }, p.state.value.tiles.filter { it.id != 1 })

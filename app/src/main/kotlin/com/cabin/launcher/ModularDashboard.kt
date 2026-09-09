@@ -12,6 +12,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.zIndex
+import kotlin.math.roundToInt
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -83,6 +89,8 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     var editing by rememberSaveable { mutableStateOf(false) }
     var selected by remember { mutableStateOf<Int?>(null) }
     var adding by remember { mutableStateOf(false) }
+    var draggedId by remember { mutableStateOf<Int?>(null) }
+    var dragOffset by remember { mutableStateOf(Offset.Zero) }
     var noRoom by remember { mutableStateOf(false) }
     val onPlacement by rememberUpdatedState(onProjectionPlacement)
     val host = remember { AppWidgetHost(context.applicationContext, HOST_ID) }
@@ -98,7 +106,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
         onDispose { lifecycle.removeObserver(observer); try { host.stopListening() } catch (_: RuntimeException) { } }
     }
     DisposableEffect(Unit) { onDispose { onPlacement(null) } }
-    LaunchedEffect(moving) { if (moving) { editing = false; selected = null; adding = false } }
+    LaunchedEffect(moving) { if (moving) { draggedId = null; dragOffset = Offset.Zero; editing = false; selected = null; adding = false } }
     fun result(success: Boolean) { noRoom = !success }
     BoxWithConstraints(Modifier.fillMaxSize()) {
     val showVehicle = maxWidth >= 680.dp
@@ -157,12 +165,39 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
         }
         if (noRoom) TextButton({ noRoom = false }) { Text(stringResource(R.string.module_no_room)) }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().testTag("dashboard-grid")) {
-            val cellWidth = maxWidth / 4
-            val cellHeight = maxHeight / 2
+            val cellWidth = maxWidth / DASHBOARD_COLUMNS
+            val cellHeight = maxHeight / DASHBOARD_ROWS
+            val gridDensity = androidx.compose.ui.platform.LocalDensity.current
+            val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            if (editing && !compact) androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
+                for (x in 0..DASHBOARD_COLUMNS) {
+                    val px = size.width * x / DASHBOARD_COLUMNS
+                    drawLine(gridColor, Offset(px, 0f), Offset(px, size.height))
+                }
+                for (y in 0..DASHBOARD_ROWS) {
+                    val py = size.height * y / DASHBOARD_ROWS
+                    drawLine(gridColor, Offset(0f, py), Offset(size.width, py))
+                }
+            }
             displayed.forEach { tile ->
                 key(tile.id) {
+                    val currentTile by rememberUpdatedState(tile)
+                    val editingNow by rememberUpdatedState(editing)
+                    var dragStart by remember { mutableStateOf(tile) }
+                    fun startDrag() { onParkedAction { editing = true; dragStart = currentTile; draggedId = tile.id; dragOffset = Offset.Zero } }
+                    fun finishDrag() {
+                        if (draggedId == tile.id) {
+                            val x = (dragStart.x + (dragOffset.x / with(gridDensity) { cellWidth.toPx() }).roundToInt()).coerceIn(0, DASHBOARD_COLUMNS - dragStart.width)
+                            val y = (dragStart.y + (dragOffset.y / with(gridDensity) { cellHeight.toPx() }).roundToInt()).coerceIn(0, DASHBOARD_ROWS - dragStart.height)
+                            onParkedAction { result(prefs.drop(tile.id, x, y)) }
+                        }
+                        draggedId = null; dragOffset = Offset.Zero
+                    }
+                    fun cancelDrag() { draggedId = null; dragOffset = Offset.Zero }
                     val tileModifier = Modifier.offset(cellWidth * if (compact) 0 else tile.x, cellHeight * if (compact) 0 else tile.y)
-                        .size((cellWidth * if (compact) 4 else tile.width).minus(4.dp).coerceAtLeast(1.dp), (cellHeight * if (compact) 2 else tile.height).minus(4.dp).coerceAtLeast(1.dp))
+                        .offset { if (draggedId == tile.id) IntOffset(dragOffset.x.roundToInt(), dragOffset.y.roundToInt()) else IntOffset.Zero }
+                        .zIndex(if (draggedId == tile.id) 1f else 0f)
+                        .size((cellWidth * if (compact) DASHBOARD_COLUMNS else tile.width).minus(4.dp).coerceAtLeast(1.dp), (cellHeight * if (compact) DASHBOARD_ROWS else tile.height).minus(4.dp).coerceAtLeast(1.dp))
                         .clipToBounds().testTag("module-${tile.module.name}-${tile.id}")
                     if (tile.module == DashboardModule.PROJECTION) {
                         Box(tileModifier.onGloballyPositioned { onPlacement(ProjectionModulePlacement(it.boundsInRoot(), editing)) }) {
@@ -173,8 +208,18 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                             }
                         }
                     } else {
-                        Card(tileModifier.then(if (!editing && !moving) Modifier.pointerInput(tile.id, prefs) {
-                            detectTapGestures(onLongPress = { onParkedAction { editing = true } })
+                        Card(tileModifier.then(if (!moving) Modifier.pointerInput(tile.id, prefs, cellWidth, cellHeight, compact) {
+                            if (compact) detectTapGestures(onLongPress = { onParkedAction { editing = true } })
+                            else {
+                                var ownsDrag = false
+                                detectDragGesturesAfterLongPress(
+                                    onDragStart = { ownsDrag = !editingNow; if (ownsDrag) startDrag() },
+                                    onDragEnd = { if (ownsDrag) finishDrag(); ownsDrag = false },
+                                    onDragCancel = { if (ownsDrag) cancelDrag(); ownsDrag = false },
+                                ) { change, amount ->
+                                    if (ownsDrag && draggedId == tile.id) { change.consume(); dragOffset += amount }
+                                }
+                            }
                         } else Modifier), shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))) {
@@ -185,7 +230,13 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                                 } else DashboardModuleContent(tile.module, manager, vehicle, onVehicle, climateActions)
                                 if (editing) {
                                     Box(Modifier.fillMaxSize().border(2.dp, MaterialTheme.colorScheme.primary)
-                                        .clickable { selected = tile.id })
+                                        .clickable { selected = tile.id }
+                                        .then(if (!compact && !moving) Modifier.pointerInput(tile.id, prefs, cellWidth, cellHeight) {
+                                            detectDragGestures(onDragStart = { startDrag() }, onDragEnd = { finishDrag() }, onDragCancel = { cancelDrag() }) { change, amount ->
+                                                if (draggedId == tile.id) { change.consume(); dragOffset += amount }
+                                            }
+                                        } else Modifier))
+                                    Icon(Icons.Default.OpenWith, null, Modifier.align(Alignment.TopStart).padding(12.dp).size(24.dp), tint = MaterialTheme.colorScheme.primary)
                                     if (!compact && !moving) WidgetResizeHandle(tile, cellWidth, cellHeight,
                                         onResize = { width, height -> onParkedAction { result(prefs.resizeInPlace(tile.id, width, height)) } },
                                         modifier = Modifier.align(Alignment.BottomEnd))
@@ -205,7 +256,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                 Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(R.string.module_size))
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        val sizes = (1..2).flatMap { h -> (1..4).map { w -> w to h } }
+                        val sizes = (1..DASHBOARD_ROWS).flatMap { h -> (1..DASHBOARD_COLUMNS).map { w -> w to h } }
                         sizes.forEach { (w, h) -> FilterChip(selected = tile.width == w && tile.height == h, onClick = { result(prefs.resize(id, w, h)) }, modifier = Modifier.heightIn(min = 56.dp), label = { Text("$w × $h") }) }
                     }
                     Text(stringResource(R.string.module_move))
