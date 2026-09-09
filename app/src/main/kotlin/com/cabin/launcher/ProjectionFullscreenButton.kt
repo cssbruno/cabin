@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material3.Icon
@@ -25,6 +26,15 @@ internal fun ProjectionFullscreenButton(fullscreen: Boolean, onClick: () -> Unit
             Icon(if (fullscreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
                 stringResource(if (fullscreen) R.string.projection_restore else R.string.main_fullscreen),
                 Modifier.size(22.dp), tint = Color.White.copy(alpha = 0.8f))
+        }
+    }
+}
+
+@Composable
+internal fun ProjectionSettingsButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    IconButton(onClick, modifier.size(56.dp).testTag("projection-settings")) {
+        Box(Modifier.size(36.dp).background(Color.Black.copy(alpha = 0.32f), CircleShape), contentAlignment = Alignment.Center) {
+            Icon(Icons.Default.Settings, stringResource(R.string.settings_carplay), Modifier.size(20.dp), tint = Color.White.copy(alpha = 0.8f))
         }
     }
 }

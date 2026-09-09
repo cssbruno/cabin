@@ -26,8 +26,8 @@ enum class SettingsTab(
     val icon: ImageVector,
 ) {
     // Order determines tab display order in the navigation rail.
-    PHONES(com.cabin.R.string.settings_tab_phones, Icons.Default.PhoneAndroid),
-    CONTROL(com.cabin.R.string.settings_tab_control, Icons.Default.Settings),
+    PHONES(com.cabin.R.string.launcher_page_carplay, Icons.Default.PhoneAndroid),
+    CONTROL(com.cabin.R.string.settings_tab_launcher, Icons.Default.Settings),
     TEYES(com.cabin.R.string.settings_tab_teyes, Icons.Default.Settings),
     LOGS(com.cabin.R.string.settings_tab_logs, Icons.AutoMirrored.Filled.Article),
     ;

@@ -2,6 +2,7 @@ package com.cabin.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.HorizontalDivider
@@ -26,7 +27,7 @@ import com.cabin.platform.ProjectionPreferences
 import com.cabin.platform.ProjectionPreferencesState
 
 @Composable
-internal fun ProjectionPreferencesSection() {
+internal fun ProjectionPreferencesSection(showMeasurements: Boolean = true) {
     val context = LocalContext.current
     val preferences = remember(context.applicationContext) { ProjectionPreferences.getInstance(context) }
     val state by preferences.state.collectAsStateWithLifecycle()
@@ -34,6 +35,7 @@ internal fun ProjectionPreferencesSection() {
     val measurementUnit by measurementPreferences.unit.collectAsStateWithLifecycle()
     ProjectionPreferencesContent(
         state = state,
+        showMeasurements = showMeasurements,
         isTeyes = BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE,
         onFocusControls = preferences::setFocusControls,
         onVehicleHud = preferences::setVehicleHud,
@@ -57,17 +59,20 @@ internal fun ProjectionPreferencesContent(
     onControlSide: (ProjectionControlSide) -> Unit = {},
     measurementUnit: MeasurementUnit = MeasurementUnit.SYSTEM,
     onMeasurementUnit: (MeasurementUnit) -> Unit = {},
+    showMeasurements: Boolean = true,
 ) {
     SettingsSection(
         title = stringResource(R.string.projection_preferences),
-        description = stringResource(R.string.bu_projection_description),
+        description = null,
     ) {
-        Text(stringResource(R.string.bu_units_title), style = MaterialTheme.typography.titleMedium)
-        Text(stringResource(R.string.bu_units_description), style = MaterialTheme.typography.bodyMedium)
-        MeasurementUnit.entries.forEach { option ->
-            SettingsChoice(measurementUnitLabel(option), measurementUnit == option, { onMeasurementUnit(option) })
+        if (showMeasurements) {
+            Text(stringResource(R.string.bu_units_title), style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.bu_units_description), style = MaterialTheme.typography.bodyMedium)
+            MeasurementUnit.entries.forEach { option ->
+                SettingsChoice(measurementUnitLabel(option), measurementUnit == option, { onMeasurementUnit(option) })
+            }
+            HorizontalDivider()
         }
-        HorizontalDivider()
         SettingsToggle(
             label = stringResource(R.string.projection_focus),
             checked = state.focusControls,
@@ -75,8 +80,12 @@ internal fun ProjectionPreferencesContent(
             onChange = onFocusControls,
         )
         Text(stringResource(R.string.projection_controls_position), style = MaterialTheme.typography.titleMedium)
-        SettingsChoice(stringResource(R.string.projection_left_side), state.controlSide == ProjectionControlSide.LEFT, { onControlSide(ProjectionControlSide.LEFT) })
-        SettingsChoice(stringResource(R.string.projection_right_side), state.controlSide == ProjectionControlSide.RIGHT, { onControlSide(ProjectionControlSide.RIGHT) })
+        androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(ProjectionControlSide.LEFT to R.string.projection_left_side, ProjectionControlSide.RIGHT to R.string.projection_right_side).forEach { (side, label) ->
+                androidx.compose.material3.FilterChip(selected = state.controlSide == side, onClick = { onControlSide(side) },
+                    label = { Text(stringResource(label)) }, modifier = Modifier.heightIn(min = 56.dp))
+            }
+        }
         Text(stringResource(R.string.projection_controls_position_detail), style = MaterialTheme.typography.bodyMedium)
         if (isTeyes) {
             HorizontalDivider()
@@ -134,3 +143,18 @@ internal fun measurementUnitLabel(unit: MeasurementUnit): String = stringResourc
         MeasurementUnit.IMPERIAL -> R.string.bu_units_imperial
     },
 )
+
+@Composable
+internal fun MeasurementSettingsSection() {
+    val context = LocalContext.current
+    val preferences = remember(context.applicationContext) { MeasurementPreferences.get(context) }
+    val unit by preferences.unit.collectAsStateWithLifecycle()
+    SettingsSection(stringResource(R.string.bu_units_title)) {
+        androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            MeasurementUnit.entries.forEach { option ->
+                androidx.compose.material3.FilterChip(selected = unit == option, onClick = { preferences.select(option) },
+                    label = { Text(measurementUnitLabel(option)) }, modifier = Modifier.heightIn(min = 56.dp))
+            }
+        }
+    }
+}

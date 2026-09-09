@@ -1,0 +1,5 @@
+<resources>
+    <string name="settings_tab_launcher">Launcher</string>
+    <string name="settings_carplay_controls">Tela e controles</string>
+    <string name="settings_carplay">Configurações do CarPlay</string>
+</resources>

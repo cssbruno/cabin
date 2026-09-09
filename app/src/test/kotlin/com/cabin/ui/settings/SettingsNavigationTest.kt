@@ -69,7 +69,7 @@ class SettingsNavigationTest {
                 }
             }
         }
-        compose.onNodeWithText("Control").performScrollTo().assertIsDisplayed().assertIsSelected()
+        compose.onNodeWithText("Launcher").performScrollTo().assertIsDisplayed().assertIsSelected()
         compose.onNodeWithText("Back").assertIsDisplayed()
         compose.onNodeWithText("Exit app").assertIsDisplayed()
         saveScreenshot("settings-short-landscape")
@@ -87,7 +87,7 @@ class SettingsNavigationTest {
                 }
             }
         }
-        compose.onNodeWithText("Control").assertIsDisplayed().assertIsSelected()
+        compose.onNodeWithText("Launcher").assertIsDisplayed().assertIsSelected()
         compose.onNodeWithContentDescription("Back to Cabin").assertIsDisplayed()
         compose.onNodeWithText("Exit app").assertIsDisplayed().performClick()
         compose.onNodeWithText("Stop and exit").assertIsDisplayed()
@@ -95,6 +95,22 @@ class SettingsNavigationTest {
         saveScreenshot("settings-narrow-light")
         compose.onNodeWithContentDescription("Back to Cabin").performClick()
         compose.runOnIdle { assertEquals(1, backs) }
+    }
+
+    @Test fun `CarPlay groups connection and display controls inside launcher settings`() {
+        compose.setContent {
+            CabinTheme(darkTheme = true) {
+                SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.PHONES, embedded = true)
+            }
+        }
+        compose.onNodeWithText("CarPlay").assertIsSelected()
+        compose.onNodeWithText("Display & controls").assertIsSelected()
+        saveScreenshot("settings-carplay-integrated")
+        compose.onNodeWithText("Connection").performClick()
+        compose.onNodeWithText("Connection").assertIsSelected()
+        saveScreenshot("settings-carplay-connection")
+        compose.onNodeWithText("Display & controls").performClick()
+        compose.onNodeWithText("Display & controls").assertIsSelected()
     }
 
     private fun saveScreenshot(name: String) {

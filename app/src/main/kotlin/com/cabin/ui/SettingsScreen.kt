@@ -117,6 +117,7 @@ fun SettingsScreen(
     onReinitForDisplayMode: (DisplayMode) -> Unit = {},
     initialTab: SettingsTab = SettingsTab.PHONES,
     vehicleState: com.cabin.platform.TeyesClimateState = com.cabin.platform.TeyesClimateState(),
+    embedded: Boolean = false,
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(initialTab.takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES) }
     val context = LocalContext.current
@@ -158,13 +159,13 @@ fun SettingsScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = colorScheme.surface,
+        color = colorScheme.surfaceContainerLowest,
     ) {
         BoxWithConstraints(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.safeDrawing),
+                    .then(if (embedded) Modifier else Modifier.windowInsetsPadding(WindowInsets.safeDrawing)),
         ) {
             val horizontalNavigation = useHorizontalSettingsNavigation(maxWidth.value)
             val navigateBack = {
@@ -178,7 +179,7 @@ fun SettingsScreen(
             val content: @Composable () -> Unit = {
                 when (selectedTab) {
                     SettingsTab.CONTROL -> ControlTabContent(cabinManager, onResetCluster, onReinitForDisplayMode)
-                    SettingsTab.PHONES -> PhonesTabContent(cabinManager)
+                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
                     SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState)
                 }
@@ -210,8 +211,8 @@ fun SettingsScreen(
                 }
             } else {
                 Row(Modifier.fillMaxSize()) {
-                    Surface(color = colorScheme.surfaceContainerLow, modifier = Modifier.width(176.dp).fillMaxHeight()) {
-                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(color = colorScheme.surfaceContainerLow, shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp), modifier = Modifier.width(152.dp).fillMaxHeight().padding(8.dp)) {
+                        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             FilledTonalButton(onClick = navigateBack, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
                                 Text(stringResource(R.string.action_back), Modifier.padding(start = 10.dp))
@@ -229,17 +230,18 @@ fun SettingsScreen(
                                 SettingsTab.visible.forEach { tab ->
                                     val selected = selectedTab == tab
                                     Surface(
-                                        shape = MaterialTheme.shapes.medium,
-                                        color = if (selected) colorScheme.secondaryContainer else colorScheme.surfaceContainerLow,
-                                        contentColor = if (selected) colorScheme.onSecondaryContainer else colorScheme.onSurfaceVariant,
+                                        shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
+                                        color = if (selected) colorScheme.primaryContainer else colorScheme.surfaceContainerLow,
+                                        contentColor = if (selected) colorScheme.onPrimaryContainer else colorScheme.onSurfaceVariant,
                                     ) {
-                                        Row(
-                                            Modifier.fillMaxWidth().selectable(selected, role = Role.Tab, onClick = { selectTab(tab) }).heightIn(min = 64.dp).padding(12.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                        Column(
+                                            Modifier.fillMaxWidth().selectable(selected, role = Role.Tab, onClick = { selectTab(tab) }).heightIn(min = 72.dp).padding(8.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
                                         ) {
-                                            Icon(tab.icon, null)
-                                            Text(stringResource(tab.title), style = MaterialTheme.typography.titleMedium)
+                                            Icon(tab.icon, null, Modifier.size(24.dp))
+                                            Text(stringResource(tab.title), style = MaterialTheme.typography.labelLarge,
+                                                maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                                         }
                                     }
                                 }
@@ -353,12 +355,10 @@ private fun ControlTabContent(
                     .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(stringResource(R.string.settings_adapter_display), style = MaterialTheme.typography.headlineMedium)
-            Text(stringResource(R.string.settings_adapter_display_detail), color = colorScheme.onSurfaceVariant)
             if (actionStatus.isNotEmpty()) SettingsNotice(actionStatus)
             com.cabin.updates.UpdateSettingsSection()
             com.cabin.ui.settings.LanguageSettingsSection()
-            ProjectionPreferencesSection()
+            com.cabin.ui.settings.MeasurementSettingsSection()
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -649,10 +649,12 @@ private fun ControlCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier.padding(16.dp),
         ) {
             // Header row
             Row(

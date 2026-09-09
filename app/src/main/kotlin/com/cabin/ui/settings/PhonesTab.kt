@@ -4,6 +4,8 @@ import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -134,15 +136,15 @@ fun PhonesTabContent(cabinManager: CabinManager) {
             onClick = { setupVisible = true },
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp).heightIn(min = 56.dp),
         ) { Text(stringResource(R.string.setup_guide)) }
-        Box(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
-        Row(
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
+        val cardWidth = if (maxWidth >= 600.dp) (maxWidth - 48.dp) / 2 else (maxWidth - 32.dp).coerceAtLeast(120.dp)
+        FlowRow(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-                    .horizontalScroll(rememberScrollState())
-                    .padding(24.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // === USB Device Card (always present) ===
             // wifi=0 means explicit USB; wifi=-1 (null) with active phoneType means
@@ -153,12 +155,12 @@ fun PhonesTabContent(cabinManager: CabinManager) {
             UsbDeviceCard(
                 isConnected = isUsbConnected,
                 phoneType = if (isUsbConnected) phoneType else null,
-                modifier = Modifier.width(CARD_WIDTH).fillMaxHeight(),
+                modifier = Modifier.width(cardWidth),
             )
 
             // === Wireless Device Cards ===
             if (pairedDevices.isEmpty()) {
-                EmptyDeviceCard(modifier = Modifier.width(CARD_WIDTH).fillMaxHeight())
+                EmptyDeviceCard(modifier = Modifier.width(cardWidth))
             } else {
                 pairedDevices.forEach { device ->
                     // Stable keying by btMac preserves per-card state across list reorderings.
@@ -187,7 +189,7 @@ fun PhonesTabContent(cabinManager: CabinManager) {
                             onRemove = {
                                 deviceToRemove = device
                             },
-                            modifier = Modifier.width(CARD_WIDTH).fillMaxHeight(),
+                            modifier = Modifier.width(cardWidth),
                             enabled = !isProcessing,
                         )
                     }

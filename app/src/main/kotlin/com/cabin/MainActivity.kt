@@ -1700,6 +1700,7 @@ fun CabinApp(
                 onResetCluster = onResetCluster,
                 onReinitForDisplayMode = onReinitForDisplayMode,
                 initialTab = initialSettingsTab,
+                embedded = true,
                 vehicleState = climateState,
             )
                 }
@@ -1719,7 +1720,11 @@ fun CabinApp(
         }
         if (launcherShell && !compactPanel && !showHub && !showSettings && pendingParkedAction == null &&
             (projectionFullscreen || (liveModuleVisible && projectionPlacement?.editing != true) || !showHome)) {
-            Box(videoFrameModifier) {
+            BoxWithConstraints(videoFrameModifier) {
+                if (maxWidth >= 144.dp) com.cabin.launcher.ProjectionSettingsButton(
+                    onClick = { parkedAction { initialSettingsTab = com.cabin.ui.settings.SettingsTab.PHONES; showSettings = true } },
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(end = 68.dp, bottom = 8.dp),
+                )
                 com.cabin.launcher.ProjectionFullscreenButton(
                     fullscreen = projectionFullscreen || !showHome,
                     onClick = {

@@ -227,6 +227,13 @@ class CabinLauncherTest {
         compose.onNodeWithText("Edit layout").assertDoesNotExist()
         screenshot("launcher-modular-default")
         assertFalse(manager.projectionSessionRequested)
+        compose.onNodeWithTag("projection-settings").assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithTag("carplay-settings").assertIsDisplayed()
+        compose.onNodeWithText("Display & controls").assertIsSelected()
+        screenshot("launcher-carplay-settings")
+        assertSame(initial, surfaces(compose.activity.window.decorView).single())
+        compose.onNodeWithTag("dashboard-settings-dismiss").performTouchInput { click(androidx.compose.ui.geometry.Offset(24f, 200f)) }
+        assertEquals(opening, compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot)
         compose.onNodeWithTag("resize-1").assertDoesNotExist()
         compose.onNodeWithContentDescription("Edit layout").performClick()
         compose.onNodeWithTag("module-PROJECTION-1").performTouchInput {

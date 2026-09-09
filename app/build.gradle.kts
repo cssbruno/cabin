@@ -16,8 +16,8 @@ android {
         applicationId = ownerApplicationId
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1004
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.0-alpha.3"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1005
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.0-alpha.4"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         manifestPlaceholders["clusterIconAuthority"] = "$ownerApplicationId.teyes.ClusterIconContentProvider"
         buildConfigField("String", "CLUSTER_ICON_AUTHORITY", "\"$ownerApplicationId.teyes.ClusterIconContentProvider\"")
