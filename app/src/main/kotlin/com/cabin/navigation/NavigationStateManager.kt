@@ -55,6 +55,7 @@ data class NavigationState(
     /** Zero is a valid supplied value; these flags distinguish it from a missing field. */
     val hasManeuverDistance: Boolean = false,
     val hasEta: Boolean = false,
+    val etaUpdatedElapsedRealtimeMs: Long? = null,
 ) {
     val isActive: Boolean get() = status == 1
     val isIdle: Boolean get() = status == 0
@@ -111,6 +112,9 @@ object NavigationStateManager {
             hasManeuverDistance = if (payload.containsKey("NaviRemainDistance")) {
                 validNonNegativeInt(payload["NaviRemainDistance"])
             } else hasManeuverDistance,
+            etaUpdatedElapsedRealtimeMs = if (payload.containsKey("NaviTimeToDestination")) {
+                now.takeIf { validNonNegativeInt(payload["NaviTimeToDestination"]) }
+            } else etaUpdatedElapsedRealtimeMs,
             hasEta = if (payload.containsKey("NaviTimeToDestination")) {
                 validNonNegativeInt(payload["NaviTimeToDestination"])
             } else hasEta,

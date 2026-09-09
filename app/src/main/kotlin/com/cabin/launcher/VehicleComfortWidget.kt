@@ -23,6 +23,7 @@ data class ClimateWidgetActions(
     val onAc: ((Boolean) -> Unit)? = null,
     val onFan: ((Int) -> Unit)? = null,
     val onRefresh: (() -> Unit)? = null,
+    val onAirflow: ((com.cabin.platform.TeyesAirflowMode) -> Unit)? = null,
 )
 
 /** Shared FYT toolkit telemetry; freshness is checked per field, including temperature units. */
@@ -31,12 +32,15 @@ internal fun comfortFieldAvailable(state: TeyesClimateState, vararg codes: Int):
 
 @Composable
 internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateState, actions: ClimateWidgetActions = ClimateWidgetActions(), onClimate: () -> Unit) {
+    if (module == DashboardModule.CLIMATE) {
+        AcWidget(state, actions, onClimate)
+        return
+    }
     fun known(vararg codes: Int) = comfortFieldAvailable(state, *codes)
     fun level(code: Int, value: Int) = if (known(code)) value.toString() else "—"
     fun temperature(code: Int, value: Int?) = formatClimateTemperature(value?.takeIf { known(code, 33) }, state.fahrenheit)
     val alternate = state.profileId == 262465
     val fanCode = if (alternate) 35 else 29
-    val acCode = if (alternate) 30 else 24
     val title = stringResource(module.title())
     val rows: List<Pair<String, String>> = when (module) {
         DashboardModule.CLIMATE -> listOf(
@@ -67,11 +71,8 @@ internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateSt
                 }, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.primary)
                 if (!compact) Text(title, Modifier.weight(1f).padding(start = 8.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleMedium)
                 else Spacer(Modifier.weight(1f))
-                if (module in setOf(DashboardModule.CLIMATE, DashboardModule.FAN) && actions.onRefresh != null) IconButton(actions.onRefresh, Modifier.size(56.dp)) {
+                if (module == DashboardModule.FAN && actions.onRefresh != null) IconButton(actions.onRefresh, Modifier.size(56.dp)) {
                     Icon(Icons.Default.Refresh, stringResource(R.string.widget_refresh_climate))
-                }
-                if (module == DashboardModule.CLIMATE) IconButton(onClimate, Modifier.size(56.dp)) {
-                    Icon(Icons.Default.Tune, stringResource(R.string.climate_open_controls))
                 }
             }
             if (module == DashboardModule.FAN) {
@@ -86,25 +87,7 @@ internal fun VehicleComfortWidget(module: DashboardModule, state: TeyesClimateSt
                     }
                 }
             }
-            if (module == DashboardModule.CLIMATE && !compact) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                    IconButton({ actions.onFan?.invoke((state.fanLevel - 1).coerceAtLeast(1)) }, Modifier.size(56.dp),
-                        enabled = (state.fanControlsAvailable || state.controlsAvailable) && known(fanCode) && actions.onFan != null && state.fanLevel > 1) {
-                        Icon(Icons.Default.Remove, stringResource(R.string.climate_fan_lower))
-                    }
-                    FilledTonalButton({ actions.onAc?.invoke(!state.ac) }, Modifier.heightIn(min = 56.dp),
-                        enabled = state.controlsAvailable && known(acCode) && actions.onAc != null,
-                        contentPadding = PaddingValues(horizontal = 8.dp)) {
-                        Text(stringResource(if (!known(acCode)) R.string.climate_ac_unknown else if (state.ac) R.string.climate_ac_on else R.string.climate_ac_off), maxLines = 1)
-                    }
-                    IconButton({ actions.onFan?.invoke((state.fanLevel + 1).coerceAtMost(7)) }, Modifier.size(56.dp),
-                        enabled = (state.fanControlsAvailable || state.controlsAvailable) && known(fanCode) && actions.onFan != null && state.fanLevel < 7) {
-                        Icon(Icons.Default.Add, stringResource(R.string.climate_fan_higher))
-                    }
-                }
-                Text(if (known(fanCode)) stringResource(R.string.climate_fan_level, state.fanLevel) else stringResource(R.string.climate_fan_unknown),
-                    Modifier.align(Alignment.CenterHorizontally), style = MaterialTheme.typography.labelLarge)
-            }
+
         }
     }
 }

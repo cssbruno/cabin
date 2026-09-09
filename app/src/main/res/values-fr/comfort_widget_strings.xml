@@ -14,4 +14,5 @@
     <string name="widget_drag_resize">Faire glisser pour redimensionner le widget</string>
     <string name="widget_refresh_climate">Actualiser les données de climatisation</string>
     <string name="fan_select_speed">Choisir la vitesse de ventilation</string>
+    <string name="widget_ac">A/C</string>
 </resources>

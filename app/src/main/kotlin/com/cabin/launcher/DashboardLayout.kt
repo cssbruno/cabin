@@ -15,7 +15,17 @@ private fun DashboardTile.finerGrid(): DashboardTile {
     return copy(x = x * 2, y = y * 2, width = width * 2, height = height * 2)
 }
 
-enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, SPEED, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET }
+enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, SPEED, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET, DRIVER_TEMPERATURE, PASSENGER_TEMPERATURE, AIRFLOW, RECIRCULATION, HOOD, TRUNK, CAN_CONNECTION, DATE, PHONE_CONNECTION, ASSISTANT, ROUTE_OVERVIEW, AUDIO_CONTROL, PINNED_APPS }
+/** Legacy kinds remain readable; new layouts expose one climate widget. */
+internal val climateDashboardModules = setOf(
+    DashboardModule.CLIMATE, DashboardModule.FAN, DashboardModule.REAR_CLIMATE,
+    DashboardModule.SEATS, DashboardModule.DEFROST, DashboardModule.DRIVER_TEMPERATURE,
+    DashboardModule.PASSENGER_TEMPERATURE, DashboardModule.AIRFLOW, DashboardModule.RECIRCULATION,
+)
+internal val dashboardPickerModules = DashboardModule.entries.filter {
+    it != DashboardModule.WIDGET && (it !in climateDashboardModules || it == DashboardModule.CLIMATE)
+}
+
 data class DashboardTile(val id: Int, val module: DashboardModule, val page: Int, val x: Int, val y: Int, val width: Int, val height: Int, val widgetId: Int = 0)
 data class DashboardLayout(val pages: Int = 2, val tiles: List<DashboardTile> = listOf(
     DashboardTile(1, DashboardModule.PROJECTION, 0, 0, 0, 3, 2),
@@ -87,9 +97,9 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
         return place(tile.copy(width = width, height = height), tile.page)
     }
     /** Dragging a corner never relocates the tile or its neighbors to make space. */
-    fun resizeInPlace(id: Int, width: Int, height: Int): Boolean {
+    fun resizeInPlace(id: Int, width: Int, height: Int, allowProjection: Boolean = false): Boolean {
         val tile = state.value.tiles.firstOrNull { it.id == id } ?: return false
-        if (tile.module == DashboardModule.PROJECTION) return false
+        if (tile.module == DashboardModule.PROJECTION && !allowProjection) return false
         return save(state.value.copy(tiles = state.value.tiles.map {
             if (it.id == id) it.copy(width = width, height = height) else it
         }))
@@ -100,7 +110,7 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
     }
     fun add(module: DashboardModule, page: Int, widgetId: Int = 0): Boolean {
         val tile = DashboardTile((state.value.tiles.maxOfOrNull { it.id } ?: 0) + 1, module, page, 0, 0,
-            if (module in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET, DashboardModule.CLIMATE, DashboardModule.REAR_CLIMATE, DashboardModule.SEATS, DashboardModule.DEFROST)) 4 else 2,
+            if (module in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET, DashboardModule.ROUTE_OVERVIEW, DashboardModule.AUDIO_CONTROL, DashboardModule.PINNED_APPS, DashboardModule.CLIMATE, DashboardModule.REAR_CLIMATE, DashboardModule.SEATS, DashboardModule.DEFROST)) 4 else 2,
             if (module in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET)) 4 else 2, widgetId)
         return place(tile, page)
     }

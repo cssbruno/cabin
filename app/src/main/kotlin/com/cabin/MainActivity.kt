@@ -290,6 +290,7 @@ class MainActivity : ComponentActivity() {
                 TeyesFeaturePreferences.get(this).profile.value.compactOnLaunch))
         compactPanelState.value = compactPanelMode
         super.onCreate(savedInstanceState)
+        com.cabin.updates.UpdateJobService.schedule(this)
 
         // Enable edge-to-edge display
         enableEdgeToEdge()
@@ -1670,7 +1671,7 @@ fun CabinApp(
                 page = launcherPage,
                 onPageChange = ::selectLauncherPage,
                 onProjectionPlacement = { projectionPlacement = it },
-                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate),
+                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow),
             )
         }
 

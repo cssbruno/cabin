@@ -41,6 +41,14 @@ jobs:
           cp app/build/outputs/apk/release/app-release.apk cabin.apk
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify cabin.apk
           sha256sum cabin.apk > cabin.apk.sha256
+          python3 - <<'PYMETA'
+          import hashlib, json, os
+          from pathlib import Path
+          apk = Path('cabin.apk')
+          Path('update.json').write_text(json.dumps(dict(packageName='zeno.carlink',
+              versionName=os.environ['CABIN_VERSION_NAME'], versionCode=int(os.environ['CABIN_VERSION_CODE']),
+              size=apk.stat().st_size, sha256=hashlib.sha256(apk.read_bytes()).hexdigest())))
+          PYMETA
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -49,10 +57,10 @@ jobs:
           flags=()
           if [[ "$RELEASE_TAG" == *-* ]]; then flags+=(--prerelease --latest=false); fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 --clobber
+            gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json --clobber
             gh release edit "$RELEASE_TAG" "${flags[@]}"
           else
-            gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 \
+            gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json \
               --verify-tag --title "Cabin ${RELEASE_TAG#v}" "${flags[@]}" \
               --notes 'Signed Cabin APK. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'
           fi

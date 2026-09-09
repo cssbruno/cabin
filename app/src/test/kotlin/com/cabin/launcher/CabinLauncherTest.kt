@@ -227,7 +227,24 @@ class CabinLauncherTest {
         compose.onNodeWithText("Edit layout").assertDoesNotExist()
         screenshot("launcher-modular-default")
         assertFalse(manager.projectionSessionRequested)
+        compose.onNodeWithTag("resize-1").assertDoesNotExist()
         compose.onNodeWithContentDescription("Edit layout").performClick()
+        compose.onNodeWithTag("module-PROJECTION-1").performTouchInput {
+            down(0, androidx.compose.ui.geometry.Offset(width * 0.25f, height * 0.5f))
+            down(1, androidx.compose.ui.geometry.Offset(width * 0.75f, height * 0.5f))
+            moveTo(0, androidx.compose.ui.geometry.Offset(width * 0.375f, height * 0.5f), 100)
+            moveTo(1, androidx.compose.ui.geometry.Offset(width * 0.625f, height * 0.5f), 100)
+            up(0); up(1)
+        }
+        val pinched = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        assertTrue("Pinch must resize the module", pinched.width < opening.width)
+        assertSame(initial, surfaces(compose.activity.window.decorView).single())
+        compose.onNodeWithTag("resize-1").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset(120f, 110f), 500)
+            up()
+        }
+        assertTrue(compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot.width > pinched.width)
         compose.onNodeWithTag("module-PROJECTION-1").performClick()
         compose.onNodeWithText("2 × 2").performScrollTo().performClick()
         compose.onAllNodesWithText("Done").onLast().performClick()
@@ -280,13 +297,14 @@ class CabinLauncherTest {
             }
         }
         compose.onNodeWithText("A/C —").assertIsDisplayed()
-        compose.onAllNodesWithText("—").assertCountEquals(2)
+        compose.onNodeWithContentDescription("Driver").assertTextContains("—")
+        compose.onNodeWithContentDescription("Passenger").assertTextContains("—")
         compose.onNodeWithContentDescription("Open climate controls").assertHeightIsAtLeast(56.dp).performClick()
         assertTrue(opened)
         screenshot("launcher-ac-widget")
     }
 
-    @Test fun `long press edits widgets and corner drag resizes without a CarPlay handle`() {
+    @Test fun `long press edits widgets and corner drag resizes with CarPlay handle in edit mode`() {
         compose.setContent {
             CabinTheme {
                 CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() })
@@ -295,7 +313,7 @@ class CabinLauncherTest {
         compose.onNodeWithTag("module-SPEED-3").performTouchInput { longClick(center) }
         compose.onNodeWithContentDescription("Done").assertIsDisplayed()
         compose.onNodeWithTag("resize-3").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
-        compose.onNodeWithTag("resize-1").assertDoesNotExist()
+        compose.onNodeWithTag("resize-1").assertIsDisplayed()
         compose.onNodeWithTag("page-dot-1").performClick()
         val before = compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot
         compose.onNodeWithTag("resize-5").performTouchInput {
@@ -308,6 +326,28 @@ class CabinLauncherTest {
         assertEquals(before.left, after.left, 1f)
         compose.onNodeWithContentDescription("Done").performClick()
         compose.onNodeWithTag("resize-5").assertDoesNotExist()
+    }
+
+    @Test fun `two finger resizing widgets does not drag their position`() {
+        compose.setContent {
+            CabinTheme { CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() }) }
+        }
+        compose.onNodeWithContentDescription("Edit layout").performClick()
+        compose.onNodeWithTag("page-dot-1").performClick()
+        val widget = compose.onNodeWithTag("module-RPM-4")
+        val before = widget.fetchSemanticsNode().boundsInRoot
+        widget.performTouchInput {
+            down(0, androidx.compose.ui.geometry.Offset(width * 0.25f, height * 0.5f))
+            down(1, androidx.compose.ui.geometry.Offset(width * 0.75f, height * 0.5f))
+            moveTo(0, androidx.compose.ui.geometry.Offset(width * 0.375f, height * 0.5f), 100)
+            moveTo(1, androidx.compose.ui.geometry.Offset(width * 0.625f, height * 0.5f), 100)
+            up(0); up(1)
+        }
+        val after = widget.fetchSemanticsNode().boundsInRoot
+        assertTrue(after.width < before.width)
+        assertTrue(after.height < before.height)
+        assertEquals(before.left, after.left, 1f)
+        assertEquals(before.top, after.top, 1f)
     }
 
     @Test fun `moving prevents long press widget editing`() {
@@ -372,6 +412,170 @@ class CabinLauncherTest {
         compose.onNodeWithText("A/C —").assertIsNotEnabled()
         compose.onNodeWithContentDescription("Refresh A/C data").performClick()
         assertEquals(1, refreshes)
+    }
+
+    @Test fun `AC widget adapts from wide to tall with controls inside its bounds`() {
+        val size = androidx.compose.runtime.mutableStateOf(480.dp to 180.dp)
+        val state = TeyesClimateState(connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 262465, availableCodes = setOf(30, 35, 25, 31, 33),
+            controlsAvailable = true, fanLevel = 3, leftTemperature = 22, rightTemperature = 23)
+        var command: Int? = null
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(size.value.first).height(size.value.second)) {
+                    VehicleComfortWidget(DashboardModule.CLIMATE, state,
+                        ClimateWidgetActions(onAc = {}, onFan = { command = it }, onRefresh = {})) {}
+                }
+            }
+        }
+        fun checkControls(tag: String) {
+            val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
+            listOf("Open climate controls", "Increase fan speed", "Decrease fan speed", "Select fan speed").forEach { label ->
+                val control = compose.onNodeWithContentDescription(label).assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+                val rect = control.fetchSemanticsNode().boundsInRoot
+                assertTrue("$label must fit in $tag", rect.left >= bounds.left && rect.top >= bounds.top &&
+                    rect.right <= bounds.right && rect.bottom <= bounds.bottom)
+            }
+            compose.onNodeWithContentDescription("Increase fan speed").performClick()
+            assertEquals(4, command)
+        }
+        checkControls("ac-horizontal")
+        screenshot("launcher-ac-horizontal")
+        compose.runOnIdle { size.value = 220.dp to 480.dp }
+        checkControls("ac-vertical")
+        screenshot("launcher-ac-vertical")
+        compose.runOnIdle { size.value = 180.dp to 400.dp }
+        checkControls("ac-vertical")
+        compose.runOnIdle { size.value = 240.dp to 132.dp }
+        compose.onNodeWithTag("ac-compact").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Open climate controls").assertIsDisplayed()
+        compose.onNodeWithText("A/C off").assertIsDisplayed()
+    }
+
+    @Test fun `unified AC includes airflow and recirculation and waits for feedback`() {
+        val state = androidx.compose.runtime.mutableStateOf(TeyesClimateState(
+            connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 262465, availableCodes = setOf(30, 35, 25, 31, 33, 73, 21),
+            controlsAvailable = true, fanLevel = 3, leftTemperature = 44, rightTemperature = 46,
+            blowBody = true, recirculating = true))
+        var requested: com.cabin.platform.TeyesAirflowMode? = null
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(480.dp).height(240.dp)) {
+                    AcWidget(state.value, ClimateWidgetActions(onAirflow = { requested = it })) {}
+                }
+            }
+        }
+        val airflow = compose.onNodeWithContentDescription("Airflow")
+        airflow.assertIsDisplayed().performClick()
+        compose.onNodeWithText("Face + feet").performClick()
+        assertEquals(com.cabin.platform.TeyesAirflowMode.BODY_FOOT, requested)
+        airflow.assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Face"))
+        compose.onNodeWithContentDescription("Recirculation").assertTextContains("ON")
+        compose.runOnIdle { state.value = state.value.copy(blowFoot = true) }
+        airflow.assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Face + feet"))
+        airflow.performClick()
+        compose.runOnIdle { state.value = state.value.copy(health = com.cabin.platform.TeyesTelemetryHealth.STALE) }
+        compose.onNodeWithText("Screen + feet").assertDoesNotExist()
+        airflow.assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Recirculation").assertTextContains("—")
+    }
+
+    @Test fun `widget picker offers one AC entry instead of individual climate functions`() {
+        compose.setContent {
+            CabinTheme { CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() }) }
+        }
+        compose.onNodeWithContentDescription("Edit layout").performClick()
+        compose.onNodeWithContentDescription("Add module").performClick()
+        compose.onNodeWithText("A/C").performScrollTo().assertIsDisplayed()
+        listOf("Fan", "Rear climate", "Seats", "Defrost", "Driver temperature", "Passenger temperature", "Airflow", "Recirculation").forEach {
+            compose.onNodeWithText(it).assertDoesNotExist()
+        }
+    }
+
+    @Test fun `route audio and pinned apps widgets fit wide tall and compact cards`() {
+        val module = androidx.compose.runtime.mutableStateOf(DashboardModule.ROUTE_OVERVIEW)
+        val size = androidx.compose.runtime.mutableStateOf(480.dp to 160.dp)
+        val preferences = LauncherPreferences(compose.activity)
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(size.value.first).height(size.value.second)) {
+                    when (module.value) {
+                        DashboardModule.ROUTE_OVERVIEW -> RouteOverviewWidget(com.cabin.navigation.NavigationState(), false, 1000)
+                        DashboardModule.AUDIO_CONTROL -> AudioControlWidget()
+                        else -> PinnedAppsWidget(preferences, false) { it() }
+                    }
+                }
+            }
+        }
+        for (dimensions in listOf(480.dp to 160.dp, 180.dp to 400.dp, 100.dp to 100.dp)) {
+            for (kind in listOf(DashboardModule.ROUTE_OVERVIEW, DashboardModule.AUDIO_CONTROL, DashboardModule.PINNED_APPS)) {
+                compose.runOnIdle { size.value = dimensions; module.value = kind }
+                compose.onNodeWithTag("widget-${kind.name}").assertIsDisplayed()
+                if (kind == DashboardModule.AUDIO_CONTROL) compose.onNodeWithContentDescription("Mute / unmute").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+            }
+        }
+        compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)).assertCountEquals(0)
+    }
+
+    @Test fun `audio widget changes the Android media volume and reflects the result`() {
+        val audio = compose.activity.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+        audio.setStreamVolume(android.media.AudioManager.STREAM_MUSIC, 3, 0)
+        compose.setContent {
+            CabinTheme { Box(Modifier.width(480.dp).height(240.dp)) { AudioControlWidget() } }
+        }
+        compose.onNodeWithContentDescription("Volume +").assertIsEnabled().performClick()
+        val increased = audio.getStreamVolume(android.media.AudioManager.STREAM_MUSIC)
+        assertTrue(increased > 3)
+        compose.onNodeWithText("$increased / ${audio.getStreamMaxVolume(android.media.AudioManager.STREAM_MUSIC)}").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Volume −").performClick()
+        assertEquals(3, audio.getStreamVolume(android.media.AudioManager.STREAM_MUSIC))
+    }
+
+    @Test fun `ten additional widgets fit horizontal vertical and smallest cards`() {
+        val module = androidx.compose.runtime.mutableStateOf(DashboardModule.DATE)
+        val size = androidx.compose.runtime.mutableStateOf(480.dp to 140.dp)
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(size.value.first).height(size.value.second)) {
+                    AdditionalDashboardWidget(module.value, TeyesClimateState(), CabinManager.State.DISCONNECTED)
+                }
+            }
+        }
+        assertEquals(10, additionalDashboardModules.size)
+        for (dimensions in listOf(480.dp to 140.dp, 180.dp to 400.dp, 100.dp to 100.dp)) {
+            for (kind in additionalDashboardModules) {
+                compose.runOnIdle { size.value = dimensions; module.value = kind }
+                compose.onNodeWithTag("widget-${kind.name}").assertIsDisplayed()
+                val title = compose.activity.getString(kind.title())
+                compose.onAllNodesWithContentDescription(title).onFirst().assertIsDisplayed()
+                if (kind in setOf(DashboardModule.DRIVER_TEMPERATURE, DashboardModule.PASSENGER_TEMPERATURE,
+                        DashboardModule.AIRFLOW, DashboardModule.RECIRCULATION, DashboardModule.HOOD, DashboardModule.TRUNK)) {
+                    compose.onNodeWithText("—").assertIsDisplayed()
+                }
+            }
+        }
+    }
+
+    @Test fun `assistant widget is enabled only with a streaming phone`() {
+        val phone = androidx.compose.runtime.mutableStateOf(CabinManager.State.DISCONNECTED)
+        var invoked = 0
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(180.dp).height(240.dp)) {
+                    AdditionalDashboardWidget(DashboardModule.ASSISTANT, TeyesClimateState(), phone.value) { invoked++ }
+                }
+            }
+        }
+        val button = compose.onNode(hasContentDescription("Phone assistant") and hasClickAction())
+        button.assertIsNotEnabled()
+        compose.runOnIdle { phone.value = CabinManager.State.DEVICE_CONNECTED }
+        button.assertIsNotEnabled()
+        compose.runOnIdle { phone.value = CabinManager.State.STREAMING }
+        button.assertIsEnabled().performClick()
+        assertEquals(1, invoked)
+        compose.runOnIdle { phone.value = CabinManager.State.DISCONNECTED }
+        button.assertIsNotEnabled()
     }
 
     @Test fun `fan widget selects an exact speed and retains reported feedback`() {

@@ -7,7 +7,7 @@ A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto p
 
 **[Download the latest APK](https://github.com/cssbruno/cabin/releases)**
 
-Release builds may require uninstalling an earlier debug build. In-app updates are not enabled yet.
+Release builds may require uninstalling an earlier debug build. Updates: Settings → Control → Updates. Automatic daily checks; download and Android install approval are manual. Alpha builds also receive alpha releases.
 
 Push a `v*` tag to build and publish a signed APK. CI does not run tests.
 

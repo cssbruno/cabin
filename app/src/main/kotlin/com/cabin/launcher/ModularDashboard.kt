@@ -64,13 +64,26 @@ internal fun DashboardModule.title(): Int = when (this) {
     DashboardModule.OIL -> R.string.vehicle_oil_life
     DashboardModule.SERVICE -> R.string.vehicle_oil_service
     DashboardModule.DOORS -> R.string.module_doors
-    DashboardModule.CLIMATE -> R.string.launcher_climate
+    DashboardModule.CLIMATE -> R.string.widget_ac
     DashboardModule.FAN -> R.string.widget_fan
     DashboardModule.REAR_CLIMATE -> R.string.widget_rear_climate
     DashboardModule.SEATS -> R.string.widget_seats
     DashboardModule.DEFROST -> R.string.widget_defrost
     DashboardModule.CLOCK -> R.string.module_clock
     DashboardModule.WIDGET -> R.string.launcher_widgets
+    DashboardModule.DRIVER_TEMPERATURE -> R.string.widget_driver_temperature
+    DashboardModule.PASSENGER_TEMPERATURE -> R.string.widget_passenger_temperature
+    DashboardModule.AIRFLOW -> R.string.widget_airflow
+    DashboardModule.RECIRCULATION -> R.string.widget_recirculation
+    DashboardModule.HOOD -> R.string.widget_hood
+    DashboardModule.TRUNK -> R.string.widget_trunk
+    DashboardModule.CAN_CONNECTION -> R.string.widget_can_connection
+    DashboardModule.DATE -> R.string.widget_date
+    DashboardModule.PHONE_CONNECTION -> R.string.widget_phone_connection
+    DashboardModule.ASSISTANT -> R.string.widget_assistant
+    DashboardModule.ROUTE_OVERVIEW -> R.string.widget_route_overview
+    DashboardModule.AUDIO_CONTROL -> R.string.teyes_media_volume
+    DashboardModule.PINNED_APPS -> R.string.launcher_favorites
 }
 
 @Composable
@@ -148,7 +161,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
             if (editing && !moving) Box {
                 IconButton({ adding = true }, modifier = Modifier.size(56.dp)) { Icon(Icons.Default.Add, stringResource(R.string.module_add)) }
                 DropdownMenu(adding, { adding = false }) {
-                    DashboardModule.entries.filter { it != DashboardModule.WIDGET }.forEach { module ->
+                    dashboardPickerModules.forEach { module ->
                         DropdownMenuItem(text = { Text(stringResource(module.title())) },
                             enabled = module != DashboardModule.PROJECTION || layout.tiles.none { it.module == module },
                             onClick = { adding = false; result(prefs.add(module, page)) })
@@ -184,6 +197,12 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                     val currentTile by rememberUpdatedState(tile)
                     val editingNow by rememberUpdatedState(editing)
                     var dragStart by remember { mutableStateOf(tile) }
+                    var pinchPreview by remember { mutableStateOf<Pair<Int, Int>?>(null) }
+                    fun resizeTile(width: Int, height: Int) {
+                        onParkedAction { result(prefs.resizeInPlace(tile.id, width, height, allowProjection = true)) }
+                    }
+                    val pinchModifier = if (editing && !compact && !moving) Modifier.widgetPinchResize(tile,
+                        onPreview = { pinchPreview = it }, onResize = { w, h -> resizeTile(w, h) }) else Modifier
                     fun startDrag() { onParkedAction { editing = true; dragStart = currentTile; draggedId = tile.id; dragOffset = Offset.Zero } }
                     fun finishDrag() {
                         if (draggedId == tile.id) {
@@ -201,10 +220,15 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                         .clipToBounds().testTag("module-${tile.module.name}-${tile.id}")
                     if (tile.module == DashboardModule.PROJECTION) {
                         Box(tileModifier.onGloballyPositioned { onPlacement(ProjectionModulePlacement(it.boundsInRoot(), editing)) }) {
-                            // No button, image, background, or gesture detector here: touches reach the live phone surface.
+                            // Normal use has no gesture interceptor: touches reach the live phone surface.
                             if (editing) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f))
-                                .border(2.dp, MaterialTheme.colorScheme.primary).clickable { selected = tile.id }, contentAlignment = Alignment.Center) {
-                                Icon(Icons.Default.OpenWith, stringResource(R.string.module_resize_projection), Modifier.size(40.dp), tint = Color.White)
+                                .border(2.dp, MaterialTheme.colorScheme.primary).then(pinchModifier), contentAlignment = Alignment.Center) {
+                                Box(Modifier.fillMaxSize().clickable { selected = tile.id }, contentAlignment = Alignment.Center) {
+                                    Icon(Icons.Default.OpenWith, stringResource(R.string.module_resize_projection), Modifier.size(40.dp), tint = Color.White)
+                                }
+                                pinchPreview?.let { Text("${it.first} × ${it.second}", Modifier.align(Alignment.TopCenter).padding(12.dp), color = Color.White) }
+                                if (!compact && !moving) WidgetResizeHandle(tile, cellWidth, cellHeight,
+                                    onResize = { w, h -> resizeTile(w, h) }, modifier = Modifier.align(Alignment.BottomEnd))
                             }
                         }
                     } else {
@@ -227,15 +251,16 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                                 if (tile.module == DashboardModule.WIDGET) {
                                     if (moving) Text(stringResource(R.string.module_widget_parked), Modifier.padding(16.dp))
                                     else DashboardAndroidWidget(host, tile.widgetId)
-                                } else DashboardModuleContent(tile.module, manager, vehicle, onVehicle, climateActions)
+                                } else DashboardModuleContent(tile.module, manager, vehicle, onVehicle, climateActions, launcherPreferences, moving, onParkedAction)
                                 if (editing) {
-                                    Box(Modifier.fillMaxSize().border(2.dp, MaterialTheme.colorScheme.primary)
+                                    Box(Modifier.fillMaxSize().border(2.dp, MaterialTheme.colorScheme.primary).then(pinchModifier)
                                         .clickable { selected = tile.id }
                                         .then(if (!compact && !moving) Modifier.pointerInput(tile.id, prefs, cellWidth, cellHeight) {
                                             detectDragGestures(onDragStart = { startDrag() }, onDragEnd = { finishDrag() }, onDragCancel = { cancelDrag() }) { change, amount ->
                                                 if (draggedId == tile.id) { change.consume(); dragOffset += amount }
                                             }
                                         } else Modifier))
+                                    pinchPreview?.let { Text("${it.first} × ${it.second}", Modifier.align(Alignment.TopCenter).padding(12.dp), color = MaterialTheme.colorScheme.primary) }
                                     Icon(Icons.Default.OpenWith, null, Modifier.align(Alignment.TopStart).padding(12.dp).size(24.dp), tint = MaterialTheme.colorScheme.primary)
                                     if (!compact && !moving) WidgetResizeHandle(tile, cellWidth, cellHeight,
                                         onResize = { width, height -> onParkedAction { result(prefs.resizeInPlace(tile.id, width, height)) } },
@@ -276,7 +301,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
 }
 
 @Composable
-private fun DashboardModuleContent(module: DashboardModule, manager: CabinManager, vehicle: TeyesClimateState, onClimate: () -> Unit = {}, climateActions: ClimateWidgetActions = ClimateWidgetActions()) {
+private fun DashboardModuleContent(module: DashboardModule, manager: CabinManager, vehicle: TeyesClimateState, onClimate: () -> Unit = {}, climateActions: ClimateWidgetActions = ClimateWidgetActions(), preferences: LauncherPreferences, moving: Boolean, onParkedAction: (() -> Unit) -> Unit) {
     val context = LocalContext.current
     val health by manager.dashboardState.collectAsStateWithLifecycle()
     val nav by NavigationStateManager.state.collectAsStateWithLifecycle()
@@ -301,6 +326,18 @@ private fun DashboardModuleContent(module: DashboardModule, manager: CabinManage
                 Text(reading.value, fontSize = if (short) 32.sp else 64.sp, fontWeight = FontWeight.Light, maxLines = 1)
                 if (reading.available) Text(reading.unit, style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant)
                 if (!short) Text(title, Modifier.padding(top = 12.dp), style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant, maxLines = 1)
+            }
+        } else if (module == DashboardModule.ROUTE_OVERVIEW) {
+            RouteOverviewWidget(nav, health.connection == CabinManager.State.STREAMING, now)
+        } else if (module == DashboardModule.AUDIO_CONTROL) {
+            AudioControlWidget()
+        } else if (module == DashboardModule.PINNED_APPS) {
+            PinnedAppsWidget(preferences, moving, onParkedAction)
+        } else if (module in climateDashboardModules) {
+            AcWidget(vehicle, climateActions, onClimate)
+        } else if (module in additionalDashboardModules) {
+            AdditionalDashboardWidget(module, vehicle, health.connection) {
+                manager.performProjectionAction(CabinManager.ProjectionAction.VOICE)
             }
         } else when (module) {
             DashboardModule.CLIMATE, DashboardModule.FAN, DashboardModule.REAR_CLIMATE, DashboardModule.SEATS, DashboardModule.DEFROST -> VehicleComfortWidget(module, vehicle, climateActions, onClimate)

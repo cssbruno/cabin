@@ -1,0 +1,6 @@
+<resources>
+    <string name="widget_route_overview">Routenübersicht</string>
+    <string name="widget_arrival">Ankunft</string>
+    <string name="widget_remaining_time">Verbleibende Zeit</string>
+    <string name="widget_minutes">%1$d Min.</string>
+</resources>

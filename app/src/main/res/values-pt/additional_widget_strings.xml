@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_driver_temperature">Temperatura do motorista</string>
+    <string name="widget_passenger_temperature">Temperatura do passageiro</string>
+    <string name="widget_airflow">Direção do ar</string>
+    <string name="widget_recirculation">Recirculação</string>
+    <string name="widget_hood">Capô</string>
+    <string name="widget_trunk">Porta-malas</string>
+    <string name="widget_can_connection">Conexão CAN</string>
+    <string name="widget_date">Data</string>
+    <string name="widget_phone_connection">Conexão do telefone</string>
+    <string name="widget_assistant">Assistente do telefone</string>
+    <string name="widget_status_open">Aberto</string>
+    <string name="widget_status_closed">Fechado</string>
+    <string name="widget_status_live">Ao vivo</string>
+    <string name="widget_status_stale">Desatualizado</string>
+    <string name="widget_status_connecting">Conectando</string>
+    <string name="widget_status_offline">Desconectado</string>
+    <string name="widget_air_screen">Para-brisa</string>
+    <string name="widget_air_face">Rosto</string>
+    <string name="widget_air_feet">Pés</string>
+</resources>

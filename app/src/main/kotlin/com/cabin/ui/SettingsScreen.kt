@@ -356,6 +356,7 @@ private fun ControlTabContent(
             Text(stringResource(R.string.settings_adapter_display), style = MaterialTheme.typography.headlineMedium)
             Text(stringResource(R.string.settings_adapter_display_detail), color = colorScheme.onSurfaceVariant)
             if (actionStatus.isNotEmpty()) SettingsNotice(actionStatus)
+            com.cabin.updates.UpdateSettingsSection()
             com.cabin.ui.settings.LanguageSettingsSection()
             ProjectionPreferencesSection()
             FlowRow(

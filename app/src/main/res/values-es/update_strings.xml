@@ -1,0 +1,17 @@
+<resources>
+    <string name="update_title">Actualizaciones</string>
+    <string name="update_automatic">Buscar automáticamente cada día</string>
+    <string name="update_idle">Actualizaciones de GitHub · cssbruno/cabin</string>
+    <string name="update_checking">Buscando actualizaciones…</string>
+    <string name="update_current">Está actualizado</string>
+    <string name="update_available">Actualización disponible</string>
+    <string name="update_downloading">Descargando…</string>
+    <string name="update_ready">Listo para instalar</string>
+    <string name="update_failed">No se pudo buscar o descargar. Inténtelo de nuevo.</string>
+    <string name="update_install_failed">No se pudo instalar. Compruebe el APK.</string>
+    <string name="update_permission">Permita que Cabin instale actualizaciones, vuelva y pulse Instalar.</string>
+    <string name="update_check">Buscar ahora</string>
+    <string name="update_download">Descargar</string>
+    <string name="update_install">Instalar</string>
+    <string name="update_cancel">Cancelar</string>
+</resources>

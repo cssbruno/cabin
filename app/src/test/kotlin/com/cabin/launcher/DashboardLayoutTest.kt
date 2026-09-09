@@ -33,6 +33,16 @@ class DashboardLayoutTest {
         }
     }
 
+    @Test fun `explicit CarPlay edit resizing keeps its origin and rejects overlaps`() {
+        val p = prefs()
+        assertTrue(p.resizeInPlace(1, 3, 2, allowProjection = true))
+        val tile = p.state.value.tiles.first { it.id == 1 }
+        assertEquals(0, tile.x)
+        assertEquals(0, tile.y)
+        assertFalse(p.resizeInPlace(1, 8, 4, allowProjection = true))
+        assertEquals(tile, prefs().state.value.tiles.first { it.id == 1 })
+    }
+
     @Test fun `corner resizing rejects overlap and never edits CarPlay`() {
         val p = prefs()
         val original = p.state.value
