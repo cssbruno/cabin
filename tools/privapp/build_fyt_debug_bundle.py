@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Build a FYT USB updater bundle for a signed Cabin debug APK.
 
-The FYT routing executables are deliberately supplied as an input archive rather
-than committed here. They are vendor firmware components, not generic tools.
+The FYT routing executables are vendor firmware components, not generic tools.
 """
 import argparse
 import hashlib
@@ -104,20 +103,29 @@ def _zip_entry(archive, name, data, mode=0o644):
     archive.writestr(entry, data)
 
 
-def build(apk: Path, updater_archive: Path, output: Path, sdk: Path):
+def read_binaries(updater_source: Path):
+    if updater_source.is_dir():
+        missing = [name for name in UPDATERS if not (updater_source / name).is_file()]
+        if missing:
+            raise ValueError('Updater directory is missing: ' + ', '.join(missing))
+        return {name: (updater_source / name).read_bytes() for name in UPDATERS}
+    if not updater_source.is_file() or not zipfile.is_zipfile(updater_source):
+        raise ValueError('Updater source must be a directory or an existing ZIP file.')
+    with zipfile.ZipFile(updater_source) as source:
+        missing = [name for name in UPDATERS if name not in source.namelist()]
+        if missing:
+            raise ValueError('Updater archive is missing: ' + ', '.join(missing))
+        return {name: source.read(name) for name in UPDATERS}
+
+
+def build(apk: Path, updater_source: Path, output: Path, sdk: Path):
     if not apk.is_file():
         raise ValueError('APK does not exist.')
-    if not updater_archive.is_file() or not zipfile.is_zipfile(updater_archive):
-        raise ValueError('Updater archive must be an existing ZIP file.')
     if output.exists():
         raise ValueError('Output exists; choose a new output path.')
     version = inspect_debug_apk(apk, sdk)
     apk_sha = hashlib.sha256(apk.read_bytes()).hexdigest()
-    with zipfile.ZipFile(updater_archive) as source:
-        missing = [name for name in UPDATERS if name not in source.namelist()]
-        if missing:
-            raise ValueError('Updater archive is missing: ' + ', '.join(missing))
-        binaries = {name: source.read(name) for name in UPDATERS}
+    binaries = read_binaries(updater_source)
     if any(not value for value in binaries.values()):
         raise ValueError('Updater archive contains an empty router binary.')
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -148,11 +156,12 @@ def build(apk: Path, updater_archive: Path, output: Path, sdk: Path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--apk', required=True, type=Path)
-    parser.add_argument('--updater-archive', required=True, type=Path)
+    parser.add_argument('--updater-source', required=True, type=Path,
+                        help='Directory or ZIP containing the three FYT router binaries')
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--sdk', type=Path, default=Path(os.environ.get('ANDROID_HOME', os.environ.get('ANDROID_SDK_ROOT', str(Path.home() / 'Android/Sdk')))))
     args = parser.parse_args()
-    print(build(args.apk.resolve(), args.updater_archive.resolve(), args.output.resolve(), args.sdk.resolve()))
+    print(build(args.apk.resolve(), args.updater_source.resolve(), args.output.resolve(), args.sdk.resolve()))
 
 
 if __name__ == '__main__':

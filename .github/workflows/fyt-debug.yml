@@ -19,17 +19,12 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Install Android SDK
         run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
-      - name: Restore vendor FYT router binaries
-        env:
-          FYT_UPDATER_BINARIES_BASE64: ${{ secrets.FYT_UPDATER_BINARIES_BASE64 }}
+      - name: Verify FYT router binaries
         run: |
           set -euo pipefail
-          test -n "$FYT_UPDATER_BINARIES_BASE64" || {
-            echo 'Configure FYT_UPDATER_BINARIES_BASE64 with a base64-encoded vendor FYT update ZIP.' >&2
-            exit 1
-          }
-          printf '%s' "$FYT_UPDATER_BINARIES_BASE64" | base64 --decode > "$RUNNER_TEMP/fyt-updaters.zip"
-          unzip -t "$RUNNER_TEMP/fyt-updaters.zip" >/dev/null
+          test -s tools/privapp/fyt-router-binaries/lsec6315update
+          test -s tools/privapp/fyt-router-binaries/lsec6316update
+          test -s tools/privapp/fyt-router-binaries/lsec6521update
       - name: Build debug APK
         env:
           CABIN_VERSION_NAME: debug-${{ github.run_number }}
@@ -45,7 +40,7 @@ jobs:
           set -euo pipefail
           python3 tools/privapp/build_fyt_debug_bundle.py \
             --apk cabin-debug.apk \
-            --updater-archive "$RUNNER_TEMP/fyt-updaters.zip" \
+            --updater-source tools/privapp/fyt-router-binaries \
             --output cabin-fyt-debug.zip
           sha256sum cabin-debug.apk cabin-fyt-debug.zip > SHA256SUMS
           unzip -t cabin-fyt-debug.zip
