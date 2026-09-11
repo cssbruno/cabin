@@ -4,7 +4,6 @@ import com.cabin.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.media.AudioManager
-import android.view.KeyEvent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,13 +24,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -42,16 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cabin.CabinManager
 import com.cabin.platform.labelRes
-import com.cabin.platform.LocalTeyesKeyRouter
 import com.cabin.platform.TeyesAppShortcuts
 import com.cabin.platform.TeyesAppearance
 import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesFeaturePreferences
-import com.cabin.platform.TeyesKeyAction
 import com.cabin.platform.TeyesLaunchableApp
 import com.cabin.platform.TeyesShortcut
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -63,29 +59,13 @@ fun TeyesFeaturesScreen(
     val resources = androidx.compose.ui.platform.LocalResources.current
     val preferences = remember { TeyesFeaturePreferences.get(context) }
     val profile by preferences.profile.collectAsStateWithLifecycle()
-    val router = LocalTeyesKeyRouter.current
-    val keyStatus = router?.status?.collectAsStateWithLifecycle()?.value.orEmpty()
-    var mappings by remember { mutableStateOf(preferences.mappedKeys()) }
     var phones by remember(manager) { mutableStateOf(manager.pairedDevices) }
     var shortcutPicker by remember { mutableStateOf<TeyesShortcut?>(null) }
     val shortcutRevision by preferences.revision.collectAsStateWithLifecycle()
     var apps by remember { mutableStateOf<List<TeyesLaunchableApp>>(emptyList()) }
     var loadingApps by remember { mutableStateOf(false) }
     var name by remember(profile.slot, profile.name) { mutableStateOf(profile.name) }
-    var learningAction by remember { mutableStateOf<TeyesKeyAction?>(null) }
-    var learningToken by remember { mutableStateOf(0) }
     var feedback by remember(profile.slot) { mutableStateOf("") }
-    LaunchedEffect(keyStatus, shortcutRevision) {
-        mappings = preferences.mappedKeys()
-        if (router?.isLearning != true) learningAction = null
-    }
-    LaunchedEffect(learningAction, learningToken) {
-        if (learningAction != null) {
-            delay(15_000)
-            router?.cancelLearning()
-            learningAction = null
-        }
-    }
     LaunchedEffect(shortcutPicker) {
         if (shortcutPicker != null) {
             loadingApps = true
@@ -103,7 +83,6 @@ fun TeyesFeaturesScreen(
         manager.refreshDeviceList()
         onDispose {
             manager.removeDeviceListener(listener)
-            router?.cancelLearning()
         }
     }
 
@@ -115,6 +94,7 @@ fun TeyesFeaturesScreen(
         Column(Modifier.widthIn(max = 920.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text(stringResource(R.string.teyes_setup), style = MaterialTheme.typography.headlineMedium)
             Text(stringResource(R.string.teyes_setup_detail), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            HeadUnitSettingsPanel()
             SettingsSection(stringResource(R.string.teyes_driver_profile), stringResource(R.string.teyes_driver_profile_detail)) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     repeat(3) { slot ->
@@ -222,35 +202,11 @@ fun TeyesFeaturesScreen(
                     }
                 }
             }
-            SettingsDisclosure(stringResource(R.string.teyes_steering_shortcuts), androidx.compose.ui.res.pluralStringResource(R.plurals.teyes_learned_buttons, mappings.size, mappings.size), onCollapse = {
-                learningAction = null
-                router?.cancelLearning()
-            }) {
-                Text(stringResource(R.string.teyes_steering_detail))
-                if (keyStatus.isNotEmpty()) SettingsNotice(keyStatus)
-                if (router == null) SettingsNotice(stringResource(R.string.teyes_steering_unavailable))
-                TeyesKeyAction.entries.forEach { action ->
-                    TextButton(onClick = {
-                        learningAction = action
-                        learningToken++
-                        router?.learn(action)
-                    }, enabled = router != null, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.teyes_learn_action, stringResource(action.labelRes))) }
-                }
-                if (learningAction != null) {
-                    TextButton(onClick = {
-                        learningAction = null
-                        router?.cancelLearning()
-                    }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.teyes_cancel_learning)) }
-                }
-                mappings.forEach { (code, action) ->
-                    TextButton(onClick = {
-                        preferences.mapKey(code, null)
-                        mappings = preferences.mappedKeys()
-                    }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-                        Text(stringResource(R.string.teyes_remove_mapping, KeyEvent.keyCodeToString(code), stringResource(action.labelRes)))
-                    }
-                }
-            }
+            TripToolsPanel(vehicle)
+            CarAutomationPanel(vehicle)
+            VehicleAppearancePanel(vehicle.profileId)
+            VehicleCompatibilityPanel(vehicle)
+            SteeringSettingsPanel()
             SettingsDisclosure(stringResource(R.string.teyes_accessory_shortcuts), stringResource(R.string.teyes_accessory_shortcuts_summary)) {
                 Text(stringResource(R.string.teyes_accessory_shortcuts_detail))
                 // Preserve legacy backup data, but never offer a generic OBD app path.

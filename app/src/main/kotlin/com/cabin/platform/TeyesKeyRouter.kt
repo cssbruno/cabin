@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 enum class TeyesKeyAction(val label: String) {
     PLAY_PAUSE("Play / pause"),
@@ -12,6 +13,8 @@ enum class TeyesKeyAction(val label: String) {
     PREVIOUS("Previous track"),
     VOICE("Phone assistant"),
     CLIMATE("A/C panel"),
+    PAGE_NEXT("Next dashboard page"), PAGE_PREVIOUS("Previous dashboard page"),
+    VOLUME_UP("Volume up"), VOLUME_DOWN("Volume down"), MUTE("Mute"),
 }
 
 val LocalTeyesKeyRouter = staticCompositionLocalOf<TeyesKeyRouter?> { null }
@@ -22,16 +25,22 @@ class TeyesKeyRouter(
     private val nowMillis: () -> Long = SystemClock::elapsedRealtime,
     private val perform: (TeyesKeyAction) -> Unit,
 ) {
+    private val mutablePageChanges = kotlinx.coroutines.flow.MutableSharedFlow<Int>(extraBufferCapacity = 1)
+    val pageChanges = mutablePageChanges.asSharedFlow()
     private val resources = preferences.resources
     private val mutableStatus = MutableStateFlow(resources.getString(com.cabin.R.string.key_waiting))
     val status = mutableStatus.asStateFlow()
     private var learning: TeyesKeyAction? = null
     val isLearning: Boolean get() = learning != null
     private var learningUntil = 0L
+    private var learningLongPress = false
+    private val downTimes = mutableMapOf<Int, Long>()
+    private val longActions = mutableMapOf<Int, TeyesKeyAction>()
     private val held = mutableSetOf<Int>()
     private val actionsOnRelease = mutableMapOf<Int, TeyesKeyAction>()
 
-    fun learn(action: TeyesKeyAction) {
+    fun learn(action: TeyesKeyAction, longPress: Boolean = false) {
+        learningLongPress = longPress
         learning = action
         learningUntil = nowMillis() + 15_000
         mutableStatus.value = resources.getString(com.cabin.R.string.key_press, resources.getString(action.labelRes))
@@ -46,14 +55,25 @@ class TeyesKeyRouter(
         // Retain consumed key codes until their up event, but don't execute an action
         // after focus loss, a canceled gesture, or an interrupted learning session.
         actionsOnRelease.clear()
+        downTimes.clear()
+        longActions.clear()
         cancelLearning()
     }
 
     fun dispatch(event: KeyEvent): Boolean {
         val code = event.keyCode
         if (event.action == KeyEvent.ACTION_UP && held.remove(code)) {
-            val action = actionsOnRelease.remove(code)
-            if (!event.isCanceled && action != null) perform(action)
+            val shortAction = actionsOnRelease.remove(code)
+            val longAction = longActions.remove(code)
+            val downTime = downTimes.remove(code)
+            val action = if (downTime != null && nowMillis() - downTime >= 650L && longAction != null) longAction else shortAction
+            if (!event.isCanceled && action != null) {
+                when (action) {
+                    TeyesKeyAction.PAGE_NEXT -> mutablePageChanges.tryEmit(1)
+                    TeyesKeyAction.PAGE_PREVIOUS -> mutablePageChanges.tryEmit(-1)
+                    else -> perform(action)
+                }
+            }
             return true
         }
         if (!isMappable(code) || event.action != KeyEvent.ACTION_DOWN) return false
@@ -61,19 +81,25 @@ class TeyesKeyRouter(
         // New down after an up was lost. It must not inherit an old action.
         held.remove(code)
         actionsOnRelease.remove(code)
+        downTimes.remove(code)
+        longActions.remove(code)
         if (event.repeatCount != 0) return false
         mutableStatus.value = resources.getString(com.cabin.R.string.key_received, KeyEvent.keyCodeToString(code), code)
         val actionToLearn = learning.takeIf { nowMillis() <= learningUntil }
         learning = null
         if (actionToLearn != null) {
-            preferences.mapKey(code, actionToLearn)
+            preferences.mapKey(code, actionToLearn, learningLongPress)
             mutableStatus.value = resources.getString(com.cabin.R.string.key_saved, KeyEvent.keyCodeToString(code), resources.getString(actionToLearn.labelRes))
             held.add(code)
             return true
         }
-        val action = preferences.keyAction(code) ?: return false
+        val action = preferences.keyAction(code)
+        val longAction = preferences.keyAction(code, longPress = true)
+        if (action == null && longAction == null) return false
         held.add(code)
-        actionsOnRelease[code] = action
+        downTimes[code] = nowMillis()
+        if (action != null) actionsOnRelease[code] = action
+        if (longAction != null) longActions[code] = longAction
         return true
     }
 
@@ -99,5 +125,10 @@ val TeyesKeyAction.labelRes: Int
         TeyesKeyAction.NEXT -> com.cabin.R.string.teyes_action_next
         TeyesKeyAction.PREVIOUS -> com.cabin.R.string.teyes_action_previous
         TeyesKeyAction.VOICE -> com.cabin.R.string.teyes_action_voice
+        TeyesKeyAction.PAGE_NEXT -> com.cabin.R.string.layout_next_page
+        TeyesKeyAction.PAGE_PREVIOUS -> com.cabin.R.string.layout_previous_page
         TeyesKeyAction.CLIMATE -> com.cabin.R.string.teyes_action_climate
+        TeyesKeyAction.VOLUME_UP -> com.cabin.R.string.vehicle_volume_up
+        TeyesKeyAction.VOLUME_DOWN -> com.cabin.R.string.vehicle_volume_down
+        TeyesKeyAction.MUTE -> com.cabin.R.string.vehicle_mute
     }

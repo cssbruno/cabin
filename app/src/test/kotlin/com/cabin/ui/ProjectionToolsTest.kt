@@ -26,7 +26,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.cabin.BuildConfig
-import com.cabin.CabinManager.ProjectionAction
 import com.cabin.ui.theme.CabinTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -95,10 +94,10 @@ class ProjectionToolsTest {
         var blanked = 0
         compose.setContent {
             CabinTheme {
-                ProjectionToolsPanel(false, "Siri", {}, {}, null, null, {}, {}, "", Modifier.fillMaxSize(), onScreenOff = { blanked++ })
+                ProjectionToolsPanel({}, {}, Modifier.fillMaxSize(), onScreenOff = { blanked++ })
             }
         }
-        compose.onNodeWithText("Screen off · keep audio").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithText("Screen off").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
         compose.runOnIdle { assertEquals(1, blanked) }
     }
 
@@ -122,39 +121,37 @@ class ProjectionToolsTest {
     }
 
     @Test
-    fun `quick phone controls invoke only their supplied projection callbacks`() {
-        val actions = mutableListOf<ProjectionAction>()
-        var recoveries = 0
+    fun `simple menu exposes device switching without an extra controls layer`() {
+        var devices = 0
+        var settings = 0
+        var screenOff = 0
         var closed = false
         compose.setContent {
             CabinTheme(darkTheme = true) {
                 ProjectionToolsPanel(
-                    playing = true,
-                    voiceLabel = "Siri",
-                    onAction = { actions.add(it) },
-                    onRecoverPicture = { recoveries++ },
-                    onHub = null,
-                    onClimate = null,
-                    onSettings = {},
+                    onChangeDevice = { devices++ },
+                    connectedDeviceName = "My iPhone",
+                    onSettings = { settings++ },
                     onClose = { closed = true },
-                    status = "",
-                    modifier = Modifier.fillMaxSize(),
+                    onScreenOff = { screenOff++ },
                 )
             }
         }
-        compose.onNodeWithText("Siri").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithText("Projection tools").assertDoesNotExist()
+        compose.onNodeWithText("Change device").assertIsDisplayed().assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithText("My iPhone").assertIsDisplayed()
+        compose.onNodeWithText("Audio continues").assertIsDisplayed()
         saveScreenshot("projection-tools-dark")
-        compose.onNodeWithText("Siri").performClick()
-        compose.onNodeWithText("Pause").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
-        compose.onNodeWithText("Previous").performScrollTo().performClick()
-        compose.onNodeWithText("Next").performScrollTo().performClick()
-        compose.onNodeWithText("Recover picture").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
-        compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed().performClick()
-        compose.onNodeWithText("Vehicle Hub").assertDoesNotExist()
-        compose.onNodeWithText("A/C").assertDoesNotExist()
+        compose.onNodeWithText("Settings").assertIsDisplayed().assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithText("Screen off").assertIsDisplayed().performClick()
+        listOf("Recover picture", "More controls", "Siri", "Previous", "Next", "Vehicle Hub", "A/C").forEach {
+            compose.onNodeWithText(it).assertDoesNotExist()
+        }
+        compose.onNodeWithContentDescription("Close projection tools").performClick()
         compose.runOnIdle {
-            assertEquals(listOf(ProjectionAction.VOICE, ProjectionAction.PLAY_PAUSE, ProjectionAction.PREVIOUS, ProjectionAction.NEXT), actions)
-            assertEquals(1, recoveries)
+            assertEquals(1, devices)
+            assertEquals(1, settings)
+            assertEquals(1, screenOff)
             assertTrue(closed)
         }
     }
@@ -162,22 +159,16 @@ class ProjectionToolsTest {
     @Test
     fun `short large font viewport keeps close pinned and secondary actions reachable`() {
         var settings = 0
-        var climate = 0
+        var screenOff = 0
         compose.setContent {
             val density = LocalDensity.current
             CompositionLocalProvider(LocalDensity provides Density(density.density, 1.5f)) {
                 CabinTheme(darkTheme = false) {
                     Box(Modifier.width(360.dp).height(240.dp)) {
                         ProjectionToolsPanel(
-                            playing = false,
-                            voiceLabel = "Voice assistant",
-                            onAction = {},
-                            onRecoverPicture = {},
-                            onHub = {},
-                            onClimate = { climate++ },
                             onSettings = { settings++ },
                             onClose = {},
-                            status = "Video recovery requested. Your phone stays connected.",
+                            onScreenOff = { screenOff++ },
                             modifier = Modifier.fillMaxSize(),
                         )
                     }
@@ -187,34 +178,52 @@ class ProjectionToolsTest {
         compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
         val closeBounds = compose.onNodeWithContentDescription("Close projection tools").fetchSemanticsNode().boundsInRoot
         assertTrue("Pinned Close must be fully visible: $closeBounds", closeBounds.height >= 55f && closeBounds.top >= 0f && closeBounds.bottom <= 240f)
-        assertFullyVisibleInShortViewport("Voice assistant")
+        compose.onNodeWithText("Screen off").performScrollTo()
+        assertFullyVisibleInShortViewport("Screen off")
+        compose.onNodeWithText("Screen off").performClick()
         saveScreenshot("projection-tools-short-large-font")
-        compose.onNodeWithText("Play").performScrollTo()
-        assertFullyVisibleInShortViewport("Play")
-        compose.onNodeWithText("A/C").performScrollTo()
-        assertFullyVisibleInShortViewport("A/C")
-        compose.onNodeWithText("A/C").performClick()
-        compose.onNodeWithText("Settings").performScrollTo()
+        compose.onNodeWithText("Settings").assertIsDisplayed()
         assertFullyVisibleInShortViewport("Settings")
         compose.onNodeWithText("Settings").performClick()
         compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed()
         val finalCloseBounds = compose.onNodeWithContentDescription("Close projection tools").fetchSemanticsNode().boundsInRoot
         assertEquals("Scrolling must not move the pinned Close action", closeBounds, finalCloseBounds)
         compose.runOnIdle {
-            assertEquals(1, climate)
             assertEquals(1, settings)
+            assertEquals(1, screenOff)
         }
     }
 
     @Test
-    fun `blank voice label falls back to an accessible action name`() {
+    fun `device picker marks current phone and selects another without opening settings`() {
+        val current = com.cabin.CabinManager.DeviceInfo("01", "My iPhone", "CarPlay")
+        val other = com.cabin.CabinManager.DeviceInfo("02", "Other phone", "AndroidAuto")
+        var selected: com.cabin.CabinManager.DeviceInfo? = null
+        var backs = 0
         compose.setContent {
-            CabinTheme {
-                ProjectionToolsPanel(false, "", {}, {}, null, null, {}, {}, "", Modifier.fillMaxSize())
+            CabinTheme(darkTheme = true) {
+                ProjectionDevicePicker(listOf(current, other), current.btMac,
+                    { selected = it }, { backs++ }, {})
             }
         }
-        compose.onNodeWithText("Voice assistant").assertIsDisplayed()
-        compose.onNodeWithText("Play").assertIsDisplayed()
+        compose.onNodeWithText("Connected").assertIsDisplayed()
+        compose.onNodeWithText("My iPhone").performClick()
+        compose.runOnIdle { assertEquals(null, selected) }
+        saveScreenshot("projection-device-picker")
+        compose.onNodeWithText("Other phone").assertHeightIsAtLeast(56.dp).performClick()
+        compose.runOnIdle { assertEquals(other, selected) }
+        compose.onNodeWithContentDescription("Back").performClick()
+        compose.runOnIdle { assertEquals(1, backs) }
+        compose.onNodeWithText("Settings").assertDoesNotExist()
+    }
+
+    @Test
+    fun `empty device picker explains pairing and keeps close available`() {
+        compose.setContent {
+            CabinTheme { ProjectionDevicePicker(emptyList(), null, {}, {}, {}) }
+        }
+        compose.onNodeWithText("No paired wireless devices").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed()
     }
 
     private fun assertFullyVisibleInShortViewport(label: String) {

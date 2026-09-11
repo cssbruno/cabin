@@ -1,4 +1,4 @@
-name: Release APK
+name: Release APK and OEM ZIP
 on:
   push:
     tags: ['v*']
@@ -49,6 +49,22 @@ jobs:
               versionName=os.environ['CABIN_VERSION_NAME'], versionCode=int(os.environ['CABIN_VERSION_CODE']),
               size=apk.stat().st_size, sha256=hashlib.sha256(apk.read_bytes()).hexdigest())))
           PYMETA
+      - name: Package additive OEM integration ZIP
+        run: |
+          set -euo pipefail
+          python3 tools/privapp/build_oem_bundle.py --apk cabin.apk --output cabin-oem-integration.zip
+          sha256sum cabin-oem-integration.zip > cabin-oem-integration.zip.sha256
+      - name: Save release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cabin-release
+          if-no-files-found: error
+          path: |
+            cabin.apk
+            cabin.apk.sha256
+            update.json
+            cabin-oem-integration.zip
+            cabin-oem-integration.zip.sha256
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -57,10 +73,10 @@ jobs:
           flags=()
           if [[ "$RELEASE_TAG" == *-* ]]; then flags+=(--prerelease --latest=false); fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json --clobber
+            gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json cabin-oem-integration.zip cabin-oem-integration.zip.sha256 --clobber
             gh release edit "$RELEASE_TAG" "${flags[@]}"
           else
-            gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json \
+            gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json cabin-oem-integration.zip cabin-oem-integration.zip.sha256 \
               --verify-tag --title "Cabin ${RELEASE_TAG#v}" "${flags[@]}" \
-              --notes 'Signed Cabin APK. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'
+              --notes 'Signed Cabin APK and additive OEM integration ZIP. The ZIP is for firmware integration; it is not a self-installing FYT USB update. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'
           fi

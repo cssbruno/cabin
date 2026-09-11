@@ -113,6 +113,27 @@ class SettingsNavigationTest {
         compose.onNodeWithText("Display & controls").assertIsSelected()
     }
 
+    @Test fun `change device shortcut opens connection directly`() {
+        compose.setContent {
+            CabinTheme(darkTheme = true) {
+                SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.PHONES,
+                    embedded = true, initialCarPlayConnection = true)
+            }
+        }
+        compose.onNodeWithText("Connection").assertIsSelected()
+        compose.onNodeWithText("Display & controls").performClick()
+        compose.onNodeWithText("Display & controls").assertIsSelected()
+    }
+
+    @Test fun `car settings can be opened from the navigation rail`() {
+        compose.setContent {
+            CabinTheme { SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL) }
+        }
+        compose.onNodeWithText("Car Settings").performScrollTo().performClick()
+        compose.onNodeWithText("Lights").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Parking & camera").performScrollTo().assertIsDisplayed()
+    }
+
     private fun saveScreenshot(name: String) {
         compose.mainClock.advanceTimeByFrame()
         compose.waitForIdle()

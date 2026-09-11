@@ -17,8 +17,8 @@ import com.cabin.CabinManager
 import com.cabin.R
 
 @Composable
-internal fun CarPlaySettingsContent(manager: CabinManager) {
-    var controls by rememberSaveable { mutableStateOf(true) }
+internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false) {
+    var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(selected = !controls, onClick = { controls = false }, modifier = Modifier.heightIn(min = 56.dp),

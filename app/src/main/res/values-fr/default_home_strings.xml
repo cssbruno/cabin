@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_active">Cabin est votre lanceur par défaut. Le bouton Accueil ouvre votre tableau de bord.</string>
+    <string name="home_setup_detail">Utilisez Cabin comme écran d’accueil. Sélectionnez Cabin Home dans Android.</string>
+    <string name="home_set_default">Définir Cabin comme lanceur par défaut</string>
+    <string name="home_change">Changer le lanceur par défaut</string>
+</resources>

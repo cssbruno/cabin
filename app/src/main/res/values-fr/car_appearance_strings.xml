@@ -1,0 +1,14 @@
+<resources>
+    <string name="car_appearance">Apparence du véhicule</string>
+    <string name="car_appearance_detail">Personnaliser la vue des pneus</string>
+    <string name="car_sedan">Berline</string>
+    <string name="car_hatchback">Compacte</string>
+    <string name="car_suv">SUV</string>
+    <string name="car_pickup">Pickup</string>
+    <string name="car_silver">Argent</string>
+    <string name="car_white">Blanc</string>
+    <string name="car_black">Noir</string>
+    <string name="car_blue">Bleu</string>
+    <string name="car_red">Rouge</string>
+    <string name="car_green">Vert</string>
+</resources>

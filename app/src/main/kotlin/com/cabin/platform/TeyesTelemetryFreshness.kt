@@ -11,6 +11,22 @@ internal object TeyesClimateControlPolicy {
 
     fun isCivic0298(profile: Int): Boolean = profile in civic0298Profiles
 
+    // SYU Air_Activity_RZC_Focus.initCallbackId: RZC Civic vertical-screen L/H.
+    fun supportsTemperature(profile: Int): Boolean = profile == 1048874 || profile == 1114410
+
+    fun canToggle(state: TeyesClimateState, control: TeyesClimateSwitch): Boolean =
+        supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
+            control.feedbackCode in state.availableCodes
+
+    fun canAdjustTemperature(state: TeyesClimateState, zone: TeyesTemperatureZone, increase: Boolean): Boolean {
+        val raw = if (zone == TeyesTemperatureZone.DRIVER) state.leftTemperature else state.rightTemperature
+        val code = if (zone == TeyesTemperatureZone.DRIVER) 25 else 31
+        return supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
+            code in state.availableCodes && 33 in state.availableCodes && raw != null &&
+            (raw == -2 || raw == -3 || raw in 0..255) &&
+            !(increase && raw == -3) && !(!increase && raw == -2)
+    }
+
     fun supports(profile: Int): Boolean = profile == VERIFIED_ALTERNATE_PROFILE || profile in civic0298Profiles
 
     fun acCode(profile: Int): Int = if (profile == VERIFIED_ALTERNATE_PROFILE) 30 else 24
@@ -26,7 +42,10 @@ internal object TeyesClimateControlPolicy {
         if (!isCivic0298(profile)) return values.filterKeys { it !in 179..181 && it !in 0..5 && it != 11 && it != 18 && it != 19 }
         if (layout == TeyesVehicleDataLayout.LEGACY) {
             // Preserve the user's working motion interface. Never infer this dialect from profile ID alone.
-            return values.filterKeys { it == 1000 || it in 20..35 || it in 51..57 || it == 89 || it == 90 }
+            return values.filter { (code, value) ->
+                (code == 1000 || code in 20..35 || code in 51..57 || code == 89 || code == 90) &&
+                    (!supportsTemperature(profile) || code !in setOf(20, 21, 22, 23, 24, 26, 27, 28, 30, 32, 33) || value in 0..1)
+            }
         }
         return buildMap {
             values[1000]?.let { put(1000, it) }
@@ -43,6 +62,18 @@ internal object TeyesClimateControlPolicy {
             copy(18, 28, 0..1) // Screen airflow
             copy(19, 26, 0..1) // Face airflow
             copy(20, 27, 0..1) // Foot airflow
+            if (supportsTemperature(profile)) {
+                // SYU Air reports half-degrees Celsius or integer Fahrenheit, with -2/-3 limits.
+                copy(27, 25, -3..255)
+                copy(28, 31, -3..255)
+                copy(37, 33, 0..1)
+                copy(10, 32, 0..1) // Power
+                copy(12, 21, 0..1) // Recirculation (reference polarity)
+                copy(13, 20, 0..1) // Auto
+                copy(14, 30, 0..1) // Dual
+                copy(65, 22, 0..1) // Front defrost
+                copy(16, 23, 0..1) // Rear defrost
+            }
             for (door in 0..5) copy(door, door + 36, 0..1)
             // Service DISTANCE, never oil-life percent. Metadata is mandatory.
             if (values[179] in 0..1 && values[180] in 0..1 && values[181]?.let { it >= 0 } == true) {
@@ -50,7 +81,7 @@ internal object TeyesClimateControlPolicy {
                 put(180, values.getValue(180))
                 put(181, values.getValue(181))
             }
-            // Reference speed149/RPM151 scaling and temperature encoding are not verified.
+            // Reference speed149/RPM151 scaling remains unverified.
             // In particular raw89/90 are seat fields here, not motion data.
         }
     }
@@ -91,6 +122,12 @@ internal class TeyesTelemetryFreshness {
             val age = now - sample.receivedAt
             age >= 0 && validValue(code, sample.value) && (code == 1000 || age < lifetimeMs(code))
         }.mapValues { it.value.value }
+
+    /** SYU profiles define their own field meanings; do not apply Civic door/motion ranges. */
+    fun airSnapshot(now: Long): Map<Int, Int> = samples.filter { (code, sample) ->
+        val age = now - sample.receivedAt
+        age >= 0 && (code == 1000 || (age < 60_000L && sample.value in -65_535..65_535))
+    }.mapValues { it.value.value }
 
     fun clear() {
         samples.clear()
@@ -141,14 +178,17 @@ internal class TeyesClimatePopupPolicy {
     }
 }
 
-/** Stop retrying a missing/broken proprietary service instead of binding forever. */
+/**
+ * Recover from a vendor service restart without hammering a unit where the service is absent.
+ *
+ * The first failures use quick exponential backoff.  Afterwards we retain a low-frequency
+ * retry because TEYES can restart its CAN service well after the launcher has started.
+ */
 internal class TeyesTelemetryReconnectPolicy {
     private var attempts = 0
 
-    fun nextDelayMs(): Long? {
-        if (attempts >= 5) return null
-        return (1_000L shl attempts++).coerceAtMost(16_000L)
-    }
+    fun nextDelayMs(): Long =
+        if (attempts < 5) (1_000L shl attempts++).coerceAtMost(16_000L) else 30_000L
 
     fun reset() {
         attempts = 0

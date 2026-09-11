@@ -112,7 +112,7 @@ internal fun AdditionalDashboardWidget(module: DashboardModule, vehicle: TeyesCl
             Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (value.isNotEmpty()) Text(value, fontSize = if (compact) 20.sp else 28.sp,
                     fontWeight = FontWeight.Light, maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
-                if (module != DashboardModule.ASSISTANT || !compact) Text(title,
+                if (module != DashboardModule.DATE && (module != DashboardModule.ASSISTANT || !compact)) Text(title,
                     style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }

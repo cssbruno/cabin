@@ -118,6 +118,11 @@ fun SettingsScreen(
     initialTab: SettingsTab = SettingsTab.PHONES,
     vehicleState: com.cabin.platform.TeyesClimateState = com.cabin.platform.TeyesClimateState(),
     embedded: Boolean = false,
+    initialCarPlayConnection: Boolean = false,
+    moving: Boolean = false,
+    carActions: com.cabin.launcher.ClimateWidgetActions = com.cabin.launcher.ClimateWidgetActions(),
+    onParkedAction: ((() -> Unit) -> Unit) = {},
+    onOpenClimate: (() -> Unit)? = null,
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(initialTab.takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES) }
     val context = LocalContext.current
@@ -179,8 +184,9 @@ fun SettingsScreen(
             val content: @Composable () -> Unit = {
                 when (selectedTab) {
                     SettingsTab.CONTROL -> ControlTabContent(cabinManager, onResetCluster, onReinitForDisplayMode)
-                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager)
+                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager, initialConnection = initialCarPlayConnection)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
+                    SettingsTab.CAR -> com.cabin.ui.settings.CarSettingsScreen(vehicleState, moving, carActions, onParkedAction, onOpenClimate)
                     SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState)
                 }
             }

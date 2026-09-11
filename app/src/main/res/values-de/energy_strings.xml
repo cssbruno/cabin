@@ -1,0 +1,21 @@
+<resources>
+    <string name="energy_flow">Batterie-Energiefluss</string>
+    <string name="energy_battery">Batteriestand</string>
+    <string name="energy_charging">Batterie lädt</string>
+    <string name="energy_discharging">Batterie entlädt</string>
+    <string name="energy_settings">Ladeeinstellungen</string>
+    <string name="energy_current_limit">Ladestromgrenze</string>
+    <string name="energy_temperature">Innenraum-Solltemperatur</string>
+    <string name="energy_climate_battery">Klimatisierung über Batterie erlauben</string>
+    <string name="energy_minimum">Mindestladestand</string>
+    <string name="energy_palette">Ambientepalette</string>
+    <string name="energy_recommended">Empfohlene Farben</string>
+    <string name="energy_theme">Designfarben</string>
+    <string name="energy_maximum">Maximum</string>
+    <string name="energy_low">Niedrig</string>
+    <string name="energy_high">Hoch</string>
+    <string name="energy_seat_preset">Sitzvoreinstellung</string>
+    <string name="energy_default">Standard</string>
+    <string name="energy_save">Speichern</string>
+    <string name="energy_activate">Aktivieren</string>
+</resources>

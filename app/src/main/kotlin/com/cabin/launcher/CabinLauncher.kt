@@ -61,6 +61,7 @@ fun CabinLauncher(
     climateActions: ClimateWidgetActions = ClimateWidgetActions(),
 ) {
     val context = LocalContext.current
+    val home = rememberDefaultHomeState()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val health by manager.dashboardState.collectAsStateWithLifecycle()
     val navigation by NavigationStateManager.state.collectAsStateWithLifecycle()
@@ -114,12 +115,6 @@ fun CabinLauncher(
         if (moving) return
         if (!TeyesAppShortcuts.launch(context, app.component)) { failure = true; refresh++ }
     }
-    fun defaultHome() {
-        try { context.startActivity(Intent(Settings.ACTION_HOME_SETTINGS)) }
-        catch (_: RuntimeException) {
-            try { context.startActivity(Intent(Settings.ACTION_SETTINGS)) } catch (_: RuntimeException) { failure = true }
-        }
-    }
     val colors = MaterialTheme.colorScheme
     CompositionLocalProvider(LocalContentColor provides colors.onBackground) {
     Box(modifier.fillMaxSize().windowInsetsPadding(WindowInsets.displayCutout).background(if (currentPage == 1) androidx.compose.ui.graphics.Color.Transparent else colors.background)) {
@@ -132,6 +127,7 @@ fun CabinLauncher(
                             stringResource(if (onClimate != null) R.string.launcher_climate else R.string.launcher_vehicle), Modifier.size(28.dp))
                     }
                 }
+                if (home.unavailable) Text(stringResource(R.string.headunit_unavailable))
                 if (failure) TextButton({ failure = false }) { Text(stringResource(R.string.launcher_action_failed)) }
                 if (drawer && !moving) {
                     val visibleApps = remember(apps, search, layout.favorites) {
@@ -148,7 +144,7 @@ fun CabinLauncher(
                     val actions = listOf(
                         R.string.launcher_vehicle to onVehicle,
                         R.string.launcher_settings to onSettings,
-                        R.string.launcher_choose_home to { defaultHome() },
+                        (if (home.isDefault) R.string.home_change else R.string.home_set_default) to { home.choose() },
                         (if (active) R.string.launcher_disconnect else R.string.launcher_connect) to {
                             if (active) manager.disconnectPhone() else try { CabinProjectionService.startPhoneConnection(context) }
                             catch (_: RuntimeException) { failure = true }

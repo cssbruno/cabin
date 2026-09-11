@@ -10,6 +10,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlinx.coroutines.launch
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -29,6 +30,19 @@ class TeyesFeaturesTest {
         preferences = TeyesFeaturePreferences(context)
         preferences.select(0)
         router = TeyesKeyRouter(preferences, nowMillis = { nowMillis }) { performed.add(it) }
+    }
+
+    @Test fun `new audio mappings run once on release and ignore held repeats`() {
+        for (action in listOf(TeyesKeyAction.VOLUME_UP, TeyesKeyAction.VOLUME_DOWN, TeyesKeyAction.MUTE)) {
+            preferences.mapKey(KeyEvent.KEYCODE_F1, action)
+            val before = performed.size
+            assertTrue(router.dispatch(event(KeyEvent.ACTION_DOWN)))
+            assertTrue(router.dispatch(event(KeyEvent.ACTION_DOWN, repeat = 1)))
+            assertEquals(before, performed.size)
+            assertTrue(router.dispatch(event(KeyEvent.ACTION_UP)))
+            assertEquals(action, performed.last())
+            assertEquals(before + 1, performed.size)
+        }
     }
 
     @Test fun `profiles are independent and restored`() {
@@ -131,6 +145,40 @@ class TeyesFeaturesTest {
         assertFalse(TeyesAppShortcuts.launch(context, null))
         assertFalse(TeyesAppShortcuts.launch(context, "garbage"))
         assertFalse(TeyesAppShortcuts.launch(context, "no.such.app/.MainActivity"))
+    }
+
+    @Test fun `long hold runs only long action and focus loss suppresses both`() {
+        preferences.mapKey(KeyEvent.KEYCODE_F1, TeyesKeyAction.NEXT)
+        preferences.mapKey(KeyEvent.KEYCODE_F1, TeyesKeyAction.VOICE, longPress = true)
+        router.dispatch(event(KeyEvent.ACTION_DOWN))
+        nowMillis = 649
+        router.dispatch(event(KeyEvent.ACTION_UP))
+        assertEquals(listOf(TeyesKeyAction.NEXT), performed)
+        router.dispatch(event(KeyEvent.ACTION_DOWN))
+        nowMillis += 650
+        router.dispatch(event(KeyEvent.ACTION_DOWN, repeat = 1))
+        router.dispatch(event(KeyEvent.ACTION_UP))
+        assertEquals(listOf(TeyesKeyAction.NEXT, TeyesKeyAction.VOICE), performed)
+        router.dispatch(event(KeyEvent.ACTION_DOWN))
+        nowMillis += 1000
+        router.cancelPressedKeys()
+        router.dispatch(event(KeyEvent.ACTION_UP))
+        assertEquals(2, performed.size)
+    }
+
+    @Test fun `page mappings emit one navigation event and never control media`() = kotlinx.coroutines.runBlocking {
+        val pages = mutableListOf<Int>()
+        val job = launch(start = kotlinx.coroutines.CoroutineStart.UNDISPATCHED) {
+            router.pageChanges.collect { pages.add(it) }
+        }
+        preferences.mapKey(KeyEvent.KEYCODE_F1, TeyesKeyAction.PAGE_NEXT)
+        router.dispatch(event(KeyEvent.ACTION_DOWN))
+        router.dispatch(event(KeyEvent.ACTION_DOWN, repeat = 1))
+        router.dispatch(event(KeyEvent.ACTION_UP))
+        kotlinx.coroutines.yield()
+        assertEquals(listOf(1), pages)
+        assertTrue(performed.isEmpty())
+        job.cancel()
     }
 
     private fun event(

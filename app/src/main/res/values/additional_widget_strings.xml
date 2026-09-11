@@ -12,11 +12,12 @@
     <string name="widget_assistant">Phone assistant</string>
     <string name="widget_status_open">Open</string>
     <string name="widget_status_closed">Closed</string>
-    <string name="widget_status_live">Live</string>
-    <string name="widget_status_stale">Stale</string>
+    <string name="widget_status_live">Connected</string>
+    <string name="widget_status_stale">No recent data</string>
     <string name="widget_status_connecting">Connecting</string>
     <string name="widget_status_offline">Offline</string>
     <string name="widget_air_screen">Screen</string>
     <string name="widget_air_face">Face</string>
     <string name="widget_air_feet">Feet</string>
+    <string name="widget_media_app">Music app</string>
 </resources>

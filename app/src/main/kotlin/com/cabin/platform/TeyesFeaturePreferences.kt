@@ -69,8 +69,8 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
         ).normalized()
     }
 
-    fun keyAction(keyCode: Int): TeyesKeyAction? =
-        if (TeyesKeyRouter.isMappable(keyCode)) TeyesKeyAction.entries.firstOrNull { it.name == prefs.all["key.$keyCode"] } else null
+    fun keyAction(keyCode: Int, longPress: Boolean = false): TeyesKeyAction? =
+        if (TeyesKeyRouter.isMappable(keyCode)) TeyesKeyAction.entries.firstOrNull { it.name == prefs.all["${if (longPress) "longKey" else "key"}.$keyCode"] } else null
 
     @Synchronized
     fun forgetPhone(btMac: String) {
@@ -84,19 +84,22 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
         mutableRevision.value++
     }
 
-    fun mappedKeys(): Map<Int, TeyesKeyAction> =
+    fun mappedKeys(longPress: Boolean = false): Map<Int, TeyesKeyAction> =
         prefs.all.keys.mapNotNull { key ->
-            val code = key.removePrefix("key.").toIntOrNull()
-            if (key.startsWith("key.") && code != null) keyAction(code)?.let { code to it } else null
+            val prefix = if (longPress) "longKey." else "key."
+            val code = key.removePrefix(prefix).toIntOrNull()
+            if (key.startsWith(prefix) && code != null) keyAction(code, longPress)?.let { code to it } else null
         }.toMap()
 
     @Synchronized
     fun mapKey(
         keyCode: Int,
         action: TeyesKeyAction?,
+        longPress: Boolean = false,
     ) {
         require(TeyesKeyRouter.isMappable(keyCode))
-        prefs.edit { if (action == null) remove("key.$keyCode") else putString("key.$keyCode", action.name) }
+        val key = "${if (longPress) "longKey" else "key"}.$keyCode"
+        prefs.edit { if (action == null) remove(key) else putString(key, action.name) }
         mutableRevision.value++
     }
 
@@ -118,6 +121,7 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
         TeyesConfigurationSnapshot(
             profiles = (0..2).map(::readProfile),
             keys = mappedKeys(),
+            longKeys = mappedKeys(longPress = true),
             shortcuts = TeyesShortcut.entries.mapNotNull { kind -> shortcut(kind)?.let { kind to it } }.toMap(),
             projection = ProjectionPreferences.getInstance(appContext).state.value,
             measurementUnit = MeasurementPreferences.get(appContext).unit.value,
@@ -128,9 +132,10 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
     fun replaceConfiguration(snapshot: TeyesConfigurationSnapshot): Boolean {
         TeyesConfigurationBackup.validate(snapshot)
         val editor = prefs.edit()
-        prefs.all.keys.filter { it.startsWith("driver.") || it.startsWith("key.") || it.startsWith("shortcut.") }.forEach(editor::remove)
+        prefs.all.keys.filter { it.startsWith("driver.") || it.startsWith("key.") || it.startsWith("longKey.") || it.startsWith("shortcut.") }.forEach(editor::remove)
         snapshot.profiles.forEach { editor.putProfile(it) }
         snapshot.keys.forEach { (key, action) -> editor.putString("key.$key", action.name) }
+        snapshot.longKeys.forEach { (key, action) -> editor.putString("longKey.$key", action.name) }
         snapshot.shortcuts.forEach { (kind, component) -> editor.putString("shortcut.${kind.name}", component) }
         // commit is used by the IO caller so success means persistence completed.
         val profilesPersisted = editor.commit()

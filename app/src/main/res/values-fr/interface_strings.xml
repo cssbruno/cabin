@@ -537,4 +537,10 @@
         <item quantity="other">%1$d instantanés récents de fin de flux dans le rapport. Arrêts volontaires inclus.</item>
         <item quantity="many">%1$d instantanés récents de fin de flux dans le rapport. Arrêts volontaires inclus.</item>
     </plurals>
+    <string name="projection_minimize">Réduire vers le lanceur</string>
+    <string name="projection_change_device">Changer d’appareil</string>
+    <string name="projection_screen_off_short">Éteindre l’écran</string>
+    <string name="projection_audio_continues">L’audio continue</string>
+    <string name="projection_usb_phone">Téléphone connecté par USB</string>
+    <string name="projection_pair_from_phone">Associez un autre téléphone depuis ses réglages Bluetooth.</string>
 </resources>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="car_appearance">Aspecto del coche</string>
+    <string name="car_appearance_detail">Personaliza la ilustración de neumáticos</string>
+    <string name="car_sedan">Sedán</string>
+    <string name="car_hatchback">Compacto</string>
+    <string name="car_suv">SUV</string>
+    <string name="car_pickup">Pickup</string>
+    <string name="car_silver">Plata</string>
+    <string name="car_white">Blanco</string>
+    <string name="car_black">Negro</string>
+    <string name="car_blue">Azul</string>
+    <string name="car_red">Rojo</string>
+    <string name="car_green">Verde</string>
+</resources>

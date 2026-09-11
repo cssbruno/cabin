@@ -537,4 +537,10 @@
         <item quantity="other">%1$d registros recentes de fim de transmissão disponíveis no relatório. Inclui interrupções intencionais.</item>
         <item quantity="many">%1$d registros recentes de fim de transmissão disponíveis no relatório. Inclui interrupções intencionais.</item>
     </plurals>
+    <string name="projection_minimize">Minimizar para o launcher</string>
+    <string name="projection_change_device">Trocar dispositivo</string>
+    <string name="projection_screen_off_short">Apagar tela</string>
+    <string name="projection_audio_continues">O áudio continua</string>
+    <string name="projection_usb_phone">Telefone conectado por USB</string>
+    <string name="projection_pair_from_phone">Emparelhe outro telefone pelo Bluetooth do telefone.</string>
 </resources>

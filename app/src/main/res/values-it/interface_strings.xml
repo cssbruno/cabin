@@ -537,4 +537,10 @@
         <item quantity="other">%1$d istantanee recenti di fine streaming nel rapporto. Include arresti intenzionali.</item>
         <item quantity="many">%1$d istantanee recenti di fine streaming nel rapporto. Include arresti intenzionali.</item>
     </plurals>
+    <string name="projection_minimize">Riduci al launcher</string>
+    <string name="projection_change_device">Cambia dispositivo</string>
+    <string name="projection_screen_off_short">Spegni schermo</string>
+    <string name="projection_audio_continues">L’audio continua</string>
+    <string name="projection_usb_phone">Telefono collegato tramite USB</string>
+    <string name="projection_pair_from_phone">Associa un altro telefono dalle sue impostazioni Bluetooth.</string>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_active">Cabin ist dein Standard-Launcher. Die Home-Taste öffnet dein Dashboard.</string>
+    <string name="home_setup_detail">Nutze Cabin als Startbildschirm. Wähle Cabin Home im Android-Dialog.</string>
+    <string name="home_set_default">Cabin als Standard-Launcher festlegen</string>
+    <string name="home_change">Standard-Launcher ändern</string>
+</resources>

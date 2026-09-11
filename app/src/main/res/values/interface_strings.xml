@@ -532,4 +532,10 @@
         <item quantity="one">%1$d recent stream-end snapshot available in the report. Intentional stops are included.</item>
         <item quantity="other">%1$d recent stream-end snapshots available in the report. Intentional stops are included.</item>
     </plurals>
+    <string name="projection_minimize">Minimize to launcher</string>
+    <string name="projection_change_device">Change device</string>
+    <string name="projection_screen_off_short">Screen off</string>
+    <string name="projection_audio_continues">Audio continues</string>
+    <string name="projection_usb_phone">Phone connected by USB</string>
+    <string name="projection_pair_from_phone">Pair another phone using Bluetooth on your phone.</string>
 </resources>

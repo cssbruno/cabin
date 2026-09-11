@@ -1,0 +1,14 @@
+<resources>
+    <string name="layout_undo">Undo layout change</string>
+    <string name="layout_redo">Redo layout change</string>
+    <string name="layout_presets">Add preset page</string>
+    <string name="layout_commute">Commute</string>
+    <string name="layout_navigation">Navigation</string>
+    <string name="layout_parking">Parking</string>
+    <string name="layout_glance">Glance</string>
+    <string name="layout_next_page">Next dashboard page</string>
+    <string name="layout_previous_page">Previous dashboard page</string>
+    <string name="layout_short_press">Short press</string>
+    <string name="layout_long_press">Long press (hold 0.65s)</string>
+    <string name="layout_drag_hint">Drag widgets to move them. Nearby widgets make room automatically.</string>
+</resources>

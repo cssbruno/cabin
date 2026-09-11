@@ -1,0 +1,17 @@
+<resources>
+    <string name="alert_title">Fahrzeugwarnungen</string>
+    <string name="alert_none">Keine aktiven Meldungen empfangen</string>
+    <string name="alert_disconnected">Fahrzeug getrennt</string>
+    <string name="alert_hood">Motorhaube offen</string>
+    <string name="alert_front_left">Tür vorne links offen</string>
+    <string name="alert_front_right">Tür vorne rechts offen</string>
+    <string name="alert_rear_left">Tür hinten links offen</string>
+    <string name="alert_rear_right">Tür hinten rechts offen</string>
+    <string name="alert_trunk">Kofferraum offen</string>
+    <string name="alert_oil_due">Ölwechsel fällig</string>
+    <string name="alert_service_due">Wartung fällig</string>
+    <string name="history_title">Reifendruckverlauf</string>
+    <string name="history_empty">Warten auf Reifendaten</string>
+    <string name="history_clear">Reifendruckverlauf löschen</string>
+    <string name="history_cleared">Reifendruckverlauf gelöscht</string>
+</resources>

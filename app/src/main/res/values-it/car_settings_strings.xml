@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_settings_title">Impostazioni auto</string>
+    <string name="car_settings_detail">I comandi auto in un solo posto. Le funzioni disponibili dipendono dal veicolo.</string>
+    <string name="car_settings_connected">Veicolo connesso. I comandi richiedono dati aggiornati.</string>
+    <string name="car_settings_disconnected">Veicolo disconnesso. Comandi di fabbrica non disponibili.</string>
+    <string name="car_settings_lights">Luci</string>
+    <string name="car_settings_lights_detail">Fari, luci interne e illuminazione ambiente</string>
+    <string name="car_settings_mirrors_detail">Ripiegamento specchi, inclinazione in retromarcia e tergicristalli automatici</string>
+    <string name="car_settings_parking">Parcheggio e telecamera</string>
+    <string name="car_settings_parking_detail">Vista telecamera e suoni dei sensori</string>
+    <string name="car_settings_comfort">Comfort</string>
+    <string name="car_settings_comfort_detail">Climatizzazione e impostazioni sedile supportate</string>
+    <string name="car_settings_charging_detail">Preferenze di ricarica della batteria e climatizzazione</string>
+    <string name="car_settings_audio">Audio e volante</string>
+    <string name="car_settings_audio_detail">Amplificatore di fabbrica e scorciatoie dei pulsanti</string>
+    <string name="car_settings_my_car">La mia auto</string>
+    <string name="car_settings_my_car_detail">Aspetto, viaggi, manutenzione e compatibilità</string>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="layout_undo">Desfazer alteração</string>
+    <string name="layout_redo">Refazer alteração</string>
+    <string name="layout_presets">Adicionar página pronta</string>
+    <string name="layout_commute">Trajeto diário</string>
+    <string name="layout_navigation">Navegação</string>
+    <string name="layout_parking">Estacionamento</string>
+    <string name="layout_glance">Visão rápida</string>
+    <string name="layout_next_page">Próxima página</string>
+    <string name="layout_previous_page">Página anterior</string>
+    <string name="layout_short_press">Toque curto</string>
+    <string name="layout_long_press">Toque longo (0,65 s)</string>
+    <string name="layout_drag_hint">Arraste os widgets para movê-los. Os outros abrem espaço automaticamente.</string>
+</resources>

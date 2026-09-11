@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import java.util.Locale
 
-enum class TeyesShortcut(val label: String) { EQUALIZER("Equalizer / DSP"), TPMS("Tyre pressure"), DASHCAM("Dashcam"), OBD("OBD dashboard") }
+enum class TeyesShortcut(val label: String) { EQUALIZER("Equalizer / DSP"), TPMS("Tyre pressure"), DASHCAM("Dashcam"), OBD("OBD dashboard"), RADIO("Radio"), BLUETOOTH_AUDIO("Bluetooth audio") }
 
 data class TeyesLaunchableApp(val component: String, val label: String)
 
@@ -96,5 +96,7 @@ val TeyesShortcut.labelRes: Int
         TeyesShortcut.EQUALIZER -> com.cabin.R.string.teyes_shortcut_equalizer
         TeyesShortcut.TPMS -> com.cabin.R.string.teyes_shortcut_tpms
         TeyesShortcut.DASHCAM -> com.cabin.R.string.teyes_shortcut_dashcam
+        TeyesShortcut.RADIO -> com.cabin.R.string.tools_radio
+        TeyesShortcut.BLUETOOTH_AUDIO -> com.cabin.R.string.tools_bluetooth
         TeyesShortcut.OBD -> com.cabin.R.string.teyes_shortcut_obd
     }

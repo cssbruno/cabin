@@ -12,11 +12,12 @@
     <string name="widget_assistant">Assistente telefono</string>
     <string name="widget_status_open">Aperto</string>
     <string name="widget_status_closed">Chiuso</string>
-    <string name="widget_status_live">In tempo reale</string>
-    <string name="widget_status_stale">Non aggiornato</string>
+    <string name="widget_status_live">Connesso</string>
+    <string name="widget_status_stale">Nessun dato recente</string>
     <string name="widget_status_connecting">Connessione</string>
     <string name="widget_status_offline">Offline</string>
     <string name="widget_air_screen">Parabrezza</string>
     <string name="widget_air_face">Viso</string>
     <string name="widget_air_feet">Piedi</string>
+    <string name="widget_media_app">App musicale</string>
 </resources>

@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -47,6 +48,111 @@ class CabinLauncherTest {
         manager = CabinManager(context)
     }
     @After fun release() = runBlocking { manager.releaseAndWait() }
+
+    @Test fun `climate destination fills screen and closes back to same dashboard`() {
+        val climate = androidx.compose.runtime.mutableStateOf(false)
+        compose.setContent {
+            CabinTheme {
+                CabinApp(manager, null, DisplayMode.FULLSCREEN_IMMERSIVE,
+                    climateOverlayVisible = climate.value,
+                    onOpenClimate = { climate.value = !climate.value }, onResetCluster = {})
+            }
+        }
+        val before = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        compose.mainClock.autoAdvance = false
+        compose.runOnIdle { climate.value = true }
+        compose.mainClock.advanceTimeBy(200)
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(32)
+        compose.runOnIdle { assertTrue("Climate must still be open", climate.value) }
+        compose.onNodeWithTag("climate-page").assertWidthIsEqualTo(1024.dp).assertHeightIsEqualTo(600.dp)
+        compose.runOnIdle { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.mainClock.advanceTimeBy(200)
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(32)
+        compose.onNodeWithTag("climate-page").assertDoesNotExist()
+        assertEquals(before, compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot)
+    }
+
+    @Test fun `small climate widget opens climate without sending AC commands`() {
+        var opens = 0
+        var commands = 0
+        compose.setContent {
+            CabinTheme { Box(Modifier.size(108.dp)) {
+                AcWidget(TeyesClimateState(), ClimateWidgetActions(onAc = { commands++ })) { opens++ }
+            } }
+        }
+        compose.onNodeWithTag("ac-compact").performClick()
+        assertEquals(1, opens)
+        assertEquals(0, commands)
+    }
+
+    @Test fun `medium climate widget offers inline temperature and fan controls`() {
+        var adjustment: Pair<com.cabin.platform.TeyesTemperatureZone, Boolean>? = null
+        val state = TeyesClimateState(connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 1048874, availableCodes = setOf(24, 29, 25, 31, 33),
+            controlsAvailable = true, fanLevel = 3, leftTemperature = 44, rightTemperature = 46)
+        compose.setContent {
+            CabinTheme { Box(Modifier.width(320.dp).height(340.dp)) {
+                AcWidget(state, ClimateWidgetActions(onAc = {}, onFan = {},
+                    onTemperature = { zone, up -> adjustment = zone to up })) {}
+            } }
+        }
+        compose.onNodeWithContentDescription("Increase Driver temperature").assertIsDisplayed().performClick()
+        assertEquals(com.cabin.platform.TeyesTemperatureZone.DRIVER to true, adjustment)
+        compose.onNodeWithContentDescription("Select fan speed").assertIsDisplayed()
+        compose.onNodeWithText("A/C off").assertIsDisplayed()
+    }
+
+    @Test fun `Civic temperature arrows surround readouts and stay disabled without live readings`() {
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(480.dp).height(560.dp)) {
+                    AcWidget(TeyesClimateState(profileId = 1048874), ClimateWidgetActions(), {})
+                }
+            }
+        }
+        for (zone in listOf("Driver", "Passenger")) {
+            val up = compose.onNodeWithContentDescription("Increase $zone temperature")
+            val down = compose.onNodeWithContentDescription("Decrease $zone temperature")
+            val reading = compose.onNodeWithContentDescription(zone)
+            up.assertIsDisplayed().assertIsNotEnabled()
+            down.assertIsDisplayed().assertIsNotEnabled()
+            assertTrue(up.fetchSemanticsNode().boundsInRoot.bottom <= reading.fetchSemanticsNode().boundsInRoot.top)
+            assertTrue(down.fetchSemanticsNode().boundsInRoot.top >= reading.fetchSemanticsNode().boundsInRoot.bottom)
+        }
+    }
+
+    @Test fun `temperature arrows dispatch zone and direction without changing fan or readings`() {
+        val calls = mutableListOf<Pair<com.cabin.platform.TeyesTemperatureZone, Boolean>>()
+        val vehicle = TeyesClimateState(connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 1048874, availableCodes = setOf(25, 31, 33), leftTemperature = 44, rightTemperature = 46)
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(480.dp).height(560.dp)) {
+                    AcWidget(vehicle, ClimateWidgetActions(onTemperature = { zone, up -> calls.add(zone to up) }), {})
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Increase Driver temperature").performClick()
+        compose.onNodeWithContentDescription("Decrease Passenger temperature").performClick()
+        assertEquals(listOf(com.cabin.platform.TeyesTemperatureZone.DRIVER to true,
+            com.cabin.platform.TeyesTemperatureZone.PASSENGER to false), calls)
+        compose.onNodeWithText("22.0°C").assertIsDisplayed()
+        compose.onNodeWithText("23.0°C").assertIsDisplayed()
+    }
+
+    @Test fun `other vehicle profiles have no temperature arrows`() {
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(480.dp).height(560.dp)) {
+                    AcWidget(TeyesClimateState(profileId = 262465), ClimateWidgetActions(), {})
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Increase Driver temperature").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Decrease Passenger temperature").assertDoesNotExist()
+    }
 
     @Test fun `launcher opens projection and app drawer without starting a session`() {
         var opened = 0
@@ -106,6 +212,21 @@ class CabinLauncherTest {
         }
         compose.onNodeWithTag("launcher-pages").performTouchInput { swipeLeft() }
         compose.onNodeWithText("Search installed apps").assertIsDisplayed()
+    }
+
+    @Test fun `temporary glance restores the existing dashboard`() {
+        compose.setContent {
+            CabinTheme { CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() }) }
+        }
+        compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Quick controls").performClick()
+        compose.onNodeWithText("Glance").performClick()
+        compose.onNodeWithTag("module-SPEED-10001").assertIsDisplayed()
+        compose.onNodeWithTag("module-PROJECTION-1").assertDoesNotExist()
+        screenshot("launcher-glance")
+        compose.onNodeWithContentDescription("Quick controls").performClick()
+        compose.onNodeWithText("Exit glance mode").performClick()
+        compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
     }
 
     @Test fun `driving surface keeps primary actions visible and customization separate`() {
@@ -412,10 +533,10 @@ class CabinLauncherTest {
         compose.onNodeWithText("A/C off").assertIsDisplayed()
         compose.runOnIdle { state.value = state.value.copy(ac = true) }
         compose.onNodeWithText("A/C on").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Increase fan speed").performClick()
+        compose.onNodeWithContentDescription("Select fan speed").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.SetProgress) { it(4f) }
         assertEquals(4, fanCommand)
         compose.runOnIdle { state.value = state.value.copy(health = com.cabin.platform.TeyesTelemetryHealth.STALE, controlsAvailable = false) }
-        compose.onNodeWithContentDescription("Increase fan speed").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Select fan speed").assertIsNotEnabled()
         compose.onNodeWithText("A/C —").assertIsNotEnabled()
         compose.onNodeWithContentDescription("Refresh A/C data").performClick()
         assertEquals(1, refreshes)
@@ -437,13 +558,13 @@ class CabinLauncherTest {
         }
         fun checkControls(tag: String) {
             val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
-            listOf("Open climate controls", "Increase fan speed", "Decrease fan speed", "Select fan speed").forEach { label ->
+            listOf("Open climate controls", "Select fan speed").forEach { label ->
                 val control = compose.onNodeWithContentDescription(label).assertIsDisplayed().assertHeightIsAtLeast(56.dp)
                 val rect = control.fetchSemanticsNode().boundsInRoot
                 assertTrue("$label must fit in $tag", rect.left >= bounds.left && rect.top >= bounds.top &&
                     rect.right <= bounds.right && rect.bottom <= bounds.bottom)
             }
-            compose.onNodeWithContentDescription("Increase fan speed").performClick()
+            compose.onNodeWithContentDescription("Select fan speed").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.SetProgress) { it(4f) }
             assertEquals(4, command)
         }
         checkControls("ac-horizontal")
@@ -597,16 +718,30 @@ class CabinLauncherTest {
                 }
             }
         }
-        compose.onNodeWithContentDescription("Select fan speed").performClick()
-        compose.onNodeWithContentDescription("Fan 6/7").performClick()
+        compose.onNodeWithContentDescription("Select fan speed").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.SetProgress) { it(6f) }
         assertEquals(6, command)
         compose.onNodeWithText("Fan 3/7").assertIsDisplayed()
         compose.runOnIdle { state.value = state.value.copy(fanLevel = 6) }
         compose.onNodeWithText("Fan 6/7").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Select fan speed").performClick()
         compose.runOnIdle { state.value = state.value.copy(health = com.cabin.platform.TeyesTelemetryHealth.STALE) }
-        compose.onNodeWithContentDescription("Fan 7/7").assertDoesNotExist()
-        compose.onNodeWithContentDescription("Increase fan speed").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Select fan speed").assertIsNotEnabled()
+    }
+
+    @Test fun `fan bar sends one command on drag release and keeps reported level`() {
+        val commands = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 262465, availableCodes = setOf(35), fanControlsAvailable = true, fanLevel = 3)
+        compose.setContent {
+            CabinTheme { Box(Modifier.width(480.dp).height(160.dp)) {
+                com.cabin.ui.FanSpeedControls(vehicle, { commands.add(it) })
+            } }
+        }
+        val bar = compose.onNodeWithContentDescription("Select fan speed")
+        bar.performTouchInput { down(center); moveTo(androidx.compose.ui.geometry.Offset(width - 1f, center.y), 500) }
+        compose.runOnIdle { assertTrue(commands.isEmpty()) }
+        bar.performTouchInput { up() }
+        assertEquals(listOf(7), commands)
+        compose.onNodeWithText("Fan 3/7").assertIsDisplayed()
     }
 
     @Test fun `long press drag swaps widgets and a second drag uses their new positions`() {
@@ -634,6 +769,81 @@ class CabinLauncherTest {
         assertEquals(first.left, compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot.left, 2f)
         compose.onNodeWithContentDescription("Done").performClick()
         screenshot("launcher-fine-grid")
+    }
+
+    @Test fun `small screen edit mode reveals the full draggable grid`() {
+        compose.setContent {
+            CabinTheme {
+                Box(Modifier.width(480.dp).height(320.dp)) {
+                    CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() })
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Edit layout").performClick()
+        compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
+        compose.onNodeWithTag("module-MEDIA-2").assertIsDisplayed()
+        compose.onNodeWithTag("module-SPEED-3").assertIsDisplayed()
+        compose.onNodeWithTag("page-dot-1").performClick()
+        val first = compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot
+        val other = compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("module-RPM-4").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset(other.left - first.left, 0f), 500)
+            up()
+        }
+        assertEquals(other.left, compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot.left, 2f)
+        screenshot("launcher-small-drag-grid")
+    }
+
+    @Test fun `dragging CarPlay rearranges adjacent widgets`() {
+        compose.setContent {
+            CabinTheme { CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() }) }
+        }
+        compose.onNodeWithContentDescription("Edit layout").performClick()
+        val before = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("module-PROJECTION-1").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset((width + 4f) / 3f, 0f), 500)
+            up()
+        }
+        val after = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        assertTrue(after.left > before.left)
+        assertTrue(compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot.right <= after.left)
+        assertTrue(compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot.right <= after.left)
+        screenshot("launcher-drag-auto-layout")
+    }
+
+    @Test fun `tile animation slides neighbors but tracks dragging immediately`() {
+        val target = androidx.compose.runtime.mutableStateOf(androidx.compose.ui.geometry.Offset.Zero)
+        val delta = androidx.compose.runtime.mutableStateOf<androidx.compose.ui.geometry.Offset?>(null)
+        val release = androidx.compose.runtime.mutableStateOf<androidx.compose.ui.geometry.Offset?>(null)
+        lateinit var position: androidx.compose.runtime.State<androidx.compose.ui.geometry.Offset>
+        compose.setContent {
+            position = rememberDashboardTilePosition(target.value, delta.value, release.value) { release.value = null }
+        }
+        compose.mainClock.autoAdvance = false
+        compose.runOnIdle { target.value = androidx.compose.ui.geometry.Offset(200f, 0f) }
+        compose.mainClock.advanceTimeByFrame()
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(112)
+        compose.runOnIdle { assertTrue("Intermediate neighbor position: ${position.value.x}", position.value.x > 0f && position.value.x < 200f) }
+        compose.mainClock.advanceTimeBy(300)
+        compose.runOnIdle { assertEquals(200f, position.value.x, 0.1f); delta.value = androidx.compose.ui.geometry.Offset(80f, 0f) }
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(32)
+        compose.runOnIdle { assertEquals(280f, position.value.x, 0.1f) }
+        compose.runOnIdle {
+            release.value = androidx.compose.ui.geometry.Offset(280f, 0f)
+            delta.value = null
+            target.value = androidx.compose.ui.geometry.Offset(300f, 0f)
+        }
+        compose.mainClock.advanceTimeByFrame()
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(112)
+        compose.runOnIdle { assertTrue("Intermediate release position: ${position.value.x}", position.value.x > 280f && position.value.x < 300f) }
+        compose.mainClock.advanceTimeBy(300)
+        compose.runOnIdle { assertEquals(300f, position.value.x, 0.1f) }
+        compose.mainClock.autoAdvance = true
     }
 
     private fun assertPage(label: String) {

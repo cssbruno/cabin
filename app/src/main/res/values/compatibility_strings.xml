@@ -1,0 +1,7 @@
+<resources>
+    <string name="compat_title">Vehicle compatibility</string>
+    <string name="compat_unverified">No verified mapping</string>
+    <string name="compat_live">Live feedback</string>
+    <string name="compat_waiting">Waiting for feedback</string>
+    <string name="compat_air_actions">Climate actions ready: %1$d / %2$d</string>
+</resources>

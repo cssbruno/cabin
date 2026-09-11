@@ -1,0 +1,21 @@
+<resources>
+    <string name="energy_flow">Flux d’énergie de la batterie</string>
+    <string name="energy_battery">Niveau de batterie</string>
+    <string name="energy_charging">Batterie en charge</string>
+    <string name="energy_discharging">Batterie en décharge</string>
+    <string name="energy_settings">Réglages de charge</string>
+    <string name="energy_current_limit">Limite du courant de charge</string>
+    <string name="energy_temperature">Température cible de l’habitacle</string>
+    <string name="energy_climate_battery">Autoriser la climatisation sur batterie</string>
+    <string name="energy_minimum">Charge minimale de batterie</string>
+    <string name="energy_palette">Palette ambiante</string>
+    <string name="energy_recommended">Couleurs recommandées</string>
+    <string name="energy_theme">Couleurs du thème</string>
+    <string name="energy_maximum">Maximum</string>
+    <string name="energy_low">Bas</string>
+    <string name="energy_high">Haut</string>
+    <string name="energy_seat_preset">Préréglage du siège</string>
+    <string name="energy_default">Par défaut</string>
+    <string name="energy_save">Enregistrer</string>
+    <string name="energy_activate">Activer</string>
+</resources>

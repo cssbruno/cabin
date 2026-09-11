@@ -78,9 +78,8 @@ class ProjectionPreferencesUiTest {
         if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
             compose.onNodeWithText("Return to projection when ready").performScrollTo().assertIsOn()
             compose.onNodeWithText("Vehicle speed HUD").performScrollTo().assertIsOff()
-            assertOneClimateModeSelected("Summary · recommended")
-            compose.onNodeWithText("Open climate panel").assertIsNotSelected()
-            compose.onNodeWithText("Off").assertIsNotSelected()
+            assertManualClimateOnly()
+            compose.onNodeWithText("Open climate panel").assertDoesNotExist()
         } else {
             compose.onNodeWithText("Return to projection when ready").assertDoesNotExist()
             compose.onNodeWithText("Vehicle speed HUD").assertDoesNotExist()
@@ -94,7 +93,7 @@ class ProjectionPreferencesUiTest {
     }
 
     @Test
-    fun `each setting invokes only its callback and climate selection stays exclusive`() {
+    fun `each setting invokes only its callback and automatic climate choices are absent`() {
         val harness = PreferencesHarness()
         showPreferences(harness, isTeyes = true)
 
@@ -105,20 +104,11 @@ class ProjectionPreferencesUiTest {
         assertFullyReachable("Vehicle speed HUD")
         compose.onNodeWithText("Vehicle speed HUD").performClick().assertIsOn()
 
-        listOf(
-            "Open climate panel" to ClimateNoticeMode.PANEL,
-            "Off" to ClimateNoticeMode.OFF,
-            "Summary · recommended" to ClimateNoticeMode.SUMMARY,
-        ).forEach { (label, mode) ->
-            assertFullyReachable(label)
-            compose.onNodeWithText(label).performClick()
-            assertOneClimateModeSelected(label)
-            compose.runOnIdle { assertEquals(mode, harness.state.climateNoticeMode) }
-        }
+        compose.onNodeWithText("Open climate panel").assertDoesNotExist()
 
         compose.runOnIdle {
             assertEquals(
-                listOf("focus:false", "return:false", "hud:true", "notice:PANEL", "notice:OFF", "notice:SUMMARY"),
+                listOf("focus:false", "return:false", "hud:true"),
                 harness.events,
             )
             assertEquals(ProjectionPreferencesState(false, true, ClimateNoticeMode.SUMMARY, false), harness.state)
@@ -129,14 +119,14 @@ class ProjectionPreferencesUiTest {
     fun `narrow large font layout keeps every toggle and radio row fully reachable`() {
         showPreferences(PreferencesHarness(), isTeyes = true, width = 360, height = 480, fontScale = 1.5f)
         allControlLabels.forEach(::assertFullyReachable)
-        assertOneClimateModeSelected("Summary · recommended")
+        assertManualClimateOnly()
     }
 
     @Test
     fun `short landscape layout scrolls every control into a full tap target`() {
         showPreferences(PreferencesHarness(), isTeyes = true, width = 480, height = 240)
         allControlLabels.forEach(::assertFullyReachable)
-        assertOneClimateModeSelected("Summary · recommended")
+        assertManualClimateOnly()
     }
 
     private fun showPreferences(
@@ -192,9 +182,9 @@ class ProjectionPreferencesUiTest {
         assertTrue("$label must fit the available width: $bounds in $viewport", bounds.left >= viewport.left - 1f && bounds.right <= viewport.right + 1f)
     }
 
-    private fun assertOneClimateModeSelected(label: String) {
-        compose.onAllNodes(isSelected() and hasAnyAncestor(hasTestTag("climate_notice_choices"))).assertCountEquals(1)
-        compose.onNodeWithText(label).assertIsSelected()
+    private fun assertManualClimateOnly() {
+        compose.onNodeWithText("No automatic notices. Open A/C manually whenever needed.").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("climate_notice_choices").assertDoesNotExist()
     }
 
     private class PreferencesHarness {
@@ -205,6 +195,6 @@ class ProjectionPreferencesUiTest {
     companion object {
         private const val VIEWPORT = "projection_preferences_viewport"
         private val allControlLabels =
-            listOf("Focus view", "Return to projection when ready", "Vehicle speed HUD", "Summary · recommended", "Open climate panel", "Off")
+            listOf("Focus view", "Return to projection when ready", "Vehicle speed HUD")
     }
 }

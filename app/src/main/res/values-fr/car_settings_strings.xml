@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_settings_title">Réglages du véhicule</string>
+    <string name="car_settings_detail">Les commandes du véhicule au même endroit. Les fonctions disponibles dépendent du véhicule.</string>
+    <string name="car_settings_connected">Véhicule connecté. Les commandes nécessitent des données récentes.</string>
+    <string name="car_settings_disconnected">Véhicule déconnecté. Commandes constructeur indisponibles.</string>
+    <string name="car_settings_lights">Éclairage</string>
+    <string name="car_settings_lights_detail">Phares, éclairage intérieur et ambiance</string>
+    <string name="car_settings_mirrors_detail">Rabattement des rétroviseurs, inclinaison en marche arrière et essuie-glaces automatiques</string>
+    <string name="car_settings_parking">Stationnement et caméra</string>
+    <string name="car_settings_parking_detail">Vue de caméra et son des capteurs</string>
+    <string name="car_settings_comfort">Confort</string>
+    <string name="car_settings_comfort_detail">Climatisation et réglages de siège compatibles</string>
+    <string name="car_settings_charging_detail">Préférences de recharge et de climatisation</string>
+    <string name="car_settings_audio">Audio et volant</string>
+    <string name="car_settings_audio_detail">Amplificateur constructeur et raccourcis des boutons</string>
+    <string name="car_settings_my_car">Mon véhicule</string>
+    <string name="car_settings_my_car_detail">Apparence, trajets, entretien et compatibilité</string>
+</resources>

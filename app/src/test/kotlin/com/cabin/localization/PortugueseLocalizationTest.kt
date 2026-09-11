@@ -50,31 +50,21 @@ class PortugueseLocalizationTest {
         )
 
     @Test
-    fun `Portuguese projection tools expose working help without disconnecting`() {
-        var helpRequests = 0
-        var mediaRequests = 0
+    fun `Portuguese projection tools expose settings`() {
+        var settings = 0
         compose.setContent {
             CabinTheme {
                 ProjectionToolsPanel(
-                    playing = false,
-                    voiceLabel = "Siri",
-                    onAction = { mediaRequests++ },
-                    onRecoverPicture = {},
-                    onHub = null,
-                    onClimate = null,
-                    onSettings = {},
+                    onSettings = { settings++ },
                     onClose = {},
-                    status = "",
                     modifier = Modifier.fillMaxSize(),
-                    onHelp = { helpRequests++ },
                 )
             }
         }
-        compose.onNodeWithText("Ferramentas de projeção").assertIsDisplayed()
-        compose.onNodeWithText("Ajuda de conexão").performScrollTo().performClick()
+        compose.onNodeWithText("Ferramentas de projeção").assertDoesNotExist()
+        compose.onNodeWithText(compose.activity.getString(com.cabin.R.string.action_settings)).assertIsDisplayed().performClick()
         compose.runOnIdle {
-            assertEquals(1, helpRequests)
-            assertEquals(0, mediaRequests)
+            assertEquals(1, settings)
         }
     }
 

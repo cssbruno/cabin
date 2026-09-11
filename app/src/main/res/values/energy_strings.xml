@@ -1,0 +1,21 @@
+<resources>
+    <string name="energy_flow">Battery energy flow</string>
+    <string name="energy_battery">Battery level</string>
+    <string name="energy_charging">Battery charging</string>
+    <string name="energy_discharging">Battery discharging</string>
+    <string name="energy_settings">Charging settings</string>
+    <string name="energy_current_limit">Charging current limit</string>
+    <string name="energy_temperature">Cabin temperature target</string>
+    <string name="energy_climate_battery">Allow climate to use battery</string>
+    <string name="energy_minimum">Minimum battery charge</string>
+    <string name="energy_palette">Ambient palette</string>
+    <string name="energy_recommended">Recommended colors</string>
+    <string name="energy_theme">Theme colors</string>
+    <string name="energy_maximum">Maximum</string>
+    <string name="energy_low">Low</string>
+    <string name="energy_high">High</string>
+    <string name="energy_seat_preset">Seat preset</string>
+    <string name="energy_default">Default</string>
+    <string name="energy_save">Save</string>
+    <string name="energy_activate">Activate</string>
+</resources>

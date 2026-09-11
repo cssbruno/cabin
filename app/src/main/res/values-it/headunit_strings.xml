@@ -1,0 +1,11 @@
+<resources>
+    <string name="headunit_settings">Impostazioni autoradio</string>
+    <string name="headunit_system">App di sistema installata</string>
+    <string name="headunit_regular">App standard installata</string>
+    <string name="headunit_widget_granted">Autorizzazione per collegare widget concessa</string>
+    <string name="headunit_widget_consent">I widget richiedono il consenso di Android</string>
+    <string name="headunit_display">Schermo</string>
+    <string name="headunit_sound">Audio</string>
+    <string name="headunit_home">Launcher predefinito</string>
+    <string name="headunit_unavailable">Questo firmware non offre questa schermata delle impostazioni.</string>
+</resources>

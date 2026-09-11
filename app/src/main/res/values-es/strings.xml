@@ -12,4 +12,8 @@
     <string name="background_channel_description">Mantiene conectado el adaptador CarPlay mientras Cabin está cerrado</string>
     <string name="background_notification_title">Cabin activo en segundo plano</string>
     <string name="background_stop">Desconectar</string>
+    <string name="climate_temperature_increase">Subir temperatura: %1$s</string>
+    <string name="climate_temperature_decrease">Bajar temperatura: %1$s</string>
+    <string name="climate_temperature_unavailable">Ajuste de temperatura no disponible</string>
+    <string name="climate_power">Encendido</string>
 </resources>

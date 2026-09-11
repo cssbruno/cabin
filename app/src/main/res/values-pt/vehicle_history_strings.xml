@@ -1,0 +1,17 @@
+<resources>
+    <string name="alert_title">Alertas do veículo</string>
+    <string name="alert_none">Nenhum alerta ativo recebido</string>
+    <string name="alert_disconnected">Veículo desconectado</string>
+    <string name="alert_hood">Capô aberto</string>
+    <string name="alert_front_left">Porta dianteira esquerda aberta</string>
+    <string name="alert_front_right">Porta dianteira direita aberta</string>
+    <string name="alert_rear_left">Porta traseira esquerda aberta</string>
+    <string name="alert_rear_right">Porta traseira direita aberta</string>
+    <string name="alert_trunk">Porta-malas aberto</string>
+    <string name="alert_oil_due">Troca de óleo necessária</string>
+    <string name="alert_service_due">Revisão necessária</string>
+    <string name="history_title">Histórico dos pneus</string>
+    <string name="history_empty">Aguardando dados dos pneus</string>
+    <string name="history_clear">Limpar histórico dos pneus</string>
+    <string name="history_cleared">Histórico dos pneus apagado</string>
+</resources>

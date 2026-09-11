@@ -1,0 +1,11 @@
+<resources>
+    <string name="headunit_settings">Ajustes de la unidad</string>
+    <string name="headunit_system">Aplicación del sistema instalada</string>
+    <string name="headunit_regular">Aplicación estándar instalada</string>
+    <string name="headunit_widget_granted">Permiso para vincular widgets concedido</string>
+    <string name="headunit_widget_consent">Los widgets requieren aprobación de Android</string>
+    <string name="headunit_display">Pantalla</string>
+    <string name="headunit_sound">Sonido</string>
+    <string name="headunit_home">Lanzador predeterminado</string>
+    <string name="headunit_unavailable">Este firmware no ofrece esa pantalla de ajustes.</string>
+</resources>

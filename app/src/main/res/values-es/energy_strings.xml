@@ -1,0 +1,21 @@
+<resources>
+    <string name="energy_flow">Flujo de energía de batería</string>
+    <string name="energy_battery">Nivel de batería</string>
+    <string name="energy_charging">Batería cargando</string>
+    <string name="energy_discharging">Batería descargando</string>
+    <string name="energy_settings">Ajustes de carga</string>
+    <string name="energy_current_limit">Límite de corriente de carga</string>
+    <string name="energy_temperature">Temperatura objetivo del habitáculo</string>
+    <string name="energy_climate_battery">Permitir climatización con batería</string>
+    <string name="energy_minimum">Carga mínima de batería</string>
+    <string name="energy_palette">Paleta ambiental</string>
+    <string name="energy_recommended">Colores recomendados</string>
+    <string name="energy_theme">Colores del tema</string>
+    <string name="energy_maximum">Máximo</string>
+    <string name="energy_low">Bajo</string>
+    <string name="energy_high">Alto</string>
+    <string name="energy_seat_preset">Memoria del asiento</string>
+    <string name="energy_default">Predeterminado</string>
+    <string name="energy_save">Guardar</string>
+    <string name="energy_activate">Activar</string>
+</resources>

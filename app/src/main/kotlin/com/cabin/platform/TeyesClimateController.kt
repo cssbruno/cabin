@@ -16,10 +16,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 /** Climate and vehicle state from the compatible FYT/SYU CANBUS toolkit. */
 data class TeyesClimateState(
     val connected: Boolean = false,
+    val syuAir: SyuAirState? = null,
+    val syuVehicle: SyuVehicleTelemetry = SyuVehicleTelemetry(),
     val health: TeyesTelemetryHealth = TeyesTelemetryHealth.DISCONNECTED,
     val lastUpdateElapsedRealtimeMs: Long? = null,
     /** Fresh app-canonical codes, normalized from the selected firmware layout; not raw Binder IDs. */
@@ -65,6 +68,21 @@ data class TeyesClimateState(
     val blowFoot: Boolean = false,
 )
 
+enum class TeyesClimateSwitch(val key: Int, val feedbackCode: Int) {
+    POWER(1, 32), AUTO(21, 20), DUAL(16, 30), RECIRCULATION(25, 21), FRONT_DEFROST(19, 22), REAR_DEFROST(20, 23);
+
+    fun active(state: TeyesClimateState): Boolean = when (this) {
+        POWER -> state.power
+        AUTO -> state.auto
+        DUAL -> state.dual
+        RECIRCULATION -> state.recirculating
+        FRONT_DEFROST -> state.frontDefrost
+        REAR_DEFROST -> state.rearDefrost
+    }
+}
+
+enum class TeyesTemperatureZone { DRIVER, PASSENGER }
+
 enum class TeyesAirflowMode { BODY, BODY_FOOT, FOOT, UP_FOOT }
 
 /**
@@ -86,23 +104,30 @@ class TeyesClimateController(
         private val UPDATE_CODES =
             intArrayOf(
                 1000,
-                0, 1, 2, 3, 4, 5, 11, 18, 19,
+                0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 16, 18, 19,
                 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
                 36, 37, 38, 39, 40, 41,
                 51, 52, 53, 54, 55, 56, 57,
-                73, 77, 89, 90, 91, 92, 93, 94, 95, 96, 97, 137, 179, 180, 181,
+                65, 73, 77, 89, 90, 91, 92, 93, 94, 95, 96, 97, 137, 179, 180, 181,
             )
         private val CLIMATE_POPUP_CODES =
             (20..35).toSet() + (51..57).toSet() + setOf(73, 91, 92, 93, 94, 95, 96, 97)
     }
 
     private val appContext = context.applicationContext
+    private val tripHistory by lazy(LazyThreadSafetyMode.NONE) { TripHistory(appContext) }
+    private val tripRecorder = TripRecorder { profile, trip -> tripHistory.save(profile, trip) }
+    private val tireHistory by lazy(LazyThreadSafetyMode.NONE) { TireHistory(appContext) }
+    private val airRegistry by lazy(LazyThreadSafetyMode.NONE) { SyuAirRegistry.load(appContext) }
+    private val registeredCodes = java.util.concurrent.ConcurrentHashMap.newKeySet<Int>()
+    private var airProfile: SyuAirProfile? = null
     private val dataPreferences = TeyesVehicleDataPreferences.get(appContext)
     private var activeLayout = dataPreferences.layout.value
     private val worker = HandlerThread("TeyesTelemetry").apply { start() }
     private val handler = Handler(worker.looper)
     private val started = AtomicBoolean(false)
     private val closed = AtomicBoolean(false)
+    private val connectionEpoch = AtomicLong(0)
     private val samples = TeyesTelemetryFreshness()
     private val popupPolicy = TeyesClimatePopupPolicy()
     private val reconnectPolicy = TeyesTelemetryReconnectPolicy()
@@ -149,16 +174,22 @@ class TeyesClimateController(
                 }
                 if (code != 1) return super.onTransact(code, data, reply, flags)
                 data.enforceInterface(CALLBACK_DESCRIPTOR)
-                val updateCode = data.readInt()
-                val ints = data.createIntArray()
-                data.createFloatArray()
-                data.createStringArray()
+                // Only a small integer sample is consumed. Never allocate unused vendor
+                // float/string arrays, or trust an unbounded array length from IPC.
+                if (data.dataAvail() > 4096 || data.dataAvail() < 8) return false
+                val sample = try {
+                    val updateCode = data.readInt()
+                    if (updateCode !in registeredCodes) return true
+                    val count = data.readInt()
+                    if (count !in 1..16 || count > data.dataAvail() / 4) return false
+                    updateCode to data.readInt()
+                } catch (_: RuntimeException) {
+                    return false
+                }
                 if (closed.get()) return true
-                ints?.firstOrNull()?.let { value ->
-                    handler.post {
-                        if (!closed.get() && connection === owner && moduleBinder != null && updateCode in UPDATE_CODES) {
-                            update(updateCode, value)
-                        }
+                handler.post {
+                    if (!closed.get() && connection === owner && moduleBinder != null) {
+                        update(sample.first, sample.second)
                     }
                 }
                 return true
@@ -267,6 +298,67 @@ class TeyesClimateController(
         }
     }
 
+    fun setFactoryControl(control: SyuFactoryControl, value: Int) {
+        if (closed.get()) return
+        val expectedProfile = mutableState.value.profileId
+        val expectedEpoch = connectionEpoch.get()
+        val frame = SyuFactoryProtocol.frame(expectedProfile, control, value) ?: return
+        handler.post {
+            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            publishState()
+            val current = mutableState.value
+            if (moduleBinder == null || current.profileId != expectedProfile ||
+                control !in current.syuVehicle.factoryControls) return@post
+            command(frame.first, frame.second.toIntArray())
+        }
+    }
+
+    fun setFactoryAmplifier(setting: SyuAmplifierSetting, value: Int) {
+        if (closed.get() || value !in 0..18) return
+        val expectedEpoch = connectionEpoch.get()
+        val expectedProfile = mutableState.value.profileId
+        handler.post {
+            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            publishState()
+            val current = mutableState.value
+            if (moduleBinder == null || current.profileId != expectedProfile ||
+                current.profileId != SyuVehicleProtocol.AMPLIFIER_PROFILE || setting !in current.syuVehicle.amplifier) return@post
+            command(2, intArrayOf(setting.commandKey, value))
+        }
+    }
+
+    fun setVehicleLighting(setting: SyuLightingSetting, value: Int) {
+        if (closed.get() || value !in setting.values.indices) return
+        val expectedProfile = mutableState.value.profileId
+        val expectedEpoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || expectedEpoch != connectionEpoch.get() ||
+                activeLayout != dataPreferences.layout.value) return@post
+            publishState()
+            val current = mutableState.value
+            if (moduleBinder == null || current.profileId != expectedProfile ||
+                current.profileId !in SyuVehicleProtocol.lightingProfiles || setting !in current.syuVehicle.lighting) return@post
+            command(105, intArrayOf(setting.commandKey, value))
+        }
+    }
+
+    fun sendAirAction(action: String) {
+        if (closed.get()) return
+        val expectedProfile = mutableState.value.syuAir?.profileId ?: return
+        val expectedEpoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            publishState()
+            val current = mutableState.value.syuAir ?: return@post
+            if (moduleBinder == null || current.profileId != expectedProfile || !current.canSend(action)) return@post
+            val frames = airProfile?.commands?.get(action) ?: return@post
+            for (frame in frames) {
+                if (moduleBinder == null || expectedEpoch != connectionEpoch.get()) break
+                command(frame.command, frame.values.toIntArray())
+            }
+        }
+    }
+
     fun setAc(enabled: Boolean) {
         postControl {
             if (isAlternateProfile()) {
@@ -285,6 +377,38 @@ class TeyesClimateController(
             } else {
                 command(105, intArrayOf(173, safeLevel))
             }
+        }
+    }
+
+    /** One tap reproduces the SYU Air key press/release; readings change only on CAN feedback. */
+    fun adjustTemperature(zone: TeyesTemperatureZone, increase: Boolean) {
+        if (closed.get()) return
+        val expectedProfile = mutableState.value.profileId
+        val expectedEpoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || activeLayout != dataPreferences.layout.value) return@post
+            publishState()
+            val state = mutableState.value
+            if (connectionEpoch.get() != expectedEpoch || state.profileId != expectedProfile || !TeyesClimateControlPolicy.canAdjustTemperature(state, zone, increase)) return@post
+            val key = when (zone) {
+                TeyesTemperatureZone.DRIVER -> if (increase) 3 else 2
+                TeyesTemperatureZone.PASSENGER -> if (increase) 5 else 4
+            }
+            command(107, intArrayOf(key, 1))
+            command(107, intArrayOf(key, 0))
+        }
+    }
+
+    fun toggleClimate(control: TeyesClimateSwitch) {
+        if (closed.get()) return
+        val expectedProfile = mutableState.value.profileId
+        val expectedEpoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || activeLayout != dataPreferences.layout.value || connectionEpoch.get() != expectedEpoch) return@post
+            publishState()
+            if (mutableState.value.profileId != expectedProfile || !TeyesClimateControlPolicy.canToggle(mutableState.value, control)) return@post
+            command(107, intArrayOf(control.key, 1))
+            command(107, intArrayOf(control.key, 0))
         }
     }
 
@@ -325,14 +449,25 @@ class TeyesClimateController(
             disconnectAndRetry()
             return
         }
-        if (code == 1000) lastProfile = value
+        if (code == 1000) {
+            val newProfile = lastProfile != value
+            lastProfile = value
+            // Preserve established Civic firmware layouts. Other profiles use their SYU definitions.
+            airProfile = if (TeyesClimateControlPolicy.supports(value)) null else airRegistry.profiles[value]
+            SyuVehicleProtocol.codes(value).forEach { if (it !in registeredCodes) register(it) }
+            airProfile?.fields?.values?.distinct()?.forEach { if (it !in registeredCodes) register(it) }
+            if (newProfile) SyuVehicleProtocol.queryFrames(value).forEach { (code, payload) ->
+                if (moduleBinder != null) command(code, payload.toIntArray())
+            }
+        }
         val changed = samples.update(code, value, now)
         publishState()
         val climateField =
             if (activeLayout == TeyesVehicleDataLayout.CIVIC_0298 &&
                 TeyesClimateControlPolicy.isCivic0298(lastProfile ?: 0)
             ) {
-                code in setOf(11, 18, 19, 20, 21)
+                code in setOf(11, 18, 19, 20, 21) ||
+                    (TeyesClimateControlPolicy.supportsTemperature(lastProfile ?: 0) && code in setOf(10, 12, 13, 14, 16, 27, 28, 37, 65))
             } else {
                 code in CLIMATE_POPUP_CODES
             }
@@ -344,17 +479,32 @@ class TeyesClimateController(
         val now = SystemClock.elapsedRealtime()
         val rawValues = samples.snapshot(now)
         val profile = rawValues[1000] ?: 0
-        val values = TeyesClimateControlPolicy.climateValues(profile, rawValues, activeLayout)
+        val values = if (airProfile != null || profile in SyuFactoryProtocol.cameraProfiles || profile in setOf(SyuFactoryProtocol.HYBRID_PROFILE, SyuFactoryProtocol.AMBIENT_PROFILE, SyuFactoryProtocol.SEAT_PRESET_PROFILE)) {
+            // Shared SYU air fields must never be interpreted as legacy Civic gauges.
+            buildMap {
+                put(1000, profile)
+                // Profile 131109 uses field 4 for camera mode, not the shared door dialect.
+                for (door in if (profile == 131109) IntRange.EMPTY else 0..5) rawValues[door]?.takeIf { it in 0..1 }?.let { put(door + 36, it) }
+            }
+        } else TeyesClimateControlPolicy.climateValues(profile, rawValues, activeLayout)
         val alternate = profile == PROFILE_2016_CIVIC_ALT
         val mode = values[73]
+        val airValues = samples.airSnapshot(now)
+        val airState = airProfile?.let { definition ->
+            SyuAirState(definition.id, definition.name,
+                definition.fields.mapNotNull { (name, code) -> airValues[code]?.let { name to it } }.toMap(),
+                definition.commands.keys, definition.low, definition.high, definition.unavailable, definition.temperatureFormats)
+        }
         mutableState.value =
             TeyesClimateState(
                 connected = moduleBinder != null,
+                syuAir = airState,
+                syuVehicle = SyuVehicleProtocol.decode(profile, airValues),
                 health =
                     when {
                         moduleBinder == null && connection != null -> TeyesTelemetryHealth.CONNECTING
                         moduleBinder == null -> TeyesTelemetryHealth.DISCONNECTED
-                        values.keys.none { it != 1000 } -> TeyesTelemetryHealth.STALE
+                        values.keys.none { it != 1000 } && airValues.keys.none { it in (airProfile?.fields?.values ?: emptyList()) || it in SyuVehicleProtocol.codes(profile) } -> TeyesTelemetryHealth.STALE
                         else -> TeyesTelemetryHealth.LIVE
                     },
                 lastUpdateElapsedRealtimeMs = samples.lastUpdateElapsedRealtimeMs,
@@ -378,7 +528,7 @@ class TeyesClimateController(
                 ac = values[if (alternate) 30 else 24] == 1,
                 auto = values[20] == 1,
                 dual = !alternate && values[30] == 1,
-                recirculating = values[21] == 0,
+                recirculating = if (activeLayout == TeyesVehicleDataLayout.CIVIC_0298 && TeyesClimateControlPolicy.supportsTemperature(profile)) values[21] == 1 else values[21] == 0,
                 frontDefrost = values[22] == 1,
                 rearDefrost = values[23] == 1,
                 leftTemperature = values[25],
@@ -407,15 +557,20 @@ class TeyesClimateController(
                 blowBody = if (alternate) mode == 6 || mode == 5 else values[26] == 1 || values[92] == 1,
                 blowFoot = if (alternate) mode == 3 || mode == 4 || mode == 5 else values[27] == 1 || values[93] == 1,
             )
+        tireHistory.record(mutableState.value, now)
+        tripRecorder.observe(mutableState.value, now, System.currentTimeMillis())
     }
 
     private fun postControl(fanOnly: Boolean = false, action: () -> Unit) {
         if (closed.get()) return
+        val expectedProfile = mutableState.value.profileId
+        val expectedEpoch = connectionEpoch.get()
         handler.post {
-            if (closed.get()) return@post
+            if (closed.get() || connectionEpoch.get() != expectedEpoch) return@post
             // Do not issue a command during the preference-change/rebind window.
             if (activeLayout != dataPreferences.layout.value) return@post
             publishState()
+            if (mutableState.value.profileId != expectedProfile) return@post
             // The legacy fallback did not identify its supported numeric profile.
             // Never treat an arbitrary vehicle profile as a Honda control interface.
             if (if (fanOnly) mutableState.value.fanControlsAvailable else mutableState.value.controlsAvailable) action()
@@ -442,6 +597,7 @@ class TeyesClimateController(
     }
 
     private fun register(updateCode: Int) {
+        if (!registeredCodes.add(updateCode)) return
         transactOneWay(3) { data ->
             data.writeStrongBinder(callback)
             data.writeInt(updateCode)
@@ -483,6 +639,7 @@ class TeyesClimateController(
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
         // Publish unavailable immediately, even if vendor IPC cleanup is still queued.
+        tripRecorder.finish()
         mutableState.value = TeyesClimateState(controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected))
         handler.removeCallbacksAndMessages(null)
         handler.post {
@@ -495,10 +652,11 @@ class TeyesClimateController(
         clearConnection()
         if (closed.get()) return
         handler.removeCallbacks(retry)
-        reconnectPolicy.nextDelayMs()?.let { handler.postDelayed(retry, it) }
+        handler.postDelayed(retry, reconnectPolicy.nextDelayMs())
     }
 
     private fun clearConnection() {
+        connectionEpoch.incrementAndGet()
         handler.removeCallbacks(bindTimeout)
         val oldModule = moduleBinder
         val oldCallback = callback
@@ -506,11 +664,12 @@ class TeyesClimateController(
         moduleBinder = null
         deathRecipient = null
         callback = null
+        airProfile = null
         connectedAt = null
         // Release the old subscription even if the exported service remains alive after unbinding.
         // Use the captured binder directly: failed cleanup must not recursively start another retry.
         if (oldModule != null && oldCallback != null && oldModule.isBinderAlive) {
-            for (updateCode in UPDATE_CODES) {
+            for (updateCode in registeredCodes.toList()) {
                 val data = Parcel.obtain()
                 try {
                     data.writeInterfaceToken(MODULE_DESCRIPTOR)
@@ -526,6 +685,7 @@ class TeyesClimateController(
                 }
             }
         }
+        registeredCodes.clear()
         if (oldModule != null && oldDeath != null) {
             try {
                 oldModule.unlinkToDeath(oldDeath, 0)
@@ -544,6 +704,7 @@ class TeyesClimateController(
         }
         samples.clear()
         lastProfile = null
+        tripRecorder.finish()
         mutableState.value = TeyesClimateState(controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected))
     }
 }

@@ -15,7 +15,7 @@ private fun DashboardTile.finerGrid(): DashboardTile {
     return copy(x = x * 2, y = y * 2, width = width * 2, height = height * 2)
 }
 
-enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, SPEED, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET, DRIVER_TEMPERATURE, PASSENGER_TEMPERATURE, AIRFLOW, RECIRCULATION, HOOD, TRUNK, CAN_CONNECTION, DATE, PHONE_CONNECTION, ASSISTANT, ROUTE_OVERVIEW, AUDIO_CONTROL, PINNED_APPS }
+enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, SPEED, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET, DRIVER_TEMPERATURE, PASSENGER_TEMPERATURE, AIRFLOW, RECIRCULATION, HOOD, TRUNK, CAN_CONNECTION, DATE, PHONE_CONNECTION, ASSISTANT, ROUTE_OVERVIEW, AUDIO_CONTROL, PINNED_APPS, TRIP_CONSUMPTION, HYBRID_BATTERY, VEHICLE_LIGHTING, TIRE_PRESSURE, FACTORY_AMPLIFIER, CAMERA_MODE, MIRROR_SETTINGS, PARKING_SETTINGS, VEHICLE_ALERTS, TIRE_HISTORY, TRIP_HISTORY, VEHICLE_OVERVIEW, ENERGY_FLOW, CHARGING_SETTINGS, AMBIENT_LIGHTING, SEAT_PRESET }
 /** Legacy kinds remain readable; new layouts expose one climate widget. */
 internal val climateDashboardModules = setOf(
     DashboardModule.CLIMATE, DashboardModule.FAN, DashboardModule.REAR_CLIMATE,
@@ -54,44 +54,129 @@ internal fun validDashboard(layout: DashboardLayout): Boolean {
     return true
 }
 
+/** Bounded packing on one page; a failed drop leaves the saved layout untouched. */
+internal fun dashboardDropLayout(layout: DashboardLayout, id: Int, x: Int, y: Int): DashboardLayout? {
+    val source = layout.tiles.firstOrNull { it.id == id } ?: return null
+    val target = source.copy(x = x, y = y)
+    if (x < 0 || y < 0 || x + target.width > DASHBOARD_COLUMNS || y + target.height > DASHBOARD_ROWS) return null
+    fun overlaps(a: DashboardTile, b: DashboardTile) = a.x < b.x + b.width && b.x < a.x + a.width &&
+        a.y < b.y + b.height && b.y < a.y + a.height
+    val neighbors = layout.tiles.filter { it.id != id && it.page == source.page }
+    val collisions = neighbors.filter { overlaps(target, it) }
+    val simple = layout.copy(tiles = layout.tiles.map {
+        when {
+            it.id == id -> target
+            collisions.size == 1 && it.id == collisions[0].id -> it.copy(x = source.x, y = source.y)
+            else -> it
+        }
+    })
+    if (validDashboard(simple)) return simple
+
+    fun mask(tile: DashboardTile): Long {
+        var bits = 0L
+        for (row in tile.y until tile.y + tile.height) for (col in tile.x until tile.x + tile.width) {
+            bits = bits or (1L shl (row * DASHBOARD_COLUMNS + col))
+        }
+        return bits
+    }
+    // Larger rectangles first avoids trapping a large widget behind several small ones.
+    val ordered = neighbors.sortedByDescending { it.width * it.height }
+    val candidates = ordered.map { tile ->
+        (0..DASHBOARD_ROWS - tile.height).flatMap { row ->
+            (0..DASHBOARD_COLUMNS - tile.width).map { col -> tile.copy(x = col, y = row) }
+        }.sortedBy { kotlin.math.abs(it.x - tile.x) + kotlin.math.abs(it.y - tile.y) }
+            .map { it to mask(it) }
+    }
+    val placed = mutableMapOf(id to target)
+    var attempts = 0
+    fun pack(index: Int, occupied: Long): Boolean {
+        if (index == ordered.size) return true
+        if (++attempts > 20_000) return false
+        for ((tile, bits) in candidates[index]) {
+            if (bits and occupied != 0L) continue
+            placed[tile.id] = tile
+            if (pack(index + 1, occupied or bits)) return true
+            placed.remove(tile.id)
+        }
+        return false
+    }
+    if (!pack(0, mask(target))) return null
+    return layout.copy(tiles = layout.tiles.map { placed[it.id] ?: it }).takeIf(::validDashboard)
+}
+
+enum class DashboardPreset { COMMUTE, NAVIGATION, PARKING, GLANCE }
+
+data class DashboardHistory(val canUndo: Boolean = false, val canRedo: Boolean = false)
+
 class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect: TeyesVehicleDataLayout) {
     private val prefs = context.applicationContext.getSharedPreferences("carlink_dashboard_v1", Context.MODE_PRIVATE)
     private val key = "$driver.$vehicle.${dialect.name}"
     private val mutable = MutableStateFlow(read())
     val state = mutable.asStateFlow()
-    private fun save(layout: DashboardLayout): Boolean {
+    private val undoLayouts = ArrayDeque<DashboardLayout>()
+    private val redoLayouts = ArrayDeque<DashboardLayout>()
+    private val mutableHistory = MutableStateFlow(DashboardHistory())
+    val history = mutableHistory.asStateFlow()
+    private fun updateHistory() {
+        mutableHistory.value = DashboardHistory(undoLayouts.isNotEmpty(), redoLayouts.isNotEmpty())
+    }
+    fun undo(): Boolean {
+        val previous = undoLayouts.removeLastOrNull() ?: return false
+        redoLayouts.addLast(state.value)
+        save(previous, record = false)
+        updateHistory()
+        return true
+    }
+    fun redo(): Boolean {
+        val next = redoLayouts.removeLastOrNull() ?: return false
+        undoLayouts.addLast(state.value)
+        save(next, record = false)
+        updateHistory()
+        return true
+    }
+    /** Append a preset so existing pages and hosted widgets remain recoverable. */
+    fun addPreset(preset: DashboardPreset, available: Set<DashboardModule>): Boolean {
+        val current = state.value
+        if (current.pages >= 6) return false
+        val modules = when (preset) {
+            DashboardPreset.COMMUTE -> listOf(DashboardModule.MEDIA, DashboardModule.CLIMATE, DashboardModule.NAVIGATION, DashboardModule.CLOCK)
+            DashboardPreset.NAVIGATION -> listOf(DashboardModule.NAVIGATION, DashboardModule.MEDIA)
+            DashboardPreset.PARKING -> listOf(DashboardModule.CAMERA_MODE, DashboardModule.PARKING_SETTINGS, DashboardModule.TIRE_PRESSURE, DashboardModule.DOORS)
+            DashboardPreset.GLANCE -> listOf(DashboardModule.SPEED, DashboardModule.NAVIGATION)
+        }.filter { it in available }
+        if (modules.isEmpty()) return false
+        val firstId = (current.tiles.maxOfOrNull { it.id } ?: 0) + 1
+        val tiles = modules.mapIndexed { index, module ->
+            val width = if (modules.size == 1) 8 else 4
+            val height = if (modules.size <= 2) 4 else 2
+            DashboardTile(firstId + index, module, current.pages, index % 2 * 4, index / 2 * 2, width, height)
+        }
+        return save(current.copy(pages = current.pages + 1, tiles = current.tiles + tiles))
+    }
+    private fun save(layout: DashboardLayout, record: Boolean = true): Boolean {
         if (!validDashboard(layout)) return false
+        if (layout == state.value) return true
+        if (record) {
+            undoLayouts.addLast(state.value)
+            if (undoLayouts.size > 40) undoLayouts.removeFirst()
+            redoLayouts.clear()
+        }
         val tiles = JSONArray().apply { layout.tiles.forEach { t -> put(JSONObject().apply {
             put("id", t.id); put("kind", t.module.name); put("page", t.page); put("x", t.x); put("y", t.y)
             put("w", t.width); put("h", t.height); put("widget", t.widgetId)
         }) } }
         prefs.edit().putString(key, JSONObject().put("gridVersion", 2).put("pages", layout.pages).put("tiles", tiles).toString()).apply()
         mutable.value = layout
+        updateHistory()
         return true
     }
     fun addPage(): Boolean = save(state.value.copy(pages = state.value.pages + 1))
     fun remove(id: Int) = save(state.value.copy(tiles = state.value.tiles.filterNot { it.id == id }))
     fun move(id: Int, dx: Int, dy: Int): Boolean = save(state.value.copy(tiles = state.value.tiles.map { if (it.id == id) it.copy(x = it.x + dx, y = it.y + dy) else it }))
-    /** Drop into free space, or swap with one compatible widget. CarPlay is never dragged or displaced. */
-    fun drop(id: Int, x: Int, y: Int): Boolean {
-        val layout = state.value
-        val source = layout.tiles.firstOrNull { it.id == id } ?: return false
-        if (source.module == DashboardModule.PROJECTION) return false
-        val target = source.copy(x = x, y = y)
-        val overlaps = layout.tiles.filter { it.id != id && it.page == source.page &&
-            target.x < it.x + it.width && it.x < target.x + target.width &&
-            target.y < it.y + it.height && it.y < target.y + target.height }
-        if (overlaps.size > 1 || overlaps.any { it.module == DashboardModule.PROJECTION }) return false
-        val other = overlaps.singleOrNull()
-        val next = layout.copy(tiles = layout.tiles.map {
-            when (it.id) {
-                id -> target
-                other?.id -> it.copy(x = source.x, y = source.y)
-                else -> it
-            }
-        })
-        return save(next)
-    }
+    /** Place the dragged tile first, then make room without resizing or losing other widgets. */
+    fun drop(id: Int, x: Int, y: Int): Boolean =
+        dashboardDropLayout(state.value, id, x, y)?.let { save(it) } ?: false
+
     fun resize(id: Int, width: Int, height: Int): Boolean {
         val tile = state.value.tiles.firstOrNull { it.id == id } ?: return false
         return place(tile.copy(width = width, height = height), tile.page)
@@ -110,8 +195,8 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
     }
     fun add(module: DashboardModule, page: Int, widgetId: Int = 0): Boolean {
         val tile = DashboardTile((state.value.tiles.maxOfOrNull { it.id } ?: 0) + 1, module, page, 0, 0,
-            if (module in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET, DashboardModule.ROUTE_OVERVIEW, DashboardModule.AUDIO_CONTROL, DashboardModule.PINNED_APPS, DashboardModule.CLIMATE, DashboardModule.REAR_CLIMATE, DashboardModule.SEATS, DashboardModule.DEFROST)) 4 else 2,
-            if (module in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET)) 4 else 2, widgetId)
+            if (module in setOf(DashboardModule.PROJECTION, DashboardModule.ROUTE_OVERVIEW, DashboardModule.AUDIO_CONTROL, DashboardModule.PINNED_APPS, DashboardModule.CLIMATE, DashboardModule.REAR_CLIMATE, DashboardModule.SEATS, DashboardModule.DEFROST)) 4 else if (module == DashboardModule.WIDGET) 1 else 2,
+            if (module == DashboardModule.PROJECTION) 4 else if (module == DashboardModule.WIDGET) 1 else 2, widgetId)
         return place(tile, page)
     }
     private fun place(tile: DashboardTile, page: Int): Boolean {

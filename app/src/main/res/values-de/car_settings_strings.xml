@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_settings_title">Fahrzeugeinstellungen</string>
+    <string name="car_settings_detail">Die Fahrzeugsteuerung an einem Ort. Verfügbare Funktionen hängen vom Fahrzeug ab.</string>
+    <string name="car_settings_connected">Fahrzeug verbunden. Die Steuerung benötigt aktuelle Rückmeldungen.</string>
+    <string name="car_settings_disconnected">Fahrzeug getrennt. Werkssteuerung nicht verfügbar.</string>
+    <string name="car_settings_lights">Licht</string>
+    <string name="car_settings_lights_detail">Scheinwerfer, Innenlicht und Ambientebeleuchtung</string>
+    <string name="car_settings_mirrors_detail">Spiegelanklappen, Rückwärtsabsenkung und automatische Wischer</string>
+    <string name="car_settings_parking">Parken und Kamera</string>
+    <string name="car_settings_parking_detail">Kameraansicht und Parksensortöne</string>
+    <string name="car_settings_comfort">Komfort</string>
+    <string name="car_settings_comfort_detail">Klima und unterstützte Sitzvoreinstellungen</string>
+    <string name="car_settings_charging_detail">Ladeeinstellungen für Batterie und Innenraum</string>
+    <string name="car_settings_audio">Audio und Lenkrad</string>
+    <string name="car_settings_audio_detail">Werksverstärker und Tastenkürzel</string>
+    <string name="car_settings_my_car">Mein Fahrzeug</string>
+    <string name="car_settings_my_car_detail">Aussehen, Fahrten, Wartung und Kompatibilität</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="headunit_settings">Configurações da central</string>
+    <string name="headunit_system">Aplicativo de sistema instalado</string>
+    <string name="headunit_regular">Aplicativo padrão instalado</string>
+    <string name="headunit_widget_granted">Permissão para vincular widgets concedida</string>
+    <string name="headunit_widget_consent">Widgets precisam de aprovação do Android</string>
+    <string name="headunit_display">Tela</string>
+    <string name="headunit_sound">Som</string>
+    <string name="headunit_home">Launcher padrão</string>
+    <string name="headunit_unavailable">Este firmware não oferece essa tela de configurações.</string>
+</resources>

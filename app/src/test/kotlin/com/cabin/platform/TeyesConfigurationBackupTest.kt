@@ -104,7 +104,7 @@ class TeyesConfigurationBackupTest {
 
     @Test fun `strict schema rejects unsupported versions unknown fields duplicate fields and trailing text`() {
         val text = json().toString()
-        assertRejected { TeyesConfigurationBackup.decode(json().put("schema", 3).toString()) }
+        assertRejected { TeyesConfigurationBackup.decode(json().put("schema", 4).toString()) }
         assertRejected { TeyesConfigurationBackup.decode(json().put("schema", "1").toString()) }
         assertRejected { TeyesConfigurationBackup.decode(json().put("extra", true).toString()) }
         assertRejected { TeyesConfigurationBackup.decode(text.replaceFirst("{", "{\"schema\":1,")) }
@@ -162,12 +162,12 @@ class TeyesConfigurationBackupTest {
         assertEquals(initial + 5L, preferences.revision.value)
     }
 
-    @Test fun `version two exports and restores every presentation field after validation`() {
+    @Test fun `version three exports and restores every presentation field after validation`() {
         val presentation = ProjectionPreferencesState(false, true, ClimateNoticeMode.OFF, false, ProjectionControlSide.LEFT)
         ProjectionPreferences.getInstance(context).replace(presentation)
         MeasurementPreferences.get(context).select(MeasurementUnit.IMPERIAL)
         val backup = TeyesConfigurationBackup.encode(preferences.configurationSnapshot())
-        assertEquals(2, JSONObject(backup).getInt("schema"))
+        assertEquals(3, JSONObject(backup).getInt("schema"))
         ProjectionPreferences.getInstance(context).replace(ProjectionPreferencesState())
         MeasurementPreferences.get(context).select(MeasurementUnit.METRIC)
         val decoded = TeyesConfigurationBackup.decode(backup)
@@ -186,6 +186,7 @@ class TeyesConfigurationBackupTest {
             put("schema", 1)
             remove("projection")
             remove("measurementUnit")
+            remove("longKeys")
         }
         val presentation = ProjectionPreferencesState(controlSide = ProjectionControlSide.LEFT, vehicleHud = true)
         ProjectionPreferences.getInstance(context).replace(presentation)
@@ -224,5 +225,15 @@ class TeyesConfigurationBackupTest {
             rejected = true
         }
         assertTrue("Expected invalid input to be rejected", rejected)
+    }
+    @Test fun `long press mappings round trip and older backups clear them`() {
+        preferences.mapKey(KeyEvent.KEYCODE_F1, TeyesKeyAction.VOICE, longPress = true)
+        val encoded = TeyesConfigurationBackup.encode(preferences.configurationSnapshot())
+        preferences.mapKey(KeyEvent.KEYCODE_F1, null, longPress = true)
+        assertTrue(preferences.replaceConfiguration(TeyesConfigurationBackup.decode(encoded)))
+        assertEquals(TeyesKeyAction.VOICE, preferences.keyAction(KeyEvent.KEYCODE_F1, longPress = true))
+        val versionTwo = JSONObject(encoded).apply { put("schema", 2); remove("longKeys") }
+        assertTrue(preferences.replaceConfiguration(TeyesConfigurationBackup.decode(versionTwo.toString())))
+        assertNull(preferences.keyAction(KeyEvent.KEYCODE_F1, longPress = true))
     }
 }

@@ -1,0 +1,14 @@
+<resources>
+    <string name="car_appearance">Car appearance</string>
+    <string name="car_appearance_detail">Customize the tire-pressure illustration</string>
+    <string name="car_sedan">Sedan</string>
+    <string name="car_hatchback">Hatchback</string>
+    <string name="car_suv">SUV</string>
+    <string name="car_pickup">Pickup</string>
+    <string name="car_silver">Silver</string>
+    <string name="car_white">White</string>
+    <string name="car_black">Black</string>
+    <string name="car_blue">Blue</string>
+    <string name="car_red">Red</string>
+    <string name="car_green">Green</string>
+</resources>

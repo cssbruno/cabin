@@ -24,6 +24,12 @@ data class ClimateWidgetActions(
     val onFan: ((Int) -> Unit)? = null,
     val onRefresh: (() -> Unit)? = null,
     val onAirflow: ((com.cabin.platform.TeyesAirflowMode) -> Unit)? = null,
+    val onTemperature: ((com.cabin.platform.TeyesTemperatureZone, Boolean) -> Unit)? = null,
+    val onSwitch: ((com.cabin.platform.TeyesClimateSwitch) -> Unit)? = null,
+    val onAirAction: ((String) -> Unit)? = null,
+    val onVehicleLighting: ((com.cabin.platform.SyuLightingSetting, Int) -> Unit)? = null,
+    val onFactoryAmplifier: ((com.cabin.platform.SyuAmplifierSetting, Int) -> Unit)? = null,
+    val onFactoryControl: ((com.cabin.platform.SyuFactoryControl, Int) -> Unit)? = null,
 )
 
 /** Shared FYT toolkit telemetry; freshness is checked per field, including temperature units. */

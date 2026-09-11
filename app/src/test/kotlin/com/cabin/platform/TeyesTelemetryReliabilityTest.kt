@@ -222,10 +222,10 @@ class TeyesTelemetryReliabilityTest {
     }
 
     @Test
-    fun `rebind uses bounded exponential backoff and can reset after stability`() {
+    fun `rebind slows down but continues after a vendor service restart and can reset after stability`() {
         val policy = TeyesTelemetryReconnectPolicy()
         assertEquals(listOf(1_000L, 2_000L, 4_000L, 8_000L, 16_000L), List(5) { policy.nextDelayMs() })
-        repeat(10) { assertNull(policy.nextDelayMs()) }
+        repeat(10) { assertEquals(30_000L, policy.nextDelayMs()) }
         policy.reset()
         assertEquals(1_000L, policy.nextDelayMs())
     }

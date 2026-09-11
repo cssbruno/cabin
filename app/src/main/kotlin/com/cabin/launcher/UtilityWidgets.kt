@@ -50,7 +50,6 @@ internal fun RouteOverviewWidget(nav: NavigationState, streaming: Boolean, now: 
             Text(remaining?.let { stringResource(R.string.widget_minutes, (it + 59L) / 60) } ?: "—",
                 style = MaterialTheme.typography.headlineSmall, maxLines = 1)
             if (!compact) {
-                Text(stringResource(R.string.widget_remaining_time), style = MaterialTheme.typography.labelSmall)
                 Text(stringResource(R.string.widget_arrival) + " · " + (remaining?.let {
                     android.text.format.DateFormat.getTimeFormat(context).format(Date(System.currentTimeMillis() + it * 1000L))
                 } ?: "—"), maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -96,7 +95,6 @@ internal fun AudioControlWidget() {
             }
         }
         Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            if (!small) Text(stringResource(R.string.teyes_media_volume), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelMedium)
             if (narrow && small) Mute() else if (narrow) {
                 Mute()
                 Row { Step(AudioManager.ADJUST_LOWER, R.string.teyes_volume_lower); Step(AudioManager.ADJUST_RAISE, R.string.teyes_volume_higher) }

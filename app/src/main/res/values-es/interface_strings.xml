@@ -537,4 +537,10 @@
         <item quantity="other">%1$d instantáneas recientes de fin de transmisión en el informe. Incluye paradas intencionadas.</item>
         <item quantity="many">%1$d instantáneas recientes de fin de transmisión en el informe. Incluye paradas intencionadas.</item>
     </plurals>
+    <string name="projection_minimize">Minimizar al lanzador</string>
+    <string name="projection_change_device">Cambiar dispositivo</string>
+    <string name="projection_screen_off_short">Apagar pantalla</string>
+    <string name="projection_audio_continues">El audio continúa</string>
+    <string name="projection_usb_phone">Teléfono conectado por USB</string>
+    <string name="projection_pair_from_phone">Empareja otro teléfono desde el Bluetooth del teléfono.</string>
 </resources>

@@ -532,4 +532,10 @@
         <item quantity="one">%1$d aktuelle Stream-Ende-Momentaufnahme im Bericht. Absichtliche Stopps eingeschlossen.</item>
         <item quantity="other">%1$d aktuelle Stream-Ende-Momentaufnahmen im Bericht. Absichtliche Stopps eingeschlossen.</item>
     </plurals>
+    <string name="projection_minimize">Zum Launcher minimieren</string>
+    <string name="projection_change_device">Gerät wechseln</string>
+    <string name="projection_screen_off_short">Bildschirm aus</string>
+    <string name="projection_audio_continues">Audio läuft weiter</string>
+    <string name="projection_usb_phone">Telefon über USB verbunden</string>
+    <string name="projection_pair_from_phone">Kopple ein weiteres Telefon über dessen Bluetooth-Einstellungen.</string>
 </resources>

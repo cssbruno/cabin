@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_settings_title">Car Settings</string>
+    <string name="car_settings_detail">Your car controls, grouped in one place. Available features depend on your vehicle.</string>
+    <string name="car_settings_connected">Vehicle connected. Controls need live feedback.</string>
+    <string name="car_settings_disconnected">Vehicle disconnected. Factory controls are unavailable.</string>
+    <string name="car_settings_lights">Lights</string>
+    <string name="car_settings_lights_detail">Headlights, interior lights and ambient lighting</string>
+    <string name="car_settings_mirrors_detail">Mirror folding, reverse dip and automatic wipers</string>
+    <string name="car_settings_parking">Parking &amp; camera</string>
+    <string name="car_settings_parking_detail">Camera view and parking sensor sound</string>
+    <string name="car_settings_comfort">Comfort</string>
+    <string name="car_settings_comfort_detail">Climate and supported seat presets</string>
+    <string name="car_settings_charging_detail">Battery and cabin charging preferences</string>
+    <string name="car_settings_audio">Audio &amp; steering wheel</string>
+    <string name="car_settings_audio_detail">Factory amplifier and button shortcuts</string>
+    <string name="car_settings_my_car">My car</string>
+    <string name="car_settings_my_car_detail">Appearance, trips, maintenance and compatibility</string>
+</resources>

@@ -133,9 +133,12 @@ fun TeyesConfigurationTools(
                         Text(stringResource(R.string.bu_phone_preview, profile.preferredPhone.ifEmpty { resources.getString(R.string.bu_adapter_default) }, enabledLabel(profile.resumeOnWake)))
                         Text(stringResource(R.string.bu_profile_more, (profile.nightBrightness * 100).toInt(), enabledLabel(profile.recoverOverlays), enabledLabel(profile.compactOnLaunch)))
                     }
-                    Text(stringResource(R.string.bu_mapping_count, snapshot.keys.size, snapshot.shortcuts.size))
+                    Text(stringResource(R.string.bu_mapping_count, snapshot.keys.size + snapshot.longKeys.size, snapshot.shortcuts.size))
                     snapshot.keys.toSortedMap().forEach { (code, action) ->
                         Text(stringResource(R.string.bu_mapping_preview, code, keyActionLabel(action)))
+                    }
+                    snapshot.longKeys.toSortedMap().forEach { (code, action) ->
+                        Text(stringResource(R.string.layout_long_press) + ": " + stringResource(R.string.bu_mapping_preview, code, keyActionLabel(action)))
                     }
                     snapshot.shortcuts.forEach { (kind, component) -> Text("${shortcutLabel(kind)}: ${component.substringBefore('/')}") }
                     val presentation = snapshot.projection
@@ -205,6 +208,8 @@ private fun shortcutLabel(shortcut: TeyesShortcut): String = stringResource(when
     TeyesShortcut.EQUALIZER -> R.string.bu_shortcut_dsp
     TeyesShortcut.TPMS -> R.string.bu_shortcut_tpms
     TeyesShortcut.DASHCAM -> R.string.bu_shortcut_dashcam
+    TeyesShortcut.RADIO -> R.string.tools_radio
+    TeyesShortcut.BLUETOOTH_AUDIO -> R.string.tools_bluetooth
     TeyesShortcut.OBD -> R.string.bu_shortcut_obd
 })
 
@@ -214,5 +219,10 @@ private fun keyActionLabel(action: TeyesKeyAction): String = stringResource(when
     TeyesKeyAction.NEXT -> R.string.bu_action_next
     TeyesKeyAction.PREVIOUS -> R.string.bu_action_previous
     TeyesKeyAction.VOICE -> R.string.bu_action_assistant
+    TeyesKeyAction.PAGE_NEXT -> R.string.layout_next_page
+    TeyesKeyAction.PAGE_PREVIOUS -> R.string.layout_previous_page
     TeyesKeyAction.CLIMATE -> R.string.bu_action_climate
+    TeyesKeyAction.VOLUME_UP -> R.string.vehicle_volume_up
+    TeyesKeyAction.VOLUME_DOWN -> R.string.vehicle_volume_down
+    TeyesKeyAction.MUTE -> R.string.vehicle_mute
 })

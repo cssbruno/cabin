@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_settings_title">Ajustes del coche</string>
+    <string name="car_settings_detail">Los controles del coche en un solo lugar. Las funciones disponibles dependen del vehículo.</string>
+    <string name="car_settings_connected">Vehículo conectado. Los controles necesitan datos actuales.</string>
+    <string name="car_settings_disconnected">Vehículo desconectado. Controles de fábrica no disponibles.</string>
+    <string name="car_settings_lights">Luces</string>
+    <string name="car_settings_lights_detail">Faros, luces interiores e iluminación ambiental</string>
+    <string name="car_settings_mirrors_detail">Plegado de espejos, inclinación en marcha atrás y limpiaparabrisas automáticos</string>
+    <string name="car_settings_parking">Aparcamiento y cámara</string>
+    <string name="car_settings_parking_detail">Vista de cámara y sonido de sensores</string>
+    <string name="car_settings_comfort">Confort</string>
+    <string name="car_settings_comfort_detail">Climatización y ajustes de asiento compatibles</string>
+    <string name="car_settings_charging_detail">Preferencias de carga de batería y climatización</string>
+    <string name="car_settings_audio">Audio y volante</string>
+    <string name="car_settings_audio_detail">Amplificador de fábrica y atajos de botones</string>
+    <string name="car_settings_my_car">Mi coche</string>
+    <string name="car_settings_my_car_detail">Apariencia, viajes, mantenimiento y compatibilidad</string>
+</resources>

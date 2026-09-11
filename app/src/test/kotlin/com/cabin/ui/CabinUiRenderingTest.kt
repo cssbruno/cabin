@@ -52,6 +52,197 @@ import java.io.File
 class CabinUiRenderingTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
+    @Test fun `energy hides direction and percentage after disconnect`() {
+        var vehicle by mutableStateOf(TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(655377, mapOf(312 to 1, 321 to 58))))
+        compose.setContent { CabinTheme { Box(Modifier.width(300.dp).height(240.dp)) {
+            com.cabin.launcher.EnergyFlowWidget(vehicle)
+        } } }
+        compose.onNodeWithText("58%").assertIsDisplayed()
+        compose.runOnIdle { vehicle = vehicle.copy(connected = false) }
+        compose.onNodeWithText("58%").assertDoesNotExist()
+        compose.onNodeWithText("—").assertIsDisplayed()
+    }
+
+    @Test fun `seat activation never cycles through save`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(1769874, mapOf(200 to 0)))
+        compose.setContent { CabinTheme { Box(Modifier.width(400.dp).height(240.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.SEAT_MEMORY,
+                vehicle, false, { _, value -> calls += value }, { it() })
+        } } }
+        compose.onNodeWithText("Default").performClick()
+        compose.onNodeWithText("Activate").performClick()
+        assertEquals(listOf(2), calls)
+    }
+
+    @Test fun `interactive overview never labels missing door telemetry closed`() {
+        compose.setContent { CabinTheme { Box(Modifier.width(400.dp).height(300.dp)) {
+            com.cabin.launcher.InteractiveVehicleWidget(TeyesClimateState(connected = true), {})
+        } } }
+        compose.onNodeWithContentDescription("Doors · Front left").performClick()
+        compose.onNodeWithText("—").assertIsDisplayed()
+        compose.onNodeWithText("Closed").assertDoesNotExist()
+    }
+
+    @Test fun `unified alerts stop displaying warnings on disconnect`() {
+        var vehicle by mutableStateOf(TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(1376590, mapOf(146 to 80, 150 to 2))))
+        compose.setContent { CabinTheme { Box(Modifier.width(300.dp).height(240.dp)) {
+            com.cabin.launcher.VehicleAlertsWidget(vehicle)
+        } } }
+        compose.onNodeWithText("Low pressure").assertIsDisplayed()
+        compose.runOnIdle { vehicle = vehicle.copy(connected = false) }
+        compose.onNodeWithText("Vehicle disconnected").assertIsDisplayed()
+        compose.onNodeWithText("Low pressure").assertDoesNotExist()
+    }
+
+    @Test fun `compact tire widget displays pressure with units and vehicle warning`() {
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(1376590, mapOf(146 to 80, 150 to 2)))
+        compose.setContent { CabinTheme { Box(Modifier.width(180.dp).height(100.dp)) {
+            com.cabin.launcher.SyuTireWidget(vehicle)
+        } } }
+        compose.onNodeWithText("220 kPa").assertIsDisplayed()
+        compose.onNodeWithText("Low pressure").assertIsDisplayed()
+    }
+
+    @Test fun `amplifier widget sends a selected value without faking feedback`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(393537, mapOf(201 to 9)))
+        compose.setContent { CabinTheme { Box(Modifier.width(300.dp).height(180.dp)) {
+            com.cabin.launcher.SyuAmplifierWidget(vehicle, false, { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("+").assertIsEnabled().performClick()
+        assertEquals(listOf(10), calls)
+        compose.onNodeWithText("0").assertIsDisplayed()
+    }
+
+    @Test fun `camera widget selects a view and retains confirmed feedback`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(131114, mapOf(134 to 1)))
+        compose.setContent { CabinTheme { Box(Modifier.width(300.dp).height(120.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.CAMERA, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Standard").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Next setting").assertIsEnabled().performClick()
+        assertEquals(listOf(2), calls)
+        compose.onNodeWithText("Standard").assertIsDisplayed()
+    }
+
+    @Test fun `unavailable WC mirror setting remains disabled`() {
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(17, mapOf(148 to 1)))
+        compose.setContent { CabinTheme { Box(Modifier.width(300.dp).height(120.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.MIRRORS, vehicle, false,
+                { _, _ -> error("Unavailable setting must not send") }, { it() })
+        } } }
+        compose.onNodeWithText("—").assertIsNotEnabled()
+    }
+
+    @Test fun `narrow camera widget opens an in place mode selector`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(131114, mapOf(134 to 1)))
+        compose.setContent { CabinTheme { Box(Modifier.width(140.dp).height(110.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.CAMERA, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Standard").assertIsDisplayed().performClick()
+        compose.onNodeWithText("Downward").assertIsDisplayed().performClick()
+        assertEquals(listOf(2), calls)
+    }
+
+    @Test fun `expanded mirror widget exposes all settings and uses confirmed switches`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(17, mapOf(148 to 0x101, 149 to 0x100, 150 to 1, 151 to 0x101, 152 to 0x100)))
+        compose.setContent { CabinTheme { Box(Modifier.width(480.dp).height(520.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.MIRRORS, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Mirror synchronization").assertIsDisplayed()
+        compose.onNodeWithText("Rear wiper in reverse").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Mirror synchronization").assertIsEnabled().performClick()
+        assertEquals(listOf(0), calls)
+    }
+
+    @Test fun `expanded camera tiles select an exact mode`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(131114, mapOf(134 to 1)))
+        compose.setContent { CabinTheme { Box(Modifier.width(480.dp).height(520.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.CAMERA, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Wide").assertIsDisplayed().performClick()
+        compose.onNodeWithText("Downward").assertIsDisplayed().performClick()
+        assertEquals(listOf(0, 2), calls)
+    }
+
+    @Test fun `expanded mirrors show all controls and preserve confirmed switch state`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(17,
+                mapOf(148 to 0x101, 149 to 0x100, 150 to 1, 151 to 0x101, 152 to 0x100)))
+        compose.setContent { CabinTheme { Box(Modifier.width(500.dp).height(540.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.MIRRORS, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Rear wiper in reverse").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Mirror synchronization").assertIsEnabled().performClick()
+        assertEquals(listOf(0), calls)
+    }
+
+    @Test fun `expanded camera offers directly selectable views`() {
+        val calls = mutableListOf<Int>()
+        val vehicle = TeyesClimateState(connected = true,
+            syuVehicle = com.cabin.platform.SyuVehicleProtocol.decode(131114, mapOf(134 to 1)))
+        compose.setContent { CabinTheme { Box(Modifier.width(500.dp).height(540.dp)) {
+            com.cabin.launcher.SyuFactoryWidget(com.cabin.platform.SyuFactoryGroup.CAMERA, vehicle, false,
+                { _, value -> calls.add(value) }, { it() })
+        } } }
+        compose.onNodeWithText("Wide").assertIsDisplayed()
+        compose.onNodeWithText("Downward").assertIsEnabled().performClick()
+        assertEquals(listOf(2), calls)
+    }
+
+    @Test fun `generic SYU panel uses vehicle action callbacks and keeps unsupported functions disabled`() {
+        val calls = mutableListOf<String>()
+        val air = com.cabin.platform.SyuAirState(21, "Ford", mapOf("U_AIR_AC" to 1),
+            setOf("C_AIR_AC", "C_AIR_AUTO"))
+        compose.setContent { CabinTheme { SyuAirPanel(air, { calls.add(it) }) } }
+        compose.onNodeWithText("A/C").assertIsEnabled().performClick()
+        compose.onNodeWithText("AUTO").assertIsNotEnabled()
+        assertEquals(listOf("C_AIR_AC"), calls)
+    }
+
+    @Test fun `full Civic panel exposes temperature and climate switches through shared callbacks`() {
+        val calls = mutableListOf<com.cabin.platform.TeyesClimateSwitch>()
+        var increaseDriver = false
+        val state = TeyesClimateState(connected = true, health = com.cabin.platform.TeyesTelemetryHealth.LIVE,
+            profileId = 1048874, availableCodes = setOf(20, 21, 22, 23, 25, 30, 31, 32, 33),
+            leftTemperature = 44, rightTemperature = 46)
+        compose.setContent {
+            CabinTheme {
+                ClimatePanel(state, null, null, null, {}, Modifier.fillMaxSize(),
+                    onAdjustTemperature = { zone, up -> increaseDriver = zone == com.cabin.platform.TeyesTemperatureZone.DRIVER && up },
+                    onSwitch = { calls.add(it) })
+            }
+        }
+        compose.onNodeWithContentDescription("Increase Driver temperature").performScrollTo().performClick()
+        assertTrue(increaseDriver)
+        for (label in listOf("Power", "AUTO", "DUAL", "Recirculation", "FRONT DEFROST", "REAR DEFROST")) {
+            compose.onNodeWithText(label).performScrollTo().assertIsEnabled().performClick()
+        }
+        assertEquals(com.cabin.platform.TeyesClimateSwitch.entries.toList(), calls)
+        saveScreenshot("climate-icon-controls")
+    }
+
     @Test
     fun `connecting screen separates phone connect help and full restart`() {
         var connects = 0
@@ -162,7 +353,7 @@ class CabinUiRenderingTest {
             }
         }
         compose.onNodeWithText("A/C —").performScrollTo().assertIsNotEnabled()
-        compose.onNodeWithContentDescription("Increase fan speed").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Select fan speed").assertIsNotEnabled()
         compose.onNodeWithContentDescription("Close climate panel").assertIsDisplayed().performClick()
         compose.runOnIdle {
             assertEquals(0, commands)

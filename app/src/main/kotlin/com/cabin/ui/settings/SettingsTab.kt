@@ -3,6 +3,7 @@ package com.cabin.ui.settings
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.cabin.BuildConfig
@@ -17,9 +18,7 @@ import com.cabin.BuildConfig
  * should render; callers must iterate [visible] (not [entries]) so build-flavor
  * gating is honored.
  *
- * Cross-file contract: adding/removing an entry requires updates at
- * SettingsScreen.kt:263-267 (exhaustive `when`), :102 (default `selectedTab`),
- * and :172 (tab rendering loop). Declaration order below is load-bearing.
+ * SettingsScreen dispatches each visible tab. Declaration order defines navigation order.
  */
 enum class SettingsTab(
     @androidx.annotation.StringRes val title: Int,
@@ -28,23 +27,13 @@ enum class SettingsTab(
     // Order determines tab display order in the navigation rail.
     PHONES(com.cabin.R.string.launcher_page_carplay, Icons.Default.PhoneAndroid),
     CONTROL(com.cabin.R.string.settings_tab_launcher, Icons.Default.Settings),
+    CAR(com.cabin.R.string.car_settings_title, Icons.Default.DirectionsCar),
     TEYES(com.cabin.R.string.settings_tab_teyes, Icons.Default.Settings),
     LOGS(com.cabin.R.string.settings_tab_logs, Icons.AutoMirrored.Filled.Article),
     ;
 
     companion object {
-        /**
-         * Entries filtered by current build flavor.
-         *
-         * Recomputed on every access (called per recomposition at
-         * SettingsScreen.kt:172); intentional and cheap — three-entry filter
-         * over a compile-time-constant condition, results are not cached.
-         *
-         * Caveat: no invariant pins `selectedTab in visible`. If a caller ends
-         * up with a `selectedTab` absent from `visible` (e.g. LOGS while hidden),
-         * the rail will show no selection while the content pane still renders
-         * that tab.
-         */
+        /** Vehicle settings share the FYT feature gate; preserve the existing log visibility. */
         val visible: List<SettingsTab>
             get() =
                 entries.filter { tab ->
@@ -54,7 +43,7 @@ enum class SettingsTab(
                         // tab; load-bearing, preserve as-is but re-verify product
                         // intent before touching.
                         LOGS -> !BuildConfig.DEBUG
-                        TEYES -> BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE
+                        CAR, TEYES -> BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE
                         else -> true
                     }
                 }

@@ -1,6 +1,14 @@
 package com.cabin.ui
 
 import android.widget.Toast
+import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.filled.AcUnit
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.AirlineSeatReclineNormal
+import androidx.compose.material.icons.filled.AirlineSeatLegroomExtra
+import androidx.compose.material.icons.filled.VerticalAlignTop
+import com.cabin.platform.TeyesTelemetryHealth
+import com.cabin.platform.labelRes
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -34,6 +42,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.Minimize
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material.icons.filled.Phonelink
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
@@ -111,6 +121,7 @@ fun MainScreen(
     autoConnectOnLaunch: Boolean = true,
     onNavigateToSettings: () -> Unit,
     onOpenDashboard: (() -> Unit)? = null,
+    onChangeDevice: ((() -> Unit) -> Unit)? = null,
     onOpenLauncher: (() -> Unit)? = null,
     onClosePanel: (() -> Unit)? = null,
     onOpenClimate: (() -> Unit)? = null,
@@ -122,6 +133,9 @@ fun MainScreen(
     onSetClimateAc: ((Boolean) -> Unit)? = null,
     onSetClimateFan: ((Int) -> Unit)? = null,
     onSetClimateAirflow: ((TeyesAirflowMode) -> Unit)? = null,
+    onAdjustClimateTemperature: ((com.cabin.platform.TeyesTemperatureZone, Boolean) -> Unit)? = null,
+    onToggleClimateSwitch: ((com.cabin.platform.TeyesClimateSwitch) -> Unit)? = null,
+    onAirAction: ((String) -> Unit)? = null,
     onRefreshClimate: (() -> Unit)? = null,
     onResetConnection: (() -> Unit)? = null,
 ) {
@@ -155,12 +169,10 @@ fun MainScreen(
     var screenBlanked by remember(cabinManager) { mutableStateOf(false) }
     var helpVisible by remember(cabinManager) { mutableStateOf(false) }
     var setupVisible by remember(cabinManager) { mutableStateOf(false) }
-    var toolsStatus by remember(cabinManager) { mutableStateOf("") }
     var readiness by remember(cabinManager) { mutableStateOf<ProjectionReadinessSnapshot?>(null) }
     var readinessRefresh by remember(cabinManager) { mutableIntStateOf(0) }
     val openTools: () -> Unit = {
         touchState.cancel()
-        toolsStatus = ""
         toolsVisible = true
         helpVisible = false
     }
@@ -604,11 +616,13 @@ fun MainScreen(
                         }
                     }
 
-                    FilledTonalButton(onClick = openTools, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.main_tools)) }
+                    FilledTonalIconButton(onClick = openTools, modifier = Modifier.size(56.dp)) {
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.action_settings))
+                    }
                 }
             }
 
-            // CarPlay first: a single control by default. Vehicle overlays are explicit opt-ins.
+            // Keep settings and return to launcher directly accessible over CarPlay.
             if (!isLoading && !isCompactPanel) {
                 Row(
                     modifier =
@@ -642,7 +656,21 @@ fun MainScreen(
                             }
                         }
                     }
-                    FilledTonalButton(onClick = openTools, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.main_tools)) }
+                    FilledTonalIconButton(onClick = openTools, modifier = Modifier.size(56.dp)) {
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.action_settings))
+                    }
+                    onOpenLauncher?.let { open ->
+                        FilledTonalIconButton(
+                            onClick = {
+                                touchState.cancel()
+                                toolsVisible = false
+                                open()
+                            },
+                            modifier = Modifier.size(56.dp),
+                        ) {
+                            Icon(Icons.Default.Minimize, contentDescription = stringResource(R.string.projection_minimize))
+                        }
+                    }
                     if (preferences.controlSide == ProjectionControlSide.LEFT) {
                         Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
                             if (preferences.vehicleHud && BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) VehicleHud(state = climateState)
@@ -657,6 +685,9 @@ fun MainScreen(
                     onToggleAc = onSetClimateAc,
                     onSetFan = onSetClimateFan,
                     onSetAirflow = onSetClimateAirflow,
+                    onAdjustTemperature = onAdjustClimateTemperature,
+                    onSwitch = onToggleClimateSwitch,
+                    onAirAction = onAirAction,
                     onClose = onOpenClimate,
                     onRefresh = onRefreshClimate,
                     modifier =
@@ -680,57 +711,20 @@ fun MainScreen(
             // These small, ordinary Compose panels never alter the video slot or decoder
             // overlay-coverage state. Touch forwarding is suspended until they close.
             if (toolsVisible && projectionUiVisible && !isLoading) {
-                val health by cabinManager.dashboardState.collectAsStateWithLifecycle()
-                ProjectionToolsPanel(
-                    playing = health.playing,
-                    voiceLabel = if (cabinManager.currentPhoneType in setOf(PhoneType.CARPLAY, PhoneType.CARPLAY_WIRELESS)) "Siri" else stringResource(R.string.projection_voice_assistant),
-                    onAction = { action ->
-                        if (cabinManager.performProjectionAction(action)) {
-                            if (action == CabinManager.ProjectionAction.VOICE) {
-                                toolsVisible = false
-                            } else {
-                                toolsStatus = resources.getString(R.string.main_command_queued)
-                            }
-                        } else {
-                            toolsStatus = resources.getString(R.string.main_command_unsent)
-                        }
-                    },
-                    onRecoverPicture = {
-                        toolsStatus =
-                            when (cabinManager.resetVideoDecoder()) {
-                                CabinManager.VideoResetResult.REQUESTED -> resources.getString(R.string.main_picture_requested)
-                                CabinManager.VideoResetResult.QUEUED -> resources.getString(R.string.main_picture_queued)
-                                CabinManager.VideoResetResult.UNAVAILABLE -> resources.getString(R.string.main_picture_unavailable)
-                            }
-                    },
-                    onHub =
-                        onOpenDashboard?.let { open ->
-                            {
-                                toolsVisible = false
-                                open()
-                            }
-                        },
-                    onClimate =
-                        onOpenClimate?.let { open ->
-                            {
-                                toolsVisible = false
-                                open()
-                            }
-                        },
+                ProjectionQuickMenu(
+                    manager = cabinManager,
+                    onRequestDeviceChange = onChangeDevice ?: { action -> action() },
                     onSettings = {
                         toolsVisible = false
                         onNavigateToSettings()
                     },
                     onClose = { toolsVisible = false },
-                    onHelp = openHelp,
-                    onHome = onOpenLauncher?.let { open -> { toolsVisible = false; open() } },
                     onScreenOff = {
                         touchState.cancel()
                         toolsVisible = false
                         helpVisible = false
                         screenBlanked = true
                     },
-                    status = toolsStatus,
                     modifier =
                         Modifier.align(if (preferences.controlSide == ProjectionControlSide.LEFT) Alignment.TopStart else Alignment.TopEnd).padding(12.dp)
                             .heightIn(max = (viewportHeight - if (doorWarning != null) 112.dp else 24.dp).coerceAtLeast(100.dp)),
@@ -1005,6 +999,7 @@ private fun HudValue(
 }
 
 @Composable
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 internal fun ClimatePanel(
     state: TeyesClimateState,
     onToggleAc: ((Boolean) -> Unit)?,
@@ -1013,21 +1008,31 @@ internal fun ClimatePanel(
     onClose: (() -> Unit)?,
     modifier: Modifier = Modifier,
     onRefresh: (() -> Unit)? = null,
+    onAdjustTemperature: ((com.cabin.platform.TeyesTemperatureZone, Boolean) -> Unit)? = null,
+    onSwitch: ((com.cabin.platform.TeyesClimateSwitch) -> Unit)? = null,
+    onAirAction: ((String) -> Unit)? = null,
 ) {
+    state.syuAir?.let { air ->
+        SyuAirPanel(air, onAirAction, modifier, onClose)
+        return
+    }
+    val closeTimer = rememberClimateCloseTimer(onClose)
+    val civicControls = com.cabin.platform.TeyesClimateControlPolicy.supportsTemperature(state.profileId)
     val resources = androidx.compose.ui.platform.LocalResources.current
     val controlsEnabled = state.controlsAvailable
     val colors = MaterialTheme.colorScheme
     val acKnown = (if (state.profileId == 262465) 30 else 24) in state.availableCodes
     val selectedAirflow = selectedClimateAirflow(state)
-    BoxWithConstraints(modifier = modifier.background(colors.surfaceContainer)) {
+    BoxWithConstraints(modifier = modifier.then(closeTimer.touchModifier).background(colors.background)) {
+        val wideClimate = maxWidth >= 720.dp
         val compactHeader = maxHeight < 220.dp
         val scrollWholePanel = maxHeight < 144.dp
         Column(
             modifier =
                 Modifier.fillMaxSize()
                     .then(if (scrollWholePanel) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+                    .padding(horizontal = if (wideClimate) 24.dp else 12.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1035,8 +1040,12 @@ internal fun ClimatePanel(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Column(modifier = Modifier.weight(1f).horizontalScroll(rememberScrollState())) {
-                    Text(stringResource(R.string.climate_title), color = colors.primary, style = MaterialTheme.typography.titleMedium)
-                    if (!compactHeader) {
+                    Text(stringResource(R.string.climate_title), color = colors.onSurface, style = MaterialTheme.typography.headlineSmall)
+                    if (state.health != TeyesTelemetryHealth.LIVE) {
+                        Text(stringResource(state.health.labelRes), style = MaterialTheme.typography.bodySmall,
+                            color = colors.onSurfaceVariant)
+                    }
+                    if (!compactHeader && !civicControls) {
                         Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                             ClimateTemperature(stringResource(R.string.label_left), state.leftTemperature, state.fahrenheit)
                             ClimateTemperature(stringResource(R.string.label_right), state.rightTemperature, state.fahrenheit)
@@ -1049,13 +1058,7 @@ internal fun ClimatePanel(
                     }
                 }
                 onClose?.let { close ->
-                    FilledTonalButton(
-                        onClick = close,
-                        modifier = Modifier.heightIn(min = 56.dp).semantics { contentDescription = resources.getString(R.string.climate_close) },
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                    ) {
-                        Icon(Icons.Default.Close, contentDescription = null)
-                    }
+                    ClimateCloseButton(close, closeTimer.remaining.value)
                 }
             }
 
@@ -1065,9 +1068,9 @@ internal fun ClimatePanel(
                 modifier =
                     Modifier.fillMaxWidth()
                         .then(if (scrollWholePanel) Modifier else Modifier.weight(1f).verticalScroll(rememberScrollState())),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                if (compactHeader) {
+                if (compactHeader && !civicControls) {
                     Row(
                         modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
@@ -1076,7 +1079,26 @@ internal fun ClimatePanel(
                         ClimateTemperature(stringResource(R.string.label_right), state.rightTemperature, state.fahrenheit)
                     }
                 }
-                if (!controlsEnabled && !fanSpeedEnabled(state)) {
+                if (civicControls) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        com.cabin.platform.TeyesTemperatureZone.entries.forEach { zone ->
+                            Surface(Modifier.weight(1f), shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                                color = colors.surfaceContainerLow) {
+                                ClimateTemperatureControl(state, zone, onAdjustTemperature,
+                                    Modifier.padding(if (wideClimate) 12.dp else 8.dp),
+                                    fontSize = if (wideClimate) 48.sp else 34.sp, horizontal = wideClimate)
+                            }
+                        }
+                    }
+                    ClimateSwitchControls(state, onSwitch)
+                }
+                val extraControlsAvailable = com.cabin.platform.TeyesClimateSwitch.entries.any {
+                    com.cabin.platform.TeyesClimateControlPolicy.canToggle(state, it)
+                } || com.cabin.platform.TeyesTemperatureZone.entries.any {
+                    com.cabin.platform.TeyesClimateControlPolicy.canAdjustTemperature(state, it, true) ||
+                        com.cabin.platform.TeyesClimateControlPolicy.canAdjustTemperature(state, it, false)
+                }
+                if (!controlsEnabled && !fanSpeedEnabled(state) && !extraControlsAvailable) {
                     Text(
                         text = state.controlUnavailableReason ?: stringResource(R.string.climate_readonly),
                         color = colors.onSurfaceVariant,
@@ -1084,7 +1106,7 @@ internal fun ClimatePanel(
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
@@ -1098,6 +1120,8 @@ internal fun ClimatePanel(
                                 contentColor = if (acKnown && state.ac) colors.onPrimaryContainer else colors.onSurface,
                             ),
                     ) {
+                        Icon(Icons.Default.AcUnit, null, Modifier.size(32.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text(
                             if (!acKnown) {
                                 stringResource(R.string.climate_ac_unknown)
@@ -1110,12 +1134,13 @@ internal fun ClimatePanel(
                         )
                     }
 
-                    FanSpeedControls(state, onSetFan, Modifier.width(280.dp))
+                    FanSpeedControls(state, onSetFan, Modifier.weight(1f).padding(horizontal = 8.dp))
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     listOf(
                         stringResource(R.string.climate_face) to TeyesAirflowMode.BODY,
@@ -1123,7 +1148,7 @@ internal fun ClimatePanel(
                         stringResource(R.string.climate_feet) to TeyesAirflowMode.FOOT,
                         stringResource(R.string.climate_screen_feet) to TeyesAirflowMode.UP_FOOT,
                     ).forEach { (label, mode) ->
-                        ClimateModeButton(label, selectedAirflow == mode, controlsEnabled && onSetAirflow != null) {
+                        ClimateModeButton(label, mode, selectedAirflow == mode, controlsEnabled && onSetAirflow != null) {
                             onSetAirflow?.invoke(mode)
                         }
                     }
@@ -1157,6 +1182,7 @@ private fun ClimateTemperature(
 @Composable
 private fun ClimateModeButton(
     label: String,
+    mode: TeyesAirflowMode,
     selected: Boolean,
     enabled: Boolean,
     onClick: () -> Unit,
@@ -1164,14 +1190,22 @@ private fun ClimateModeButton(
     FilledTonalButton(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.heightIn(min = 56.dp).semantics { this.selected = selected },
+        modifier = Modifier.heightIn(min = 88.dp).semantics { this.selected = selected },
         colors =
             ButtonDefaults.filledTonalButtonColors(
                 containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHighest,
                 contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
             ),
     ) {
-        Text(label, maxLines = 1)
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Icon(when (mode) {
+                TeyesAirflowMode.BODY -> Icons.Default.Face
+                TeyesAirflowMode.BODY_FOOT -> Icons.Default.AirlineSeatReclineNormal
+                TeyesAirflowMode.FOOT -> Icons.Default.AirlineSeatLegroomExtra
+                TeyesAirflowMode.UP_FOOT -> Icons.Default.VerticalAlignTop
+            }, null, Modifier.size(32.dp))
+            Text(label, maxLines = 1, style = MaterialTheme.typography.labelMedium)
+        }
     }
 }
 

@@ -1738,12 +1738,17 @@ class CabinManager(
             com.cabin.platform.TeyesKeyAction.NEXT -> ProjectionAction.NEXT
             com.cabin.platform.TeyesKeyAction.PREVIOUS -> ProjectionAction.PREVIOUS
             com.cabin.platform.TeyesKeyAction.VOICE -> ProjectionAction.VOICE
-            com.cabin.platform.TeyesKeyAction.CLIMATE -> return // Activity-owned UI only
+            com.cabin.platform.TeyesKeyAction.CLIMATE, com.cabin.platform.TeyesKeyAction.VOLUME_UP,
+            com.cabin.platform.TeyesKeyAction.VOLUME_DOWN, com.cabin.platform.TeyesKeyAction.MUTE,
+            com.cabin.platform.TeyesKeyAction.PAGE_NEXT, com.cabin.platform.TeyesKeyAction.PAGE_PREVIOUS -> return // Activity-owned actions
         }
         performProjectionAction(projectionAction)
     }
 
-    fun syncTeyesAppearance() {
+    @Volatile private var teyesSystemDarkOverride: Boolean? = null
+
+    fun syncTeyesAppearance(systemDarkOverride: Boolean? = null) {
+        if (systemDarkOverride != null) teyesSystemDarkOverride = systemDarkOverride
         if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
         scope.launch(Dispatchers.IO) {
             if (state != State.STREAMING && state != State.DEVICE_CONNECTED) return@launch
@@ -1751,9 +1756,9 @@ class CabinManager(
             val dark = when (appearance) {
                 com.cabin.platform.TeyesAppearance.DAY -> false
                 com.cabin.platform.TeyesAppearance.NIGHT -> true
-                com.cabin.platform.TeyesAppearance.SYSTEM ->
+                com.cabin.platform.TeyesAppearance.SYSTEM -> teyesSystemDarkOverride ?: (
                     context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK ==
-                        android.content.res.Configuration.UI_MODE_NIGHT_YES
+                        android.content.res.Configuration.UI_MODE_NIGHT_YES)
             }
             sendKey(if (dark) CommandMapping.ENABLE_NIGHT_MODE else CommandMapping.DISABLE_NIGHT_MODE)
         }

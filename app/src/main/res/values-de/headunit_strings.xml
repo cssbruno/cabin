@@ -1,0 +1,11 @@
+<resources>
+    <string name="headunit_settings">Radioeinstellungen</string>
+    <string name="headunit_system">System-App installiert</string>
+    <string name="headunit_regular">Standard-App installiert</string>
+    <string name="headunit_widget_granted">Widget-Verknüpfung erlaubt</string>
+    <string name="headunit_widget_consent">Widgets erfordern Android-Zustimmung</string>
+    <string name="headunit_display">Anzeige</string>
+    <string name="headunit_sound">Ton</string>
+    <string name="headunit_home">Standard-Launcher</string>
+    <string name="headunit_unavailable">Diese Firmware bietet diese Einstellungsseite nicht an.</string>
+</resources>

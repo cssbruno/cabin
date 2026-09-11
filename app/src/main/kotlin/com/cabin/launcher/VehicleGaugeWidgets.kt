@@ -11,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -81,9 +83,12 @@ fun VehicleWidgetsPage(preferences: LauncherPreferences, vehicle: TeyesClimateSt
             Row(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 layout.gauges.drop(page * 2).take(2).forEach { gauge ->
                     val reading = vehicleGaugeReading(gauge, vehicle, units)
-                    Card(Modifier.weight(1f).fillMaxHeight()) {
+                    val label = stringResource(gauge.label)
+                    Card(Modifier.weight(1f).fillMaxHeight().semantics { contentDescription = label }) {
                         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-                            Text(stringResource(gauge.label), style = MaterialTheme.typography.titleMedium)
+                            if (gauge != VehicleGauge.SPEED && gauge != VehicleGauge.RPM) {
+                                Text(stringResource(gauge.label), style = MaterialTheme.typography.titleMedium)
+                            }
                             Text(reading.value, style = MaterialTheme.typography.displaySmall, maxLines = 1)
                             if (reading.available) Text(reading.unit)
                         }

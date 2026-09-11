@@ -1,0 +1,7 @@
+<resources>
+    <string name="compat_title">Compatibilidade do veículo</string>
+    <string name="compat_unverified">Sem mapeamento verificado</string>
+    <string name="compat_live">Dados ao vivo</string>
+    <string name="compat_waiting">Aguardando dados</string>
+    <string name="compat_air_actions">Comandos do ar disponíveis: %1$d / %2$d</string>
+</resources>

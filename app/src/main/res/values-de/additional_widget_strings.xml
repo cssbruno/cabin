@@ -12,11 +12,12 @@
     <string name="widget_assistant">Telefonassistent</string>
     <string name="widget_status_open">Offen</string>
     <string name="widget_status_closed">Geschlossen</string>
-    <string name="widget_status_live">Aktuell</string>
-    <string name="widget_status_stale">Veraltet</string>
+    <string name="widget_status_live">Verbunden</string>
+    <string name="widget_status_stale">Keine aktuellen Daten</string>
     <string name="widget_status_connecting">Verbindung läuft</string>
     <string name="widget_status_offline">Offline</string>
     <string name="widget_air_screen">Scheibe</string>
     <string name="widget_air_face">Gesicht</string>
     <string name="widget_air_feet">Füße</string>
+    <string name="widget_media_app">Musik-App</string>
 </resources>

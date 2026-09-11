@@ -1,13 +1,15 @@
 package com.cabin.launcher
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.AcUnit
-import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,18 +26,24 @@ import com.cabin.R
 import com.cabin.platform.TeyesClimateControlPolicy
 import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesAirflowMode
+import com.cabin.platform.TeyesTemperatureZone
+import com.cabin.platform.labelRes
 import com.cabin.ui.FanSpeedControls
-import com.cabin.ui.formatClimateTemperature
 
 /** One resizable A/C widget: side-by-side when wide, stacked when tall, compact at the smallest sizes. */
 @Composable
 internal fun AcWidget(state: TeyesClimateState, actions: ClimateWidgetActions, onClimate: () -> Unit) {
+    state.syuAir?.let { air ->
+        com.cabin.ui.SyuAirWidget(air, actions.onAirAction, onClimate)
+        return
+    }
     val acKnown = comfortFieldAvailable(state, TeyesClimateControlPolicy.acCode(state.profileId))
     @Composable fun AcButton(modifier: Modifier) {
+        val ready = acKnown && state.controlsAvailable
         FilledTonalButton({ actions.onAc?.invoke(!state.ac) }, modifier.heightIn(min = 56.dp),
-            enabled = acKnown && state.controlsAvailable && actions.onAc != null,
+            enabled = actions.onAc != null && ready,
             contentPadding = PaddingValues(horizontal = 8.dp)) {
-            Icon(Icons.Default.AcUnit, null, Modifier.size(18.dp))
+            Icon(Icons.Default.AcUnit, null, Modifier.size(28.dp))
             Spacer(Modifier.width(4.dp))
             Text(stringResource(if (!acKnown) R.string.climate_ac_unknown else if (state.ac) R.string.climate_ac_on else R.string.climate_ac_off), maxLines = 1)
         }
@@ -47,6 +54,7 @@ internal fun AcWidget(state: TeyesClimateState, actions: ClimateWidgetActions, o
         }
     }
     @Composable fun Header(refresh: Boolean = true) {
+      Column {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             AcButton(Modifier.weight(1f))
             if (refresh && actions.onRefresh != null) IconButton(actions.onRefresh, Modifier.size(56.dp)) {
@@ -54,41 +62,73 @@ internal fun AcWidget(state: TeyesClimateState, actions: ClimateWidgetActions, o
             }
             OpenPanel()
         }
+        if (state.health != com.cabin.platform.TeyesTelemetryHealth.LIVE) {
+            Text(stringResource(state.health.labelRes), style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+      }
     }
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val availableWidth = maxWidth
         val availableHeight = maxHeight
         val narrow = maxWidth < 240.dp
-        val short = maxHeight < (if (maxWidth < 216.dp) 340.dp else if (maxWidth < 440.dp) 280.dp else 160.dp)
+        val short = maxHeight < (if (maxWidth < 440.dp) 340.dp else 160.dp)
         val tiny = maxWidth < 180.dp
         val horizontal = maxWidth >= 440.dp && maxWidth > maxHeight * 1.25f
-        val temperatures = listOf(
-            Triple(R.string.widget_driver, 25, state.leftTemperature),
-            Triple(R.string.widget_passenger, 31, state.rightTemperature))
-        @Composable fun Temperature(labelId: Int, code: Int, raw: Int?, modifier: Modifier) {
-            val label = stringResource(labelId)
-            val value = formatClimateTemperature(raw?.takeIf { comfortFieldAvailable(state, code, 33) }, state.fahrenheit)
-            Column(modifier.semantics(mergeDescendants = true) { contentDescription = label }, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(value, fontSize = if (narrow) 24.sp else 34.sp, fontWeight = FontWeight.Light, maxLines = 1)
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(Icons.Default.Thermostat, null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
+        val civicArrows = TeyesClimateControlPolicy.supportsTemperature(state.profileId)
+        val roomForArrows = availableHeight >= (if (horizontal) 280.dp else 480.dp)
+        val temperatures = listOf(25, 31)
+        @Composable fun Temperature(code: Int, modifier: Modifier) {
+            com.cabin.ui.ClimateTemperatureControl(state,
+                if (code == 25) TeyesTemperatureZone.DRIVER else TeyesTemperatureZone.PASSENGER,
+                actions.onTemperature, modifier, roomForArrows,
+                if (narrow) 24.sp else if (availableHeight >= 400.dp) 48.sp else 34.sp)
         }
         @Composable fun Temperatures(stacked: Boolean) {
             if (stacked) Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                temperatures.forEach { (label, code, raw) -> Temperature(label, code, raw, Modifier.fillMaxWidth()) }
+                temperatures.forEach { code -> Temperature(code, Modifier.fillMaxWidth()) }
             } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                temperatures.forEach { (label, code, raw) -> Temperature(label, code, raw, Modifier.weight(1f)) }
+                temperatures.forEach { code -> Temperature(code, Modifier.weight(1f)) }
             }
         }
         when {
-            tiny && maxHeight >= 128.dp -> Column(Modifier.fillMaxSize().padding(8.dp).testTag("ac-compact"),
+            tiny || maxHeight < 128.dp -> Column(Modifier.fillMaxSize().clickable(onClick = onClimate).padding(8.dp).testTag("ac-compact"),
                 verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally) {
-                AcButton(Modifier.fillMaxWidth())
-                OpenPanel()
+                Icon(Icons.Default.AcUnit, stringResource(R.string.climate_open_controls), Modifier.size(24.dp))
+                Text(com.cabin.ui.formatClimateTemperature(
+                    state.leftTemperature.takeIf { comfortFieldAvailable(state, 25, 33) }, state.fahrenheit),
+                    style = MaterialTheme.typography.titleLarge, maxLines = 1)
+                Text(stringResource(R.string.widget_ac), style = MaterialTheme.typography.labelSmall)
+            }
+            civicArrows && availableWidth >= 240.dp && availableHeight >= 264.dp && availableHeight < 480.dp -> Column(
+                Modifier.fillMaxSize().padding(4.dp).testTag("ac-inline"),
+                verticalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                Header()
+                com.cabin.platform.TeyesTemperatureZone.entries.forEach { zone ->
+                    val driver = zone == TeyesTemperatureZone.DRIVER
+                    val label = stringResource(if (driver) R.string.widget_driver else R.string.widget_passenger)
+                    val code = if (driver) 25 else 31
+                    val raw = if (driver) state.leftTemperature else state.rightTemperature
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        IconButton({ actions.onTemperature?.invoke(zone, false) },
+                            enabled = actions.onTemperature != null && TeyesClimateControlPolicy.canAdjustTemperature(state, zone, false),
+                            modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.Remove, stringResource(R.string.climate_temperature_decrease, label))
+                        }
+                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(com.cabin.ui.formatClimateTemperature(raw.takeIf { comfortFieldAvailable(state, code, 33) }, state.fahrenheit),
+                                style = MaterialTheme.typography.titleLarge, maxLines = 1)
+                            Text(label, style = MaterialTheme.typography.labelSmall)
+                        }
+                        IconButton({ actions.onTemperature?.invoke(zone, true) },
+                            enabled = actions.onTemperature != null && TeyesClimateControlPolicy.canAdjustTemperature(state, zone, true),
+                            modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.Add, stringResource(R.string.climate_temperature_increase, label))
+                        }
+                    }
+                }
+                FanSpeedControls(state, actions.onFan, Modifier.fillMaxWidth())
             }
             short -> Row(Modifier.fillMaxSize().padding(8.dp).testTag("ac-compact"), verticalAlignment = Alignment.CenterVertically) {
                 if (availableWidth >= 480.dp) {
@@ -108,9 +148,11 @@ internal fun AcWidget(state: TeyesClimateState, actions: ClimateWidgetActions, o
                 }
             }
             else -> Column(Modifier.fillMaxSize().padding(if (narrow) 8.dp else 12.dp).testTag("ac-vertical"),
-                verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally) {
+                verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Header(refresh = !narrow)
-                Temperatures(stacked = availableHeight >= 360.dp && availableHeight > availableWidth)
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Temperatures(stacked = narrow && availableHeight >= (if (civicArrows) 680.dp else 400.dp))
+                }
                 FanSpeedControls(state, actions.onFan, Modifier.fillMaxWidth())
                 AcModes(state, actions)
             }
@@ -118,7 +160,7 @@ internal fun AcWidget(state: TeyesClimateState, actions: ClimateWidgetActions, o
     }
 }
 
-/** Airflow writes use the same verified controller as the full panel; recirculation is telemetry only. */
+/** Airflow and supported Civic recirculation share the full panel controller. */
 @Composable
 private fun AcModes(state: TeyesClimateState, actions: ClimateWidgetActions) {
     val airflowKnown = additionalVehicleFieldKnown(DashboardModule.AIRFLOW, state)
@@ -158,7 +200,12 @@ private fun AcModes(state: TeyesClimateState, actions: ClimateWidgetActions) {
                 }
             }
         }
-        Column(Modifier.weight(1f).heightIn(min = 56.dp).semantics(mergeDescendants = true) {
+        Column(Modifier.weight(1f).heightIn(min = 56.dp)
+            .then(if (TeyesClimateControlPolicy.supportsTemperature(state.profileId)) Modifier.clickable(
+                enabled = actions.onSwitch != null && TeyesClimateControlPolicy.canToggle(state, com.cabin.platform.TeyesClimateSwitch.RECIRCULATION),
+                role = androidx.compose.ui.semantics.Role.Button,
+                onClick = { actions.onSwitch?.invoke(com.cabin.platform.TeyesClimateSwitch.RECIRCULATION) }) else Modifier)
+            .semantics(mergeDescendants = true) {
             contentDescription = recircLabel; stateDescription = recircText
         }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Icon(Icons.Default.Autorenew, null, Modifier.size(22.dp),

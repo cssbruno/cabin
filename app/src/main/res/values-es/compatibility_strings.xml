@@ -1,0 +1,7 @@
+<resources>
+    <string name="compat_title">Compatibilidad del vehículo</string>
+    <string name="compat_unverified">Sin mapeo verificado</string>
+    <string name="compat_live">Datos en vivo</string>
+    <string name="compat_waiting">Esperando datos</string>
+    <string name="compat_air_actions">Acciones de climatización listas: %1$d / %2$d</string>
+</resources>

@@ -64,7 +64,35 @@ class DashboardLayoutTest {
         assertEquals(p.state.value, prefs().state.value)
     }
 
-    @Test fun `drop swaps widgets and rejects CarPlay displacement and invalid drops`() {
+    @Test fun `drop rearranges multiple widgets and keeps sizes ids and other pages`() {
+        val before = DashboardLayout(2, listOf(
+            DashboardTile(1, DashboardModule.SPEED, 0, 0, 0, 4, 2),
+            DashboardTile(2, DashboardModule.RPM, 0, 4, 0, 2, 2),
+            DashboardTile(3, DashboardModule.OIL, 0, 6, 0, 2, 2),
+            DashboardTile(4, DashboardModule.CLOCK, 1, 0, 0, 8, 4),
+        ))
+        val after = checkNotNull(dashboardDropLayout(before, 1, 4, 0))
+        assertTrue(validDashboard(after))
+        assertEquals(4, after.tiles.first { it.id == 1 }.x)
+        assertEquals(before.tiles.last(), after.tiles.last())
+        assertEquals(before.tiles.map { Triple(it.id, it.width, it.height) }, after.tiles.map { Triple(it.id, it.width, it.height) })
+    }
+
+    @Test fun `CarPlay can be dragged and displaced without duplicate surfaces with undo`() {
+        val p = prefs()
+        val before = p.state.value
+        assertTrue(p.drop(1, 2, 0))
+        assertTrue(validDashboard(p.state.value))
+        assertEquals(2, p.state.value.tiles.first { it.id == 1 }.x)
+        assertEquals(1, p.state.value.tiles.count { it.module == DashboardModule.PROJECTION })
+        assertTrue(p.undo())
+        assertEquals(before, p.state.value)
+        assertTrue(p.drop(2, 0, 0))
+        assertTrue(validDashboard(p.state.value))
+        assertEquals(p.state.value, prefs().state.value)
+    }
+
+    @Test fun `drop swaps widgets and rejects impossible or invalid drops`() {
         val p = prefs()
         val before = p.state.value
         assertTrue(p.drop(4, 4, 0))
@@ -73,7 +101,6 @@ class DashboardLayoutTest {
         assertEquals(p.state.value, prefs().state.value)
         val swapped = p.state.value
         assertFalse(p.drop(1, 1, 0))
-        assertFalse(p.drop(2, 0, 0))
         assertFalse(p.drop(4, 8, 0))
         assertEquals(swapped, p.state.value)
         assertEquals(before.tiles.first { it.id == 1 }, swapped.tiles.first { it.id == 1 })
@@ -109,6 +136,9 @@ class DashboardLayoutTest {
     @Test fun `a hosted Android widget is not duplicated into two modules`() {
         val p = prefs()
         assertTrue(p.add(DashboardModule.WIDGET, 2, 51))
+        val added = p.state.value.tiles.single { it.module == DashboardModule.WIDGET }
+        assertEquals(1, added.width)
+        assertEquals(1, added.height)
         val before = p.state.value
         assertFalse(p.add(DashboardModule.WIDGET, 2, 51))
         assertEquals(before, p.state.value)
@@ -122,5 +152,51 @@ class DashboardLayoutTest {
         assertFalse(p.addPage())
         context.getSharedPreferences("carlink_dashboard_v1", 0).edit().putString("0.1.LEGACY", "bad json").commit()
         assertEquals(DashboardLayout(), prefs().state.value)
+    }
+    @Test fun `undo redo persist and new edits invalidate redo`() {
+        val p = prefs()
+        val initial = p.state.value
+        assertFalse(p.undo())
+        assertTrue(p.resizeInPlace(5, 1, 1))
+        val edited = p.state.value
+        assertTrue(p.undo())
+        assertEquals(initial, prefs().state.value)
+        assertTrue(p.redo())
+        assertEquals(edited, prefs().state.value)
+        assertTrue(p.undo())
+        assertTrue(p.addPage())
+        assertFalse(p.redo())
+        assertFalse(p.history.value.canRedo)
+    }
+    @Test fun `invalid and unchanged operations do not consume history`() {
+        val p = prefs()
+        assertTrue(p.remove(999))
+        assertFalse(p.drop(4, 99, 99))
+        assertFalse(p.history.value.canUndo)
+    }
+    @Test fun `presets preserve hosted widgets and respect capability filters`() {
+        val p = prefs()
+        assertTrue(p.add(DashboardModule.WIDGET, 2, 71))
+        val previous = p.state.value
+        assertTrue(p.addPreset(DashboardPreset.PARKING, setOf(DashboardModule.DOORS)))
+        val added = p.state.value.tiles.last()
+        assertEquals(DashboardModule.DOORS, added.module)
+        assertEquals(8, added.width)
+        assertEquals(4, added.height)
+        assertEquals(previous.tiles, p.state.value.tiles.dropLast(1))
+        assertTrue(p.undo())
+        assertEquals(previous, p.state.value)
+        assertFalse(p.addPreset(DashboardPreset.PARKING, emptySet()))
+    }
+    @Test fun `all presets produce valid layouts and obey page cap`() {
+        DashboardPreset.entries.forEach { preset ->
+            reset()
+            val p = prefs()
+            repeat(4) {
+                assertTrue(p.addPreset(preset, DashboardModule.entries.toSet()))
+                assertTrue(validDashboard(p.state.value))
+            }
+            assertFalse(p.addPreset(preset, DashboardModule.entries.toSet()))
+        }
     }
 }

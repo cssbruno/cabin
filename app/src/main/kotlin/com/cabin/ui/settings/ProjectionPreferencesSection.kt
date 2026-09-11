@@ -103,34 +103,9 @@ internal fun ProjectionPreferencesContent(
             )
             HorizontalDivider()
             Text(stringResource(R.string.projection_ac_notices), style = MaterialTheme.typography.titleMedium)
-            Text(
-                stringResource(R.string.projection_ac_notices_detail),
+            Text(stringResource(R.string.projection_ac_off_detail),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth().selectableGroup().testTag("climate_notice_choices"),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                SettingsChoice(
-                    label = stringResource(R.string.projection_ac_summary),
-                    selected = state.climateNoticeMode == ClimateNoticeMode.SUMMARY,
-                    onClick = { onClimateNoticeMode(ClimateNoticeMode.SUMMARY) },
-                    detail = stringResource(R.string.projection_ac_summary_detail),
-                )
-                SettingsChoice(
-                    label = stringResource(R.string.projection_ac_panel),
-                    selected = state.climateNoticeMode == ClimateNoticeMode.PANEL,
-                    onClick = { onClimateNoticeMode(ClimateNoticeMode.PANEL) },
-                    detail = stringResource(R.string.projection_ac_panel_detail),
-                )
-                SettingsChoice(
-                    label = stringResource(R.string.interface_state_off),
-                    selected = state.climateNoticeMode == ClimateNoticeMode.OFF,
-                    onClick = { onClimateNoticeMode(ClimateNoticeMode.OFF) },
-                    detail = stringResource(R.string.projection_ac_off_detail),
-                )
-            }
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

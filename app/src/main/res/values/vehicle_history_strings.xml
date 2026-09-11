@@ -1,0 +1,17 @@
+<resources>
+    <string name="alert_title">Vehicle alerts</string>
+    <string name="alert_none">No active reported alerts</string>
+    <string name="alert_disconnected">Vehicle disconnected</string>
+    <string name="alert_hood">Hood open</string>
+    <string name="alert_front_left">Front left door open</string>
+    <string name="alert_front_right">Front right door open</string>
+    <string name="alert_rear_left">Rear left door open</string>
+    <string name="alert_rear_right">Rear right door open</string>
+    <string name="alert_trunk">Trunk open</string>
+    <string name="alert_oil_due">Oil service due</string>
+    <string name="alert_service_due">Service due</string>
+    <string name="history_title">Tire history</string>
+    <string name="history_empty">Waiting for tire readings</string>
+    <string name="history_clear">Clear tire history</string>
+    <string name="history_cleared">Tire history cleared</string>
+</resources>

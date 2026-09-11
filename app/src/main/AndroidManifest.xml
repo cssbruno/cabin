@@ -29,8 +29,8 @@
 
     <!-- AltVideo (USB 0x2C) IPC permission. Protects NaviVideoSourceService so only
          co-signed priv-apps (ClusterHomeDisplay) can bind and consume the stream.
-         signature|privileged: caller must share our signing cert AND live in
-         /system/priv-app/. uses-permission is required because the service-protecting
+         signature|privileged: callers may qualify through our signing certificate
+         OR privileged permission assignment. uses-permission is required because the service-protecting
          permission is declared and used by the same app. -->
     <permission
         android:name="com.carlink.permission.NAVI_VIDEO_STREAM"
@@ -77,6 +77,10 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
         <package android:name="com.syu.ms" />
     </queries>
 
@@ -92,6 +96,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CabinNative"
         tools:targetApi="35">
+        <service android:name="com.cabin.platform.CabinMediaListener"
+            android:exported="true" android:label="@string/tools_media_access"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter><action android:name="android.service.notification.NotificationListenerService" /></intent-filter>
+        </service>
+
 
         <!-- Main Activity -->
         <activity

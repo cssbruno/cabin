@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_active">Cabin is your default launcher. The Home button opens your dashboard.</string>
+    <string name="home_setup_detail">Use Cabin as your home screen. Choose Cabin Home in the Android prompt.</string>
+    <string name="home_set_default">Set Cabin as default launcher</string>
+    <string name="home_change">Change default launcher</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_active">O Cabin é seu launcher padrão. O botão Início abre seu painel.</string>
+    <string name="home_setup_detail">Use o Cabin como tela inicial. Selecione Cabin Home na janela do Android.</string>
+    <string name="home_set_default">Definir Cabin como launcher padrão</string>
+    <string name="home_change">Alterar launcher padrão</string>
+</resources>

@@ -101,7 +101,6 @@ import com.cabin.protocol.KnownDevices
 import com.cabin.ui.MainScreen
 import com.cabin.ui.ProjectionReturnDecision
 import com.cabin.ui.projectionReturnDecision
-import com.cabin.ui.projectionClimateNoticeVisibility
 import com.cabin.ui.SettingsScreen
 import com.cabin.ui.settings.AdapterConfigPreference
 import com.cabin.ui.settings.DisplayMode
@@ -147,7 +146,6 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val ACTION_SHOW_COMPACT_PROJECTION = "com.carlink.action.SHOW_COMPACT_PROJECTION"
         const val ACTION_SHOW_FULLSCREEN_PROJECTION = "com.carlink.action.SHOW_FULLSCREEN_PROJECTION"
-        private const val TEYES_CLIMATE_OVERLAY_TIMEOUT_MS = 5_000L
     }
 
     // Nullable to prevent UninitializedPropertyAccessException if Activity
@@ -197,7 +195,6 @@ class MainActivity : ComponentActivity() {
     private val cabinManagerState = mutableStateOf<CabinManager?>(null)
     private val displayModeState = mutableStateOf(DisplayMode.SYSTEM_UI_VISIBLE)
     private val compactPanelState = mutableStateOf(false)
-    private var manualClimatePanel = false
     private val climateOverlayVisibleState = mutableStateOf(false)
     private val climateSummaryVisibleState = mutableStateOf(false)
     private val windowFocusedState = mutableStateOf(false)
@@ -207,6 +204,14 @@ class MainActivity : ComponentActivity() {
     // Pending reinit handler — tracked for cancellation on rapid display mode changes
     private var pendingReinitJob: Job? = null
     private val mainHandler = Handler(Looper.getMainLooper())
+    private val rehideLauncherBars = Runnable {
+        if (homeNavigationRequest.value > 0 && !compactPanelMode && hasWindowFocus()) {
+            WindowCompat.getInsetsController(window, window.decorView).apply {
+                hide(WindowInsetsCompat.Type.systemBars())
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        }
+    }
     private val hideClimateOverlay = Runnable {
         climateOverlayVisibleState.value = false
         climateSummaryVisibleState.value = false
@@ -369,7 +374,7 @@ class MainActivity : ComponentActivity() {
             val climateState =
                 climateController?.state?.collectAsState()?.value ?: TeyesClimateState()
             val teyesProfile by TeyesFeaturePreferences.get(this).profile.collectAsState()
-            val systemDark = isSystemInDarkTheme()
+            val systemDark = com.cabin.platform.rememberCarAutomation(climateState, isSystemInDarkTheme())
             val dark = if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) when (teyesProfile.appearance) {
                 TeyesAppearance.SYSTEM -> systemDark
                 TeyesAppearance.DAY -> false
@@ -386,7 +391,7 @@ class MainActivity : ComponentActivity() {
                 manager?.applyTeyesAudioProfile()
             }
             LaunchedEffect(manager, teyesProfile.appearance, dark) {
-                manager?.syncTeyesAppearance()
+                manager?.syncTeyesAppearance(systemDark)
             }
             LaunchedEffect(manager, teyesProfile.recoverOverlays) {
                 if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
@@ -407,6 +412,7 @@ class MainActivity : ComponentActivity() {
                                 displayMode = displayMode,
                                 compactPanel = compactPanel,
                                 homeRequest = homeNavigationRequest.value,
+                                onOpenLauncherWindow = ::openLauncherFullscreen,
                                 onExpandPanel = { setCompactPanelMode(false) },
                                 onClosePanel = { finish() },
                                 onOpenClimate = if (climateController != null) ::toggleTeyesClimate else null,
@@ -416,6 +422,12 @@ class MainActivity : ComponentActivity() {
                                 climateState = climateState,
                                 onSetClimateAc = climateController?.let { controller -> controller::setAc },
                                 onSetClimateFan = climateController?.let { controller -> controller::setFan },
+                                onAdjustClimateTemperature = climateController?.let { controller -> controller::adjustTemperature },
+                                onToggleClimateSwitch = climateController?.let { controller -> controller::toggleClimate },
+                                onAirAction = climateController?.let { controller -> controller::sendAirAction },
+                                onVehicleLighting = climateController?.let { controller -> controller::setVehicleLighting },
+                                onFactoryAmplifier = climateController?.let { controller -> controller::setFactoryAmplifier },
+                                onFactoryControl = climateController?.let { controller -> controller::setFactoryControl },
                                 onSetClimateAirflow = climateController?.let { controller -> controller::setAirflow },
                                 onResetCluster = ::restartClusterBinding,
                                 onRetryVehicle = { teyesClimateController?.retryConnection() },
@@ -495,6 +507,14 @@ class MainActivity : ComponentActivity() {
         TeyesKeyRouter(TeyesFeaturePreferences.get(this)) { action ->
             if (action == TeyesKeyAction.CLIMATE) {
                 if (teyesClimateController != null) toggleTeyesClimate()
+            } else if (action in setOf(TeyesKeyAction.VOLUME_UP, TeyesKeyAction.VOLUME_DOWN, TeyesKeyAction.MUTE)) {
+                val audio = getSystemService(android.media.AudioManager::class.java)
+                val direction = when (action) {
+                    TeyesKeyAction.VOLUME_UP -> android.media.AudioManager.ADJUST_RAISE
+                    TeyesKeyAction.VOLUME_DOWN -> android.media.AudioManager.ADJUST_LOWER
+                    else -> android.media.AudioManager.ADJUST_TOGGLE_MUTE
+                }
+                audio?.adjustStreamVolume(android.media.AudioManager.STREAM_MUSIC, direction, android.media.AudioManager.FLAG_SHOW_UI)
             } else cabinManager?.performTeyesKey(action)
         }
     }
@@ -608,6 +628,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /** Keeps the Activity window policy in sync when Home is opened in-place. */
+    private fun openLauncherFullscreen() {
+        homeNavigationRequest.value = kotlin.math.abs(homeNavigationRequest.value) + 1L
+        if (compactPanelMode) setCompactPanelMode(false) else loadAndApplyDisplayMode()
+    }
+
     private fun configureCompactProjectionWindow() {
         val bounds = WindowMetricsCompat.displayBounds(windowManager)
         val marginPx = (24 * resources.displayMetrics.density).toInt()
@@ -627,7 +653,6 @@ class MainActivity : ComponentActivity() {
 
     private fun toggleTeyesClimate() {
         if (climateOverlayVisibleState.value) {
-            manualClimatePanel = false
             mainHandler.removeCallbacks(hideClimateOverlay)
             climateOverlayVisibleState.value = false
         } else {
@@ -638,7 +663,7 @@ class MainActivity : ComponentActivity() {
     private fun showTeyesClimateOverlay() {
         mainHandler.post {
             if (isDestroyed || isFinishing) return@post
-            manualClimatePanel = true
+            if (compactPanelMode) setCompactPanelMode(false)
             climateSummaryVisibleState.value = false
             climateOverlayVisibleState.value = true
             mainHandler.removeCallbacks(hideClimateOverlay)
@@ -648,25 +673,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Automatic notices never resize projection unless the user explicitly opts in. */
-    private fun showTeyesClimateNotice() {
-        mainHandler.post {
-            if (isDestroyed || isFinishing || !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@post
-            if (manualClimatePanel) return@post
-            val mode = ProjectionPreferences.getInstance(this).state.value.climateNoticeMode
-            val notice = projectionClimateNoticeVisibility(mode, climateOverlayVisibleState.value)
-            climateSummaryVisibleState.value = notice.summary
-            climateOverlayVisibleState.value = notice.panel
-            mainHandler.removeCallbacks(hideClimateOverlay)
-            if (climateOverlayVisibleState.value || climateSummaryVisibleState.value) {
-                mainHandler.postDelayed(hideClimateOverlay, TEYES_CLIMATE_OVERLAY_TIMEOUT_MS)
-            }
-        }
-    }
-
     private fun initializeTeyesClimateController() {
         if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
-        val controller = TeyesClimateController(this, ::showTeyesClimateNotice)
+        // Feedback updates widgets in place; climate navigation is always explicit.
+        val controller = TeyesClimateController(this) {}
         if (controller.start()) {
             teyesClimateController = controller
             logInfo("[TEYES] Started asynchronous vehicle service connection", tag = "MAIN")
@@ -1271,6 +1281,14 @@ class MainActivity : ComponentActivity() {
                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 windowInsetsController.systemBarsBehavior =
                     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                // Some TPRO SystemUI builds restore the dock just after an Activity
+                // regains focus. Re-hide after both the immediate and delayed decor
+                // redraw, but only while Home still owns the window.
+                if (homeNavigationRequest.value > 0 && !compactPanelMode) {
+                    window.decorView.post(rehideLauncherBars)
+                    mainHandler.removeCallbacks(rehideLauncherBars)
+                    mainHandler.postDelayed(rehideLauncherBars, 250)
+                }
             }
         }
     }
@@ -1434,6 +1452,7 @@ fun CabinApp(
     displayMode: DisplayMode,
     compactPanel: Boolean = false,
     homeRequest: Long = 0L,
+    onOpenLauncherWindow: () -> Unit = {},
     onExpandPanel: () -> Unit = {},
     onClosePanel: () -> Unit = {},
     onOpenClimate: (() -> Unit)? = null,
@@ -1443,6 +1462,12 @@ fun CabinApp(
     climateState: TeyesClimateState = TeyesClimateState(),
     onSetClimateAc: ((Boolean) -> Unit)? = null,
     onSetClimateFan: ((Int) -> Unit)? = null,
+    onAdjustClimateTemperature: ((com.cabin.platform.TeyesTemperatureZone, Boolean) -> Unit)? = null,
+    onToggleClimateSwitch: ((com.cabin.platform.TeyesClimateSwitch) -> Unit)? = null,
+    onAirAction: ((String) -> Unit)? = null,
+    onVehicleLighting: ((com.cabin.platform.SyuLightingSetting, Int) -> Unit)? = null,
+    onFactoryAmplifier: ((com.cabin.platform.SyuAmplifierSetting, Int) -> Unit)? = null,
+    onFactoryControl: ((com.cabin.platform.SyuFactoryControl, Int) -> Unit)? = null,
     onSetClimateAirflow: ((TeyesAirflowMode) -> Unit)? = null,
     onResetCluster: () -> Unit,
     onRetryVehicle: () -> Unit = {},
@@ -1548,11 +1573,11 @@ fun CabinApp(
     val dashboardVisible = launcherShell && showHome && launcherPage == 1 && !compactPanel && !showHub && !projectionFullscreen
     val liveModuleVisible = dashboardVisible && projectionPlacement != null
     // Keep transport/audio alive but don't decode into an occluded Surface on TEYES.
-    LaunchedEffect(cabinManager, showSettings, showHub, showHome, liveModuleVisible, projectionFullscreen) {
+    LaunchedEffect(cabinManager, showSettings, showHub, showHome, liveModuleVisible, projectionFullscreen, climateOverlayVisible) {
         val screenName = when { showSettings -> "SettingsScreen"; showHub -> "TeyesDashboard"; showHome -> "CabinHome"; else -> "Projection" }
         logInfo("[UI_NAV] Active screen: $screenName", tag = "UI")
         if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
-            cabinManager.setVideoOverlayCovered(showSettings || showHub || (showHome && !liveModuleVisible && !projectionFullscreen), lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+            cabinManager.setVideoOverlayCovered(climateOverlayVisible || showSettings || showHub || (showHome && !liveModuleVisible && !projectionFullscreen), lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
         } else if (!showSettings && !showHub && !showHome) {
             cabinManager.recoverVideoFromOverlay()
         }
@@ -1590,7 +1615,7 @@ fun CabinApp(
         } else Modifier.fillMaxSize()
         Box(videoFrameModifier.then(if (dashboardVisible) Modifier.clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp)) else Modifier).clipToBounds().testTag("persistent-projection-frame")
             .alpha(if (dashboardVisible && frame == null) 0f else 1f)
-            .then(if ((showHome && !liveModuleVisible && !projectionFullscreen) || showHub || showSettings) Modifier.clearAndSetSemantics { } else Modifier)) {
+            .then(if (climateOverlayVisible || (showHome && !liveModuleVisible && !projectionFullscreen) || showHub || showSettings) Modifier.clearAndSetSemantics { } else Modifier)) {
         MainScreen(
             cabinManager = cabinManager,
             displayMode = displayMode,
@@ -1609,18 +1634,26 @@ fun CabinApp(
                     }
                 }
             },
+            onChangeDevice = { action -> parkedAction(action) },
             onClosePanel = if (compactPanel) onClosePanel else null,
             onOpenDashboard = if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) ({ showHub = true; showHome = false }) else null,
-            onOpenLauncher = if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) ({ launcherShell = true; selectLauncherPage(1) }) else null,
+            onOpenLauncher = if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) ({
+                onOpenLauncherWindow()
+                launcherShell = true
+                selectLauncherPage(1)
+            }) else null,
             onOpenClimate = onOpenClimate,
-            climateOverlayVisible = climateOverlayVisible,
-            climateSummaryVisible = climateSummaryVisible,
-            projectionUiVisible = !showHub && (!showHome || projectionFullscreen || (liveModuleVisible && projectionPlacement?.editing != true)) && !showSettings && pendingParkedAction == null,
+            climateOverlayVisible = false,
+            climateSummaryVisible = false,
+            projectionUiVisible = !climateOverlayVisible && !showHub && (!showHome || projectionFullscreen || (liveModuleVisible && projectionPlacement?.editing != true)) && !showSettings && pendingParkedAction == null,
             windowFocused = windowFocused,
             climateState = climateState,
             onSetClimateAc = onSetClimateAc,
             onSetClimateFan = onSetClimateFan,
             onSetClimateAirflow = onSetClimateAirflow,
+            onAdjustClimateTemperature = onAdjustClimateTemperature,
+            onToggleClimateSwitch = onToggleClimateSwitch,
+            onAirAction = onAirAction,
             onRefreshClimate = onRefreshClimate,
             onResetConnection = onResetConnection,
         )
@@ -1634,7 +1667,7 @@ fun CabinApp(
                 onSettings = {
                     parkedAction { initialSettingsTab = com.cabin.ui.settings.SettingsTab.TEYES; showSettings = true }
                 },
-                onClimate = onOpenClimate?.let { open -> { showHub = false; open() } },
+                onClimate = onOpenClimate,
                 onRetryVehicle = onRetryVehicle,
                 onConnectPhone = {
                     // Only this explicit action arms one return. Automatic reconnects never navigate.
@@ -1657,21 +1690,21 @@ fun CabinApp(
                 modifier = Modifier.layout { measurable, constraints ->
                     val placeable = measurable.measure(constraints)
                     layout(placeable.width, placeable.height) {
-                        if (!projectionFullscreen) placeable.place(0, 0)
+                        if (!projectionFullscreen && !climateOverlayVisible) placeable.place(0, 0)
                     }
-                }.then(if (projectionFullscreen) Modifier.clearAndSetSemantics { } else Modifier),
+                }.then(if (projectionFullscreen || climateOverlayVisible) Modifier.clearAndSetSemantics { } else Modifier),
                 manager = cabinManager,
                 vehicle = climateState,
                 moving = driving.moving,
                 onProjection = { selectLauncherPage(0) },
                 onVehicle = { showHome = false; showHub = true },
-                onClimate = onOpenClimate?.let { open -> { showHome = false; open() } },
+                onClimate = onOpenClimate,
                 onSettings = { selectLauncherPage(3) },
                 onParkedAction = parkedAction,
                 page = launcherPage,
                 onPageChange = ::selectLauncherPage,
                 onProjectionPlacement = { projectionPlacement = it },
-                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow),
+                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl),
             )
         }
 
@@ -1702,6 +1735,10 @@ fun CabinApp(
                 initialTab = initialSettingsTab,
                 embedded = true,
                 vehicleState = climateState,
+                moving = driving.moving,
+                carActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl),
+                onParkedAction = parkedAction,
+                onOpenClimate = onOpenClimate?.let { open -> { showSettings = false; open() } },
             )
                 }
             }
@@ -1735,9 +1772,26 @@ fun CabinApp(
                 )
             }
         }
-        if (launcherShell && !compactPanel && !projectionFullscreen && !showSettings) {
+        if (launcherShell && !compactPanel && !projectionFullscreen && !showSettings && !climateOverlayVisible) {
             com.cabin.launcher.LauncherPageSwitcher(if (showHome) launcherPage else 0, driving.moving, ::selectLauncherPage,
                 Modifier.align(Alignment.TopEnd).padding(4.dp))
+        }
+        if (climateOverlayVisible) {
+            // A full screen destination. Dashboard state stays composed underneath
+            // so closing Climate returns to the same page and layout.
+            BackHandler { onOpenClimate?.invoke() }
+            com.cabin.ui.ClimatePanel(
+                state = climateState,
+                onToggleAc = onSetClimateAc,
+                onSetFan = onSetClimateFan,
+                onSetAirflow = onSetClimateAirflow,
+                onAdjustTemperature = onAdjustClimateTemperature,
+                onSwitch = onToggleClimateSwitch,
+                onAirAction = onAirAction,
+                onClose = onOpenClimate,
+                onRefresh = onRefreshClimate,
+                modifier = Modifier.fillMaxSize().testTag("climate-page"),
+            )
         }
       }
     }
