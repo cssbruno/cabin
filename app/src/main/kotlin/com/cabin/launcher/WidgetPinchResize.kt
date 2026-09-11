@@ -10,7 +10,8 @@ import kotlin.math.roundToInt
 
 /** Edit-mode only. Claim two-finger input before the single-finger drag detector sees it. */
 internal fun Modifier.widgetPinchResize(tile: DashboardTile,
-    onPreview: (Pair<Int, Int>?) -> Unit, onResize: (Int, Int) -> Unit): Modifier = pointerInput(tile) {
+    columns: Int = DASHBOARD_COLUMNS, rows: Int = DASHBOARD_ROWS,
+    onPreview: (Pair<Int, Int>?) -> Unit, onResize: (Int, Int) -> Unit): Modifier = pointerInput(tile, columns, rows) {
     awaitEachGesture {
         awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
         var scale = 1f
@@ -22,8 +23,8 @@ internal fun Modifier.widgetPinchResize(tile: DashboardTile,
                 if (event.changes.count { it.pressed } >= 2) {
                     active = true
                     scale = (scale * event.calculateZoom()).coerceIn(0.125f, 8f)
-                    target = (tile.width * scale).roundToInt().coerceIn(1, DASHBOARD_COLUMNS - tile.x) to
-                        (tile.height * scale).roundToInt().coerceIn(1, DASHBOARD_ROWS - tile.y)
+                    target = (tile.width * scale).roundToInt().coerceIn(1, columns - tile.x) to
+                        (tile.height * scale).roundToInt().coerceIn(1, rows - tile.y)
                     onPreview(target)
                 }
                 if (active) event.changes.forEach { it.consume() }

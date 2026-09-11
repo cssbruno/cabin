@@ -27,7 +27,8 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun WidgetResizeHandle(tile: DashboardTile, cellWidth: Dp, cellHeight: Dp,
-    onResize: (Int, Int) -> Unit, modifier: Modifier = Modifier) {
+    onResize: (Int, Int) -> Unit, modifier: Modifier = Modifier,
+    columns: Int = DASHBOARD_COLUMNS, rows: Int = DASHBOARD_ROWS) {
     val currentTile by rememberUpdatedState(tile)
     val commit by rememberUpdatedState(onResize)
     val density = LocalDensity.current
@@ -37,7 +38,7 @@ internal fun WidgetResizeHandle(tile: DashboardTile, cellWidth: Dp, cellHeight: 
     Box(modifier.size(56.dp).testTag("resize-${tile.id}")
         .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(topStart = 16.dp))
         .semantics { contentDescription = description }
-        .pointerInput(tile.id, cell) {
+        .pointerInput(tile.id, cell, columns, rows) {
             var start = currentTile
             var delta = Offset.Zero
             detectDragGestures(
@@ -47,8 +48,8 @@ internal fun WidgetResizeHandle(tile: DashboardTile, cellWidth: Dp, cellHeight: 
                 onDrag = { change, amount ->
                     change.consume()
                     delta += amount
-                    preview = (start.width + (delta.x / cell.x).roundToInt()).coerceIn(1, DASHBOARD_COLUMNS - start.x) to
-                        (start.height + (delta.y / cell.y).roundToInt()).coerceIn(1, DASHBOARD_ROWS - start.y)
+                    preview = (start.width + (delta.x / cell.x).roundToInt()).coerceIn(1, columns - start.x) to
+                        (start.height + (delta.y / cell.y).roundToInt()).coerceIn(1, rows - start.y)
                 })
         }, contentAlignment = Alignment.Center) {
         val size = preview

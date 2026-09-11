@@ -771,6 +771,55 @@ class CabinLauncherTest {
         screenshot("launcher-fine-grid")
     }
 
+    @Test
+    @Config(qualifiers = "w600dp-h1024dp-port-mdpi")
+    fun `portrait stacks CarPlay above widgets and supports dragging and resizing`() {
+        assertPortraitLayout()
+    }
+
+    @Test
+    @Config(qualifiers = "w800dp-h1280dp-port-mdpi")
+    fun `tall head unit uses the entire portrait grid for editing`() {
+        assertPortraitLayout()
+    }
+
+    private fun assertPortraitLayout() {
+        compose.setContent {
+            CabinTheme { CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() }) }
+        }
+        val projection = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        val media = compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot
+        val speed = compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot
+        assertTrue("CarPlay should use the tall screen", projection.height > 600f)
+        val grid = compose.onNodeWithTag("dashboard-grid").fetchSemanticsNode().boundsInRoot
+        assertEquals("No left margin in portrait", grid.left, projection.left, 1f)
+        assertEquals("CarPlay fills portrait width", grid.right - 4f, projection.right, 1f)
+        assertEquals("No top margin in portrait", grid.top, projection.top, 1f)
+        assertEquals("Widgets reach the bottom", grid.bottom - 4f, media.bottom, 1f)
+        assertEquals("Widgets reach the right edge", grid.right - 4f, speed.right, 1f)
+        assertTrue(media.top >= projection.bottom)
+        assertEquals(media.top, speed.top, 1f)
+        assertTrue(speed.left >= media.right)
+        compose.onNodeWithContentDescription("Edit layout").performClick()
+        assertEquals(projection, compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot)
+        screenshot("launcher-portrait-grid")
+        compose.onNodeWithTag("resize-1").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset(0f, -120f), 500)
+            up()
+        }
+        val resized = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
+        assertEquals(projection.width, resized.width, 1f)
+        assertTrue(resized.height < projection.height)
+        compose.onNodeWithTag("module-MEDIA-2").performTouchInput {
+            down(center)
+            moveBy(androidx.compose.ui.geometry.Offset(speed.left - media.left, 0f), 500)
+            up()
+        }
+        assertEquals(speed.left, compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot.left, 2f)
+        assertEquals(media.left, compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot.left, 2f)
+    }
+
     @Test fun `small screen edit mode reveals the full draggable grid`() {
         compose.setContent {
             CabinTheme {
