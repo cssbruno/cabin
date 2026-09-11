@@ -77,3 +77,23 @@ Local equivalent:
 ```sh
 python3 tools/privapp/build_oem_bundle.py --apk /path/to/cabin-release.apk --output cabin-oem-integration.zip
 ```
+
+## GitHub APK signing and updates
+
+The FYT debug workflow requires `CABIN_DEBUG_KEYSTORE_BASE64`: the base64 contents
+of the working local `~/.android/debug.keystore` (standard Android debug alias and
+password). Store it as a GitHub Actions secret, never in the repository. Missing
+secrets now stop the build instead of silently generating a new signing identity.
+Keep a secure backup of that keystore. Existing APKs signed with another temporary
+CI key cannot be updated using this key.
+
+Debug and release workflows both use `tools/ci_version_code.py` with full Git
+history. Codes start above 2,000,000 and increase with commits on the release
+lineage; retries of the same commit retain the same code. Release from the main
+lineage: independently diverged branches are not ordered by build time.
+
+Signing remains intentionally separate: `cabin.apk` uses the existing release
+key, and `cabin-debug.apk` uses the stable debug key. A higher version code does not
+allow installing a differently signed APK over an existing installation. Keep
+using the same signing channel to preserve app data. Back up settings before any
+intentional uninstall. These changes do not certify the app with Play Protect.

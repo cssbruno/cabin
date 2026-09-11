@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -26,14 +28,24 @@ jobs:
           test -s tools/privapp/fyt-router-binaries/lsec6316update
           test -s tools/privapp/fyt-router-binaries/lsec6521update
       - name: Build debug APK
+        env:
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.CABIN_DEBUG_KEYSTORE_BASE64 }}
         run: |
           set -euo pipefail
+          if [[ -z "$DEBUG_KEYSTORE_BASE64" ]]; then
+            echo "::error::Set CABIN_DEBUG_KEYSTORE_BASE64 to the working local debug.keystore. Refusing to generate a different signer."
+            exit 1
+          fi
+          mkdir -p "$HOME/.android"
+          printf '%s' "$DEBUG_KEYSTORE_BASE64" | base64 --decode > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+          trap 'rm -f "$HOME/.android/debug.keystore"' EXIT
           export CABIN_VERSION_NAME="debug-${GITHUB_RUN_NUMBER}"
-          export CABIN_VERSION_CODE="$((1000000 + GITHUB_RUN_NUMBER))"
+          export CABIN_VERSION_CODE="$(python3 tools/ci_version_code.py)"
           chmod +x gradlew
           ./gradlew :app:assembleDebug --no-daemon --no-configuration-cache --console=plain
           cp app/build/outputs/apk/debug/app-debug.apk cabin-debug.apk
-          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify cabin-debug.apk
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs cabin-debug.apk
       - name: Build FYT debug USB ZIP
         run: |
           set -euo pipefail
