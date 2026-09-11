@@ -33,6 +33,14 @@ android {
     }
 
     signingConfigs {
+        providers.environmentVariable("CABIN_DEBUG_KEYSTORE_PATH").orNull?.let { path ->
+            getByName("debug") {
+                storeFile = file(path)
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
         if (providers.environmentVariable("CABIN_KEYSTORE_PATH").isPresent) {
             create("cabinRelease") {
                 storeFile = file(providers.environmentVariable("CABIN_KEYSTORE_PATH").get())
