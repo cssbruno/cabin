@@ -1506,6 +1506,17 @@ fun CabinApp(
     val projectionPreferences by ProjectionPreferences.getInstance(context).state.collectAsState()
     val connectionFlow = remember(cabinManager) { cabinManager.dashboardState.map { it.connection }.distinctUntilChanged() }
     val projectionConnection by connectionFlow.collectAsState(initial = cabinManager.state)
+    val canFullscreenProjection = projectionConnection == CabinManager.State.STREAMING
+    LaunchedEffect(canFullscreenProjection, compactPanel, homeRequest, showHome, projectionFullscreen) {
+        if (!canFullscreenProjection && !compactPanel && BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
+            projectionFullscreen = false
+            if (!showHome) {
+                launcherShell = true
+                launcherPage = 1
+                showHome = true
+            }
+        }
+    }
     var pendingHubConnectAt by remember(cabinManager) { mutableStateOf<Long?>(null) }
     var foreground by remember(lifecycle) { mutableStateOf(lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) }
     DisposableEffect(lifecycle) {
@@ -1555,7 +1566,7 @@ fun CabinApp(
         }
         val action = {
             projectionFullscreen = false
-            launcherPage = page.coerceIn(0, 4)
+            launcherPage = if (page == 0 && !canFullscreenProjection) 1 else page.coerceIn(0, 4)
             showHome = launcherPage != 0
             showHub = false
             showSettings = false
@@ -1625,7 +1636,7 @@ fun CabinApp(
             onNavigateToSettings = {
                 if (compactPanel) {
                     logInfo("[UI_NAV] Expanding compact projection panel", tag = "UI")
-                    onExpandPanel()
+                    if (canFullscreenProjection) onExpandPanel()
                 } else {
                     logInfo("[UI_NAV] Opening SettingsScreen overlay (video continues)", tag = "UI")
                     parkedAction {
@@ -1764,9 +1775,10 @@ fun CabinApp(
                 )
                 com.cabin.launcher.ProjectionFullscreenButton(
                     fullscreen = projectionFullscreen || !showHome,
+                    enabled = canFullscreenProjection || projectionFullscreen || !showHome,
                     onClick = {
                         if (!showHome) selectLauncherPage(1)
-                        else projectionFullscreen = !projectionFullscreen
+                        else if (projectionFullscreen || canFullscreenProjection) projectionFullscreen = !projectionFullscreen
                     },
                     modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
                 )

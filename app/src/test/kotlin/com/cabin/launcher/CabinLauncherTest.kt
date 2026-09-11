@@ -254,9 +254,7 @@ class CabinLauncherTest {
         compose.runOnIdle { assertFalse(manager.projectionSessionRequested) }
         compose.onNodeWithTag("launcher-pages").performClick()
         compose.onNode(hasText("CarPlay") and hasClickAction()).performClick()
-        compose.onNodeWithText("Connection help").assertIsDisplayed()
-        assertPage("CarPlay")
-        compose.onNodeWithTag("launcher-pages").performTouchInput { swipeLeft() }
+        compose.onNodeWithText("Connection help").assertDoesNotExist()
         assertPage("Main menu")
         compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
         compose.onNodeWithTag("launcher-pages").performClick()
@@ -382,7 +380,9 @@ class CabinLauncherTest {
         assertSame(initial, surfaces(compose.activity.window.decorView).single())
         assertFalse(manager.projectionSessionRequested)
         screenshot("launcher-live-module")
-        compose.onNodeWithTag("projection-fullscreen").assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithTag("projection-fullscreen").assertIsNotEnabled()
+        compose.runOnIdle { setProjectionConnection(CabinManager.State.STREAMING) }
+        compose.onNodeWithTag("projection-fullscreen").assertIsEnabled().assertHeightIsAtLeast(56.dp).performClick()
         val expanded = compose.onNodeWithTag("persistent-projection-frame").fetchSemanticsNode().boundsInRoot
         assertTrue(expanded.width > after.width)
         assertTrue(expanded.height > after.height)
@@ -844,6 +844,29 @@ class CabinLauncherTest {
         compose.mainClock.advanceTimeBy(300)
         compose.runOnIdle { assertEquals(300f, position.value.x, 0.1f) }
         compose.mainClock.autoAdvance = true
+    }
+
+    @Test fun `fullscreen requires streaming and disconnection returns to dashboard`() {
+        if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
+        compose.setContent {
+            CabinTheme { CabinApp(manager, null, DisplayMode.SYSTEM_UI_VISIBLE, homeRequest = 1L, onResetCluster = {}) }
+        }
+        compose.onNodeWithTag("projection-fullscreen").assertIsNotEnabled()
+        compose.runOnIdle { setProjectionConnection(CabinManager.State.DEVICE_CONNECTED) }
+        compose.onNodeWithTag("projection-fullscreen").assertIsNotEnabled()
+        compose.runOnIdle { setProjectionConnection(CabinManager.State.STREAMING) }
+        val embedded = compose.onNodeWithTag("persistent-projection-frame").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("projection-fullscreen").assertIsEnabled().performClick()
+        assertTrue(compose.onNodeWithTag("persistent-projection-frame").fetchSemanticsNode().boundsInRoot.width > embedded.width)
+        compose.runOnIdle { setProjectionConnection(CabinManager.State.DISCONNECTED) }
+        compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
+        compose.onNodeWithTag("projection-fullscreen").assertIsNotEnabled()
+    }
+
+    private fun setProjectionConnection(state: CabinManager.State) {
+        CabinManager::class.java.getDeclaredMethod("setState", CabinManager.State::class.java).apply {
+            isAccessible = true
+        }.invoke(manager, state)
     }
 
     private fun assertPage(label: String) {

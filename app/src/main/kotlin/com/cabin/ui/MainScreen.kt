@@ -46,6 +46,8 @@ import androidx.compose.material.icons.filled.Minimize
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material.icons.filled.Phonelink
 import androidx.compose.material.icons.filled.RestartAlt
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -798,144 +800,54 @@ internal fun ProjectionConnectionScreen(
     onHome: (() -> Unit)? = null,
 ) {
     val presentation = projectionConnectionPresentation(androidx.compose.ui.platform.LocalResources.current, state)
+    val busy = presentation.busy || isResetting
     val colors = MaterialTheme.colorScheme
     Surface(modifier = modifier, color = colors.surface) {
         BoxWithConstraints(contentAlignment = Alignment.Center) {
             val viewportHeight = maxHeight
-            val shortViewport = viewportHeight < 400.dp || maxWidth < 600.dp || LocalDensity.current.fontScale >= 1.3f
             Column(
-                modifier =
-                    Modifier
-                        .widthIn(max = 760.dp)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .heightIn(min = viewportHeight)
-                        .padding(if (shortViewport) 16.dp else 28.dp),
-                verticalArrangement = Arrangement.spacedBy(if (shortViewport) 12.dp else 20.dp, Alignment.CenterVertically),
+                modifier = Modifier.widthIn(max = 480.dp).fillMaxWidth()
+                    .verticalScroll(rememberScrollState()).heightIn(min = viewportHeight).padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                if (isCompactPanel) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        FilledTonalButton(onClick = onSettings, modifier = Modifier.heightIn(min = 56.dp)) {
-                            Icon(Icons.Default.Fullscreen, contentDescription = null)
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.main_fullscreen))
-                        }
-                        onClosePanel?.let { close ->
-                            OutlinedButton(onClick = close, modifier = Modifier.heightIn(min = 56.dp)) {
-                                Icon(Icons.Default.Close, contentDescription = null)
-                                Spacer(Modifier.width(8.dp))
-                                Text(stringResource(R.string.main_close_panel))
-                            }
-                        }
+                if (busy) LoadingSpinner(size = 36.dp, color = colors.primary)
+                else Icon(Icons.Default.Phonelink, contentDescription = null,
+                    modifier = Modifier.size(40.dp), tint = colors.primary)
+                Text(
+                    text = if (isResetting) stringResource(R.string.main_restarting) else statusText.ifBlank { presentation.title },
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                    style = MaterialTheme.typography.titleLarge,
+                    color = colors.onSurface,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                )
+                if (!busy && state != CabinManager.State.DEVICE_CONNECTED && state != CabinManager.State.STREAMING) {
+                    Button(onClick = onReconnect, modifier = Modifier.heightIn(min = 56.dp)) {
+                        Text(stringResource(R.string.action_connect_phone))
                     }
                 }
-
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    if (!shortViewport) {
-                        Surface(color = colors.primaryContainer, shape = MaterialTheme.shapes.large) {
-                            Icon(
-                                Icons.Default.Phonelink,
-                                contentDescription = null,
-                                tint = colors.onPrimaryContainer,
-                                modifier = Modifier.padding(20.dp).size(40.dp),
-                            )
-                        }
-                    }
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        if (!shortViewport) Text("CABIN", color = colors.primary, style = MaterialTheme.typography.labelLarge)
-                        Text(
-                            presentation.title,
-                            style = if (shortViewport) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium,
-                            color = colors.onSurface,
-                        )
-                        Text(presentation.nextStep, style = MaterialTheme.typography.bodyLarge, color = colors.onSurfaceVariant)
-                    }
-                }
-
-                if (viewportHeight >= 360.dp) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        listOf(stringResource(R.string.help_usb_adapter), stringResource(R.string.label_phone), stringResource(R.string.readiness_projection)).forEachIndexed { index, label ->
-                            val reached = index <= presentation.stage
-                            Surface(
-                                color = if (reached) colors.secondaryContainer else colors.surfaceContainerHigh,
-                                shape = MaterialTheme.shapes.small,
-                            ) {
-                                Text(
-                                    "${index + 1}  $label",
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = if (reached) colors.onSecondaryContainer else colors.onSurfaceVariant,
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Surface(color = colors.surfaceContainer, shape = MaterialTheme.shapes.medium) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp).semantics { liveRegion = LiveRegionMode.Polite },
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        if (presentation.busy || isResetting) LoadingSpinner(size = 24.dp, color = colors.primary)
-                        Text(
-                            text = if (isResetting) stringResource(R.string.main_restarting) else statusText.ifBlank { presentation.title },
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = colors.onSurfaceVariant,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                }
-
                 FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    if (state != CabinManager.State.DEVICE_CONNECTED) {
-                        Button(onClick = onReconnect, enabled = !isResetting, modifier = Modifier.heightIn(min = 56.dp)) {
-                            Icon(Icons.Default.Phonelink, contentDescription = null)
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.action_connect_phone))
-                        }
-                    }
                     onHome?.let { open ->
-                        FilledTonalButton(open, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.launcher_home)) }
-                    }
-                    onHelp?.let { help ->
-                        FilledTonalButton(onClick = help, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.help_title)) }
-                    }
-                    onSetup?.let { setup ->
-                        OutlinedButton(onClick = setup, modifier = Modifier.heightIn(min = 56.dp)) {
-                            Text(stringResource(if (firstTimeSetup) R.string.setup_first_time else R.string.setup_guide))
+                        IconButton(onClick = open, modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.Home, stringResource(R.string.launcher_home))
                         }
                     }
-                    if (!isCompactPanel) {
-                        onDashboard?.let { open ->
-                            FilledTonalButton(onClick = open, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.main_open_hub)) }
+                    if (isCompactPanel) {
+                        if (state == CabinManager.State.STREAMING) IconButton(onClick = onSettings, modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.Fullscreen, stringResource(R.string.main_fullscreen))
                         }
-                        OutlinedButton(onClick = onSettings, modifier = Modifier.heightIn(min = 56.dp)) {
-                            Icon(Icons.Default.Settings, contentDescription = null)
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.action_settings))
+                        onClosePanel?.let { close ->
+                            IconButton(onClick = close, modifier = Modifier.size(56.dp)) {
+                                Icon(Icons.Default.Close, stringResource(R.string.main_close_panel))
+                            }
                         }
                     }
-                    onClimate?.let { ClimateButton(onClick = it) }
-                    onRestart?.let { restart ->
-                        OutlinedButton(onClick = restart, enabled = !isResetting, modifier = Modifier.heightIn(min = 56.dp)) {
-                            Icon(Icons.Default.RestartAlt, contentDescription = null)
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.main_restart_connection))
-                        }
+                    IconButton(onClick = onHelp ?: onSettings, modifier = Modifier.size(56.dp)) {
+                        Icon(if (onHelp != null) Icons.Default.HelpOutline else Icons.Default.Settings,
+                            stringResource(if (onHelp != null) R.string.help_title else R.string.action_settings))
                     }
                 }
             }

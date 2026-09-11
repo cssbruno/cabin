@@ -244,7 +244,7 @@ class CabinUiRenderingTest {
     }
 
     @Test
-    fun `connecting screen separates phone connect help and full restart`() {
+    fun `connecting screen keeps help without duplicate connect and restart actions`() {
         var connects = 0
         var restarts = 0
         var help = 0
@@ -257,22 +257,12 @@ class CabinUiRenderingTest {
                 )
             }
         }
-        compose.onNodeWithText("Connect phone").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithText("Connect phone").assertDoesNotExist()
+        compose.onNodeWithText("Restart connection").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Connection help").performScrollTo().assertHeightIsAtLeast(56.dp).performClick()
         compose.runOnIdle {
-            assertEquals(1, connects)
+            assertEquals(0, connects)
             assertEquals(0, restarts)
-            assertEquals(0, help)
-        }
-        compose.onNodeWithText("Connection help").performScrollTo().performClick()
-        compose.runOnIdle {
-            assertEquals(1, connects)
-            assertEquals(0, restarts)
-            assertEquals(1, help)
-        }
-        compose.onNodeWithText("Restart connection").performScrollTo().performClick()
-        compose.runOnIdle {
-            assertEquals(1, connects)
-            assertEquals(1, restarts)
             assertEquals(1, help)
         }
         saveScreenshot("connection-help-entry")
@@ -299,6 +289,32 @@ class CabinUiRenderingTest {
         }
         compose.onNodeWithText("A/C on · Left 22.0°C · Fan 3/7").assertIsDisplayed()
         saveScreenshot("climate-quiet-summary")
+    }
+
+    @Test
+    fun `busy portrait connection shows one status and only home and help`() {
+        var homes = 0
+        var helps = 0
+        compose.setContent {
+            CabinTheme(darkTheme = false) {
+                Box(Modifier.width(480.dp).height(800.dp)) {
+                    ProjectionConnectionScreen(
+                        CabinManager.State.CONNECTING, "Phone found — connecting…", false, false,
+                        {}, {}, {}, {}, {}, Modifier.fillMaxSize(),
+                        onHelp = { helps++ }, onRestart = {}, onSetup = {}, firstTimeSetup = true,
+                        onHome = { homes++ },
+                    )
+                }
+            }
+        }
+        compose.onNodeWithText("Phone found — connecting…").assertIsDisplayed()
+        listOf("CABIN", "Connect phone", "First-time setup", "Settings", "A/C", "Restart connection").forEach {
+            compose.onNodeWithText(it).assertDoesNotExist()
+        }
+        compose.onNodeWithContentDescription("Home").assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithContentDescription("Connection help").assertHeightIsAtLeast(56.dp).performClick()
+        compose.runOnIdle { assertEquals(1, homes); assertEquals(1, helps) }
+        saveScreenshot("connection-simple-portrait")
     }
 
     @Test
@@ -330,7 +346,7 @@ class CabinUiRenderingTest {
             }
         }
         compose.onNodeWithText("Connect phone").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Close panel").performScrollTo().assertIsDisplayed().assertIsEnabled()
+        compose.onNodeWithContentDescription("Close panel").performScrollTo().assertIsDisplayed().assertIsEnabled()
         saveScreenshot("compact-light")
     }
 
@@ -381,8 +397,8 @@ class CabinUiRenderingTest {
         val bounds = compose.onNodeWithText("Connect phone").fetchSemanticsNode().boundsInRoot
         assertTrue("Primary action must be fully visible, not a clipped sliver: $bounds", bounds.height >= 55f && bounds.bottom <= 480f)
         saveScreenshot("connection-large-font")
-        compose.onNodeWithText("Settings").performScrollTo().assertIsDisplayed()
-        val settingsBounds = compose.onNodeWithText("Settings").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithContentDescription("Settings").performScrollTo().assertIsDisplayed()
+        val settingsBounds = compose.onNodeWithContentDescription("Settings").fetchSemanticsNode().boundsInRoot
         assertTrue("Settings must remain fully reachable: $settingsBounds", settingsBounds.height >= 55f && settingsBounds.bottom <= 480f)
     }
 

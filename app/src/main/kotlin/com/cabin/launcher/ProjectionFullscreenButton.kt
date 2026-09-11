@@ -20,12 +20,12 @@ import androidx.compose.ui.unit.dp
 import com.cabin.R
 
 @Composable
-internal fun ProjectionFullscreenButton(fullscreen: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    IconButton(onClick, modifier.size(56.dp).testTag("projection-fullscreen")) {
+internal fun ProjectionFullscreenButton(fullscreen: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
+    IconButton(onClick, modifier.size(56.dp).testTag("projection-fullscreen"), enabled = enabled) {
         Box(Modifier.size(36.dp).background(Color.Black.copy(alpha = 0.32f), CircleShape), contentAlignment = Alignment.Center) {
             Icon(if (fullscreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
                 stringResource(if (fullscreen) R.string.projection_restore else R.string.main_fullscreen),
-                Modifier.size(22.dp), tint = Color.White.copy(alpha = 0.8f))
+                Modifier.size(22.dp), tint = Color.White.copy(alpha = if (enabled) 0.8f else 0.3f))
         }
     }
 }
