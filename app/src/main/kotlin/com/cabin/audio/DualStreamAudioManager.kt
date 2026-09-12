@@ -104,33 +104,44 @@ class DualStreamAudioManager(
     private val focusHandler = Handler(Looper.getMainLooper())
     private val navCompletionRunnable = Runnable { stopNavTrack() }
 
+    // Keep losses per purpose: navigation/assistant/calls must also respect another
+    // application's focus. All access is serialized with playback/track teardown.
+    private val purposeFocusLevels = mutableMapOf<StreamPurpose, Float>()
+
     private fun getOrCreateFocusListener(purpose: StreamPurpose): AudioManager.OnAudioFocusChangeListener =
         focusListeners.getOrPut(purpose) {
-            AudioManager.OnAudioFocusChangeListener { focusChange ->
-                val changeStr =
-                    when (focusChange) {
-                        AudioManager.AUDIOFOCUS_GAIN -> "GAIN"
-                        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> "LOSS_TRANSIENT_CAN_DUCK"
-                        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> "LOSS_TRANSIENT"
-                        AudioManager.AUDIOFOCUS_LOSS -> "LOSS"
-                        else -> "UNKNOWN($focusChange)"
-                    }
-                logDebug("[AUDIO_FOCUS] FocusChange($purpose): $changeStr")
-                // Only MEDIA adjusts volume on duck — other purposes are short-lived
-                // foreground streams that play at full volume.
-                if (purpose == StreamPurpose.MEDIA) {
-                    focusDuckLevel =
-                        when (focusChange) {
-                            AudioManager.AUDIOFOCUS_GAIN -> 1.0f
+            lateinit var listener: AudioManager.OnAudioFocusChangeListener
+            listener = AudioManager.OnAudioFocusChangeListener { change ->
+                synchronized(lock) {
+                    // Android can deliver an already queued event after abandonment.
+                    if (focusListeners[purpose] === listener) {
+                        val level = when (change) {
+                            AudioManager.AUDIOFOCUS_GAIN -> 1f
                             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> 0.2f
-                            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> 0.0f
-                            AudioManager.AUDIOFOCUS_LOSS -> 0.0f
-                            else -> focusDuckLevel
+                            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT, AudioManager.AUDIOFOCUS_LOSS -> 0f
+                            else -> null
                         }
-                    applyEffectiveVolume()
+                        if (level != null) {
+                            setFocusLevel(purpose, level)
+                            logDebug("[AUDIO_FOCUS] FocusChange($purpose): $change")
+                        }
+                    }
                 }
             }
+            listener
         }
+
+    private fun setFocusLevel(purpose: StreamPurpose, level: Float) {
+        purposeFocusLevels[purpose] = level
+        if (purpose == StreamPurpose.MEDIA) focusDuckLevel = level
+        applyEffectiveVolume()
+    }
+
+    private fun effectiveVolume(purpose: StreamPurpose): Float = when (purpose) {
+        StreamPurpose.MEDIA -> mediaVolume * minOf(if (isDucked) duckLevel else 1f, focusDuckLevel)
+        StreamPurpose.NAVIGATION -> navVolume * (purposeFocusLevels[purpose] ?: 1f)
+        else -> purposeFocusLevels[purpose] ?: 1f
+    }
 
     private var playbackThread: AudioPlaybackThread? = null
     private val isRunning = AtomicBoolean(false)
@@ -483,7 +494,6 @@ class DualStreamAudioManager(
             mediaVolume = media.takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: 1f
             navVolume = navigation.takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: 1f
             applyEffectiveVolume()
-            navTrack?.setVolume(navVolume)
         }
     }
 
@@ -503,16 +513,19 @@ class DualStreamAudioManager(
         }
     }
 
-    /** Combine adapter ducking and system focus ducking, apply to media slot only.
+    /** Apply per-purpose system focus and user gains. Combine adapter/system ducking for media.
      *  Adapter duck (duckLevel) only applies when explicitly set via volumeDuration packet (isDucked=true).
      *  System focus duck (focusDuckLevel) always applies — it tracks Android AudioFocus state. */
     private fun applyEffectiveVolume() {
         val adapterFactor = if (isDucked) duckLevel else 1.0f
-        val effectiveVolume = mediaVolume * minOf(adapterFactor, focusDuckLevel)
-        mediaSlot?.track?.setVolume(effectiveVolume)
-        // Non-media purpose slots (PHONE_CALL, SIRI, ALERT) stay at full volume
+        val mediaGain = mediaVolume * minOf(adapterFactor, focusDuckLevel)
+        mediaSlot?.track?.setVolume(mediaGain)
+        navTrack?.setVolume(effectiveVolume(StreamPurpose.NAVIGATION))
+        siriSlot?.track?.setVolume(effectiveVolume(StreamPurpose.SIRI))
+        phoneCallSlot?.track?.setVolume(effectiveVolume(StreamPurpose.PHONE_CALL))
+        alertSlot?.track?.setVolume(effectiveVolume(StreamPurpose.ALERT))
         logDebug(
-            "[AUDIO_FOCUS] Volume: effective=${(effectiveVolume * 100).toInt()}% " +
+            "[AUDIO_FOCUS] Volume: effective=${(mediaGain * 100).toInt()}% " +
                 "(media=${(mediaVolume * 100).toInt()}% adapterDuck=${if (isDucked) "${(duckLevel * 100).toInt()}%" else "off"} " +
                 "focusDuck=${(focusDuckLevel * 100).toInt()}%)",
         )
@@ -521,6 +534,11 @@ class DualStreamAudioManager(
     /** Request AudioFocus for a stream purpose. */
     fun onPurposeChanged(purpose: StreamPurpose) {
         synchronized(lock) {
+            // A repeated START can re-request focus without a STOP. Retire the
+            // previous identity before abandonment so its queued losses cannot
+            // silence a newly granted request.
+            focusListeners.remove(purpose)
+            activeFocusRequests.remove(purpose)?.let { systemAudioManager.abandonAudioFocusRequest(it) }
             val gainType =
                 when (purpose) {
                     StreamPurpose.MEDIA -> AudioManager.AUDIOFOCUS_GAIN
@@ -544,17 +562,20 @@ class DualStreamAudioManager(
                     ).setOnAudioFocusChangeListener(getOrCreateFocusListener(purpose), focusHandler)
                     .build()
 
-            val result = systemAudioManager.requestAudioFocus(focusRequest)
-            activeFocusRequests[purpose] = focusRequest
-
-            // Reset focusDuckLevel when MEDIA focus is granted. With per-purpose listeners,
-            // MEDIA's listener gets proper GAIN callbacks when unblocked, but the sync reset
-            // handles the case where MEDIA focus was re-requested after abandonment.
-            if (purpose == StreamPurpose.MEDIA && result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED && focusDuckLevel != 1.0f) {
-                logDebug("[AUDIO_FOCUS] Reset focusDuckLevel=100% (MEDIA focus granted)")
-                focusDuckLevel = 1.0f
-                applyEffectiveVolume()
+            val result = try {
+                systemAudioManager.requestAudioFocus(focusRequest)
+            } catch (error: RuntimeException) {
+                log("[AUDIO_FOCUS] Request $purpose failed: ${error.javaClass.simpleName}")
+                AudioManager.AUDIOFOCUS_REQUEST_FAILED
             }
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED || result == AudioManager.AUDIOFOCUS_REQUEST_DELAYED) {
+                activeFocusRequests[purpose] = focusRequest
+            } else {
+                activeFocusRequests.remove(purpose)?.let { systemAudioManager.abandonAudioFocusRequest(it) }
+                focusListeners.remove(purpose)
+            }
+            // A denied/delayed request is not permission to play over radio or a call.
+            setFocusLevel(purpose, if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) 1f else 0f)
 
             val resultStr =
                 when (result) {
@@ -810,6 +831,8 @@ class DualStreamAudioManager(
             }
             activeFocusRequests.clear()
             focusListeners.clear()
+            purposeFocusLevels.clear()
+            focusDuckLevel = 1f
 
             navBuffer?.clear()
             navBuffer = null
@@ -1045,12 +1068,7 @@ class DualStreamAudioManager(
                     .setPerformanceMode(audioConfig.performanceMode)
                     .build()
 
-            val volume =
-                when (purpose) {
-                    StreamPurpose.NAVIGATION -> navVolume
-                    StreamPurpose.MEDIA -> mediaVolume * minOf(if (isDucked) duckLevel else 1.0f, focusDuckLevel)
-                    else -> 1.0f // Non-media purpose slots stay at full volume
-                }
+            val volume = effectiveVolume(purpose)
             track.setVolume(volume)
 
             log(

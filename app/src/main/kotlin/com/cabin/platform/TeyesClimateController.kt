@@ -179,19 +179,21 @@ class TeyesClimateController(
                 if (data.dataAvail() > 4096 || data.dataAvail() < 8) return false
                 val sample = try {
                     val updateCode = data.readInt()
-                    if (updateCode !in registeredCodes) return true
+                    if (updateCode !in registeredCodes) { reply?.writeNoException(); return true }
                     val count = data.readInt()
+                    if (count == -1 || count == 0) { reply?.writeNoException(); return true }
                     if (count !in 1..16 || count > data.dataAvail() / 4) return false
                     updateCode to data.readInt()
                 } catch (_: RuntimeException) {
                     return false
                 }
-                if (closed.get()) return true
+                if (closed.get()) { reply?.writeNoException(); return true }
                 handler.post {
                     if (!closed.get() && connection === owner && moduleBinder != null) {
                         update(sample.first, sample.second)
                     }
                 }
+                reply?.writeNoException()
                 return true
             }
         }
@@ -579,26 +581,12 @@ class TeyesClimateController(
 
     private fun isAlternateProfile(): Boolean = mutableState.value.profileId == PROFILE_2016_CIVIC_ALT
 
-    private fun getCanbusModule(toolkit: IBinder): IBinder? {
-        val data = Parcel.obtain()
-        val reply = Parcel.obtain()
-        return try {
-            data.writeInterfaceToken(TOOLKIT_DESCRIPTOR)
-            data.writeInt(MODULE_CANBUS)
-            if (!toolkit.transact(1, data, reply, 0)) return null
-            reply.readException()
-            reply.readStrongBinder()
-        } catch (_: Exception) {
-            null
-        } finally {
-            reply.recycle()
-            data.recycle()
-        }
-    }
+    private fun getCanbusModule(toolkit: IBinder): IBinder? =
+        try { SyuBinderTransport.getModule(toolkit, MODULE_CANBUS) } catch (_: Exception) { null }
 
     private fun register(updateCode: Int) {
         if (!registeredCodes.add(updateCode)) return
-        transactOneWay(3) { data ->
+        transactModule(3) { data ->
             data.writeStrongBinder(callback)
             data.writeInt(updateCode)
             data.writeInt(1)
@@ -609,7 +597,7 @@ class TeyesClimateController(
         commandCode: Int,
         ints: IntArray,
     ) {
-        transactOneWay(1) { data ->
+        transactModule(1) { data ->
             data.writeInt(commandCode)
             data.writeIntArray(ints)
             data.writeFloatArray(null)
@@ -617,22 +605,15 @@ class TeyesClimateController(
         }
     }
 
-    private fun transactOneWay(
+    private fun transactModule(
         code: Int,
         body: (Parcel) -> Unit,
     ) {
         val remote = moduleBinder ?: return
-        val data = Parcel.obtain()
         try {
-            data.writeInterfaceToken(MODULE_DESCRIPTOR)
-            body(data)
-            if (!remote.transact(code, data, null, IBinder.FLAG_ONEWAY)) disconnectAndRetry()
-        } catch (_: RemoteException) {
+            SyuBinderTransport.transact(remote, code, body, {})
+        } catch (_: Exception) {
             disconnectAndRetry()
-        } catch (_: SecurityException) {
-            disconnectAndRetry()
-        } finally {
-            data.recycle()
         }
     }
 
@@ -670,18 +651,10 @@ class TeyesClimateController(
         // Use the captured binder directly: failed cleanup must not recursively start another retry.
         if (oldModule != null && oldCallback != null && oldModule.isBinderAlive) {
             for (updateCode in registeredCodes.toList()) {
-                val data = Parcel.obtain()
                 try {
-                    data.writeInterfaceToken(MODULE_DESCRIPTOR)
-                    data.writeStrongBinder(oldCallback)
-                    data.writeInt(updateCode)
-                    if (!oldModule.transact(4, data, null, IBinder.FLAG_ONEWAY)) break
-                } catch (_: RemoteException) {
+                    SyuBinderTransport.unregister(oldModule, oldCallback, updateCode)
+                } catch (_: Exception) {
                     break
-                } catch (_: SecurityException) {
-                    break
-                } finally {
-                    data.recycle()
                 }
             }
         }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONArray
 
-data class LauncherLayout(val favorites: List<String> = emptyList(), val widgets: List<Int> = emptyList(), val widgetHeights: Map<Int, Int> = emptyMap(), val gauges: List<VehicleGauge> = listOf(VehicleGauge.SPEED, VehicleGauge.RPM, VehicleGauge.OIL))
+data class LauncherLayout(val favorites: List<String> = emptyList(), val widgets: List<Int> = emptyList(), val widgetHeights: Map<Int, Int> = emptyMap(), val gauges: List<VehicleGauge> = listOf(VehicleGauge.RPM, VehicleGauge.OIL))
 
 /** Favorites are per existing driver slot. Widget IDs belong to this installation only. */
 class LauncherPreferences(context: Context, private val driverSlot: Int = 0,
@@ -70,7 +70,7 @@ class LauncherPreferences(context: Context, private val driverSlot: Int = 0,
         val widgetJson = preferences.all["widgets"] as? String
         val gaugeJson = (preferences.all[gaugeKey] ?: preferences.all["gauges.$driverSlot"]) as? String
         return LauncherLayout(
-            gauges = if (gaugeJson == null) listOf(VehicleGauge.SPEED, VehicleGauge.RPM, VehicleGauge.OIL)
+            gauges = if (gaugeJson == null) listOf(VehicleGauge.RPM, VehicleGauge.OIL)
                 else boundedArray(gaugeJson).mapNotNull { name -> VehicleGauge.entries.firstOrNull { it.name == name } }.distinct(),
             favorites = boundedArray(favoriteJson).mapNotNull { it as? String }.filter(::validLauncherComponent).distinct().take(MAX_FAVORITES),
             widgets = boundedArray(widgetJson).mapNotNull { it as? Int }.filter { it > 0 }.distinct().take(MAX_WIDGETS),

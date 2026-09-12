@@ -32,11 +32,14 @@ public final class LabActivity extends Activity {
             if (code == INTERFACE_TRANSACTION) { if (reply != null) reply.writeString(ToolkitBridge.CALLBACK); return true; }
             if (code != 1) return false;
             data.enforceInterface(ToolkitBridge.CALLBACK);
+            if (data.dataSize() > 4096 || data.dataAvail() < 8) return false;
             int field = data.readInt();
-            int[] value = data.createIntArray();
-            if (field == 37 && value != null && value.length == 1) {
-                runOnUiThread(() -> status.setText("Simulated front-left door: " + (value[0] == 1 ? "Open" : "Closed")));
+            int count = data.readInt();
+            if (field == 37 && count == 1 && data.dataAvail() >= 4) {
+                int value = data.readInt();
+                runOnUiThread(() -> status.setText("Simulated front-left door: " + (value == 1 ? "Open" : "Closed")));
             }
+            if (reply != null) reply.writeNoException();
             return true;
         }
     };
@@ -173,14 +176,15 @@ public final class LabActivity extends Activity {
     }
     private void subscribe(boolean register) throws RemoteException {
         if (module == null) return;
-        Parcel data = Parcel.obtain();
+        Parcel data = Parcel.obtain(), reply = Parcel.obtain();
         try {
             data.writeInterfaceToken(ToolkitBridge.MODULE);
             data.writeStrongBinder(callback);
             data.writeInt(37);
             if (register) data.writeInt(1);
-            module.transact(register ? 3 : 4, data, null, IBinder.FLAG_ONEWAY);
-        } finally { data.recycle(); }
+            if (!module.transact(register ? 3 : 4, data, reply, 0)) throw new RemoteException("Subscription unavailable");
+            reply.readException();
+        } finally { data.recycle(); reply.recycle(); }
     }
     @Override protected void onStop() {
         try { subscribe(false); } catch (RemoteException | RuntimeException ignored) { }

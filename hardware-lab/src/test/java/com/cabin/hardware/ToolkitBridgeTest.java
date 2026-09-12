@@ -28,22 +28,23 @@ public class ToolkitBridgeTest {
         } finally { data.recycle(); reply.recycle(); }
     }
     private void subscribe(IBinder callback, int code, boolean register, boolean cached) throws Exception {
-        Parcel data = Parcel.obtain();
+        Parcel data = Parcel.obtain(), reply = Parcel.obtain();
         try {
             data.writeInterfaceToken(ToolkitBridge.MODULE); data.writeStrongBinder(callback); data.writeInt(code);
             if (register) data.writeInt(cached ? 1 : 0);
-            assertTrue(can.transact(register ? 3 : 4, data, null, IBinder.FLAG_ONEWAY));
-        } finally { data.recycle(); }
+            assertTrue(can.transact(register ? 3 : 4, data, reply, 0));
+            reply.readException();
+        } finally { data.recycle(); reply.recycle(); }
     }
     private static final class Client extends Binder {
         final List<Integer> readings = new ArrayList<>();
         @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) {
-            assertEquals(1, code); assertEquals(IBinder.FLAG_ONEWAY, flags);
+            assertEquals(1, code); assertEquals(0, flags); assertNotNull(reply);
             data.enforceInterface(ToolkitBridge.CALLBACK);
             assertEquals(37, data.readInt());
             readings.add(data.createIntArray()[0]);
             assertNull(data.createFloatArray()); assertNull(data.createStringArray());
-            assertEquals(0, data.dataAvail()); return true;
+            assertEquals(0, data.dataAvail()); reply.writeNoException(); return true;
         }
     }
     @Test public void clientReceivesCachedAndChangedFieldsThenUnsubscribes() throws Exception {
@@ -64,13 +65,14 @@ public class ToolkitBridgeTest {
         backend.toggleDoor(); assertEquals(List.of(1), client.readings); assertEquals(1, toolkit.subscriberCount());
     }
     @Test public void commandIsRejectedWithoutChangingSimulatedState() throws Exception {
-        Parcel data = Parcel.obtain();
+        Parcel data = Parcel.obtain(), reply = Parcel.obtain();
         try {
             data.writeInterfaceToken(ToolkitBridge.MODULE); data.writeInt(105);
             data.writeIntArray(new int[]{44, 1}); data.writeFloatArray(null); data.writeStringArray(null);
-            assertTrue(can.transact(1, data, null, IBinder.FLAG_ONEWAY));
+            assertTrue(can.transact(1, data, reply, 0));
+            reply.readException();
             assertEquals(1, toolkit.rejectedCommands()); assertEquals(Integer.valueOf(0), backend.snapshot().get(37));
-        } finally { data.recycle(); }
+        } finally { data.recycle(); reply.recycle(); }
     }
     @Test public void closingDisconnectsClientsAndStopsUpdates() throws Exception {
         Client client = new Client(); subscribe(client, 37, true, false);
@@ -102,4 +104,24 @@ public class ToolkitBridgeTest {
         subscribe(deadClient, 37, true, true);
         assertEquals(0, toolkit.subscriberCount());
     }
+    @Test public void exceptionFromSynchronousCallbackRemovesClient() throws Exception {
+        Binder client = new Binder() {
+            @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) {
+                assertEquals(0, flags);
+                assertNotNull(reply);
+                reply.writeException(new SecurityException("Callback rejected"));
+                return true;
+            }
+        };
+        subscribe(client, 37, true, true);
+        assertEquals(0, toolkit.subscriberCount());
+    }
+    @Test public void emptyCallbackReplyRemovesClient() throws Exception {
+        Binder client = new Binder() {
+            @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) { return true; }
+        };
+        subscribe(client, 37, true, true);
+        assertEquals(0, toolkit.subscriberCount());
+    }
+
 }

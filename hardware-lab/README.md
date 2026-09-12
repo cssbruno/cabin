@@ -46,3 +46,7 @@ This report is an identification step, not the finished hardware backend. Native
 **Export SYU firmware bundle** saves a ZIP through the system file picker. It includes readable base/split APKs for `com.syu.ms` and `com.syu.canbus`, visible readable libraries matching eight names observed in the reference JNI wrappers, and the hardware report. Each copied file has a SHA-256 hash in the report. Files are limited to 64 MiB each and 192 MiB total; unavailable/oversized candidates are reported. Failed exports must be discarded.
 
 This copies firmware binaries only, not application data or device-node contents. It does not request root or modify the installed service. It is not a complete recovery backup. Some required libraries may have different names or be inaccessible; such missing evidence still needs a matching vendor firmware package. MCU/DSP identification and compatibility remain unverified until the target files and hardware are examined.
+
+## 0.4: Binder communication fixes
+
+Module subscriptions and callbacks now use synchronous Binder transactions with exception replies, matching the SYU wire contract. Malformed or oversized callback replies are rejected, and failed clients are removed. Firmware report and bundle export remain available; the vehicle backend still uses simulation.

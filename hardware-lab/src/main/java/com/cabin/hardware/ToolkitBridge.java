@@ -25,6 +25,7 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
         @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
             if (code == INTERFACE_TRANSACTION) { if (reply != null) reply.writeString(MODULE); return true; }
             if (code != 1 && code != 3 && code != 4) return false;
+            if (reply == null || flags != 0) return false;
             bounded(data);
             data.enforceInterface(MODULE);
             synchronized (ToolkitBridge.this) { if (closed) return false; }
@@ -112,16 +113,18 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
             Subscription sub = clients.get(binder);
             if (closed || sub == null || !sub.fields.contains(field)) return;
         }
-        Parcel parcel = Parcel.obtain();
+        Parcel parcel = Parcel.obtain(), reply = Parcel.obtain();
         try {
             parcel.writeInterfaceToken(CALLBACK);
             parcel.writeInt(field);
             parcel.writeIntArray(new int[] {value});
             parcel.writeFloatArray(null);
             parcel.writeStringArray(null);
-            if (!binder.transact(1, parcel, null, IBinder.FLAG_ONEWAY)) remove(binder);
+            if (!binder.transact(1, parcel, reply, 0)) { remove(binder); return; }
+            if (reply.dataSize() > 4096 || reply.dataAvail() < 4) { remove(binder); return; }
+            reply.readException();
         } catch (RemoteException | RuntimeException ex) { remove(binder); }
-        finally { parcel.recycle(); }
+        finally { parcel.recycle(); reply.recycle(); }
     }
     private void publish() {
         Map<Integer, Integer> current = backend.snapshot();

@@ -48,6 +48,7 @@ object TeyesDiagnostics {
         vehicle: TeyesClimateState,
         configuredShortcutCount: Int,
         androidApi: Int,
+        frameworkAccess: SyuFrameworkAccess = SyuFrameworkAccess.NOT_CHECKED,
     ): String =
         JSONObject()
             .put("schemaVersion", 2)
@@ -59,6 +60,8 @@ object TeyesDiagnostics {
             .put("appVersionCode", com.cabin.BuildConfig.VERSION_CODE)
             .put("buildFlavor", "cabin")
             .put("debugBuild", com.cabin.BuildConfig.DEBUG)
+            .put("syuFrameworkAccess", frameworkAccess.name)
+            .put("syuBspEventSupport", "UNVERIFIED")
             .put("vehicleBinderConnected", vehicle.connected)
             .put("vehicleDataSource", "TEYES/SYU")
             .put("vehicleProfileId", vehicle.profileId)

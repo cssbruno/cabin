@@ -144,12 +144,14 @@ import java.nio.ByteOrder
  */
 class MainActivity : ComponentActivity() {
     companion object {
+        private val activityOwner = ActivityInstanceOwner<MainActivity>()
         const val ACTION_SHOW_COMPACT_PROJECTION = "com.carlink.action.SHOW_COMPACT_PROJECTION"
         const val ACTION_SHOW_FULLSCREEN_PROJECTION = "com.carlink.action.SHOW_FULLSCREEN_PROJECTION"
     }
 
     // Nullable to prevent UninitializedPropertyAccessException if Activity
     // is destroyed before initialization completes (e.g., low memory kill)
+    private var redirectedDuplicate = false
     private var cabinManager: CabinManager? = null
     private val homeNavigationRequest = mutableStateOf(0L)
     private var fileLogManager: FileLogManager? = null
@@ -204,14 +206,7 @@ class MainActivity : ComponentActivity() {
     // Pending reinit handler — tracked for cancellation on rapid display mode changes
     private var pendingReinitJob: Job? = null
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val rehideLauncherBars = Runnable {
-        if (homeNavigationRequest.value > 0 && !compactPanelMode && hasWindowFocus()) {
-            WindowCompat.getInsetsController(window, window.decorView).apply {
-                hide(WindowInsetsCompat.Type.systemBars())
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        }
-    }
+    private var systemBarRecovery: com.cabin.ui.SystemBarRecovery? = null
     private val hideClimateOverlay = Runnable {
         climateOverlayVisibleState.value = false
         climateSummaryVisibleState.value = false
@@ -287,6 +282,21 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityOwner.claim(this)?.let { existing ->
+            // Some head units launch HOME aliases in a separate task despite singleTask.
+            // Forward the request before creating another manager or video surface.
+            redirectedDuplicate = true
+            existing.onNewIntent(Intent(intent))
+            try {
+                getSystemService(android.app.ActivityManager::class.java).appTasks
+                    .firstOrNull { it.taskInfo.taskId == existing.taskId }?.moveToFront()
+            } catch (e: RuntimeException) {
+                logWarn("Could not bring existing projection task forward: ${e.message}", tag = "MAIN")
+            }
+            finish()
+            return
+        }
         val homeLaunch = BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE &&
             intent?.action != ACTION_SHOW_COMPACT_PROJECTION && intent?.action != ACTION_SHOW_FULLSCREEN_PROJECTION
         if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) homeNavigationRequest.value = if (homeLaunch) 1L else -1L
@@ -294,11 +304,19 @@ class MainActivity : ComponentActivity() {
             (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE && intent?.action == Intent.ACTION_MAIN &&
                 TeyesFeaturePreferences.get(this).profile.value.compactOnLaunch))
         compactPanelState.value = compactPanelMode
-        super.onCreate(savedInstanceState)
         com.cabin.updates.UpdateJobService.schedule(this)
 
         // Enable edge-to-edge display
         enableEdgeToEdge()
+        systemBarRecovery = com.cabin.ui.SystemBarRecovery(window.decorView,
+            canRecover = { !isDestroyed && !isFinishing && !compactPanelMode && hasWindowFocus() &&
+                lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) },
+            hide = { types ->
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    hide(types)
+                }
+            })
 
         // Keep screen on during projection
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -456,6 +474,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (redirectedDuplicate) return
         // Permission results can arrive before the Activity becomes visible again.
         // Refresh here too so a first-launch grant upgrades the existing service.
         refreshProjectionForegroundCapabilities()
@@ -474,6 +493,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
+        if (redirectedDuplicate) return
         // Resume video decoding when app returns to foreground
         // On AAOS, Surface may remain valid while app is in background, but
         // BufferQueue can stall. Resume codec and request keyframe for immediate video.
@@ -490,6 +510,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
+        if (redirectedDuplicate) return
+        systemBarRecovery?.cancel()
         mainHandler.removeCallbacks(hideClimateOverlay)
         hideClimateOverlay.run()
         mainHandler.removeCallbacks(pauseTeyesOverlay)
@@ -545,11 +567,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
+        if (redirectedDuplicate) return
         windowFocusedState.value = hasFocus
+        if (hasFocus && !compactPanelMode) applyDisplayMode(currentDisplayMode)
+        else systemBarRecovery?.cancel()
         if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
         mainHandler.removeCallbacks(pauseTeyesOverlay)
         if (hasFocus) {
-            if (homeNavigationRequest.value > 0 && !compactPanelMode) applyDisplayMode(currentDisplayMode)
             if (teyesOverlayPaused) {
                 teyesOverlayPaused = false
                 cabinManager?.resumeVideo()
@@ -635,6 +659,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun configureCompactProjectionWindow() {
+        systemBarRecovery?.update(DisplayMode.SYSTEM_UI_VISIBLE)
         val bounds = WindowMetricsCompat.displayBounds(windowManager)
         val marginPx = (24 * resources.displayMetrics.density).toInt()
         val width = ((bounds.width() * 0.82f).toInt() and 1.inv()).coerceAtMost(bounds.width() - marginPx * 2)
@@ -692,6 +717,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (redirectedDuplicate) return
+        activityOwner.release(this)
+        systemBarRecovery?.close()
+        systemBarRecovery = null
 
         mainHandler.removeCallbacks(hideClimateOverlay)
         mainHandler.removeCallbacks(pauseTeyesOverlay)
@@ -1241,7 +1270,9 @@ class MainActivity : ComponentActivity() {
         // LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS is API 30; SHORT_EDGES (API 28) is the
         // pre-30 equivalent. gminfo3.7 has no display cutout, so the two are identical
         // on the target hardware.
-        when (com.cabin.launcher.launcherDisplayMode(mode, homeNavigationRequest.value > 0, compactPanelMode)) {
+        val effectiveMode = com.cabin.launcher.launcherDisplayMode(mode, homeNavigationRequest.value > 0, compactPanelMode)
+        systemBarRecovery?.update(effectiveMode)
+        when (effectiveMode) {
             DisplayMode.SYSTEM_UI_VISIBLE -> {
                 // Edge-to-edge (window stays full-display); Compose windowInsetsPadding in
                 // MainScreen subtracts the system bars exactly once. Using decorFits=true here
@@ -1281,14 +1312,6 @@ class MainActivity : ComponentActivity() {
                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 windowInsetsController.systemBarsBehavior =
                     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                // Some TPRO SystemUI builds restore the dock just after an Activity
-                // regains focus. Re-hide after both the immediate and delayed decor
-                // redraw, but only while Home still owns the window.
-                if (homeNavigationRequest.value > 0 && !compactPanelMode) {
-                    window.decorView.post(rehideLauncherBars)
-                    mainHandler.removeCallbacks(rehideLauncherBars)
-                    mainHandler.postDelayed(rehideLauncherBars, 250)
-                }
             }
         }
     }

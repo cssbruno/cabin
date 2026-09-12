@@ -221,7 +221,7 @@ class CabinLauncherTest {
         compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
         compose.onNodeWithContentDescription("Quick controls").performClick()
         compose.onNodeWithText("Glance").performClick()
-        compose.onNodeWithTag("module-SPEED-10001").assertIsDisplayed()
+        compose.onNodeWithTag("module-NAVIGATION-10002").assertIsDisplayed()
         compose.onNodeWithTag("module-PROJECTION-1").assertDoesNotExist()
         screenshot("launcher-glance")
         compose.onNodeWithContentDescription("Quick controls").performClick()
@@ -438,9 +438,9 @@ class CabinLauncherTest {
                 CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() })
             }
         }
-        compose.onNodeWithTag("module-SPEED-3").performTouchInput { longClick(center) }
+        compose.onNodeWithTag("module-MEDIA-2").performTouchInput { longClick(center) }
         compose.onNodeWithContentDescription("Done").assertIsDisplayed()
-        compose.onNodeWithTag("resize-3").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithTag("resize-2").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
         compose.onNodeWithTag("resize-1").assertIsDisplayed()
         compose.onNodeWithTag("page-dot-1").performClick()
         val before = compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot
@@ -484,9 +484,9 @@ class CabinLauncherTest {
                 CabinLauncher(manager, TeyesClimateState(), true, {}, {}, null, {}, { it() })
             }
         }
-        compose.onNodeWithTag("module-SPEED-3").performTouchInput { longClick(center) }
+        compose.onNodeWithTag("module-MEDIA-2").performTouchInput { longClick(center) }
         compose.onNodeWithContentDescription("Done").assertDoesNotExist()
-        compose.onNodeWithTag("resize-3").assertDoesNotExist()
+        compose.onNodeWithTag("resize-2").assertDoesNotExist()
     }
 
     @Test fun `normal startup opens dashboard and settings return to the same layout`() {
@@ -789,17 +789,14 @@ class CabinLauncherTest {
         }
         val projection = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
         val media = compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot
-        val speed = compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("module-SPEED-3").assertDoesNotExist()
         assertTrue("CarPlay should use the tall screen", projection.height > 600f)
         val grid = compose.onNodeWithTag("dashboard-grid").fetchSemanticsNode().boundsInRoot
         assertEquals("No left margin in portrait", grid.left, projection.left, 1f)
         assertEquals("CarPlay fills portrait width", grid.right - 4f, projection.right, 1f)
         assertEquals("No top margin in portrait", grid.top, projection.top, 1f)
         assertEquals("Widgets reach the bottom", grid.bottom - 4f, media.bottom, 1f)
-        assertEquals("Widgets reach the right edge", grid.right - 4f, speed.right, 1f)
         assertTrue(media.top >= projection.bottom)
-        assertEquals(media.top, speed.top, 1f)
-        assertTrue(speed.left >= media.right)
         compose.onNodeWithContentDescription("Edit layout").performClick()
         assertEquals(projection, compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot)
         screenshot("launcher-portrait-grid")
@@ -813,11 +810,10 @@ class CabinLauncherTest {
         assertTrue(resized.height < projection.height)
         compose.onNodeWithTag("module-MEDIA-2").performTouchInput {
             down(center)
-            moveBy(androidx.compose.ui.geometry.Offset(speed.left - media.left, 0f), 500)
+            moveBy(androidx.compose.ui.geometry.Offset(media.width + 4f, 0f), 500)
             up()
         }
-        assertEquals(speed.left, compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot.left, 2f)
-        assertEquals(media.left, compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot.left, 2f)
+        assertEquals(media.right + 4f, compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot.left, 2f)
     }
 
     @Test fun `small screen edit mode reveals the full draggable grid`() {
@@ -831,7 +827,7 @@ class CabinLauncherTest {
         compose.onNodeWithContentDescription("Edit layout").performClick()
         compose.onNodeWithTag("module-PROJECTION-1").assertIsDisplayed()
         compose.onNodeWithTag("module-MEDIA-2").assertIsDisplayed()
-        compose.onNodeWithTag("module-SPEED-3").assertIsDisplayed()
+        compose.onNodeWithTag("module-SPEED-3").assertDoesNotExist()
         compose.onNodeWithTag("page-dot-1").performClick()
         val first = compose.onNodeWithTag("module-RPM-4").fetchSemanticsNode().boundsInRoot
         val other = compose.onNodeWithTag("module-OIL-5").fetchSemanticsNode().boundsInRoot
@@ -858,7 +854,6 @@ class CabinLauncherTest {
         val after = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
         assertTrue(after.left > before.left)
         assertTrue(compose.onNodeWithTag("module-MEDIA-2").fetchSemanticsNode().boundsInRoot.right <= after.left)
-        assertTrue(compose.onNodeWithTag("module-SPEED-3").fetchSemanticsNode().boundsInRoot.right <= after.left)
         screenshot("launcher-drag-auto-layout")
     }
 
