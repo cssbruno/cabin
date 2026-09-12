@@ -1,0 +1,21 @@
+<resources>
+    <string name="syu_source_waiting">Warten auf Audioquelle</string>
+    <string name="syu_android_media">Android-Medien</string>
+    <string-array name="syu_audio_sources">
+        <item>Keine Audioquelle</item>
+        <item>Radio</item>
+        <item>Telefonanruf</item>
+        <item>Bluetooth-Audio</item>
+        <item>DVD</item>
+        <item>AUX</item>
+        <item>TV</item>
+        <item>iPod</item>
+        <item>Musikplayer</item>
+        <item>Videoplayer</item>
+        <item>Android-Apps</item>
+        <item>Fahrzeugradio</item>
+        <item>Fahrzeugtelefon</item>
+        <item>Fahrzeug-USB</item>
+        <item>DVR</item>
+    </string-array>
+</resources>

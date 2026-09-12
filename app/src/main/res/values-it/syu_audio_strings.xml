@@ -1,0 +1,21 @@
+<resources>
+    <string name="syu_source_waiting">In attesa della sorgente audio</string>
+    <string name="syu_android_media">Contenuti multimediali Android</string>
+    <string-array name="syu_audio_sources">
+        <item>Nessuna sorgente audio</item>
+        <item>Radio</item>
+        <item>Chiamata telefonica</item>
+        <item>Audio Bluetooth</item>
+        <item>DVD</item>
+        <item>AUX</item>
+        <item>TV</item>
+        <item>iPod</item>
+        <item>Lettore musicale</item>
+        <item>Lettore video</item>
+        <item>App Android</item>
+        <item>Radio del veicolo</item>
+        <item>Telefono del veicolo</item>
+        <item>USB del veicolo</item>
+        <item>DVR</item>
+    </string-array>
+</resources>
