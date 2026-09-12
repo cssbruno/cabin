@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <package android:name="com.syu.ms" />
+        <package android:name="com.syu.canbus" />
+    </queries>
+    <permission android:name="com.cabin.hardware.permission.CONNECT" android:protectionLevel="signature" />
+    <uses-permission android:name="com.cabin.hardware.permission.CONNECT" />
+    <application android:label="Cabin Hardware Lab" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:supportsRtl="true">
+        <activity android:name=".LabActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name=".ToolkitService" android:exported="true" android:permission="com.cabin.hardware.permission.CONNECT">
+            <intent-filter><action android:name="com.cabin.hardware.TOOLKIT" /></intent-filter>
+        </service>
+    </application>
+</manifest>
