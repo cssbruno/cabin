@@ -1,10 +1,10 @@
-# Honda Customizer 2.0 — original Honda head unit
+# Honda Customizer 2.0.1 — original Honda head unit
 
 Standalone Android app for the original Mitsubishi Electric Honda head unit. Built from the recovered OEM service contracts, with a Civic-focused offline catalog and live vehicle capability discovery.
 
 ## Install
 
-Copy **`dist/Honda-Customizer-2.0-original-HU.apk`** to the original Honda head unit and use its APK installer. Open the app and connect to load the controls the vehicle actually reports. Android 4.2/API 17 is the minimum; this is a debug-signed development APK, not a Honda-signed system app.
+Copy **`dist/Honda-Customizer-2.0.1-original-HU.apk`** to the original Honda head unit and use its APK installer. Open the app and connect to load the controls the vehicle actually reports. Android 4.2/API 17 is the minimum; this is a non-debuggable release build signed with the existing development certificate, not a Honda-signed system app. The published APK updates the earlier 2.0 development build in place; locally built/CI APKs use their own development certificate.
 
 ## Implemented controls
 
@@ -35,7 +35,7 @@ Copy **`dist/Honda-Customizer-2.0-original-HU.apk`** to the original Honda head 
 
 ## Verification and limits
 
-**67 Robolectric tests passed**, including independent Parcel decoders, service descriptor checks, capability gating, protected content, presets/defaults, value validation, action callbacks, matching readback, rejection, timeout, disconnect and stale-session behavior. Android lint passed with no errors and 10 non-blocking localization/resource warnings. APK v1 and v2 signatures verified.
+**88 Robolectric tests passed**, including independent Parcel decoders, service descriptor checks, capability gating, protected content, presets/defaults, value validation, action callbacks, matching readback, rejection, timeout, disconnect and stale-session behavior. Android lint passed with no errors and 11 non-blocking localization/resource warnings. APK v1 and v2 signatures verified. Seven additional real-emulator checks cover release installation, screen navigation, catalog/language search and unavailable-service gating on Android 16/API 36.1 at 800 × 480. Emulator checks cannot validate OEM services or vehicle behavior.
 
 No actual head unit or vehicle was connected. API 17 compatibility is checked by Android lint; runtime tests use API 28. Vehicle trim/year coverage and installation/service permissions still depend on the original hardware. No permission bypass, proprietary executable library or raw CAN injection is included.
 
@@ -48,12 +48,19 @@ Unknown values, inconsistent encodings, unsupported maintenance variants and unm
 Use Android SDK platform 36 and a compatible JDK with the included Gradle wrapper:
 
 ```sh
-ANDROID_HOME=/path/to/Android/Sdk ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+export ANDROID_HOME=/path/to/Android/Sdk
+./gradlew :app:assembleRelease :app:testReleaseUnitTest :app:lintRelease :app:assembleReleaseAndroidTest --rerun-tasks
+# Start an Android emulator, wait for boot, and specify its exact serial:
+python3 tools/run_emulator_smoke.py --serial emulator-5554
 python3 tools/package_release.py
 ```
 
 The legacy target is API 28; the Play publishing target-policy lint rule is disabled because this APK is sideloaded on OEM firmware. Other lint checks remain enabled.
 
-`tools/extract_catalog.py` reproduces catalog labels from the local OEM research evidence, including the separately traced panel preset selector. Build inputs are already bundled. `tools/package_release.py` exports the tested APK, source ZIP, test/lint reports and checksums; it excludes caches, signing keys, local SDK configuration and proprietary decompiled source.
+`tools/extract_catalog.py` reproduces catalog labels from the local OEM research evidence, including the separately traced panel preset selector. Build inputs are already bundled. `tools/package_release.py` rejects stale/failed results, checks the tested APK hashes, version and signature, then exports the APK, source ZIP, unit/lint/emulator reports and checksums; it excludes caches, signing keys, local SDK configuration and proprietary decompiled source.
 
 Protocol evidence: `../honda-cluster-analysis/oem-civic/meter-binder-protocol.md`, `camera-native-implementation.md`, `action-implementation-evidence.md`, and `../honda-cluster-analysis/full-command-trace.md`.
+
+## 2.0.1 changes
+
+Cancelled service sessions cannot start delayed tachometer preference writes or reuse a new connection for an old panel save. Tachometer requests verify both the head-unit preference and vehicle response, including when cached values already match. Panel defaults refresh capacity, saves publish fresh capabilities, and malformed outgoing IDs are rejected. Camera failures survive screen cleanup; interrupted writes report uncertain outcomes. Head-unit editor authorization clears when leaving the screen. The added GitHub workflow repeats unit, lint, build and emulator checks for Honda changes.

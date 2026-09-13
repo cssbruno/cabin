@@ -84,6 +84,55 @@ public class MeterClientTest {
         String reason=client.status;client.disconnect();assertEquals(reason,client.status);
         service.changed(1);ShadowLooper.idleMainLooper();assertEquals(MeterClient.Phase.DISCONNECTED,client.phase);assertNull(client.live);
     }
+    @Test public void defaultsRefreshCapacityWithoutOverwritingBaselineOrWriting()throws Exception{
+        Arrays.fill(service.display,true);ready();
+        client.loadDefaults();await(()->service.reads==2);
+        service.data(1,0,11,15,0,1,2,3,4,5,6,7,8,9,10);await(()->client.phase==MeterClient.Phase.READY);
+        assertEquals(15,client.capacity());assertEquals(10,client.live.max);assertEquals(Arrays.asList(0,3),client.live.contents());
+        assertEquals(2,client.live.preset);assertEquals(11,client.draft().size());assertEquals(0,service.writes);assertTrue(client.canAdd(14));
+        client.save(true);await(()->service.writes==1);assertEquals(11,service.count);assertEquals(2,service.preset);
+    }
+    @Test public void smallerDefaultCapacityRestrictsDraftEvenWithLargerBaseline()throws Exception{
+        Arrays.fill(service.display,true);client.connect();await(()->service.reads==1);
+        service.data(1,2,12,15,0,1,2,3,4,5,6,7,8,9,10,14);await(()->client.phase==MeterClient.Phase.READY);
+        client.loadDefaults();await(()->service.reads==2);service.data(1,0,10,10,0,1,2,3,4,5,6,7,8,9);await(()->client.phase==MeterClient.Phase.READY);
+        assertEquals(10,client.capacity());assertEquals(12,client.live.count);assertFalse(client.canAdd(14));client.add(14);assertEquals(10,client.draft().size());
+        client.save(true);await(()->service.writes==1);assertEquals(10,service.count);assertEquals(2,service.preset);
+    }
+    @Test public void successfulSavePublishesNewProtectionAndAvailability()throws Exception{
+        ready();client.add(14);service.protectedIds=new int[]{0,3};service.content66=false;
+        client.save(true);await(()->service.writes==1);service.changed(1);await(()->service.reads==2);
+        service.data(1,2,3,10,0,3,14);await(()->client.phase==MeterClient.Phase.READY);
+        assertTrue(client.isProtected(3));assertFalse(client.available().contains(66));client.remove(1);assertEquals(Arrays.asList(0,3,14),client.draft());
+    }
+    @Test public void synchronousDisconnectDuringBindStillUnbindsRegistration(){
+        client.destroy();final int[] unbinds={0};
+        Context context=new ContextWrapper(RuntimeEnvironment.getApplication()){
+            @Override public boolean bindService(Intent intent,ServiceConnection connection,int flags){connection.onServiceDisconnected(intent.getComponent());return true;}
+            @Override public void unbindService(ServiceConnection connection){unbinds[0]++;}
+        };
+        client=new MeterClient(context,()->{});client.connect();assertEquals(MeterClient.Phase.DISCONNECTED,client.phase);assertEquals(1,unbinds[0]);
+    }
+    @Test public void observerCancellationDoesNotStartBinding(){
+        client.destroy();final int[] binds={0};
+        Context context=new ContextWrapper(RuntimeEnvironment.getApplication()){
+            @Override public boolean bindService(Intent intent,ServiceConnection connection,int flags){binds[0]++;return true;}
+        };
+        client=new MeterClient(context,()->{if(client.phase==MeterClient.Phase.CONNECTING)client.disconnect();});
+        client.connect();assertEquals(MeterClient.Phase.DISCONNECTED,client.phase);assertEquals(0,binds[0]);
+        String status=client.status;ShadowLooper.idleMainLooper(21,TimeUnit.SECONDS);assertEquals(status,client.status);
+    }
+    @Test public void observerReconnectCannotSendPreviousDraftOnNewSession()throws Exception{
+        client.destroy();final boolean[] reconnect={true};
+        Context context=new ContextWrapper(RuntimeEnvironment.getApplication()){
+            @Override public boolean bindService(Intent intent,ServiceConnection connection,int flags){connection.onServiceConnected(intent.getComponent(),service);return true;}
+            @Override public void unbindService(ServiceConnection connection){}
+        };
+        client=new MeterClient(context,()->{if(client.phase==MeterClient.Phase.WRITING&&reconnect[0]){reconnect[0]=false;client.disconnect();client.connect();}});
+        ready();client.add(14);client.save(true);await(()->service.reads==2);
+        assertEquals(0,service.writes);assertEquals(MeterClient.Phase.READING,client.phase);
+        service.data(1,2,2,10,0,3);await(()->client.phase==MeterClient.Phase.READY);assertFalse(client.dirty());
+    }
     @Test public void defaultPresetCannotBeWrittenDirectly()throws Exception{
         client.connect();await(()->service.reads==1);service.data(1,0,2,10,0,3);await(()->client.phase==MeterClient.Phase.READY);assertFalse(client.editable());client.add(14);client.save(true);assertEquals(0,service.writes);
     }

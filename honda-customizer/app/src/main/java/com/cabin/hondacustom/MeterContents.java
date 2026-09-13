@@ -52,7 +52,11 @@ public final class MeterContents implements Parcelable {
             this.protectedIds=Collections.unmodifiableSet(keep);
         }
         public boolean permits(MeterContents baseline,List<Integer> order){
-            if(baseline==null||!baseline.validReply()||baseline.preset<1||order==null||order.size()>baseline.max)return false;
+            return permits(baseline,order,baseline==null?0:baseline.max);
+        }
+        public boolean permits(MeterContents baseline,List<Integer> order,int capacity){
+            if(baseline==null||!baseline.validReply()||baseline.preset<1||order==null
+                    ||(capacity!=10&&capacity!=15)||order.size()>capacity)return false;
             Set<Integer> seen=new HashSet<>();List<Integer> old=baseline.contents();
             for(Integer id:order)if(id==null||!seen.add(id)||(!old.contains(id)&&!available.contains(id)))return false;
             for(Integer id:old)if(protectedIds.contains(id)&&!seen.contains(id))return false;

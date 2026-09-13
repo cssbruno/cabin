@@ -2,6 +2,8 @@ package com.cabin.hondacustom;
 
 import android.content.*;
 import android.os.*;
+import android.widget.CheckBox;
+import java.lang.reflect.Field;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.robolectric.*;
@@ -19,11 +21,11 @@ public class CameraIntegrationTest {
     static class FakeCamera extends Binder {
         final Map<Integer, Bundle> values = new HashMap<>();
         volatile int writes, defaults, enters, exits, reads, unbinds;
-        volatile boolean rear = true, lane = true, angle = true, mismatch, reject;
+        volatile boolean rear = true, lane = true, angle = true, mismatch, reject, malformedDefaults;
         CountDownLatch entered, release;
         FakeCamera() {
             attachInterface(null, "com.mitsubishielectric.ada.appservice.camera.ICameraAPService");
-            Bundle r = new Bundle(); r.putInt("REAR_WIDE_CAMERA_STATIC", 0); r.putInt("REAR_WIDE_CAMERA_DYNAMIC", 1); r.putInt("CAMERA_PARKING_SENSOR", 2); values.put(0, r);
+            Bundle r = new Bundle(); r.putInt("REAR_WIDE_CAMERA_STATIC", 0); r.putInt("REAR_WIDE_CAMERA_DYNAMIC", 1); r.putInt("CAMERA_PARKING_SENSOR", 0); values.put(0, r);
             Bundle l = new Bundle(); l.putInt("LANEWATCH_TURN_SW", 1); l.putInt("LANEWATCH_DISPLAY_TIME", 0); l.putInt("LANEWATCH_GUIDE_LINE", 1); values.put(4, l);
         }
         @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
@@ -51,6 +53,7 @@ public class CameraIntegrationTest {
                     defaults++;
                     Bundle value = values.get(camera);
                     for (String key : value.keySet()) value.putInt(key, key.equals("LANEWATCH_DISPLAY_TIME") ? 0 : 1);
+                    if (malformedDefaults) value.putString("CAMERA_PARKING_SENSOR", "0");
                 } else reads++;
                 reply.writeInt(1); values.get(camera).writeToParcel(reply, 0); return true;
             }
@@ -87,7 +90,7 @@ public class CameraIntegrationTest {
         ready(); fake.values.get(0).putInt("REAR_WIDE_CAMERA_DYNAMIC", 0);
         client.change(0, CameraProtocol.STATIC, 1, true); await(() -> fake.writes == 1 && client.phase == CameraClient.Phase.READY);
         assertEquals(0, fake.values.get(0).getInt("REAR_WIDE_CAMERA_DYNAMIC"));
-        assertEquals(2, fake.values.get(0).getInt("CAMERA_PARKING_SENSOR"));
+        assertEquals(0, fake.values.get(0).getInt("CAMERA_PARKING_SENSOR"));
         assertEquals(1, client.values.get(0).getInt(CameraProtocol.STATIC)); assertEquals(0, fake.enters);
         assertTrue(client.status.contains("service readback"));
     }
@@ -142,7 +145,62 @@ public class CameraIntegrationTest {
         Binder bad = new Binder(); bad.attachInterface(null, "other.service");
         try { new CameraProtocol(bad); fail("Expected interface rejection"); } catch (RemoteException expected) { }
     }
+    @Test public void disconnectDuringBlockedWritePreservesUnknownOutcomeAndCleansSession() throws Exception {
+        ready(); fake.entered = new CountDownLatch(1); fake.release = new CountDownLatch(1);
+        client.change(4, CameraProtocol.DURATION, 1, true);
+        assertTrue(fake.entered.await(3, TimeUnit.SECONDS));
+        client.disconnect(); String interrupted = client.status;
+        assertTrue(interrupted.contains("Outcome unknown"));
+        client.disconnect(); assertEquals(interrupted, client.status);
+        fake.release.countDown(); await(() -> fake.exits == 1);
+        assertEquals(CameraClient.Phase.DISCONNECTED, client.phase);
+        assertEquals(interrupted, client.status); assertTrue(client.values.isEmpty());
+        assertEquals(1, fake.unbinds);
+    }
+    @Test public void repeatedLifecycleDisconnectDoesNotEraseCameraFailure() throws Exception {
+        ready(); fake.reject = true; client.change(4, CameraProtocol.DURATION, 1, true);
+        await(() -> client.phase == CameraClient.Phase.DISCONNECTED);
+        String failure = client.status; assertTrue(failure.contains("rejected"));
+        client.disconnect(); client.destroy(); assertEquals(failure, client.status);
+    }
+    @Test public void malformedOptionalParkingValueCannotPassValidation() throws Exception {
+        Bundle settings = new Bundle(fake.values.get(0));
+        for (Object bad : new Object[]{"0", null, 2, -1}) {
+            if (bad instanceof Integer) settings.putInt(CameraProtocol.PARKING_SENSOR, (Integer)bad);
+            else settings.putString(CameraProtocol.PARKING_SENSOR, (String)bad);
+            try { CameraProtocol.validate(0, settings); fail("Malformed parking value accepted"); }
+            catch (IllegalArgumentException expected) { }
+        }
+        settings.remove(CameraProtocol.PARKING_SENSOR); CameraProtocol.validate(0, settings);
+        settings.putInt(CameraProtocol.PARKING_SENSOR, 0); CameraProtocol.validate(0, settings);
+        settings.putInt(CameraProtocol.PARKING_SENSOR, 1); CameraProtocol.validate(0, settings);
+    }
+    @Test public void malformedDefaultsCannotBeReportedAsConfirmed() throws Exception {
+        ready(); fake.malformedDefaults = true; client.defaults(0, true);
+        await(() -> client.phase == CameraClient.Phase.DISCONNECTED);
+        assertEquals(1, fake.defaults); assertTrue(client.status.contains("parking-sensor"));
+        assertFalse(client.status.contains("defaults confirmed")); assertTrue(client.values.isEmpty());
+    }
+    @Test public void malformedFreshParkingValueStopsWriteBeforeServiceMutation() throws Exception {
+        ready(); fake.values.get(0).putString(CameraProtocol.PARKING_SENSOR, "0");
+        client.change(0, CameraProtocol.STATIC, 1, true);
+        await(() -> client.phase == CameraClient.Phase.DISCONNECTED);
+        assertEquals(0, fake.writes); assertTrue(client.values.isEmpty());
+    }
     @Test public void cameraScreenLaunchesWithoutHondaService() {
         try (org.robolectric.android.controller.ActivityController<CameraActivity> activity = Robolectric.buildActivity(CameraActivity.class).setup()) { assertNotNull(activity.get()); }
     }
+    @Test public void cameraPauseClearsParkedAndPreservesFailureExplanation() throws Exception {
+        try (org.robolectric.android.controller.ActivityController<CameraActivity> controller = Robolectric.buildActivity(CameraActivity.class).setup()) {
+            CameraActivity activity = controller.get();
+            Field clientField = CameraActivity.class.getDeclaredField("client"); clientField.setAccessible(true);
+            CameraClient activityClient = (CameraClient)clientField.get(activity);
+            Field parkedField = CameraActivity.class.getDeclaredField("parked"); parkedField.setAccessible(true);
+            CheckBox parked = (CheckBox)parkedField.get(activity);
+            activityClient.status = "Camera request rejected. Reconnect to check current values.";
+            parked.setChecked(true); controller.pause().resume();
+            assertFalse(parked.isChecked()); assertTrue(activityClient.status.contains("rejected"));
+        }
+    }
+
 }

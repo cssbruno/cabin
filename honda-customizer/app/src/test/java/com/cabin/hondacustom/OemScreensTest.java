@@ -3,6 +3,8 @@ package com.cabin.hondacustom;
 import android.app.Activity;
 import android.content.*;
 import android.content.pm.*;
+import android.view.*;
+import android.widget.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.robolectric.*;
@@ -40,4 +42,28 @@ public class OemScreensTest {
             assertNull(Shadows.shadowOf(activity.get()).getNextStartedActivity());
         }
     }
+    private static <T extends View> T find(View view,Class<T> type,String text){
+        if(type.isInstance(view)&&(text==null||(view instanceof TextView&&text.equals(((TextView)view).getText().toString()))))return type.cast(view);
+        if(view instanceof ViewGroup)for(int i=0;i<((ViewGroup)view).getChildCount();i++){
+            T match=find(((ViewGroup)view).getChildAt(i),type,text);if(match!=null)return match;
+        }
+        return null;
+    }
+    @Test public void headUnitPauseRequiresFreshParkedAcknowledgementBeforeNativeLaunch(){
+        OemScreens.Screen screen=OemScreens.Screen.LANGUAGE;
+        PackageInfo pkg=new PackageInfo();pkg.packageName=screen.component.getPackageName();
+        ApplicationInfo app=new ApplicationInfo();app.packageName=pkg.packageName;app.enabled=true;pkg.applicationInfo=app;
+        ActivityInfo info=new ActivityInfo();info.applicationInfo=app;info.packageName=pkg.packageName;info.name=screen.component.getClassName();info.enabled=true;info.exported=true;
+        pkg.activities=new ActivityInfo[]{info};Shadows.shadowOf(RuntimeEnvironment.getApplication().getPackageManager()).installPackage(pkg);
+        try(org.robolectric.android.controller.ActivityController<HeadUnitActivity> controller=Robolectric.buildActivity(HeadUnitActivity.class).setup()){
+            HeadUnitActivity activity=controller.get();View root=activity.getWindow().getDecorView();
+            CheckBox parked=find(root,CheckBox.class,null);Button language=find(root,Button.class,"Head-unit language");
+            assertNotNull(parked);assertNotNull(language);assertTrue(language.isEnabled());
+            parked.setChecked(true);controller.pause().resume();assertFalse(parked.isChecked());
+            language.performClick();assertNull(Shadows.shadowOf(activity).getNextStartedActivity());
+            parked.setChecked(true);language.performClick();
+            assertEquals(screen.component,Shadows.shadowOf(activity).getNextStartedActivity().getComponent());assertFalse(parked.isChecked());
+        }
+    }
+
 }

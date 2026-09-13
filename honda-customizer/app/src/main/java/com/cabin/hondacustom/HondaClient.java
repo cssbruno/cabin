@@ -21,27 +21,33 @@ public final class HondaClient {
     private enum Action { TPMS, RESET, MAINTENANCE }
     private Action action;
     private volatile UnitConnection unitConnection;
-    private volatile boolean preferenceAttempted;
-    private boolean preferenceVerified;
+    private boolean destroyed;
     private int[] maintenanceStatus;
     private boolean maintenanceReadback;
     private boolean verifyingAction;
     private int reading=-1; private Setting pending; private String afterRead;
     private final Runnable timeout=()->fail("Timed out. The outcome is unknown; reconnect and read the vehicle before retrying.");
+    private static final class Request {
+        volatile boolean started;
+        boolean accepted;
+        final List<Runnable> deferred=new ArrayList<>();
+    }
     private class Session implements ServiceConnection {
         final long token; final HondaProtocol.Callback callback; final HondaProtocol.MaintenanceCallback maintenanceCallback; HondaProtocol protocol;
-        boolean bound; volatile boolean mode, maintenanceMode, maintenanceRegistered;
+        boolean bound; volatile boolean mode, maintenanceMode, maintenanceRegistered, preferenceAttempted, preferenceVerified;
+        volatile Request request;
         Session(long token){this.token=token;callback=new HondaProtocol.Callback(new HondaProtocol.Events(){
             public void result(int type,int result){post(()->onResult(type,result));}
             public void categories(int[] categories){post(()->onCategories(categories));}
             public void values(List<Setting> values){post(()->onValues(values));}
-            private void post(Runnable r){main.post(()->{if(current(Session.this))r.run();});}
+            private void post(Runnable r){deliver(Session.this,r);}
         });maintenanceCallback=new HondaProtocol.MaintenanceCallback(status->{final int[] copy=status==null?null:status.clone();
-            main.post(()->{if(current(Session.this))onMaintenanceStatus(copy);});});}
+            deliver(Session.this,()->onMaintenanceStatus(copy));});}
         public void onServiceConnected(ComponentName name,IBinder binder){
             if(!current(this))return;
             io.execute(()->{try{
-                protocol=new HondaProtocol(binder);protocol.register(callback);
+                if(!current(this))return;
+                protocol=new HondaProtocol(binder);if(!current(this))return;protocol.register(callback);
                 main.post(()->{if(current(this))refresh();});
             }catch(Exception e){main.post(()->{if(current(this))fail(message(e));});}});
         }
@@ -55,32 +61,39 @@ public final class HondaClient {
             io.execute(()->{try{
                 if(unitConnection!=this||!current(owner))return;
                 UnitInfoProtocol unit=new UnitInfoProtocol(binder);
-                preferenceAttempted=true;unit.setTachometer(value);
+                if(unitConnection!=this||!current(owner))return;
+                owner.preferenceAttempted=true;unit.setTachometer(value);
                 if(!current(owner))return;
                 if(unit.getTachometer()!=value)throw new RemoteException("Head-unit preference readback mismatch");
                 main.post(()->{if(unitConnection!=this||!current(owner))return;
-                    preferenceVerified=true;releaseUnit();disarm();phase=Phase.READY;change(entry,value,true);
+                    owner.preferenceVerified=true;releaseUnit();disarm();phase=Phase.READY;change(entry,value,true);
                 });
             }catch(Exception e){main.post(()->{if(unitConnection==this&&current(owner))fail(message(e));});}});
         }
         public void onServiceDisconnected(ComponentName name){if(unitConnection==this&&current(owner))fail("Head-unit preference service disconnected.");}
     }
-    private void releaseUnit(){UnitConnection old=unitConnection;unitConnection=null;if(old!=null&&old.bound)try{context.unbindService(old);}catch(IllegalArgumentException ignored){}}
+    private void unbind(UnitConnection connection){if(connection.bound){connection.bound=false;try{context.unbindService(connection);}catch(IllegalArgumentException ignored){}}}
+    private void unbind(Session connection){if(connection.bound){connection.bound=false;try{context.unbindService(connection);}catch(IllegalArgumentException ignored){}}}
+    private void releaseUnit(){UnitConnection old=unitConnection;unitConnection=null;if(old!=null)unbind(old);}
+    private boolean preferenceAttempted(){return session!=null&&session.preferenceAttempted;}
+    private boolean preferenceVerified(){return session!=null&&session.preferenceVerified;}
+    private void clearPreference(){if(session!=null){session.preferenceAttempted=false;session.preferenceVerified=false;}}
     /** System-menu equivalent: store/read back the HU preference before requesting the vehicle change. */
     public void changeSystemTachometer(Catalog.Entry entry,int value,boolean parked){
         Setting live=values.get(entry.key());
         if(!parked||phase!=Phase.READY||session==null||entry.category!=3||entry.id!=0x5c||!entry.allows(live,value)){
             note("Tachometer change unavailable. Discover live support while parked.");return;
         }
-        preferenceAttempted=false;preferenceVerified=false;phase=Phase.PREFERENCE_WRITING;
+        clearPreference();phase=Phase.PREFERENCE_WRITING;
         note("Saving the head-unit tachometer preference before the vehicle change…");arm();
         UnitConnection connection=new UnitConnection(session,entry,value);unitConnection=connection;
         try{connection.bound=context.bindService(new Intent(UnitInfoProtocol.DESCRIPTOR).setComponent(new ComponentName(UnitInfoProtocol.PACKAGE,UnitInfoProtocol.SERVICE)),connection,Context.BIND_AUTO_CREATE);
+            if(unitConnection!=connection||!current(connection.owner)){unbind(connection);return;}
             if(!connection.bound)fail("Original Honda UnitInfo service is unavailable.");
         }catch(Exception e){fail(message(e));}
     }
     public HondaClient(Context context,Observer observer){this.context=context;this.observer=observer;}
-    private boolean current(Session s){return session==s&&generation==s.token;}
+    private boolean current(Session s){return !destroyed&&s!=null&&session==s&&generation==s.token;}
     private void note(String message){status=message;log.add(new java.text.SimpleDateFormat("HH:mm:ss",Locale.US).format(new Date())+"  "+message);if(log.size()>100)log.remove(0);observer.updated();}
     private void arm(){main.removeCallbacks(timeout);main.postDelayed(timeout,20000);}
     private void disarm(){main.removeCallbacks(timeout);}
@@ -90,12 +103,40 @@ public final class HondaClient {
         try{if(!current(s))return;if(s.protocol==null)throw new IllegalStateException("Honda service is not connected");work.run(s.protocol);}
         catch(Exception e){main.post(()->{if(current(s))fail(message(e));});}
     });}
+    private void deliver(Session owner,Runnable event){
+        final Request request=owner.request;
+        if(request==null||!request.started)return;
+        main.post(()->{
+            if(!current(owner)||owner.request!=request)return;
+            if(request.accepted)event.run();else request.deferred.add(event);
+        });
+    }
+    private void sendRequest(Work work){sendRequest(null,work);}
+    private void sendRequest(Work prepare,Work work){
+        final Session owner=session;if(!current(owner))return;
+        final Request request=new Request();owner.request=request;
+        io.execute(()->{try{
+            if(!current(owner))return;
+            if(prepare!=null)prepare.run(owner.protocol);
+            if(!current(owner)||owner.request!=request)return;
+            request.started=true;work.run(owner.protocol);
+            main.post(()->{
+                if(!current(owner)||owner.request!=request)return;
+                request.accepted=true;
+                for(Runnable event:new ArrayList<>(request.deferred)){
+                    if(!current(owner)||owner.request!=request)break;
+                    event.run();
+                }
+                request.deferred.clear();
+            });
+        }catch(Exception e){main.post(()->{if(current(owner)&&owner.request==request)fail(message(e));});}});
+    }
     public void connect(){
-        if(phase!=Phase.DISCONNECTED)return;
-        values.clear();pending=null;queue.clear();session=new Session(++generation);
+        if(destroyed||phase!=Phase.DISCONNECTED)return;
+        values.clear();pending=null;queue.clear();final Session connection=new Session(++generation);session=connection;
         phase=Phase.CONNECTING;note("Connecting to Honda VehicleInfoManager…");arm();
         Intent intent=new Intent(HondaProtocol.DESCRIPTOR).setComponent(new ComponentName(HondaProtocol.PACKAGE,HondaProtocol.SERVICE));
-        try{session.bound=context.bindService(intent,session,Context.BIND_AUTO_CREATE);if(!session.bound)fail("Honda service not found. This APK requires the original Mitsubishi Electric Honda head unit.");}
+        try{connection.bound=context.bindService(intent,connection,Context.BIND_AUTO_CREATE);if(!current(connection)){unbind(connection);return;}if(!connection.bound)fail("Honda service not found. This APK requires the original Mitsubishi Electric Honda head unit.");}
         catch(Exception e){fail(message(e));}
     }
     public void refresh(){
@@ -104,7 +145,7 @@ public final class HondaClient {
     }
     private void beginDiscovery(String completion){
         values.clear();queue.clear();pending=null;afterRead=completion;
-        phase=Phase.DISCOVERING;note("Discovering supported vehicle settings…");arm();send(HondaProtocol::discover);
+        phase=Phase.DISCOVERING;note("Discovering supported vehicle settings…");arm();sendRequest(HondaProtocol::discover);
     }
     private void onCategories(int[] categories){
         if(phase!=Phase.DISCOVERING)return;
@@ -118,7 +159,7 @@ public final class HondaClient {
             note(msg==null?"Connected • "+values.size()+" live settings loaded.":msg);return;
         }
         reading=queue.removeFirst();phase=pending==null&&!verifyingAction?Phase.READING:Phase.VERIFYING;
-        note((pending==null?"Reading ":"Verifying ")+Catalog.category(reading)+"…");arm();final int c=reading;send(p->p.read(c));
+        note((pending==null?"Reading ":"Verifying ")+Catalog.category(reading)+"…");arm();final int c=reading;sendRequest(p->p.read(c));
     }
     private void onValues(List<Setting> returned){
         if(phase!=Phase.READING&&phase!=Phase.VERIFYING)return;
@@ -131,18 +172,19 @@ public final class HondaClient {
         if(pending!=null){
             Setting actual=values.get(pending.key());
             if(actual==null||actual.value!=pending.value){fail("Readback did not confirm the requested value. Reconnect before another change.");return;}
-            afterRead="Change confirmed by Honda and verified by readback."+(preferenceVerified?" Head-unit tachometer preference also verified.":"");pending=null;preferenceAttempted=false;preferenceVerified=false;
+            afterRead="Change confirmed by Honda and verified by readback."+(preferenceVerified()?" Head-unit tachometer preference also verified.":"");pending=null;clearPreference();
         }
         readNext();
     }
     public void change(Catalog.Entry entry,int value,boolean parked){
         Setting live=values.get(entry.key());
         if(!parked||phase!=Phase.READY||session==null||!entry.allows(live,value)){note("Change unavailable. Use a current supported setting while parked.");return;}
-        if(live.value==value){note(preferenceVerified?"Head-unit preference verified; vehicle already reports that value.":"The vehicle already reports that value.");preferenceAttempted=false;preferenceVerified=false;return;}
+        // The System-menu flow must verify both stores even when discovery cached the desired value.
+        if(live.value==value&&!preferenceVerified()){note("The vehicle already reports that value.");clearPreference();return;}
         pending=live.withValue(value);phase=Phase.WRITING;session.mode=true;
         note("Sending change; waiting for Honda confirmation…");arm();final Setting desired=pending;
         final Session active=session;
-        send(p->{p.mode(true);if(current(active))p.change(desired);});
+        sendRequest(p->p.mode(true),p->p.change(desired));
     }
     /** Capability comes from this connection's completed discovery, never the bundled catalog. */
     public boolean canCalibrateTpms(){
@@ -166,8 +208,8 @@ public final class HondaClient {
         maintenanceStatus=null;maintenanceReadback=afterAction;phase=Phase.MAINTENANCE_READING;
         note(afterAction?"Honda acknowledged maintenance reset; reading current maintenance status…":"Reading supported maintenance items…");arm();
         final Session active=session;
-        send(p->{if(active.maintenanceRegistered){p.unregisterMaintenance(active.maintenanceCallback);active.maintenanceRegistered=false;}
-            active.maintenanceRegistered=true;p.registerMaintenance(active.maintenanceCallback);});
+        sendRequest(p->{if(active.maintenanceRegistered){p.unregisterMaintenance(active.maintenanceCallback);active.maintenanceRegistered=false;}},
+            p->{active.maintenanceRegistered=true;p.registerMaintenance(active.maintenanceCallback);});
     }
     private void onMaintenanceStatus(int[] status){
         if(status==null||status.length<3){if(phase==Phase.MAINTENANCE_READING)fail("Honda returned invalid maintenance status.");return;}
@@ -185,7 +227,7 @@ public final class HondaClient {
         }
         action=Action.MAINTENANCE;phase=Phase.ACTION;session.mode=true;session.maintenanceMode=true;
         note("Requesting maintenance reset; waiting for Honda acknowledgement…");arm();final Session active=session;
-        send(p->{p.mode(true);if(current(active)){p.maintenanceMode(true);if(current(active))p.resetMaintenance(item);}});
+        sendRequest(p->{p.mode(true);if(current(active))p.maintenanceMode(true);},p->p.resetMaintenance(item));
     }
     /** Call only after the UI's explicit action-specific confirmation. */
     public void calibrateTpms(boolean parked){startAction(Action.TPMS,parked,canCalibrateTpms());}
@@ -196,9 +238,7 @@ public final class HondaClient {
         action=requested;phase=Phase.ACTION;session.mode=true;
         note(requested==Action.TPMS?"Requesting TPMS calibration; waiting for Honda acknowledgement…":"Requesting vehicle customization defaults; waiting for Honda acknowledgement…");
         arm();final Session active=session;
-        send(p->{p.mode(true);if(current(active)){
-            if(requested==Action.TPMS)p.calibrateTpms();else p.resetCustomization();
-        }});
+        sendRequest(p->p.mode(true),p->{if(requested==Action.TPMS)p.calibrateTpms();else p.resetCustomization();});
     }
     private void onResult(int type,int result){
         if(phase==Phase.ACTION){
@@ -227,10 +267,10 @@ public final class HondaClient {
             fail("Honda could not complete the read (type "+type+", result "+result+").");
         }
     }
-    private void fail(String message){String detail=preferenceAttempted?" The head-unit preference may have changed; the vehicle change is not confirmed.":"";disconnectInternal();note(message+detail);}
-    public void disconnect(){String detail=preferenceAttempted?" A head-unit preference write was attempted; vehicle outcome is not confirmed.":"";disconnectInternal();note("Disconnected. Reconnect to read fresh vehicle values."+detail);}
+    private void fail(String message){String detail=preferenceAttempted()?" The head-unit preference may have changed; the vehicle change is not confirmed.":"";disconnectInternal();note(message+detail);}
+    public void disconnect(){String detail=preferenceAttempted()?" A head-unit preference write was attempted; vehicle outcome is not confirmed.":"";disconnectInternal();note("Disconnected. Reconnect to read fresh vehicle values."+detail);}
     private void disconnectInternal(){
-        disarm();releaseUnit();preferenceAttempted=false;preferenceVerified=false;Session s=session;session=null;++generation;pending=null;action=null;verifyingAction=false;maintenanceStatus=null;maintenanceReadback=false;afterRead=null;queue.clear();reading=-1;
+        disarm();releaseUnit();clearPreference();Session s=session;session=null;++generation;pending=null;action=null;verifyingAction=false;maintenanceStatus=null;maintenanceReadback=false;afterRead=null;queue.clear();reading=-1;
         phase=Phase.DISCONNECTED;values.clear();
         if(s!=null){
             io.execute(()->{if(s.protocol!=null){
@@ -238,8 +278,8 @@ public final class HondaClient {
                 if(s.maintenanceRegistered)try{s.protocol.unregisterMaintenance(s.maintenanceCallback);}catch(Exception ignored){}
                 if(s.mode)try{s.protocol.mode(false);}catch(Exception ignored){}
                 try{s.protocol.unregister(s.callback);}catch(Exception ignored){}}});
-            if(s.bound)try{context.unbindService(s);}catch(IllegalArgumentException ignored){}
+            unbind(s);
         }
     }
-    public void destroy(){disconnectInternal();io.shutdown();}
+    public void destroy(){if(destroyed)return;disconnectInternal();destroyed=true;io.shutdown();}
 }

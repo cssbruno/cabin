@@ -10,6 +10,7 @@ public final class CameraProtocol {
     public static final String SERVICE = PACKAGE + ".CameraAPService";
     public static final String DESCRIPTOR = PACKAGE + ".ICameraAPService";
     public static final int REAR = 0, LANEWATCH = 4;
+    public static final String PARKING_SENSOR = "CAMERA_PARKING_SENSOR";
     public static final String STATIC = "REAR_WIDE_CAMERA_STATIC", DYNAMIC = "REAR_WIDE_CAMERA_DYNAMIC";
     public static final String TURN = "LANEWATCH_TURN_SW", DURATION = "LANEWATCH_DISPLAY_TIME", GUIDE = "LANEWATCH_GUIDE_LINE";
     private final IBinder remote;
@@ -32,6 +33,13 @@ public final class CameraProtocol {
             Object value = settings.get(key);
             if (!(value instanceof Integer) || ((Integer)value != 0 && (Integer)value != 1))
                 throw new IllegalArgumentException("Missing or unsupported camera value: " + key);
+        }
+        // OEM onClickPKSButton offers only 0/1; RearWideCameraManager defaults to 1.
+        // getInt() alone would silently coerce a malformed optional value to zero.
+        if (settings.containsKey(PARKING_SENSOR)) {
+            Object value = settings.get(PARKING_SENSOR);
+            if (!(value instanceof Integer) || ((Integer)value != 0 && (Integer)value != 1))
+                throw new IllegalArgumentException("Unsupported parking-sensor view mode");
         }
     }
     private interface Writer { void write(Parcel data); }

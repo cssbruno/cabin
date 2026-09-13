@@ -1,0 +1,8 @@
+INSTRUMENTATION_RESULT: checks=[main_installs_and_launches, missing_vehicle_service_fails_closed, offline_civic_catalog_and_search, panel_navigation_missing_service, camera_navigation_missing_service, head_unit_missing_editors_disabled, service_actions_require_live_support]
+INSTRUMENTATION_RESULT: failures=0
+INSTRUMENTATION_RESULT: passed=7
+INSTRUMENTATION_RESULT: stream=
+PASS 7 emulator smoke checks
+[main_installs_and_launches, missing_vehicle_service_fails_closed, offline_civic_catalog_and_search, panel_navigation_missing_service, camera_navigation_missing_service, head_unit_missing_editors_disabled, service_actions_require_live_support]
+
+INSTRUMENTATION_CODE: -1

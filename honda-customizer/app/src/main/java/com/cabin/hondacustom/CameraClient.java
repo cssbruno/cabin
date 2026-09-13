@@ -112,9 +112,9 @@ public final class CameraClient {
                     if (expected.getInt(candidate) != actual.getInt(candidate))
                         throw new RemoteException("Camera service readback did not confirm the requested settings");
                 }
-                if (expected.containsKey("CAMERA_PARKING_SENSOR")
-                        && (!actual.containsKey("CAMERA_PARKING_SENSOR")
-                        || expected.getInt("CAMERA_PARKING_SENSOR") != actual.getInt("CAMERA_PARKING_SENSOR")))
+                if (expected.containsKey(CameraProtocol.PARKING_SENSOR)
+                        && (!actual.containsKey(CameraProtocol.PARKING_SENSOR)
+                        || expected.getInt(CameraProtocol.PARKING_SENSOR) != actual.getInt(CameraProtocol.PARKING_SENSOR)))
                     throw new RemoteException("Parking-sensor view readback did not confirm the requested settings");
                 return snapshot(s);
             } finally { if (laneSession) s.protocol.laneWatchSession(false); }
@@ -142,10 +142,16 @@ public final class CameraClient {
     private void unbind(Session s) { if (s.bound) { s.bound = false; try { context.unbindService(s); } catch (IllegalArgumentException ignored) {} } }
     private void fail(String message) { disconnect(); status = message; changed.run(); }
     public void disconnect() {
+        // Activity.onPause/onDestroy must not hide a failure or an interrupted write.
+        if (phase == Phase.DISCONNECTED && session == null) return;
+        boolean unverified = phase == Phase.WRITING;
         Session s = session; session = null;
         if (s != null) { s.active = false; unbind(s); }
         cancelTimeout(); values.clear(); angleSensor = false; phase = Phase.DISCONNECTED;
-        status = "Camera service disconnected."; changed.run();
+        status = unverified
+                ? "Disconnected during camera change. Outcome unknown; reconnect to read current values before retrying."
+                : "Camera service disconnected.";
+        changed.run();
     }
     public void destroy() { disconnect(); destroyed = true; worker.shutdown(); }
 }

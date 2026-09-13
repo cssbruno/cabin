@@ -56,6 +56,8 @@ public final class MeterProtocol {
     public void change(MeterContents contents)throws RemoteException{
         if(contents==null||contents.preset<1||contents.preset>3||contents.count<0||contents.count>15
                 ||contents.ids()==null||contents.ids().length!=contents.count)throw new IllegalArgumentException("Invalid writable meter preset");
+        java.util.Set<Integer> seen=new java.util.HashSet<>();
+        for(int id:contents.ids())if(id<0||id>255||!seen.add(id))throw new IllegalArgumentException("Invalid meter content ID");
         accepted(17,p->{p.writeInt(1);contents.writeToParcel(p,0);});
     }
 }

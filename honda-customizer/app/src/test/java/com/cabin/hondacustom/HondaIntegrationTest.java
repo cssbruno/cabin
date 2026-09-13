@@ -17,7 +17,7 @@ public class HondaIntegrationTest {
     private HondaClient client; private FakeService fake; private Catalog catalog;
     static final Setting TACH=new Setting(3,0x5c,1,0,new int[]{1,2},new boolean[]{false,true});
     static class FakeService extends Binder {
-        volatile IBinder listener;volatile int reads,changes,modeOn,modeOff,lastCategory;volatile Setting written;
+        volatile IBinder listener;volatile int discovers,reads,changes,modeOn,modeOff,lastCategory;volatile Setting written;
         boolean reject;
         FakeService(){attachInterface(null,HondaProtocol.DESCRIPTOR);}
         @Override protected boolean onTransact(int code,Parcel data,Parcel reply,int flags)throws RemoteException{
@@ -26,7 +26,7 @@ public class HondaIntegrationTest {
                 case 0x4d:listener=data.readStrongBinder();break;
                 case 0x4e:data.readStrongBinder();break;
                 case 0x4f:if(data.readInt()==1)modeOn++;else modeOff++;break;
-                case 0x51:break;
+                case 0x51:discovers++;break;
                 case 0x52:lastCategory=data.readInt();reads++;break;
                 case 0x53:assertEquals(1,data.readInt());
                     // Independent decoder uses the stock wire order, not Setting.CREATOR.
@@ -49,7 +49,7 @@ public class HondaIntegrationTest {
     }
     @After public void close(){client.destroy();}
     void await(BooleanSupplier condition)throws Exception{long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);while(!condition.getAsBoolean()&&System.nanoTime()<end){ShadowLooper.idleMainLooper();Thread.sleep(5);}ShadowLooper.idleMainLooper();assertTrue("Condition not reached; state="+client.phase+" "+client.status,condition.getAsBoolean());}
-    void ready()throws Exception{client.connect();await(()->client.phase==HondaClient.Phase.DISCOVERING);fake.categories(3);await(()->fake.reads==1);fake.values(TACH);await(()->client.phase==HondaClient.Phase.READY);}
+    void ready()throws Exception{client.connect();await(()->client.phase==HondaClient.Phase.DISCOVERING&&fake.discovers>0);fake.categories(3);await(()->fake.reads==1);fake.values(TACH);await(()->client.phase==HondaClient.Phase.READY);}
     @Test public void wireFormatPreservesFieldsAndNullArrays()throws Exception{
         HondaProtocol protocol=new HondaProtocol(fake);protocol.change(TACH.withValue(2));
         assertEquals(3,fake.written.category);assertEquals(0x5c,fake.written.id);assertEquals(2,fake.written.value);assertEquals(0,fake.written.type);
@@ -78,7 +78,7 @@ public class HondaIntegrationTest {
         assertEquals(HondaClient.Phase.DISCONNECTED,client.phase);fake.result(3,0);fake.values(TACH.withValue(2));ShadowLooper.idleMainLooper();assertEquals(HondaClient.Phase.DISCONNECTED,client.phase);assertTrue(client.values.isEmpty());
     }
     @Test public void binderRejectionFailsClosed()throws Exception{ready();fake.reject=true;client.change(catalog.byKey.get(TACH.key()),2,true);await(()->client.phase==HondaClient.Phase.DISCONNECTED);assertTrue(client.status.contains("rejected"));}
-    @Test public void unknownCategoryCallbackCannotAdvanceRead()throws Exception{client.connect();await(()->client.phase==HondaClient.Phase.DISCOVERING);fake.categories(3);await(()->fake.reads==1);fake.values(new Setting(7,1,1,0,new int[]{1,2},null));ShadowLooper.idleMainLooper();assertEquals(HondaClient.Phase.READING,client.phase);assertTrue(client.values.isEmpty());}
+    @Test public void unknownCategoryCallbackCannotAdvanceRead()throws Exception{client.connect();await(()->client.phase==HondaClient.Phase.DISCOVERING&&fake.discovers>0);fake.categories(3);await(()->fake.reads==1);fake.values(new Setting(7,1,1,0,new int[]{1,2},null));ShadowLooper.idleMainLooper();assertEquals(HondaClient.Phase.READING,client.phase);assertTrue(client.values.isEmpty());}
     @Test public void mainActivityLaunchesWithoutHondaService(){try(org.robolectric.android.controller.ActivityController<MainActivity> activity=Robolectric.buildActivity(MainActivity.class).setup()){assertNotNull(activity.get());}}
     @Test public void disconnectPreventsQueuedSettingWrite()throws Exception{
         ready();client.change(catalog.byKey.get(TACH.key()),2,true);client.disconnect();await(()->client.phase==HondaClient.Phase.DISCONNECTED);

@@ -39,7 +39,7 @@ public final class MeterActivity extends Activity {
         setContentView(root);render();
     }
     private void render(){if(status==null||contents==null)return;
-        status.setText(client.status);connect.setText(client.phase==MeterClient.Phase.DISCONNECTED?"Connect":"Disconnect");
+        status.setText(client.status+(client.live==null?"":"\nPreset "+client.live.preset+" · "+client.draft().size()+" / "+client.capacity()+" items"));connect.setText(client.phase==MeterClient.Phase.DISCONNECTED?"Connect":"Disconnect");
         boolean ready=client.phase==MeterClient.Phase.READY;
         for(Button b:presets)b.setEnabled(ready);
         if(client.phase==MeterClient.Phase.DISCONNECTED&&parked.isChecked())parked.setChecked(false);

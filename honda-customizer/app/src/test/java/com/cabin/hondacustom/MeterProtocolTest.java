@@ -15,6 +15,7 @@ public class MeterProtocolTest {
         volatile int reads,lastRequest,writes,on,off,unregisters;
         volatile int preset,count,max;volatile int[] ids;
         volatile boolean reject;
+        volatile boolean content66=true;
         volatile boolean[] display=new boolean[64];
         volatile int[] protectedIds={0};
         Service(){attachInterface(null,"com.mitsubishielectric.ada.appservice.externaldisplay.IExternalDisplayApService");display[0]=true;display[3]=true;display[14]=true;}
@@ -26,7 +27,7 @@ public class MeterProtocolTest {
                 case 10:if(data.readInt()==1)on++;else off++;break;
                 case 14:reply.writeNoException();reply.writeBooleanArray(display);return true;
                 case 15:reply.writeNoException();reply.writeIntArray(protectedIds);return true;
-                case 23:int id=data.readInt();reply.writeNoException();reply.writeInt(id==66?1:0);return true;
+                case 23:int id=data.readInt();reply.writeNoException();reply.writeInt(id==66&&content66?1:0);return true;
                 case 16:lastRequest=data.readInt();reads++;break;
                 case 17:assertEquals(1,data.readInt());preset=data.readInt();count=data.readInt();max=data.readInt();ids=data.createIntArray();writes++;break;
                 default:return false;
@@ -69,6 +70,13 @@ public class MeterProtocolTest {
         assertTrue(c.permits(baseline,Arrays.asList(3,99,64)));assertFalse(c.permits(baseline,Arrays.asList(3,64)));
         assertFalse(c.permits(baseline,Arrays.asList(3,99,67)));assertFalse(c.permits(baseline,Arrays.asList(3,99,99)));
         assertFalse(new MeterContents(1,2,12,new int[]{0,3}).validReply());assertFalse(new MeterContents(1,3,10,new int[]{0,3}).validReply());
+    }
+    @Test public void malformedOutgoingIdsCannotBeTruncatedByTheOemEncoder()throws Exception{
+        Service service=new Service();MeterProtocol protocol=new MeterProtocol(service);
+        for(int[] ids:new int[][]{{256},{-1},{3,3}}){
+            try{protocol.change(new MeterContents(1,ids.length,0,ids));fail("Invalid IDs accepted");}catch(IllegalArgumentException expected){}
+        }
+        assertEquals(0,service.writes);
     }
     @Test public void defensiveCopiesProtectState(){int[] ids={0};MeterContents c=new MeterContents(1,1,10,ids);ids[0]=4;c.ids()[0]=5;assertEquals(Arrays.asList(0),c.contents());}
 }

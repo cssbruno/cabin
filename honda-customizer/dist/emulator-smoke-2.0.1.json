@@ -1,0 +1,13 @@
+{
+  "passed": 7,
+  "failures": 0,
+  "apk_sha256": "8c2507349c93e181c8446ff309c6ad1f549af452a99c7d94258867988fc8f6ff",
+  "test_apk_sha256": "dd6243645df6ec70540cd32657566a49850e373d842ab46051d8a77927985d14",
+  "tested_at_utc": "2026-09-13T20:55:53.803578+00:00",
+  "emulator_api": "36",
+  "emulator_android_version": "16",
+  "emulator_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BE4B.251210.005/14574095:user/release-keys",
+  "display": "Physical size: 320x640\nOverride size: 800x480",
+  "scope": "Release APK installation, navigation and unavailable-service gating; no Honda hardware/services",
+  "hardware_tested": false
+}
