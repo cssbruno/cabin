@@ -1,0 +1,1111 @@
+[
+  {
+    "method": "clearInputHistory",
+    "signature": "clearInputHistory(Z)Z",
+    "line": 36,
+    "kind": "Control/reset action",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getCanInformationForAvApService",
+    "signature": "getCanInformationForAvApService(I)I",
+    "line": 177,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "type"
+      ]
+    ]
+  },
+  {
+    "method": "getChangeSpeedReference",
+    "signature": "getChangeSpeedReference()Z",
+    "line": 253,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getDrivingOperationStatus",
+    "signature": "getDrivingOperationStatus(I)I",
+    "line": 300,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "display"
+      ]
+    ]
+  },
+  {
+    "method": "getFootBrakeStatus",
+    "signature": "getFootBrakeStatus()I",
+    "line": 379,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getInputHistory",
+    "signature": "getInputHistory()[Z",
+    "line": 443,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getParkSensHistory",
+    "signature": "getParkSensHistory()Z",
+    "line": 494,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getTransmissionInformation",
+    "signature": "getTransmissionInformation()I",
+    "line": 541,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getTurnSignalStatus",
+    "signature": "getTurnSignalStatus()[I",
+    "line": 590,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "getVehicleInformation",
+    "signature": "getVehicleInformation(I)I",
+    "line": 696,
+    "kind": "Read/cache",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "type"
+      ]
+    ]
+  },
+  {
+    "method": "notifyBcanReceiveSetting",
+    "signature": "notifyBcanReceiveSetting(IZ)I",
+    "line": 851,
+    "kind": "Receive-configuration write",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "canId"
+      ],
+      [
+        "p2",
+        "setting"
+      ]
+    ]
+  },
+  {
+    "method": "notifyChangeSpeedReference",
+    "signature": "notifyChangeSpeedReference(Z)I",
+    "line": 872,
+    "kind": "Local/service state write",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "setting"
+      ]
+    ]
+  },
+  {
+    "method": "notifyParkSensHistory",
+    "signature": "notifyParkSensHistory(Z)I",
+    "line": 904,
+    "kind": "Local/service state write",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "setting"
+      ]
+    ]
+  },
+  {
+    "method": "registerAntiTheftStatusCallback",
+    "signature": "registerAntiTheftStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAntiTheftInformationListener;)I",
+    "line": 951,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerAntiTheftValidateCallback",
+    "signature": "registerAntiTheftValidateCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAntiTheftValidateListener;)I",
+    "line": 1115,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerAtSerialCallback",
+    "signature": "registerAtSerialCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAtSerialCodeInformationListener;)I",
+    "line": 1214,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerBackupClearCallback",
+    "signature": "registerBackupClearCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBackupClearInformationListener;)I",
+    "line": 1313,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerBatteryAndVspPulseCallback",
+    "signature": "registerBatteryAndVspPulseCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBatteryAndVspPulseInformationListener;)I",
+    "line": 1412,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerBcanInformationCallback",
+    "signature": "registerBcanInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBcanInformationListener;)I",
+    "line": 1530,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerBcanParkingBrakeCallback",
+    "signature": "registerBcanParkingBrakeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBcanParkingBrakeListener;)I",
+    "line": 2757,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerCanInformationForAvApServiceCallback",
+    "signature": "registerCanInformationForAvApServiceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleCanInformationForAvApServiceListener;)I",
+    "line": 2925,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerCanInformationForCameraApServiceCallback",
+    "signature": "registerCanInformationForCameraApServiceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleCanInformationForCameraApServiceListener;)I",
+    "line": 3169,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerDrivingOperationStatusCallback",
+    "signature": "registerDrivingOperationStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleDrivingOperationStatusListener;I)I",
+    "line": 3438,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ],
+      [
+        "p2",
+        "display"
+      ]
+    ]
+  },
+  {
+    "method": "registerFOBKeyNumberInformationCallback",
+    "signature": "registerFOBKeyNumberInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleFOBKeyNumberInformationListener;)I",
+    "line": 3663,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerFcanInformationCallback",
+    "signature": "registerFcanInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleFcanInformationListener;)I",
+    "line": 3839,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerGearInformationCallback",
+    "signature": "registerGearInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleGearInformationListener;)I",
+    "line": 4828,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerHDSConnectInformationCallback",
+    "signature": "registerHDSConnectInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleHDSConnectInformationListener;)I",
+    "line": 4943,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerIGInformationCallback",
+    "signature": "registerIGInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIGInformationListener;)I",
+    "line": 5119,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerIGVoltageCallback",
+    "signature": "registerIGVoltageCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIGVoltageInformationListener;)I",
+    "line": 5275,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerIgnitionStatusCallback",
+    "signature": "registerIgnitionStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIgnitionStatusListener;)I",
+    "line": 5374,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerLetDiagInformationCallback",
+    "signature": "registerLetDiagInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleLetDiagInformationListener;)I",
+    "line": 5550,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerMaintenanceCallback",
+    "signature": "registerMaintenanceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMaintenanceInformationListener;)I",
+    "line": 5721,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerMetCustomCallback",
+    "signature": "registerMetCustomCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMetCustomInformationListener;)I",
+    "line": 5902,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerMeterIllStatusCallback",
+    "signature": "registerMeterIllStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMeterIllStatusInformationListener;)I",
+    "line": 6083,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerMicuBcmCallback",
+    "signature": "registerMicuBcmCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMicuBcmInformationListener;)I",
+    "line": 6225,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerParkSens2Callback",
+    "signature": "registerParkSens2Callback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkSens2InformationListener;)I",
+    "line": 6395,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerParkSensCallback",
+    "signature": "registerParkSensCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkSensInformationListener;)I",
+    "line": 6559,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerParkingInformationCallback",
+    "signature": "registerParkingInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkingInformationListener;)I",
+    "line": 6729,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerPassThresholdSpeedCallback",
+    "signature": "registerPassThresholdSpeedCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehiclePassThresholdSpeedInformationListener;II)I",
+    "line": 6897,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ],
+      [
+        "p2",
+        "upperBorder"
+      ],
+      [
+        "p3",
+        "lowerBorder"
+      ]
+    ]
+  },
+  {
+    "method": "registerShiftParkPositionCallback",
+    "signature": "registerShiftParkPositionCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleShiftParkPositionListener;)I",
+    "line": 7194,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerShiftPositionCallback",
+    "signature": "registerShiftPositionCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleShiftPositionListener;)I",
+    "line": 7363,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerSpecificBcanStatusCallback",
+    "signature": "registerSpecificBcanStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSpecificBcanStatusListener;)I",
+    "line": 7522,
+    "kind": "Subscription + active read request",
+    "cpu_calls": [
+      "requestBcanReceiveData"
+    ],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerSpecificFcanStatusCallback",
+    "signature": "registerSpecificFcanStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSpecificFcanStatusListener;)I",
+    "line": 7646,
+    "kind": "Subscription + active read request",
+    "cpu_calls": [
+      "requestFcanReceiveData"
+    ],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerSteeringAngleCallback",
+    "signature": "registerSteeringAngleCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSteeringAngleListener;)I",
+    "line": 7728,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "registerVehicleCustomizeCallback",
+    "signature": "registerVehicleCustomizeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVehicleCustomizeInformationListener;)I",
+    "line": 7994,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerVinCodeCallback",
+    "signature": "registerVinCodeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVinCodeInformationListener;)I",
+    "line": 8093,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerVinNoCallback",
+    "signature": "registerVinNoCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVinNoInformationListener;)I",
+    "line": 8192,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerVspPulseCallback",
+    "signature": "registerVspPulseCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVspPulseInformationListener;)I",
+    "line": 8356,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "registerWelcomeStateCallback",
+    "signature": "registerWelcomeStateCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleWelcomeStateListener;)I",
+    "line": 8510,
+    "kind": "Read subscription / current-data notification",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "requestAntiTheftRelease",
+    "signature": "requestAntiTheftRelease(II[B)I",
+    "line": 8680,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "notifyAtCodeCollation"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestAntiTheftTemporaryRelease",
+    "signature": "requestAntiTheftTemporaryRelease()I",
+    "line": 8752,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "requestAntiTheftForceTemporaryCancel"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestAntiTheftValidate",
+    "signature": "requestAntiTheftValidate()I",
+    "line": 8784,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "requestExamAntiTheftStatus"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestAntiTheftValidateChange",
+    "signature": "requestAntiTheftValidateChange(I)I",
+    "line": 8816,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "notifyExamAntiTheftControl"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestAtSerialCode",
+    "signature": "requestAtSerialCode()I",
+    "line": 8864,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "requestAtSerialCode"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestAtSerialCodeWrite",
+    "signature": "requestAtSerialCodeWrite(I[BI[B)I",
+    "line": 8927,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "requestAtSerialCodeWrite"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestBackupClear",
+    "signature": "requestBackupClear(II)I",
+    "line": 9065,
+    "kind": "Control/reset action",
+    "cpu_calls": [
+      "requestBackupInfoClear"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestCustomizeCategory",
+    "signature": "requestCustomizeCategory()I",
+    "line": 9147,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "requestBcanReceiveData",
+      "notifyCustomCheckStart"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestCustomizeMode",
+    "signature": "requestCustomizeMode(Z)I",
+    "line": 9226,
+    "kind": "Vehicle control-mode write",
+    "cpu_calls": [
+      "notifyVehicleCustomize"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestCustomizeReset",
+    "signature": "requestCustomizeReset()I",
+    "line": 9308,
+    "kind": "Control/reset action",
+    "cpu_calls": [
+      "notifyBcanCustomFrame"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestCustomizeSettingChange",
+    "signature": "requestCustomizeSettingChange(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/CustomizeSettingData;)I",
+    "line": 9555,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "notifyBcanCustomFrame",
+      "requestBcanReceiveData",
+      "notifyVehicleCustomize"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestCustomizeSettingValue",
+    "signature": "requestCustomizeSettingValue(I)I",
+    "line": 10251,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "notifyBcanCustomFrame"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestIGVoltage",
+    "signature": "requestIGVoltage()I",
+    "line": 10580,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "requestExamIgVoltageValue"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestMaintenanceReset",
+    "signature": "requestMaintenanceReset(II)I",
+    "line": 10612,
+    "kind": "Control/reset action",
+    "cpu_calls": [
+      "notifyVehicleCustomize"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestMaintenanceResetMode",
+    "signature": "requestMaintenanceResetMode(Z)I",
+    "line": 10860,
+    "kind": "Vehicle control-mode write",
+    "cpu_calls": [
+      "notifyVehicleCustomize"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestTPMSCalibration",
+    "signature": "requestTPMSCalibration()I",
+    "line": 10942,
+    "kind": "Control/reset action",
+    "cpu_calls": [
+      "requestBcanReceiveData",
+      "notifyVehicleCustomize"
+    ],
+    "params": []
+  },
+  {
+    "method": "requestVinCode",
+    "signature": "requestVinCode()I",
+    "line": 11011,
+    "kind": "Active read/discovery",
+    "cpu_calls": [
+      "requestVinCodeInfo"
+    ],
+    "params": []
+  },
+  {
+    "method": "sendVehicleCustomize",
+    "signature": "sendVehicleCustomize(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/BcanNaviCustomData;)V",
+    "line": 11067,
+    "kind": "Write/control action",
+    "cpu_calls": [
+      "notifyVehicleCustomize"
+    ],
+    "params": [
+      [
+        "p1",
+        "bcanNaviCustomData"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterAntiTheftStatusCallback",
+    "signature": "unregisterAntiTheftStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAntiTheftInformationListener;)I",
+    "line": 11127,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterAntiTheftValidateCallback",
+    "signature": "unregisterAntiTheftValidateCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAntiTheftValidateListener;)I",
+    "line": 11209,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterAtSerialCodeCallback",
+    "signature": "unregisterAtSerialCodeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleAtSerialCodeInformationListener;)I",
+    "line": 11291,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterBackupClearCallback",
+    "signature": "unregisterBackupClearCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBackupClearInformationListener;)I",
+    "line": 11373,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterBatteryAndVspPulseCallback",
+    "signature": "unregisterBatteryAndVspPulseCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBatteryAndVspPulseInformationListener;)I",
+    "line": 11455,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterBcanInformationCallback",
+    "signature": "unregisterBcanInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBcanInformationListener;)I",
+    "line": 11537,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterBcanParkingBrakeCallback",
+    "signature": "unregisterBcanParkingBrakeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleBcanParkingBrakeListener;)I",
+    "line": 11625,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterCanInformationForAvApServiceCallback",
+    "signature": "unregisterCanInformationForAvApServiceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleCanInformationForAvApServiceListener;)I",
+    "line": 11707,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterCanInformationForCameraApServiceCallback",
+    "signature": "unregisterCanInformationForCameraApServiceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleCanInformationForCameraApServiceListener;)I",
+    "line": 11790,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterDrivingOperationStatusCallback",
+    "signature": "unregisterDrivingOperationStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleDrivingOperationStatusListener;)I",
+    "line": 11872,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterFOBKeyNumberInformationCallback",
+    "signature": "unregisterFOBKeyNumberInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleFOBKeyNumberInformationListener;)I",
+    "line": 11977,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterFcanInformationCallback",
+    "signature": "unregisterFcanInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleFcanInformationListener;)I",
+    "line": 12065,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterGearInformationCallback",
+    "signature": "unregisterGearInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleGearInformationListener;)I",
+    "line": 12153,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterHDSConnectInformationCallback",
+    "signature": "unregisterHDSConnectInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleHDSConnectInformationListener;)I",
+    "line": 12235,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterIGInformationCallback",
+    "signature": "unregisterIGInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIGInformationListener;)I",
+    "line": 12323,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterIGVoltageCallback",
+    "signature": "unregisterIGVoltageCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIGVoltageInformationListener;)I",
+    "line": 12405,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterIgnitionStatusCallback",
+    "signature": "unregisterIgnitionStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleIgnitionStatusListener;)I",
+    "line": 12487,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterLetDiagInformationCallback",
+    "signature": "unregisterLetDiagInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleLetDiagInformationListener;)I",
+    "line": 12575,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterMaintenanceCallback",
+    "signature": "unregisterMaintenanceCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMaintenanceInformationListener;)I",
+    "line": 12663,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterMetCustomCallback",
+    "signature": "unregisterMetCustomCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMetCustomInformationListener;)I",
+    "line": 12751,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterMeterIllStatusCallback",
+    "signature": "unregisterMeterIllStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMeterIllStatusInformationListener;)I",
+    "line": 12839,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterMicuBcmCallback",
+    "signature": "unregisterMicuBcmCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleMicuBcmInformationListener;)I",
+    "line": 12921,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterParkSens2Callback",
+    "signature": "unregisterParkSens2Callback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkSens2InformationListener;)I",
+    "line": 13009,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterParkSensCallback",
+    "signature": "unregisterParkSensCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkSensInformationListener;)I",
+    "line": 13091,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterParkingInformationCallback",
+    "signature": "unregisterParkingInformationCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleParkingInformationListener;)I",
+    "line": 13179,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterPassThresholdSpeedCallback",
+    "signature": "unregisterPassThresholdSpeedCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehiclePassThresholdSpeedInformationListener;)I",
+    "line": 13267,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterShiftParkPositionCallback",
+    "signature": "unregisterShiftParkPositionCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleShiftParkPositionListener;)I",
+    "line": 13366,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterShiftPositionCallback",
+    "signature": "unregisterShiftPositionCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleShiftPositionListener;)I",
+    "line": 13449,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterSpecificBcanStatusCallback",
+    "signature": "unregisterSpecificBcanStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSpecificBcanStatusListener;)I",
+    "line": 13532,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterSpecificFcanStatusCallback",
+    "signature": "unregisterSpecificFcanStatusCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSpecificFcanStatusListener;)I",
+    "line": 13620,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterSteeringAngleCallback",
+    "signature": "unregisterSteeringAngleCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleSteeringAngleListener;)I",
+    "line": 13677,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": [
+      [
+        "p1",
+        "callback"
+      ]
+    ]
+  },
+  {
+    "method": "unregisterVehicleCustomizeCallback",
+    "signature": "unregisterVehicleCustomizeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVehicleCustomizeInformationListener;)I",
+    "line": 13765,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterVinCodeCallback",
+    "signature": "unregisterVinCodeCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVinCodeInformationListener;)I",
+    "line": 13847,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterVinNoCallback",
+    "signature": "unregisterVinNoCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVinNoInformationListener;)I",
+    "line": 13929,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterVspPulseCallback",
+    "signature": "unregisterVspPulseCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleVspPulseInformationListener;)I",
+    "line": 14011,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  },
+  {
+    "method": "unregisterWelcomeStateCallback",
+    "signature": "unregisterWelcomeStateCallback(Lcom/mitsubishielectric/ada/appservice/vehicleinfomanager/IVehicleWelcomeStateListener;)I",
+    "line": 14093,
+    "kind": "Subscription removal",
+    "cpu_calls": [],
+    "params": []
+  }
+]

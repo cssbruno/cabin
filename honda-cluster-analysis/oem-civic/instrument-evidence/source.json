@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/tmp/honda-inspect/extracted/system/vendor/app/DaSettings.apk",
+    "sha256": "aaeecf05af8302d456e4d4966d94b014cf24a9e9bbcbbf20d0b55fb9146dc382"
+  },
+  {
+    "path": "/home/bruno/Documentos/ChatGPT/R/honda-cluster-analysis/vehicle_customize_config.xml",
+    "sha256": "b11b0611a85f13d2bbe224dfdd29195ce6dd31bf9eeb073cb1c251a65e081ef6"
+  },
+  {
+    "path": "/tmp/honda-inspect/DaSettings-resource-values.txt",
+    "sha256": "c594f476d2e620df4a18d64229c55199a6b6e53cd2ed6d887812f0f37b4a8d34"
+  }
+]

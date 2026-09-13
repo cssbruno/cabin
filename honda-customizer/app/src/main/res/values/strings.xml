@@ -1,0 +1,7 @@
+<resources>
+<string name="app_name">Honda Customizer</string>
+<string name="parked">I am parked — allow setting changes</string>
+<string name="catalog">Catalog</string>
+<string name="setting_count">%1$s • %2$d settings</string>
+<string name="unknown_count"> • %1$d unknown entries in report</string>
+</resources>

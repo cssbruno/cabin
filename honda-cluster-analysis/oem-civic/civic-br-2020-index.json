@@ -1,0 +1,2756 @@
+{
+  "scope": "OEM Civic vehicle/cluster/camera settings; Brazil 2020 manual cross-check. Not all generations or all infotainment features.",
+  "manual": "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2020-01/Civic%202020%20-%20Manual%20do%20propriet%C3%A1rio_20200128.pdf",
+  "retrieval": {
+    "url": "https://pdfcoffee.com/civic-2020-manual-do-proprietario-pdf-free.html",
+    "note": "Honda-authored manual transcription; official PDF exceeded browser size limit and shell retrieval returned HTTP 403."
+  },
+  "feature_count": 35,
+  "settings": [
+    {
+      "feature": "TPMS calibration",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "01/01",
+          "title": null,
+          "original_description": "TPMS Calibration",
+          "xml_line": 2,
+          "data_type": 2,
+          "api_to_encoded_values": {},
+          "option_labels_from_existing_catalog": {},
+          "unlabeled_api_values": [],
+          "range": [],
+          "routes": [
+            {
+              "source": 0,
+              "menu": 3
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Temperature correction",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/13",
+          "title": "Adjust Outside Temp. Display",
+          "original_description": "外気温表示補正(℃表示)",
+          "xml_line": 1804,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1,
+            "3": 2,
+            "4": 3,
+            "5": 4,
+            "6": 5,
+            "7": 6
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Adjust Outside Temp. Display",
+              "options": [
+                "-3℃",
+                "-2℃",
+                "-1℃",
+                "±0℃",
+                "+1℃",
+                "+2℃",
+                "+3℃"
+              ]
+            },
+            "pt": {
+              "title": "Ajustar tela de temperatura ext.",
+              "options": [
+                "-3℃",
+                "-2℃",
+                "-1℃",
+                "±0℃",
+                "+1℃",
+                "+2℃",
+                "+3℃"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            7
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 6
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "03/14",
+          "title": "Adjust Outside Temp. Display",
+          "original_description": "外気温表示補正(°F表示)",
+          "xml_line": 1831,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1,
+            "3": 2,
+            "4": 3,
+            "5": 4,
+            "6": 5,
+            "7": 6,
+            "8": 7,
+            "9": 8,
+            "10": 9,
+            "11": 10
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Adjust Outside Temp. Display",
+              "options": [
+                "-5℉",
+                "-4℉",
+                "-3℉",
+                "-2℉",
+                "-1℉",
+                "±0℉",
+                "+1℉",
+                "+2℉",
+                "+3℉",
+                "+4℉",
+                "+5℉"
+              ]
+            },
+            "pt": {
+              "title": "Ajustar tela de temperatura ext.",
+              "options": [
+                "-5℉",
+                "-4℉",
+                "-3℉",
+                "-2℉",
+                "-1℉",
+                "±0℉",
+                "+1℉",
+                "+2℉",
+                "+3℉",
+                "+4℉",
+                "+5℉"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            11
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 7
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Trip-A reset",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/18",
+          "title": "\"Trip A\" Reset Timing",
+          "original_description": "TRIP A リセット条件(非PHEV車)",
+          "xml_line": 1927,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 2,
+            "3": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "\"Trip A\" Reset Timing",
+              "options": [
+                "When Refueled",
+                "IGN Off",
+                "Manually Reset"
+              ]
+            },
+            "pt": {
+              "title": "Zerar o tempo da Viagem A",
+              "options": [
+                "Com abastecimento",
+                "Ignição desligada",
+                "Zerar manualmente"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 26
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Trip-B reset",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/19",
+          "title": "\"Trip B\" Reset Timing",
+          "original_description": "TRIP B リセット条件(非PHEV車)",
+          "xml_line": 1950,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 2,
+            "3": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "\"Trip B\" Reset Timing",
+              "options": [
+                "When Refueled",
+                "IGN Off",
+                "Manually Reset"
+              ]
+            },
+            "pt": {
+              "title": "Zerar o tempo da Viagem B",
+              "options": [
+                "Com abastecimento",
+                "Ignição desligada",
+                "Zerar manualmente"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 27
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Alarm volume",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/1D",
+          "title": "Adjust Alarm Volume",
+          "original_description": "ｱﾗｰﾑ音量調整",
+          "xml_line": 2044,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1,
+            "3": 2
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Adjust Alarm Volume",
+              "options": [
+                "High",
+                "Mid",
+                "Low"
+              ]
+            },
+            "pt": {
+              "title": "Ajustar Volume do Alarme",
+              "options": [
+                "Alta",
+                "Média",
+                "Baixa"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 11
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Economy illumination",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/28",
+          "title": "Fuel Efficiency Backlight",
+          "original_description": "アンビエントメーター照明色変化設定",
+          "xml_line": 2274,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Fuel Efficiency Backlight",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Retroiluminação de eficiência de combustível",
+              "options": [
+                "Ligada",
+                "Desligada"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 22
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Navigation prompts",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/38",
+          "title": "Turn By Turn Auto Display",
+          "original_description": "Turn by Turn表示（メータのみ）",
+          "xml_line": 2618,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Turn By Turn Auto Display",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Exibição curva-a-curva",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 32
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "03/3B",
+          "title": "Turn By Turn Auto Display",
+          "original_description": "Turn by Turn表示（HUD装備時）",
+          "xml_line": 2680,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Turn By Turn Auto Display",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Exibição curva-a-curva",
+              "options": [
+                "Ligada",
+                "Desligada"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 49
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "03/48",
+          "title": "Turn by Turn Display",
+          "original_description": "交差点案内表示",
+          "xml_line": 2936,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Turn by Turn Display",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Exibição Curva a Curva",
+              "options": [
+                "",
+                ""
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [],
+          "route_status": "no_xml_route"
+        }
+      ]
+    },
+    {
+      "feature": "Message notifications",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/40",
+          "title": "New Message Notifications",
+          "original_description": "新着（Mail/News/SNS）割り込み表示　有無切替",
+          "xml_line": 2772,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "New Message Notifications",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Notificação de nova mensagem",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 55
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Tachometer",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-74",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "03/5C",
+          "title": "Tachometer",
+          "original_description": "タコメータ表示",
+          "xml_line": 3371,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Tachometer",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Conta-giros",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 46
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Remote-start enable",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "05/04",
+          "title": "Remote Start System On/Off",
+          "original_description": "リモートスタート機能",
+          "xml_line": 3657,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Remote Start System On/Off",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Ligar/Desligar Sistema de Partida por Controle Remoto",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 48
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "05/14",
+          "title": "Remote Start System On/Off",
+          "original_description": "リモートスタート機能",
+          "xml_line": 3974,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Remote Start System On/Off",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Ligar/Desligar Sistema de Partida por Controle Remoto",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 144,
+              "menu": 12
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Passive-entry doors",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "05/15",
+          "title": "Door Unlock Mode",
+          "original_description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+          "xml_line": 3996,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Door Unlock Mode",
+              "options": [
+                "Driver Door Only",
+                "All Doors"
+              ]
+            },
+            "pt": {
+              "title": "Modo de destravamento das portas",
+              "options": [
+                "Apenas porta do motorista",
+                "Todas as portas"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 144,
+              "menu": 2
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "05/16",
+          "title": "Door Unlock Mode",
+          "original_description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+          "xml_line": 4018,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Door Unlock Mode",
+              "options": [
+                "Driver Door Only",
+                "All Doors"
+              ]
+            },
+            "pt": {
+              "title": "Modo de destravamento das portas",
+              "options": [
+                "Apenas porta do motorista",
+                "Todas as portas"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 41
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Keyless-beep volume",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "05/17",
+          "title": "Keyless Access Beep Volume",
+          "original_description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+          "xml_line": 4040,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Beep Volume",
+              "options": [
+                "High",
+                "Low"
+              ]
+            },
+            "pt": {
+              "title": "Volume do bipe do acesso keyless",
+              "options": [
+                "Alto",
+                "Baixo"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 144,
+              "menu": 6
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "05/18",
+          "title": "Keyless Access Beep Volume",
+          "original_description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+          "xml_line": 4062,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Beep Volume",
+              "options": [
+                "High",
+                "Low"
+              ]
+            },
+            "pt": {
+              "title": "Volume do bipe do acesso keyless",
+              "options": [
+                "Alto",
+                "Baixo"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 43
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Keyless flashes",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "05/19",
+          "title": "Keyless Access Light Flash",
+          "original_description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+          "xml_line": 4084,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Light Flash",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Localizar carro",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 144,
+              "menu": 7
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "05/1A",
+          "title": "Keyless Access Light Flash",
+          "original_description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+          "xml_line": 4106,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Light Flash",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Localizar carro",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 44
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Keyless beeps",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "05/1B",
+          "title": "Keyless Access Beep",
+          "original_description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+          "xml_line": 4128,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Beep",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Aviso sonoro do acesso keyless",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 144,
+              "menu": 8
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "05/1C",
+          "title": "Keyless Access Beep",
+          "original_description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+          "xml_line": 4150,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Access Beep",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Aviso sonoro do acesso keyless",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 45
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Interior-light delay",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "06/04",
+          "title": "Interior Light Dimming Time",
+          "original_description": "ｲﾝﾃﾘｱﾗｲﾄ点灯時間",
+          "xml_line": 4228,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 2,
+            "3": 3
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Interior Light Dimming Time",
+              "options": [
+                "15seconds",
+                "30seconds",
+                "60seconds"
+              ]
+            },
+            "pt": {
+              "title": "Tempo redução luz interior",
+              "options": [
+                "15Segundos",
+                "30Segundos",
+                "60Segundos"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 6
+            },
+            {
+              "source": 19,
+              "menu": 6
+            },
+            {
+              "source": 24,
+              "menu": 6
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Headlight delay",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "06/05",
+          "title": "Headlight Auto Off Timer",
+          "original_description": "ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間",
+          "xml_line": 4253,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 15,
+            "3": 30,
+            "4": 60
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Headlight Auto Off Timer",
+              "options": [
+                "0seconds",
+                "15seconds",
+                "30seconds",
+                "60seconds"
+              ]
+            },
+            "pt": {
+              "title": "Ajuste temporiz. farol desl.",
+              "options": [
+                "0Segundos",
+                "15Segundos",
+                "30Segundos",
+                "60Segundos"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            4
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 8
+            },
+            {
+              "source": 19,
+              "menu": 8
+            },
+            {
+              "source": 24,
+              "menu": 8
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/06",
+          "title": "Headlight Auto Off Timer",
+          "original_description": "ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間",
+          "xml_line": 4279,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 15,
+            "3": 30,
+            "4": 60
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Headlight Auto Off Timer",
+              "options": [
+                "0seconds",
+                "15seconds",
+                "30seconds",
+                "60seconds"
+              ]
+            },
+            "pt": {
+              "title": "Ajuste temporiz. farol desl.",
+              "options": [
+                "0Segundos",
+                "15Segundos",
+                "30Segundos",
+                "60Segundos"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            4
+          ],
+          "routes": [
+            {
+              "source": 17,
+              "menu": 4
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Headlight sensitivity",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "06/07",
+          "title": "Auto Light Sensitivity",
+          "original_description": "ｵｰﾄﾗｲﾄ感度設定",
+          "xml_line": 4303,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Light Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade da luz automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 20,
+              "menu": 4
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/08",
+          "title": "Auto Light Sensitivity",
+          "original_description": "ｵｰﾄﾗｲﾄ感度設定",
+          "xml_line": 4328,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Light Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade da luz automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 9
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/09",
+          "title": "Auto Light Sensitivity",
+          "original_description": "ﾗｲﾄ感度設定",
+          "xml_line": 4353,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Light Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade da luz automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 114,
+              "menu": 1
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/0B",
+          "title": "Auto Light Sensitivity",
+          "original_description": "ﾗｲﾄ感度設定",
+          "xml_line": 4403,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Light Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade da luz automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 116,
+              "menu": 1
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/13",
+          "title": "Auto Light Sensitivity",
+          "original_description": "ﾗｲﾄ感度設定",
+          "xml_line": 4567,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Light Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade da luz automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [],
+          "route_status": "no_xml_route"
+        }
+      ]
+    },
+    {
+      "feature": "Interior-illumination sensitivity",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "06/0A",
+          "title": "Auto Interior Illumination Sensitivity",
+          "original_description": "室内ｲﾙﾐ感度設定",
+          "xml_line": 4378,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Interior Illumination Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade de Iluminação Interior Automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 114,
+              "menu": 2
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/0C",
+          "title": "Auto Interior Illumination Sensitivity",
+          "original_description": "室内ｲﾙﾐ感度設定",
+          "xml_line": 4428,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Interior Illumination Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade de Iluminação Interior Automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 116,
+              "menu": 2
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/14",
+          "title": "Auto Interior Illumination Sensitivity",
+          "original_description": "室内ｲﾙﾐ感度設定",
+          "xml_line": 4590,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Interior Illumination Sensitivity",
+              "options": [
+                "Max",
+                "High",
+                "Mid",
+                "Low",
+                "Min"
+              ]
+            },
+            "pt": {
+              "title": "Sensibilidade de Iluminação Interior Automática",
+              "options": [
+                "Máx",
+                "Alta",
+                "Média",
+                "Baixa",
+                "Mín"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 25
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Wiper-linked headlights",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-75",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "06/15",
+          "title": "Auto Headlight ON With Wiper ON",
+          "original_description": "ﾜｲﾊﾟｰ連動",
+          "xml_line": 4615,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Headlight ON With Wiper ON",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 114,
+              "menu": 3
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "06/16",
+          "title": "Auto Headlight ON With Wiper ON",
+          "original_description": "ﾜｲﾊﾟｰ連動",
+          "xml_line": 4637,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Headlight ON With Wiper ON",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 116,
+              "menu": 3
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "08/22",
+          "title": "Auto Headlight On with Wiper On",
+          "original_description": "ﾜｲﾊﾟｰ連動",
+          "xml_line": 6591,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Headlight On with Wiper On",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+              "options": [
+                "",
+                ""
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 26
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Automatic locking",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/0F",
+          "title": "Auto Door Lock",
+          "original_description": "自動ﾄﾞｱﾛｯｸ連動機能(AT)",
+          "xml_line": 4955,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 2,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Lock",
+              "options": [
+                "With Vehicle Speed",
+                "Shift from P",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Trava automática de portas",
+              "options": [
+                "Com velocidade do veículo",
+                "C/ alav câmbio saindo pos P",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 1
+            },
+            {
+              "source": 19,
+              "menu": 1
+            },
+            {
+              "source": 24,
+              "menu": 1
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/10",
+          "title": "Auto Door Lock",
+          "original_description": "自動ﾄﾞｱﾛｯｸ連動機能(MT)",
+          "xml_line": 4980,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Lock",
+              "options": [
+                "With Vehicle Speed",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Trava automática de portas",
+              "options": [
+                "Com velocidade do veículo",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 17
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/11",
+          "title": "Auto Door Lock",
+          "original_description": "自動ﾄﾞｱﾛｯｸ連動機能(MT)",
+          "xml_line": 5002,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Lock",
+              "options": [
+                "With Vehicle Speed",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Trava automática de portas",
+              "options": [
+                "Com velocidade do veículo",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 19
+            },
+            {
+              "source": 19,
+              "menu": 19
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Automatic unlocking",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/12",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/1モーション)",
+          "xml_line": 5025,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 4,
+            "2": 6,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "Shift To P",
+                "IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Câmbio na posição P",
+                "Ignição desligada",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 2
+            },
+            {
+              "source": 19,
+              "menu": 2
+            },
+            {
+              "source": 24,
+              "menu": 2
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/13",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)",
+          "xml_line": 5050,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 6,
+            "2": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Ignição desligada",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 18
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/14",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)",
+          "xml_line": 5072,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 6,
+            "2": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Ignição desligada",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 20
+            },
+            {
+              "source": 19,
+              "menu": 20
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/15",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)",
+          "xml_line": 5095,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 3,
+            "2": 4,
+            "3": 5,
+            "4": 6,
+            "5": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "Driver Door with Shift to P",
+                "All Doors with Shift to P",
+                "Driver Door with IGN Off",
+                "All Doors with IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Porta motorist câmbio pos P",
+                "Todas portas câmbio pos P",
+                "Porta motorista c/ ignição desl",
+                "Todas portas c/ ignição desl",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 19
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/16",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)",
+          "xml_line": 5120,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 3,
+            "2": 4,
+            "3": 5,
+            "4": 6,
+            "5": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "Driver Door with Shift to P",
+                "All Doors with Shift to P",
+                "Driver Door with IGN Off",
+                "All Doors with IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Porta motorist câmbio pos P",
+                "Todas portas câmbio pos P",
+                "Porta motorista c/ ignição desl",
+                "Todas portas c/ ignição desl",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            5
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 21
+            },
+            {
+              "source": 19,
+              "menu": 21
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/17",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)",
+          "xml_line": 5146,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 6,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "Driver Door with IGN Off",
+                "All Doors with IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Porta motorista c/ ignição desl",
+                "Todas portas c/ ignição desl",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 20
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/18",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)",
+          "xml_line": 5169,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 5,
+            "2": 6,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "Driver Door with IGN Off",
+                "All Doors with IGN Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Porta motorista c/ ignição desl",
+                "Todas portas c/ ignição desl",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 22
+            },
+            {
+              "source": 19,
+              "menu": 22
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/19",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)",
+          "xml_line": 5193,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 4,
+            "3": 6,
+            "4": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "All Doors When Driver’s Door Opens",
+                "All Doors When Shifted to Park",
+                "All Doors When Ignition Switched Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Todas as portas ao abrir a porta do motorista",
+                "Todas as portas com o câmbio na pos P",
+                "Todas as portas ao desligar a ignição",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            4
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 23
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/1A",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)",
+          "xml_line": 5217,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 4,
+            "3": 6,
+            "4": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "All Doors When Driver’s Door Opens",
+                "All Doors When Shifted to Park",
+                "All Doors When Ignition Switched Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Todas as portas ao abrir a porta do motorista",
+                "Todas as portas com o câmbio na pos P",
+                "Todas as portas ao desligar a ignição",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            4
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 25
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/1B",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)",
+          "xml_line": 5241,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 6,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "All Doors When Driver’s Door Opens",
+                "All Doors When Ignition Switched Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Todas as portas ao abrir a porta do motorista",
+                "Todas as portas ao desligar a ignição",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 24
+            }
+          ],
+          "route_status": "metadata_present"
+        },
+        {
+          "identity": "07/1C",
+          "title": "Auto Door Unlock",
+          "original_description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)",
+          "xml_line": 5264,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 6,
+            "3": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Door Unlock",
+              "options": [
+                "All Doors When Driver’s Door Opens",
+                "All Doors When Ignition Switched Off",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Destravam autom de portas",
+              "options": [
+                "Todas as portas ao abrir a porta do motorista",
+                "Todas as portas ao desligar a ignição",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 26
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Remote-unlock doors",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/1D",
+          "title": "Key and Remote Unlock Mode",
+          "original_description": "ﾄﾞｱﾛｯｸ動作",
+          "xml_line": 5287,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 1,
+            "2": 0
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Key and Remote Unlock Mode",
+              "options": [
+                "Driver Door",
+                "All Doors"
+              ]
+            },
+            "pt": {
+              "title": "Modo destravamento via chave e remoto",
+              "options": [
+                "Porta do motorista",
+                "Todas as portas"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 3
+            },
+            {
+              "source": 19,
+              "menu": 3
+            },
+            {
+              "source": 24,
+              "menu": 3
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Lock acknowledgement",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/32",
+          "title": "Keyless Lock Answer Back",
+          "original_description": "ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ",
+          "xml_line": 5731,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Keyless Lock Answer Back",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Reconhecimento de travas via keyless",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 4
+            },
+            {
+              "source": 19,
+              "menu": 4
+            },
+            {
+              "source": 24,
+              "menu": 4
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Relock delay",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/33",
+          "title": "Security Relock Timer",
+          "original_description": "ｷｰﾚｽﾘﾛｯｸ時間",
+          "xml_line": 5755,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 3,
+            "2": 2,
+            "3": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Security Relock Timer",
+              "options": [
+                "90seconds",
+                "60seconds",
+                "30seconds"
+              ]
+            },
+            "pt": {
+              "title": "Tempor retravam segurança",
+              "options": [
+                "90s",
+                "60s",
+                "30s"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 16,
+              "menu": 5
+            },
+            {
+              "source": 19,
+              "menu": 5
+            },
+            {
+              "source": 24,
+              "menu": 5
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Walk-away locking",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/30",
+          "title": "Walk Away Auto Lock",
+          "original_description": "降車時ドアオートロック機能",
+          "xml_line": 5691,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Walk Away Auto Lock",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Travamento Automático de Afastamento",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [],
+          "route_status": "no_xml_route"
+        },
+        {
+          "identity": "07/31",
+          "title": "Walk Away Auto Lock",
+          "original_description": "降車時ドアオートロック機能",
+          "xml_line": 5711,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Walk Away Auto Lock",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Travamento Automático de Afastamento",
+              "options": [
+                "Ligado",
+                "Desligado"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [],
+          "route_status": "no_xml_route"
+        },
+        {
+          "identity": "07/36",
+          "title": "Walk Away Auto Lock",
+          "original_description": "WAL",
+          "xml_line": 5825,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Walk Away Auto Lock",
+              "options": [
+                "On",
+                "Off"
+              ]
+            },
+            "pt": {
+              "title": "Travamento Automático de Afastamento",
+              "options": [
+                "",
+                ""
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 24,
+              "menu": 49
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Mirror folding",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Semantic match to OEM catalog only; exact Civic variant binding unverified",
+      "oem_candidates": [
+        {
+          "identity": "07/37",
+          "title": "Auto Folding Door Mirror",
+          "original_description": "電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動",
+          "xml_line": 5847,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1
+          },
+          "option_labels_from_existing_catalog": {
+            "(default)": {
+              "title": "Auto Folding Door Mirror",
+              "options": [
+                "Auto Fold With Keyless",
+                "Manual Only"
+              ]
+            },
+            "pt": {
+              "title": "Retrovisor lateral com recolhimento automático",
+              "options": [
+                "Recolhimento automático com função sem chave",
+                "Somente manual"
+              ]
+            }
+          },
+          "unlabeled_api_values": [],
+          "range": [
+            1,
+            2
+          ],
+          "routes": [
+            {
+              "source": 48,
+              "menu": 7
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ]
+    },
+    {
+      "feature": "Maintenance reset",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-76",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "Cluster content/layout",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-11–10-14, 10-71",
+      "candidate_binding_status": "OEM separate preset selector explicitly uses 03/5B; add/delete/order use ExternalDisplay CustomizeData. Brazil-2020 runtime compatibility unverified.",
+      "oem_candidates": [
+        {
+          "identity": "03/5B",
+          "title": null,
+          "original_description": "メータ表示コンフィグレーション設定",
+          "xml_line": 3348,
+          "data_type": 0,
+          "api_to_encoded_values": {
+            "1": 0,
+            "2": 1,
+            "3": 2
+          },
+          "option_labels_from_existing_catalog": {},
+          "unlabeled_api_values": [
+            1,
+            2,
+            3
+          ],
+          "range": [
+            1,
+            3
+          ],
+          "routes": [
+            {
+              "source": 80,
+              "menu": 21
+            }
+          ],
+          "route_status": "metadata_present"
+        }
+      ],
+      "code_report": "instrument-panel-editor.md"
+    },
+    {
+      "feature": "Rear-camera fixed guides",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "Rear-camera dynamic guides",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "LaneWatch activation",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "LaneWatch persistence",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "LaneWatch guides",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "Camera defaults",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-68",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    },
+    {
+      "feature": "Head-unit language",
+      "applicability_evidence": "Honda Civic 2020 Brazil owner manual; equipment-dependent, not every trim",
+      "manual_pages": "10-72",
+      "candidate_binding_status": "Separate OEM app/service path; see audit reports",
+      "oem_candidates": []
+    }
+  ]
+}

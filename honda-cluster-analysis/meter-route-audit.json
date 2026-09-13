@@ -1,0 +1,2443 @@
+[
+  {
+    "category": "0x03",
+    "id": "0x01",
+    "outer_item_id": "0x003D",
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ１機能",
+    "xml_line": 1403,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x01"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x00"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x02",
+    "outer_item_id": "0x003E",
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ１車速設定値",
+    "xml_line": 1425,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x01"
+      }
+    ],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x03",
+    "outer_item_id": "0x003F",
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ２機能",
+    "xml_line": 1444,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x01"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x00"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x04",
+    "outer_item_id": "0x0040",
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ２車速設定値",
+    "xml_line": 1466,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x01"
+      }
+    ],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x05",
+    "outer_item_id": "0x0041",
+    "description": "ACC設定車速表示単位",
+    "xml_line": 1485,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x06",
+    "outer_item_id": "0x0042",
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝｲﾙﾐｺﾝﾄﾛｰﾙ",
+    "xml_line": 1505,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x07",
+    "outer_item_id": "0x0043",
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝｼｽﾃﾑ起動設定",
+    "xml_line": 1527,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x08",
+    "outer_item_id": "0x0044",
+    "description": "HUD表示ｲﾙﾐｺﾝﾄﾛｰﾙ",
+    "xml_line": 1547,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x09",
+    "outer_item_id": "0x0045",
+    "description": "言語設定 (US)",
+    "xml_line": 1564,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x02"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0A",
+    "outer_item_id": "0x0046",
+    "description": "言語設定 (US)",
+    "xml_line": 1587,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0B",
+    "outer_item_id": "0x0047",
+    "description": "ﾒｰﾀｰ表示言語切り替え",
+    "xml_line": 1608,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0C",
+    "outer_item_id": "0x0048",
+    "description": "言語設定 (中国)",
+    "xml_line": 1622,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x03"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0D",
+    "outer_item_id": "0x0049",
+    "description": "言語設定 (EU) 6ヶ国語",
+    "xml_line": 1644,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x04"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0xFF"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0E",
+    "outer_item_id": "0x004A",
+    "description": "言語設定（南米ポルトガル語）",
+    "xml_line": 1671,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x23"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x0F",
+    "outer_item_id": "0x004B",
+    "description": "言語設定 (EU) 12ヶ国語",
+    "xml_line": 1693,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1F"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x09",
+        "encoded_value": "0x08"
+      },
+      {
+        "api_value": "0x0A",
+        "encoded_value": "0x09"
+      },
+      {
+        "api_value": "0x0B",
+        "encoded_value": "0x0A"
+      },
+      {
+        "api_value": "0x0C",
+        "encoded_value": "0x0B"
+      },
+      {
+        "api_value": "0x0D",
+        "encoded_value": "0xFF"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x10",
+    "outer_item_id": "0x004C",
+    "description": "言語設定 (EU) 13ヶ国語",
+    "xml_line": 1726,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x24"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x09",
+        "encoded_value": "0x08"
+      },
+      {
+        "api_value": "0x0A",
+        "encoded_value": "0x09"
+      },
+      {
+        "api_value": "0x0B",
+        "encoded_value": "0x0A"
+      },
+      {
+        "api_value": "0x0C",
+        "encoded_value": "0x0B"
+      },
+      {
+        "api_value": "0x0D",
+        "encoded_value": "0x0C"
+      },
+      {
+        "api_value": "0x0E",
+        "encoded_value": "0xFF"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x11",
+    "outer_item_id": "0x004D",
+    "description": "言語設定 (ロシア)",
+    "xml_line": 1760,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x22"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x12",
+    "outer_item_id": "0x004E",
+    "description": "ﾜｰﾆﾝｸﾞﾒｯｾｰｼﾞ表示",
+    "xml_line": 1782,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x05"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x13",
+    "outer_item_id": "0x004F",
+    "description": "外気温表示補正(℃表示)",
+    "xml_line": 1804,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x06"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x14",
+    "outer_item_id": "0x0050",
+    "description": "外気温表示補正(°F表示)",
+    "xml_line": 1831,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x07"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x09",
+        "encoded_value": "0x08"
+      },
+      {
+        "api_value": "0x0A",
+        "encoded_value": "0x09"
+      },
+      {
+        "api_value": "0x0B",
+        "encoded_value": "0x0A"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x15",
+    "outer_item_id": "0x0051",
+    "description": "TRIP A & 平均燃費Aの給油連動リセット",
+    "xml_line": 1862,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x08"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x16",
+    "outer_item_id": "0x0052",
+    "description": "ﾄﾘｯﾌﾟA&平均電費Aの充電連動ﾘｾｯﾄ",
+    "xml_line": 1884,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x17",
+    "outer_item_id": "0x0053",
+    "description": "経過時間のﾘｾｯﾄ条件切り替え",
+    "xml_line": 1904,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x09"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x18",
+    "outer_item_id": "0x0054",
+    "description": "TRIP A リセット条件(非PHEV車)",
+    "xml_line": 1927,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1A"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x19",
+    "outer_item_id": "0x0055",
+    "description": "TRIP B リセット条件(非PHEV車)",
+    "xml_line": 1950,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1B"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1A",
+    "outer_item_id": "0x0056",
+    "description": "TRIP A リセット条件(PHEV車)",
+    "xml_line": 1973,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x17"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1B",
+    "outer_item_id": "0x0057",
+    "description": "TRIP B リセット条件(PHEV車)",
+    "xml_line": 1997,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x18"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1C",
+    "outer_item_id": "0x0058",
+    "description": "ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択",
+    "xml_line": 2021,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1D",
+    "outer_item_id": "0x0059",
+    "description": "ｱﾗｰﾑ音量調整",
+    "xml_line": 2044,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x0B"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1E",
+    "outer_item_id": "0x005A",
+    "description": "ｺﾝﾊﾟｽｿﾞｰﾝ設定",
+    "xml_line": 2067,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x1F",
+    "outer_item_id": "0x005B",
+    "description": "WELCOMEｽｸﾛｰﾙ時間",
+    "xml_line": 2087,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x20",
+    "outer_item_id": "0x005C",
+    "description": "ｳｪﾙｶﾑ照明の初期点灯輝度設定",
+    "xml_line": 2108,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x21",
+    "outer_item_id": "0x005D",
+    "description": "ｳｪﾙｶﾑ照明の初期点灯輝度設定",
+    "xml_line": 2128,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x22",
+    "outer_item_id": "0x005E",
+    "description": "ｳｪﾙｶﾑ照明設定",
+    "xml_line": 2145,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x23",
+    "outer_item_id": "0x005F",
+    "description": "REVインジケータ設定",
+    "xml_line": 2165,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x11"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x24",
+    "outer_item_id": "0x0060",
+    "description": "ECOインジケータ設定",
+    "xml_line": 2187,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x12"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x25",
+    "outer_item_id": "0x0061",
+    "description": "ﾃﾞｼﾞﾀﾙｽﾋﾟｰﾄﾞﾒｰﾀの表示単位系切り替え",
+    "xml_line": 2209,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x26",
+    "outer_item_id": "0x0062",
+    "description": "パワーメータの表示単位切替",
+    "xml_line": 2230,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x14"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x27",
+    "outer_item_id": "0x0063",
+    "description": "ストップウオッチ機能の設定",
+    "xml_line": 2253,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x28",
+    "outer_item_id": "0x0064",
+    "description": "アンビエントメーター照明色変化設定",
+    "xml_line": 2274,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x16"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x29",
+    "outer_item_id": "0x0065",
+    "description": "アンビエントメーター照明色設定（ホワイト色なし）",
+    "xml_line": 2296,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x32"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x07"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2A",
+    "outer_item_id": "0x0066",
+    "description": "アンビエントメーター照明色設定（ホワイト色あり）",
+    "xml_line": 2323,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x33"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2B",
+    "outer_item_id": "0x0067",
+    "description": "CLOCK機能",
+    "xml_line": 2351,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2C",
+    "outer_item_id": "0x0068",
+    "description": "CLOCK機能",
+    "xml_line": 2365,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2D",
+    "outer_item_id": "0x0069",
+    "description": "タイマー充電機能",
+    "xml_line": 2386,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2E",
+    "outer_item_id": "0x006A",
+    "description": "タイマー充電モード",
+    "xml_line": 2406,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x2F",
+    "outer_item_id": "0x006B",
+    "description": "タイマー充電開始時刻（時間）",
+    "xml_line": 2426,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x0C"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x17"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x30",
+    "outer_item_id": "0x006C",
+    "description": "タイマー充電開始時刻（分）",
+    "xml_line": 2447,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x1E"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x32"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x31",
+    "outer_item_id": "0x006D",
+    "description": "タイマー充電終了時刻（時間）",
+    "xml_line": 2468,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x0C"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x17"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x32",
+    "outer_item_id": "0x006E",
+    "description": "タイマー充電終了時刻（分）",
+    "xml_line": 2489,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x1E"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x32"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x33",
+    "outer_item_id": "0x006F",
+    "description": "SILインジケータ表示設定",
+    "xml_line": 2510,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x34",
+    "outer_item_id": "0x0070",
+    "description": "ECOＮモード保持",
+    "xml_line": 2530,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x19"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x35",
+    "outer_item_id": "0x0071",
+    "description": "スマートスタートのガイダンス表示",
+    "xml_line": 2552,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1C"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x36",
+    "outer_item_id": "0x0072",
+    "description": "車速表示単位",
+    "xml_line": 2574,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1D"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x37",
+    "outer_item_id": "0x0073",
+    "description": "アイドルストップガイダンス表示設定",
+    "xml_line": 2596,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x1E"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x38",
+    "outer_item_id": "0x0074",
+    "description": "Turn by Turn表示（メータのみ）",
+    "xml_line": 2618,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x20"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x39",
+    "outer_item_id": "0x0075",
+    "description": "HUW 機能 ON/OFF",
+    "xml_line": 2640,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3A",
+    "outer_item_id": "0x0076",
+    "description": "HUD デジタルスピードメーターの表示単位切替",
+    "xml_line": 2660,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3B",
+    "outer_item_id": "0x0077",
+    "description": "Turn by Turn表示（HUD装備時）",
+    "xml_line": 2680,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x31"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3C",
+    "outer_item_id": "0x0078",
+    "description": "言語設定 (アラビア語)",
+    "xml_line": 2702,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x21"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3D",
+    "outer_item_id": "0x0079",
+    "description": "コンテンツ切替",
+    "xml_line": 2724,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3E",
+    "outer_item_id": "0x007A",
+    "description": "フェイバリット切替",
+    "xml_line": 2738,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x3F",
+    "outer_item_id": "0x007B",
+    "description": "コンテンツ切替音　有無切替",
+    "xml_line": 2752,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x40",
+    "outer_item_id": "0x007C",
+    "description": "新着（Mail/News/SNS）割り込み表示　有無切替",
+    "xml_line": 2772,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x37"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x41",
+    "outer_item_id": "0x007D",
+    "description": "壁紙選択",
+    "xml_line": 2794,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x42",
+    "outer_item_id": "0x007E",
+    "description": "画像読込",
+    "xml_line": 2816,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x43",
+    "outer_item_id": "0x007F",
+    "description": "壁紙削除",
+    "xml_line": 2830,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x44",
+    "outer_item_id": "0x0080",
+    "description": "ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択",
+    "xml_line": 2851,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x45",
+    "outer_item_id": "0x0081",
+    "description": "オープニングアニメーション",
+    "xml_line": 2874,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x46",
+    "outer_item_id": "0x0082",
+    "description": "背景色",
+    "xml_line": 2894,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x47",
+    "outer_item_id": "0x0083",
+    "description": "スマートスタートのガイダンス表示",
+    "xml_line": 2916,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x48",
+    "outer_item_id": "0x0084",
+    "description": "交差点案内表示",
+    "xml_line": 2936,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x49",
+    "outer_item_id": "0x0085",
+    "description": "アイドルストップガイダンス表示設定",
+    "xml_line": 2956,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4A",
+    "outer_item_id": "0x0086",
+    "description": "ワーニングメッセージ",
+    "xml_line": 2976,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4B",
+    "outer_item_id": "0x0087",
+    "description": "TSR常駐表示",
+    "xml_line": 2996,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4C",
+    "outer_item_id": "0x0088",
+    "description": "DISPLY表示言語切り替え",
+    "xml_line": 3016,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4D",
+    "outer_item_id": "0x0089",
+    "description": "DISPLY表示言語切り替え",
+    "xml_line": 3037,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4E",
+    "outer_item_id": "0x008A",
+    "description": "DISPLY表示言語切り替え",
+    "xml_line": 3057,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x4F",
+    "outer_item_id": "0x008B",
+    "description": "DISPLY表示言語切り替え",
+    "xml_line": 3077,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x09",
+        "encoded_value": "0x08"
+      },
+      {
+        "api_value": "0x0A",
+        "encoded_value": "0x09"
+      },
+      {
+        "api_value": "0x0B",
+        "encoded_value": "0x0A"
+      },
+      {
+        "api_value": "0x0C",
+        "encoded_value": "0x0B"
+      },
+      {
+        "api_value": "0x0D",
+        "encoded_value": "0x0C"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x50",
+    "outer_item_id": "0x0104",
+    "description": "default",
+    "xml_line": 3108,
+    "routes": [],
+    "values": [],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x51",
+    "outer_item_id": "0x0105",
+    "description": "非パドル操作時ギヤ段常時表示",
+    "xml_line": 3122,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x0A"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x52",
+    "outer_item_id": "0x0106",
+    "description": "MTギヤ段表示",
+    "xml_line": 3144,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x36"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x53",
+    "outer_item_id": "0x0107",
+    "description": "ターン音色",
+    "xml_line": 3166,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x0D"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x54",
+    "outer_item_id": "0x0107",
+    "description": "1周期吹鳴タイプリバースアラーム",
+    "xml_line": 3189,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x0C"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x55",
+    "outer_item_id": "0x0107",
+    "description": "タイヤ角度モニター",
+    "xml_line": 3211,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x35"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x56",
+    "outer_item_id": "0x0107",
+    "description": "距離表示単位",
+    "xml_line": 3233,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x0E"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x57",
+    "outer_item_id": "0x0108",
+    "description": "車速・距離表示単位",
+    "xml_line": 3255,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x2F"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x58",
+    "outer_item_id": "0x0109",
+    "description": "室内照明自動減光設定",
+    "xml_line": 3277,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x26"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x59",
+    "outer_item_id": "0x010A",
+    "description": "IDS設定",
+    "xml_line": 3303,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5A",
+    "outer_item_id": "0x010A",
+    "description": "Trip Computerの表示単位切替",
+    "xml_line": 3325,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x13"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5B",
+    "outer_item_id": "0x010A",
+    "description": "メータ表示コンフィグレーション設定",
+    "xml_line": 3348,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x15"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5C",
+    "outer_item_id": "0x010A",
+    "description": "タコメータ表示",
+    "xml_line": 3371,
+    "routes": [
+      {
+        "source": "0x50",
+        "menu": "0x2E"
+      }
+    ],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5D",
+    "outer_item_id": "0x0104",
+    "description": "タイマー充電開始時刻",
+    "xml_line": 3393,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5E",
+    "outer_item_id": "0x0104",
+    "description": "タイマー充電終了時刻",
+    "xml_line": 3413,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      }
+    ],
+    "live_support_verified": false
+  },
+  {
+    "category": "0x03",
+    "id": "0x5F",
+    "outer_item_id": "0x0104",
+    "description": "DISPLY表示言語切り替え",
+    "xml_line": 3433,
+    "routes": [],
+    "values": [
+      {
+        "api_value": "0x01",
+        "encoded_value": "0x00"
+      },
+      {
+        "api_value": "0x02",
+        "encoded_value": "0x01"
+      },
+      {
+        "api_value": "0x03",
+        "encoded_value": "0x02"
+      },
+      {
+        "api_value": "0x04",
+        "encoded_value": "0x03"
+      },
+      {
+        "api_value": "0x05",
+        "encoded_value": "0x04"
+      },
+      {
+        "api_value": "0x06",
+        "encoded_value": "0x05"
+      },
+      {
+        "api_value": "0x07",
+        "encoded_value": "0x06"
+      },
+      {
+        "api_value": "0x08",
+        "encoded_value": "0x07"
+      },
+      {
+        "api_value": "0x09",
+        "encoded_value": "0x08"
+      },
+      {
+        "api_value": "0x0A",
+        "encoded_value": "0x09"
+      },
+      {
+        "api_value": "0x0B",
+        "encoded_value": "0x0A"
+      },
+      {
+        "api_value": "0x0C",
+        "encoded_value": "0x0B"
+      },
+      {
+        "api_value": "0x0D",
+        "encoded_value": "0x0C"
+      },
+      {
+        "api_value": "0x0E",
+        "encoded_value": "0x0D"
+      },
+      {
+        "api_value": "0x0F",
+        "encoded_value": "0x0E"
+      },
+      {
+        "api_value": "0x10",
+        "encoded_value": "0x0F"
+      },
+      {
+        "api_value": "0x11",
+        "encoded_value": "0x10"
+      },
+      {
+        "api_value": "0x12",
+        "encoded_value": "0x11"
+      },
+      {
+        "api_value": "0x13",
+        "encoded_value": "0x12"
+      },
+      {
+        "api_value": "0x14",
+        "encoded_value": "0x13"
+      }
+    ],
+    "live_support_verified": false
+  }
+]

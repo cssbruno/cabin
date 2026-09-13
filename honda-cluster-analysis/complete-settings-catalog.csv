@@ -1,0 +1,356 @@
+﻿category/id,title,title_pt,original_description,xml_line,data_type,api_to_encoded_values,routes,status
+01/01,,,TPMS Calibration,2,2,{},"[{""source"": 0, ""menu"": 3}]",metadata_present
+02/01,,,ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定,18,0,"{""1"": 1, ""2"": 2}",[],no_xml_route
+02/02,,,CMBS警報ﾀｲﾐﾝｸﾞ,38,0,"{""1"": 1, ""2"": 2}",[],no_xml_route
+02/03,Forward Collision Warning Distance,Distância de Alerta de Colisão Frontal,CMBS警報ﾀｲﾐﾝｸﾞ,58,0,"{""1"": 3, ""2"": 1, ""3"": 2}","[{""source"": 0, ""menu"": 9}]",metadata_present
+02/04,Forward Collision Warning Distance,Distância de Alerta de Colisão Frontal,FCW警報ﾀｲﾐﾝｸﾞ,81,0,"{""1"": 3, ""2"": 1, ""3"": 2, ""4"": 4}","[{""source"": 0, ""menu"": 8}]",metadata_present
+02/05,Forward Collision Warning Distance,Distância de Alerta de Colisão Frontal,FCW警報ﾀｲﾐﾝｸﾞ,105,0,"{""1"": 2, ""2"": 0, ""3"": 1, ""4"": 3}",[],no_xml_route
+02/06,Traffic Sign Recognition Function,Função de reconhec. de sinais de trânsito,TSR常駐表示ON/OFF,127,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 52}]",metadata_present
+02/07,HSS ON/OFF Setting,,HSS ON/OFF設定,149,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+02/08,HSS function recovery condition (Distance driven),,HSS機能復帰条件（走行距離）,169,0,"{""1"": 7, ""2"": 6, ""3"": 5, ""4"": 4, ""5"": 3, ""6"": 2, ""7"": 1, ""8"": 0}",[],no_xml_route
+02/09,HSS function recovery condition (passing SW fixed time),,HSS機能復帰条件（パッシングSW固定時間）,195,0,"{""1"": 7, ""2"": 6, ""3"": 5, ""4"": 4, ""5"": 3, ""6"": 2, ""7"": 1, ""8"": 0}",[],no_xml_route
+02/0A,ACC Forward Vehicle Detect Beep,Aviso Sonoro de Detecção de Veículo Frontal de ACC,先行車検知音,221,0,"{""1"": 1, ""2"": 2}","[{""source"": 0, ""menu"": 1}]",metadata_present
+02/0B,Reactive Force Pedal,Pedal de força reativa,リアクティブフォースペダル設定,243,0,"{""1"": 1, ""2"": 0, ""3"": 2}",[],no_xml_route
+02/0C,IDA inter-vehicle control: inter-vehicle distance,,リアクティブフォースペダル 車間維持支援 車間距離設定,264,0,"{""1"": 2, ""2"": 1, ""3"": 0}",[],no_xml_route
+02/0D,Curve entry support speed setting,,リアクティブフォースペダルカーブ進入支援速度設定,285,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+02/0E,IDA inter-vehicle maintenance functions ON/OFF,,リアクティブフォースペダル車間制御ON/OFF,306,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+02/0F,IDA curve entry function ON/OFF,,リアクティブフォースペダル カーブ進入機能ON/OFF,326,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+02/10,,,IDA 規制速度機能ON/OFF,346,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+02/11,GV automatic display when going from reverse to forward,,ﾊﾞｯｸ→前進時のGV自動表示,366,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/12,Camera video switching from reverse to forward,,後退から前進時カメラ映像切換え,386,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/13,Screen display when MVC is turned on after IG ON,,IGｵﾝ後、MVC起動時の表示画面,406,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/14,Forward view screen after the camera system is turned on,,カメラシステム起動後の前方画面,426,0,"{""1"": 1, ""2"": 2, ""3"": 3, ""4"": 4}",[],no_xml_route
+02/15,Side view screen after the camera system is turned on,,カメラシステム起動後の側方画面,448,0,"{""1"": 1, ""2"": 2, ""3"": 3}",[],no_xml_route
+02/16,Rear view screen after the camera system is turned on,,カメラシステム起動後の後方画面,469,0,"{""1"": 1, ""2"": 2, ""3"": 4, ""4"": 5}",[],no_xml_route
+02/17,Automatic camera display when slowing down,,減速時のカメラ自動表示,491,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/18,Ground view display when door mirrors are stored,,ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示,511,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/19,Automatic deletion of parking guidelines,,駐車ガイド線自動消去,531,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/1A,Side view display speed restriction,,サイドビュー表示車速制限,551,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/1B,Display screen for rear view full screen,,リアビュー全画面での表示画面,571,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/1C,Ground view display when door mirrors are stored,,ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示,591,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/1D,"Set Parking Course
+(Right Parking. Start Point.X)","Configurar rota de
+estacionamento (Est. à
+direita. Ponto de início.X)",Set Parking course(Right Parking. Start Point.X),611,1,{},[],no_xml_route
+02/1E,"Set Parking Course
+(Right Parking. Start Point.Y)","Configurar rota de
+estacionamento (Est. à
+direita. Ponto de início.Y)",Set Parking course(Right Parking. Start Point.Y),628,1,{},[],no_xml_route
+02/1F,"Set Parking Course
+(Right Parking. Start Point.THETA)","Configurar rota de estacionamento
+(Est. à direita. Ponto de
+início.TETA)",Set Parking course(Right Parking. Start Point.THETA),645,1,{},[],no_xml_route
+02/20,"Set Parking Course
+(Left Parking. Start Point.X)","Configurar rota de
+estacionamento (Est. à
+esquerda. Ponto de início.X)",Set Parking course(Left Parking. Start Point.X),662,1,{},[],no_xml_route
+02/21,"Set Parking Course
+(Left Parking. Start Point.Y)","Configurar rota de
+estacionamento (Est. à
+esquerda. Ponto de início.Y)",Set Parking course(Left Parking. Start Point.Y),679,1,{},[],no_xml_route
+02/22,"Set Parking Course
+(Left Parking. Start Point.THETA)","Configurar rota de estacionamento
+(Est. à esquerda. Ponto de
+início.TETA)",Set Parking course(Left Parking. Start Point.THETA),696,1,{},[],no_xml_route
+02/23,"Set Parking Course
+(Parallel Right Parking. Start Point.X)","Configurar rota de estacionamento (Est.
+paralelo à direita. Ponto de início.X)",Set Parking course(Parallel Right Parking. Start Point.X),713,1,{},[],no_xml_route
+02/24,"Set Parking Course
+(Parallel Right Parking. Start Point.Y)","Configurar rota de estacionamento (Est.
+paralelo à direita. Ponto de início.Y)",Set Parking course(Parallel Right Parking. Start Point.Y),730,1,{},[],no_xml_route
+02/25,"Set Parking Course
+(Parallel Right Parking. Start Point.THETA)","Configurar rota de estacionamento (Est.
+paralelo à direita. Ponto de início.TETA)",Set Parking course(Parallel Right Parking. Start Point.THETA),747,1,{},[],no_xml_route
+02/26,"Set Parking Course
+(Parallel Left Parking. Start Point.X)","Configurar rota de estacionamento
+(Est. paralelo à esquerda. Ponto de
+início.X)",Set Parking course(Parallel Left Parking. Start Point.X),764,1,{},[],no_xml_route
+02/27,"Set Parking Course
+(Parallel Left Parking. Start Point.Y)","Configurar rota de estacionamento
+(Est. paralelo à esquerda. Ponto de
+início.Y)",Set Parking course(Parallel Left Parking. Start Point.Y),781,1,{},[],no_xml_route
+02/28,"Set Parking Course
+(Parallel Left Parking. Start Point.THETA)","Configurar rota de estacionamento (Est.
+paralelo à esquerda. Ponto de
+início.TETA)",Set Parking course(Parallel Left Parking. Start Point.THETA),798,1,{},[],no_xml_route
+02/29,Clear Parking Course,Limpar rota de estacionamento,Clear Parking course,815,0,"{""1"": 16, ""2"": 32, ""3"": 48, ""4"": 64}",[],no_xml_route
+02/2A,Night Vision: Guideline Display,,ﾅｲﾄﾋﾞｼﾞｮﾝ ｶﾞｲﾄﾞ線表示,837,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/2B,Night Vision: Automatic Video Switching,,ﾅｲﾄﾋﾞｼﾞｮﾝ 自動映像切替え,857,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/2C,Night Vision: Video Brightness Setting,,ﾅｲﾄﾋﾞｼﾞｮﾝ 映像明るさ設定,877,1,{},[],no_xml_route
+02/2D,Night Vision: Video Contrast Setting,,ﾅｲﾄﾋﾞｼﾞｮﾝ 映像ｺﾝﾄﾗｽﾄ設定,894,1,{},[],no_xml_route
+02/2E,Safe Driving Coach ON/OFF Function,,安全運転コーチングON/OFF機能,911,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/2F,"Safe Driving Coach
+Individual Functions ON/OFF Function",,安全運転コーチング機能別ON/OFF機能,931,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/30,,,安全運転コーチング乗車中情報提供地点別ON/OFF機能,951,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/31,Blind Spot Info ON/OFF,Inform. dos pontos cegos lig/desl,BSIシステムON/OFF,971,0,"{""1"": 0, ""2"": 1}","[{""source"": 159, ""menu"": 1}]",metadata_present
+02/32,Blind Spot Info Brightness,Brilho das informações de pontos cegos,BSIシステムインジケータ輝度変更,993,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 159, ""menu"": 2}]",metadata_present
+02/33,"BSI System
+Alarm ON/OFF",,BSIシステム警報音ON/OFF,1016,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 159, ""menu"": 3}]",metadata_present
+02/34,Blind Spot Info,Informações de Ponto Cego,BSIシステムインジケータ及び警報音ON/OFF,1039,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 159, ""menu"": 4}]",metadata_present
+02/35,"CTM (BSI Radar Scheme)
+System ON/OFF",,CTM(BSIレーダ方式)システムON/OFF,1062,0,"{""1"": 0, ""2"": 1}","[{""source"": 159, ""menu"": 9}]",metadata_present
+02/36,Lane Keeping Assist Suspend Beep,Aviso Sonoro de Suspensão do Auxílio na Permanência de Faixa,LKAS解除ブザー,1084,0,"{""1"": 1, ""2"": 2}","[{""source"": 0, ""menu"": 4}]",metadata_present
+02/37,City Brake Active System,Sistema ativo de freio urbano,CTBAシステムON/OFF,1106,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/38,"CTBA System
+Alarm ON/OFF",,CTBAシステム警報音ON/OFF,1126,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/39,Start Information,Informações iniciais,発進お知らせ設定,1146,0,"{""1"": 1, ""2"": 2, ""3"": 3}","[{""source"": 0, ""menu"": 10}]",metadata_present
+02/3A,Road Departure Mitigation Setting,Configuração de Mitigação de Saída de Estrada,路外逸脱機能設定Road Departure Mitigation Settings,1169,0,"{""1"": 1, ""2"": 2, ""3"": 3}","[{""source"": 0, ""menu"": 12}]",metadata_present
+02/3B,"ACC Function Setting with Interruption Predictor
+i-ACC Setting",,割り込み予測付ACC機能設定i-ACC　setting,1192,0,"{""1"": 1, ""2"": 2}","[{""source"": 0, ""menu"": 13}]",metadata_present
+02/3C,Default,Padrão,default,1214,2,{},[],no_xml_route
+02/3D,Traffic Signal Information Driving Support - Drive Information Transmission,Inf. de sinais de trânsito de suporte à condução - Transmissão de inf. de condução,信号情報活用運転支援表示 ON/OFF,1228,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 56}]",metadata_present
+02/3E,,,ナイトビジョン注意喚起,1251,0,"{""1"": 0, ""2"": 1}","[{""source"": 165, ""menu"": 1}]",metadata_present
+02/3F,Blind Spot Info,Informações de Ponto Cego,BSIシステム インジケータ及びステアリングインフォメーションON/OFF,1273,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 159, ""menu"": 5}]",metadata_present
+02/40,,,眠気検知システム休憩喚起モード切替,1296,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+02/41,,,眠気検知システム休憩喚起 感度切替,1317,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+02/42,Head-up Warning,Aviso Head-up,HUW 機能 ON/OFF,1337,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 40}]",metadata_present
+02/43,ACC Display Speed Unit,Unidade de Velocidade no Visor de ACC,ACC設定車速表示単位,1359,0,"{""1"": 2, ""2"": 1}","[{""source"": 0, ""menu"": 2}]",metadata_present
+02/44,Rev Match,Adaptação de rotações,RevMatch制御,1381,0,"{""1"": 1, ""2"": 2}","[{""source"": 0, ""menu"": 14}]",metadata_present
+03/01,Speed Alarm 1 Function,,ｽﾋﾟｰﾄﾞｱﾗｰﾑ１機能,1403,0,"{""1"": 1, ""2"": 0}","[{""source"": 80, ""menu"": 1}]",metadata_present
+03/02,Speed Alarm 1 Vehicle Speed Setting,,ｽﾋﾟｰﾄﾞｱﾗｰﾑ１車速設定値,1425,1,{},"[{""source"": 80, ""menu"": 1}]",metadata_present
+03/03,Speed Alarm 2 Function,,ｽﾋﾟｰﾄﾞｱﾗｰﾑ２機能,1444,0,"{""1"": 1, ""2"": 0}","[{""source"": 80, ""menu"": 1}]",metadata_present
+03/04,Speed Alarm 2 Vehicle Speed Setting,,ｽﾋﾟｰﾄﾞｱﾗｰﾑ２車速設定値,1466,1,{},"[{""source"": 80, ""menu"": 1}]",metadata_present
+03/05,,,ACC設定車速表示単位,1485,0,"{""1"": 2, ""2"": 1}",[],no_xml_route
+03/06,Night Vision: Light Control,,ﾅｲﾄﾋﾞｼﾞｮﾝｲﾙﾐｺﾝﾄﾛｰﾙ,1505,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}",[],no_xml_route
+03/07,Night Vision: System Start-Up Settings,,ﾅｲﾄﾋﾞｼﾞｮﾝｼｽﾃﾑ起動設定,1527,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/08,HUD Light Control,,HUD表示ｲﾙﾐｺﾝﾄﾛｰﾙ,1547,1,{},[],no_xml_route
+03/09,Language Selection,Seleção de Idioma,言語設定 (US),1564,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 2}]",metadata_present
+03/0A,Language Selection,Seleção de Idioma,言語設定 (US),1587,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/0B,,,ﾒｰﾀｰ表示言語切り替え,1608,0,{},[],no_xml_route
+03/0C,Language Selection,Seleção de Idioma,言語設定 (中国),1622,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 3}]",metadata_present
+03/0D,Language Selection,Seleção de Idioma,言語設定 (EU) 6ヶ国語,1644,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 255}","[{""source"": 80, ""menu"": 4}]",metadata_present
+03/0E,Language Selection,Seleção de Idioma,言語設定（南米ポルトガル語）,1671,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 35}]",metadata_present
+03/0F,Language Selection,Seleção de Idioma,言語設定 (EU) 12ヶ国語,1693,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7, ""9"": 8, ""10"": 9, ""11"": 10, ""12"": 11, ""13"": 255}","[{""source"": 80, ""menu"": 31}]",metadata_present
+03/10,Language Selection,Seleção de Idioma,言語設定 (EU) 13ヶ国語,1726,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7, ""9"": 8, ""10"": 9, ""11"": 10, ""12"": 11, ""13"": 12, ""14"": 255}","[{""source"": 80, ""menu"": 36}]",metadata_present
+03/11,Language Selection,Seleção de Idioma,言語設定 (ロシア),1760,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 34}]",metadata_present
+03/12,Warning Message,Mensagem de aviso,ﾜｰﾆﾝｸﾞﾒｯｾｰｼﾞ表示,1782,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 5}]",metadata_present
+03/13,Adjust Outside Temp. Display,Ajustar tela de temperatura ext.,外気温表示補正(℃表示),1804,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6}","[{""source"": 80, ""menu"": 6}]",metadata_present
+03/14,Adjust Outside Temp. Display,Ajustar tela de temperatura ext.,外気温表示補正(°F表示),1831,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7, ""9"": 8, ""10"": 9, ""11"": 10}","[{""source"": 80, ""menu"": 7}]",metadata_present
+03/15,Trip A & Average Fuel Economy A Refueling Interlock Reset,,TRIP A & 平均燃費Aの給油連動リセット,1862,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 8}]",metadata_present
+03/16,Trip A & Average Power Consumption A Charging Interlock Reset,,ﾄﾘｯﾌﾟA&平均電費Aの充電連動ﾘｾｯﾄ,1884,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/17,Change Reset Conditions for Elapsed Time,,経過時間のﾘｾｯﾄ条件切り替え,1904,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 9}]",metadata_present
+03/18,"""Trip A"" Reset Timing",Zerar o tempo da Viagem A,TRIP A リセット条件(非PHEV車),1927,0,"{""1"": 0, ""2"": 2, ""3"": 1}","[{""source"": 80, ""menu"": 26}]",metadata_present
+03/19,"""Trip B"" Reset Timing",Zerar o tempo da Viagem B,TRIP B リセット条件(非PHEV車),1950,0,"{""1"": 0, ""2"": 2, ""3"": 1}","[{""source"": 80, ""menu"": 27}]",metadata_present
+03/1A,"""Trip A"" Reset Timing",Zerar o tempo da Viagem A,TRIP A リセット条件(PHEV車),1973,0,"{""1"": 0, ""2"": 3, ""3"": 2, ""4"": 1}","[{""source"": 80, ""menu"": 23}]",metadata_present
+03/1B,"""Trip B"" Reset Timing",Zerar o tempo da Viagem B,TRIP B リセット条件(PHEV車),1997,0,"{""1"": 0, ""2"": 3, ""3"": 2, ""4"": 1}","[{""source"": 80, ""menu"": 24}]",metadata_present
+03/1C,Select Drive Computer Display,,ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択,2021,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4}",[],no_xml_route
+03/1D,Adjust Alarm Volume,Ajustar Volume do Alarme,ｱﾗｰﾑ音量調整,2044,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 11}]",metadata_present
+03/1E,Compass Zone Settings,,ｺﾝﾊﾟｽｿﾞｰﾝ設定,2067,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/1F,WELCOME Scroll Duration,,WELCOMEｽｸﾛｰﾙ時間,2087,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/20,"Initial Brightness Setting for Welcome Lights
+",,ｳｪﾙｶﾑ照明の初期点灯輝度設定,2108,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/21,"Initial Brightness Setting for Welcome Lights
+",,ｳｪﾙｶﾑ照明の初期点灯輝度設定,2128,1,{},[],no_xml_route
+03/22,"Welcome Light Settings
+",,ｳｪﾙｶﾑ照明設定,2145,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/23,Shift Up Backlight,,REVインジケータ設定,2165,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 17}]",metadata_present
+03/24,"ECO Indicator ON/OFF
+",,ECOインジケータ設定,2187,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 18}]",metadata_present
+03/25,Change Units for Digital Speedometer Display,,ﾃﾞｼﾞﾀﾙｽﾋﾟｰﾄﾞﾒｰﾀの表示単位系切り替え,2209,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/26,,,パワーメータの表示単位切替,2230,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 20}]",metadata_present
+03/27,Stopwatch Function Settings,,ストップウオッチ機能の設定,2253,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/28,Fuel Efficiency Backlight,Retroiluminação de eficiência de combustível,アンビエントメーター照明色変化設定,2274,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 22}]",metadata_present
+03/29,Fuel Efficiency Backlight Color,Luz do Consumo de Combustível,アンビエントメーター照明色設定（ホワイト色なし）,2296,0,"{""1"": 1, ""2"": 2, ""3"": 3, ""4"": 4, ""5"": 5, ""6"": 6, ""7"": 7}","[{""source"": 80, ""menu"": 50}]",metadata_present
+03/2A,Fuel Efficiency Backlight Color,Luz do Consumo de Combustível,アンビエントメーター照明色設定（ホワイト色あり）,2323,0,"{""1"": 7, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7}","[{""source"": 80, ""menu"": 51}]",metadata_present
+03/2B,CLOCK Function,,CLOCK機能,2351,1,{},[],no_xml_route
+03/2C,CLOCK Function,,CLOCK機能,2365,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/2D,Timed Charging Function,,タイマー充電機能,2386,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/2E,Timed Charging Mode,,タイマー充電モード,2406,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/2F,,,タイマー充電開始時刻（時間）,2426,0,"{""1"": 0, ""2"": 12, ""3"": 23}",[],no_xml_route
+03/30,,,タイマー充電開始時刻（分）,2447,0,"{""1"": 0, ""2"": 30, ""3"": 50}",[],no_xml_route
+03/31,,,タイマー充電終了時刻（時間）,2468,0,"{""1"": 0, ""2"": 12, ""3"": 23}",[],no_xml_route
+03/32,,,タイマー充電終了時刻（分）,2489,0,"{""1"": 0, ""2"": 30, ""3"": 50}",[],no_xml_route
+03/33,SIL display settings,SIL display settings,SILインジケータ表示設定,2510,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/34,Hold ECON Mode,,ECOＮモード保持,2530,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 25}]",metadata_present
+03/35,Smart Start Guidance Display,,スマートスタートのガイダンス表示,2552,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 28}]",metadata_present
+03/36,Speed Display Unit,Unid. de exibição de velocidade,車速表示単位,2574,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 29}]",metadata_present
+03/37,Auto Engine Idle Stop Guidance Screens,,アイドルストップガイダンス表示設定,2596,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 30}]",metadata_present
+03/38,Turn By Turn Auto Display,Exibição curva-a-curva,Turn by Turn表示（メータのみ）,2618,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 32}]",metadata_present
+03/39,,,HUW 機能 ON/OFF,2640,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/3A,Change Display Unit for HUD Digital Speedometer,,HUD デジタルスピードメーターの表示単位切替,2660,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/3B,Turn By Turn Auto Display,Exibição curva-a-curva,Turn by Turn表示（HUD装備時）,2680,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 49}]",metadata_present
+03/3C,Language Selection,Seleção de Idioma,言語設定 (アラビア語),2702,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 33}]",metadata_present
+03/3D,,,コンテンツ切替,2724,2,{},[],no_xml_route
+03/3E,,,フェイバリット切替,2738,2,{},[],no_xml_route
+03/3F,Contents Change Sound ON/OFF,,コンテンツ切替音　有無切替,2752,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/40,New Message Notifications,Notificação de nova mensagem,新着（Mail/News/SNS）割り込み表示　有無切替,2772,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 55}]",metadata_present
+03/41,Select Wallpaper,,壁紙選択,2794,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}",[],no_xml_route
+03/42,,,画像読込,2816,2,{},[],no_xml_route
+03/43,Delete Wallpaper,,壁紙削除,2830,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/44,Select Drive Computer Display,,ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択,2851,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4}",[],no_xml_route
+03/45,Opening Animation,,オープニングアニメーション,2874,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/46,Background Color,,背景色,2894,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}",[],no_xml_route
+03/47,Keyless Start Guidance Screens,Telas de orientação inicial sem chave,スマートスタートのガイダンス表示,2916,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/48,Turn by Turn Display,Exibição Curva a Curva,交差点案内表示,2936,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/49,Auto Engine Idle Stop Guidance Screens,Telas de interrupção de guia com motor ocioso,アイドルストップガイダンス表示設定,2956,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/4A,Warning Message,Mensagem de aviso,ワーニングメッセージ,2976,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/4B,Traffic Sign Recognition System Display,Exibição do sistema de reconhecimento de sinais de trânsito,TSR常駐表示,2996,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/4C,,,DISPLY表示言語切り替え,3016,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+03/4D,,,DISPLY表示言語切り替え,3037,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/4E,,,DISPLY表示言語切り替え,3057,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/4F,,,DISPLY表示言語切り替え,3077,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7, ""9"": 8, ""10"": 9, ""11"": 10, ""12"": 11, ""13"": 12}",[],no_xml_route
+03/50,Default,Padrão,default,3108,2,{},[],no_xml_route
+03/51,,,非パドル操作時ギヤ段常時表示,3122,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 10}]",metadata_present
+03/52,Gear Position Display,Exibição da posição de marcha,MTギヤ段表示,3144,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 54}]",metadata_present
+03/53,,,ターン音色,3166,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 13}]",metadata_present
+03/54,Reverse Alert Tone,Tom de Alerta de Marcha à Ré,1周期吹鳴タイプリバースアラーム,3189,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 12}]",metadata_present
+03/55,Tire Angle Monitor,Monitor de ângulo de pneu,タイヤ角度モニター,3211,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 53}]",metadata_present
+03/56,Display Speed Unit,Exibir unid. de velocidade,距離表示単位,3233,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 14}]",metadata_present
+03/57,Speed/Distance Units,Unid. de distância/velocidade,車速・距離表示単位,3255,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 47}]",metadata_present
+03/58,Auto Interior Illumination,Inluminação interna autom.,室内照明自動減光設定,3277,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5}","[{""source"": 80, ""menu"": 38}]",metadata_present
+03/59,,,IDS設定,3303,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}",[],no_xml_route
+03/5A,,,Trip Computerの表示単位切替,3325,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 19}]",metadata_present
+03/5B,,,メータ表示コンフィグレーション設定,3348,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 80, ""menu"": 21}]",metadata_present
+03/5C,Tachometer,Conta-giros,タコメータ表示,3371,0,"{""1"": 0, ""2"": 1}","[{""source"": 80, ""menu"": 46}]",metadata_present
+03/5D,,,タイマー充電開始時刻,3393,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/5E,,,タイマー充電終了時刻,3413,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+03/5F,Change Display Language 5,,DISPLY表示言語切り替え,3433,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3, ""5"": 4, ""6"": 5, ""7"": 6, ""8"": 7, ""9"": 8, ""10"": 9, ""11"": 10, ""12"": 11, ""13"": 12, ""14"": 13, ""15"": 14, ""16"": 15, ""17"": 16, ""18"": 17, ""19"": 18, ""20"": 19}",[],no_xml_route
+04/01,Memory Position Link,Ligação da Posição de Memória,ﾒﾓﾘｰｼｰﾄ連動,3471,0,"{""1"": 0, ""2"": 1}","[{""source"": 149, ""menu"": 1}]",metadata_present
+04/02,Steering Wheel Movement at Entry/Exit,Movimento do Volante na Entrada/Saída,ﾁﾙﾄ・ﾃﾚｽｺ跳ね上げ設定,3493,0,"{""1"": 0, ""2"": 1}","[{""source"": 149, ""menu"": 2}]",metadata_present
+04/03,Default,Padrão,default,3515,2,{},[],no_xml_route
+04/04,Seat Position Movement At Entry/Exit,Movimiento de Asiento en Entrada / Salida,乗降時シート位置動作,3529,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+04/05,Easy Entry/Exit,Entrada/Saída Fácil,乗降時チルト/テレスコ自動跳ね上げ/シート位置動作,3549,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}",[],no_xml_route
+04/06,Auto Seat Belt Tension,Tensão do cinto de segurança modo sport,ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定,3571,0,"{""1"": 1, ""2"": 2}","[{""source"": 0, ""menu"": 6}]",metadata_present
+05/01,Customize Card Key Interlock,,ｶｽﾀﾏｲｽﾞのｶｰﾄﾞｷｰ連動,3593,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 40}]",metadata_present
+05/02,Customize Interlock,,ｶｽﾀﾏｲｽﾞの連動,3615,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 40}]",metadata_present
+05/03,Smart Functions,,ｽﾏｰﾄ機能,3637,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/04,Remote Start System On/Off,Ligar/Desligar Sistema de Partida por Controle Remoto,リモートスタート機能,3657,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 48}]",metadata_present
+05/05,,,WAL,3679,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/06,,,ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ,3699,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/07,,,ｷｰﾚｽﾘﾛｯｸ時間,3719,0,"{""1"": 3, ""2"": 2, ""3"": 1}",[],no_xml_route
+05/08,,,ｾｷｭﾘﾃｨ機能,3740,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/09,,,ｾｷｭﾘﾃｨ機能,3760,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/0A,,,電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動,3780,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/0B,PTG Keyless Lock Answer Back Buzzer,,PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,3800,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/0C,PTL Keyless Lock Answer Back Buzzer,,PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,3820,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/0D,PTG Keyless Lock Answer Back Hazard,,PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,3840,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/0E,PTL Keyless Lock Answer Back Hazard,,PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,3860,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/0F,PTG Keyless Lock Answer Back Buzzer Sound,,PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音,3880,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/10,PTL Keyless Lock Answer Back Buzzer Sound,,PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音,3900,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+05/11,,,PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ,3920,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/12,,,PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ,3940,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+05/13,Default,Padrão,default,3960,2,{},[],no_xml_route
+05/14,Remote Start System On/Off,Ligar/Desligar Sistema de Partida por Controle Remoto,リモートスタート機能,3974,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 12}]",metadata_present
+05/15,Door Unlock Mode,Modo de destravamento das portas,ｾﾚｸﾀﾌﾞﾙ切り替え,3996,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 2}]",metadata_present
+05/16,Door Unlock Mode,Modo de destravamento das portas,ｾﾚｸﾀﾌﾞﾙ切り替え,4018,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 41}]",metadata_present
+05/17,Keyless Access Beep Volume,Volume do bipe do acesso keyless,ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量,4040,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 6}]",metadata_present
+05/18,Keyless Access Beep Volume,Volume do bipe do acesso keyless,ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量,4062,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 43}]",metadata_present
+05/19,Keyless Access Light Flash,Localizar carro,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,4084,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 7}]",metadata_present
+05/1A,Keyless Access Light Flash,Localizar carro,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,4106,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 44}]",metadata_present
+05/1B,Keyless Access Beep,Aviso sonoro do acesso keyless,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4128,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 8}]",metadata_present
+05/1C,Keyless Access Beep,Aviso sonoro do acesso keyless,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4150,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 45}]",metadata_present
+06/01,CC&ASL/ACC&ASL Settings for Vehicle Speed Display Unit,,CC&ASL／ACC&ASL設定車速表示単位,4172,0,"{""1"": 2, ""2"": 1}","[{""source"": 0, ""menu"": 5}]",metadata_present
+06/02,,,WELCOME LTのSMART連動,4194,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+06/03,WELCOME LT Time,,WELCOME LT時間,4214,2,{},[],no_xml_route
+06/04,Interior Light Dimming Time,Tempo redução luz interior,ｲﾝﾃﾘｱﾗｲﾄ点灯時間,4228,0,"{""1"": 1, ""2"": 2, ""3"": 3}","[{""source"": 16, ""menu"": 6}, {""source"": 19, ""menu"": 6}, {""source"": 24, ""menu"": 6}]",metadata_present
+06/05,Headlight Auto Off Timer,Ajuste temporiz. farol desl.,ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間,4253,0,"{""1"": 0, ""2"": 15, ""3"": 30, ""4"": 60}","[{""source"": 16, ""menu"": 8}, {""source"": 19, ""menu"": 8}, {""source"": 24, ""menu"": 8}]",metadata_present
+06/06,Headlight Auto Off Timer,Ajuste temporiz. farol desl.,ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間,4279,0,"{""1"": 0, ""2"": 15, ""3"": 30, ""4"": 60}","[{""source"": 17, ""menu"": 4}]",metadata_present
+06/07,Auto Light Sensitivity,Sensibilidade da luz automática,ｵｰﾄﾗｲﾄ感度設定,4303,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 20, ""menu"": 4}]",metadata_present
+06/08,Auto Light Sensitivity,Sensibilidade da luz automática,ｵｰﾄﾗｲﾄ感度設定,4328,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 16, ""menu"": 9}]",metadata_present
+06/09,Auto Light Sensitivity,Sensibilidade da luz automática,ﾗｲﾄ感度設定,4353,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 114, ""menu"": 1}]",metadata_present
+06/0A,Auto Interior Illumination Sensitivity,Sensibilidade de Iluminação Interior Automática,室内ｲﾙﾐ感度設定,4378,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 114, ""menu"": 2}]",metadata_present
+06/0B,Auto Light Sensitivity,Sensibilidade da luz automática,ﾗｲﾄ感度設定,4403,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 116, ""menu"": 1}]",metadata_present
+06/0C,Auto Interior Illumination Sensitivity,Sensibilidade de Iluminação Interior Automática,室内ｲﾙﾐ感度設定,4428,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 116, ""menu"": 2}]",metadata_present
+06/0D,,,ﾌｯﾄﾗｲﾄ ｽﾓｰﾙﾗｲﾄ連動,4453,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+06/0E,,,点灯モード設定,4473,0,"{""1"": 1, ""2"": 2, ""3"": 3, ""4"": 4, ""5"": 5}",[],no_xml_route
+06/0F,,,ハンドル点灯角度,4496,0,"{""1"": 1, ""2"": 2, ""3"": 3, ""4"": 4}",[],no_xml_route
+06/10,,,点灯タイマー,4518,0,"{""1"": 2, ""2"": 1, ""3"": 3}",[],no_xml_route
+06/11,Default,Padrão,default,4539,2,{},[],no_xml_route
+06/12,Accessory Light,Luz acessória,ｱｸｾｻﾘﾗﾝﾌﾟ点灯,4553,2,{},[],no_xml_route
+06/13,Auto Light Sensitivity,Sensibilidade da luz automática,ﾗｲﾄ感度設定,4567,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}",[],no_xml_route
+06/14,Auto Interior Illumination Sensitivity,Sensibilidade de Iluminação Interior Automática,室内ｲﾙﾐ感度設定,4590,0,"{""1"": 5, ""2"": 4, ""3"": 3, ""4"": 2, ""5"": 1}","[{""source"": 24, ""menu"": 25}]",metadata_present
+06/15,Auto Headlight ON With Wiper ON,Acionamento Automático dos Faróis com o Limpador Acionado,ﾜｲﾊﾟｰ連動,4615,0,"{""1"": 0, ""2"": 1}","[{""source"": 114, ""menu"": 3}]",metadata_present
+06/16,Auto Headlight ON With Wiper ON,Acionamento Automático dos Faróis com o Limpador Acionado,ﾜｲﾊﾟｰ連動,4637,0,"{""1"": 0, ""2"": 1}","[{""source"": 116, ""menu"": 3}]",metadata_present
+07/01,,,ｾﾚｸﾀﾌﾞﾙ切り替え,4659,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/02,,,ｾﾚｸﾀﾌﾞﾙ切り替え,4679,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/03,,,ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量,4699,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/04,,,ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量,4719,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/05,,,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,4739,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/06,,,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ,4759,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/07,,,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4779,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/08,,,ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4799,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/09,Auto Lock Start-up Buzzer,,ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ,4819,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 9}]",metadata_present
+07/0A,Auto Lock Start-up Buzzer,,ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ,4841,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 46}]",metadata_present
+07/0B,Auto Lock Answer Back Buzzer,,ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4863,0,"{""1"": 0, ""2"": 1}","[{""source"": 144, ""menu"": 10}]",metadata_present
+07/0C,Auto Lock Answer Back Buzzer,,ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ,4885,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 47}]",metadata_present
+07/0D,Unlock Sensor Prohibited Time,,ｱﾝﾛｯｸｾﾝｻ禁止時間,4907,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}","[{""source"": 144, ""menu"": 4}]",metadata_present
+07/0E,Unlock sensor Prohibited Time,,ｱﾝﾛｯｸｾﾝｻ禁止時間,4931,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}","[{""source"": 24, ""menu"": 42}]",metadata_present
+07/0F,Auto Door Lock,Trava automática de portas,自動ﾄﾞｱﾛｯｸ連動機能(AT),4955,0,"{""1"": 1, ""2"": 2, ""3"": 0}","[{""source"": 16, ""menu"": 1}, {""source"": 19, ""menu"": 1}, {""source"": 24, ""menu"": 1}]",metadata_present
+07/10,Auto Door Lock,Trava automática de portas,自動ﾄﾞｱﾛｯｸ連動機能(MT),4980,0,"{""1"": 1, ""2"": 0}","[{""source"": 24, ""menu"": 17}]",metadata_present
+07/11,Auto Door Lock,Trava automática de portas,自動ﾄﾞｱﾛｯｸ連動機能(MT),5002,0,"{""1"": 1, ""2"": 0}","[{""source"": 16, ""menu"": 19}, {""source"": 19, ""menu"": 19}]",metadata_present
+07/12,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/1モーション),5025,0,"{""1"": 4, ""2"": 6, ""3"": 0}","[{""source"": 16, ""menu"": 2}, {""source"": 19, ""menu"": 2}, {""source"": 24, ""menu"": 2}]",metadata_present
+07/13,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション),5050,0,"{""1"": 6, ""2"": 0}","[{""source"": 24, ""menu"": 18}]",metadata_present
+07/14,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション),5072,0,"{""1"": 6, ""2"": 0}","[{""source"": 16, ""menu"": 20}, {""source"": 19, ""menu"": 20}]",metadata_present
+07/15,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション),5095,0,"{""1"": 3, ""2"": 4, ""3"": 5, ""4"": 6, ""5"": 0}","[{""source"": 24, ""menu"": 19}]",metadata_present
+07/16,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション),5120,0,"{""1"": 3, ""2"": 4, ""3"": 5, ""4"": 6, ""5"": 0}","[{""source"": 16, ""menu"": 21}, {""source"": 19, ""menu"": 21}]",metadata_present
+07/17,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション),5146,0,"{""1"": 5, ""2"": 6, ""3"": 0}","[{""source"": 24, ""menu"": 20}]",metadata_present
+07/18,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション),5169,0,"{""1"": 5, ""2"": 6, ""3"": 0}","[{""source"": 16, ""menu"": 22}, {""source"": 19, ""menu"": 22}]",metadata_present
+07/19,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション),5193,0,"{""1"": 1, ""2"": 4, ""3"": 6, ""4"": 0}","[{""source"": 24, ""menu"": 23}]",metadata_present
+07/1A,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション),5217,0,"{""1"": 1, ""2"": 4, ""3"": 6, ""4"": 0}","[{""source"": 16, ""menu"": 25}]",metadata_present
+07/1B,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション),5241,0,"{""1"": 1, ""2"": 6, ""3"": 0}","[{""source"": 24, ""menu"": 24}]",metadata_present
+07/1C,Auto Door Unlock,Destravam autom de portas,自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション),5264,0,"{""1"": 1, ""2"": 6, ""3"": 0}","[{""source"": 16, ""menu"": 26}]",metadata_present
+07/1D,Key and Remote Unlock Mode,Modo destravamento via chave e remoto,ﾄﾞｱﾛｯｸ動作,5287,0,"{""1"": 1, ""2"": 0}","[{""source"": 16, ""menu"": 3}, {""source"": 19, ""menu"": 3}, {""source"": 24, ""menu"": 3}]",metadata_present
+07/1E,Sunroof Key Off Timer Time,,ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間,5311,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 14}]",metadata_present
+07/1F,Sunroof Key Off Timer Time,,ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間,5333,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 16}]",metadata_present
+07/20,Power Windows (Sunroof) Key Cylinder Interlock,Interconexão do cilindro da chave das janelas elétricas (teto solar),ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰｼﾘﾝﾀﾞｰ連動,5355,0,"{""1"": 0, ""2"": 1}","[{""source"": 48, ""menu"": 4}]",metadata_present
+07/21,Power Windows (Sunroof) Key Cylinder Interlock,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰｼﾘﾝﾀﾞｰ連動,5377,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+07/22,Power Windows (Sunroof) Keyless Interlock,Interconexão keyless de janelas elétricas (teto solar),ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰﾚｽ連動,5397,0,"{""1"": 0, ""2"": 1}","[{""source"": 48, ""menu"": 5}]",metadata_present
+07/23,Power Windows (Sunroof) Keyless Interlock,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰﾚｽ連動,5419,0,"{""1"": 1, ""2"": 0}",[],no_xml_route
+07/24,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5439,0,"{""1"": 0, ""2"": 2, ""3"": 1}","[{""source"": 24, ""menu"": 16}]",metadata_present
+07/25,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5462,0,"{""1"": 0, ""2"": 2, ""3"": 1}","[{""source"": 16, ""menu"": 18}]",metadata_present
+07/26,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ) ｷｰｵﾌﾀｲﾏｰ時間,5485,0,"{""1"": 0, ""2"": 1, ""3"": 2}",[],no_xml_route
+07/27,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5506,0,"{""1"": 1, ""2"": 2}","[{""source"": 24, ""menu"": 22}]",metadata_present
+07/28,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5528,0,"{""1"": 1, ""2"": 2}","[{""source"": 16, ""menu"": 24}]",metadata_present
+07/29,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5550,0,"{""1"": 1, ""2"": 2, ""3"": 3}","[{""source"": 48, ""menu"": 6}]",metadata_present
+07/2A,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5573,0,"{""1"": 1, ""2"": 2}",[],no_xml_route
+07/2B,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5593,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 21}]",metadata_present
+07/2C,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5615,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 23}]",metadata_present
+07/2D,Default,Padrão,default,5637,2,{},[],no_xml_route
+07/2E,,,ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間,5651,0,"{""1"": 1, ""2"": 3}",[],no_xml_route
+07/2F,Power Slide Door Keyless Open Mode,Abertura da porta deslizante via keyless,Power Slide Door Keyless Open Mode,5671,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/30,Walk Away Auto Lock,Travamento Automático de Afastamento,降車時ドアオートロック機能,5691,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/31,Walk Away Auto Lock,Travamento Automático de Afastamento,降車時ドアオートロック機能,5711,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+07/32,Keyless Lock Answer Back,Reconhecimento de travas via keyless,ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ,5731,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 4}, {""source"": 19, ""menu"": 4}, {""source"": 24, ""menu"": 4}]",metadata_present
+07/33,Security Relock Timer,Tempor retravam segurança,ｷｰﾚｽﾘﾛｯｸ時間,5755,0,"{""1"": 3, ""2"": 2, ""3"": 1}","[{""source"": 16, ""menu"": 5}, {""source"": 19, ""menu"": 5}, {""source"": 24, ""menu"": 5}]",metadata_present
+07/34,Security Alarm,Alarme de Segurança,ｾｷｭﾘﾃｨ機能,5780,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 15}]",metadata_present
+07/35,Security Alarm,Alarme de Segurança,ｾｷｭﾘﾃｨ機能,5802,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 17}, {""source"": 19, ""menu"": 17}]",metadata_present
+07/36,Walk Away Auto Lock,Travamento Automático de Afastamento,WAL,5825,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 49}]",metadata_present
+07/37,Auto Folding Door Mirror,Retrovisor lateral com recolhimento automático,電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動,5847,0,"{""1"": 0, ""2"": 1}","[{""source"": 48, ""menu"": 7}]",metadata_present
+08/01,,,ﾜｲﾊﾟｰ連動,5869,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+08/02,,,ﾜｲﾊﾟｰ連動,5889,0,"{""1"": 0, ""2"": 1}",[],no_xml_route
+08/03,Front Wiper Action,Configuração do limpador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ動作,5909,0,"{""1"": 1, ""2"": 0}","[{""source"": 24, ""menu"": 9}]",metadata_present
+08/04,Front Wiper Action,Configuração do limpador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ動作,5931,0,"{""1"": 1, ""2"": 0}","[{""source"": 16, ""menu"": 10}, {""source"": 19, ""menu"": 10}]",metadata_present
+08/05,Front Wiper Action,Configuração do limpador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ動作,5954,0,"{""1"": 1, ""2"": 0}","[{""source"": 118, ""menu"": 10}]",metadata_present
+08/06,Front Wiper Action,Configuração do limpador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ動作,5976,0,"{""1"": 1, ""2"": 0}","[{""source"": 17, ""menu"": 5}]",metadata_present
+08/07,Wiper Action,Ajuste do limpador do para-brisas,ｵｰﾄﾜｲﾊﾟｰ動作,5998,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 16, ""menu"": 7}, {""source"": 19, ""menu"": 7}, {""source"": 24, ""menu"": 7}]",metadata_present
+08/08,Wiper Action,Ajuste do limpador do para-brisas,ｵｰﾄﾜｲﾊﾟｰ動作,6023,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 118, ""menu"": 7}]",metadata_present
+08/09,Wiper Action,Ajuste do limpador do para-brisas,ｵｰﾄﾜｲﾊﾟｰ動作,6046,0,"{""1"": 0, ""2"": 1, ""3"": 2}","[{""source"": 17, ""menu"": 1}]",metadata_present
+08/0A,Wiper Washer Interlock,Interconexão do esguichador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動,6069,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 10}]",metadata_present
+08/0B,Wiper Washer Interlock,Interconexão do esguichador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動,6091,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 11}, {""source"": 19, ""menu"": 11}]",metadata_present
+08/0C,Wiper Washer Interlock,Interconexão do esguichador do para-brisas,ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動,6114,0,"{""1"": 0, ""2"": 1}","[{""source"": 118, ""menu"": 11}]",metadata_present
+08/0D,Wiper Washer Interlock,,ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動,6136,0,"{""1"": 0, ""2"": 1}","[{""source"": 17, ""menu"": 2}]",metadata_present
+08/0E,Wiper Action on Vehicle Startup,Ação do limp. no arranque do veículo,ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作,6158,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 11}]",metadata_present
+08/0F,Wiper Action on Vehicle Startup,Ação do limp. no arranque do veículo,ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作,6180,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 12}, {""source"": 19, ""menu"": 12}]",metadata_present
+08/10,Wiper Action on Vehicle Startup,Ação do limp. no arranque do veículo,ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作,6203,0,"{""1"": 0, ""2"": 1}","[{""source"": 118, ""menu"": 12}]",metadata_present
+08/11,Wiper Action on Vehicle Startup,,ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作,6225,0,"{""1"": 0, ""2"": 1}","[{""source"": 17, ""menu"": 3}]",metadata_present
+08/12,Rear Wiper Action,,ﾘｱﾜｲﾊﾟｰ動作,6247,0,"{""1"": 0, ""2"": 1}","[{""source"": 20, ""menu"": 1}]",metadata_present
+08/13,Rear Wiper Action,,ﾘｱﾜｲﾊﾟｰ動作,6269,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 13}]",metadata_present
+08/14,Rear Wiper Action,,ﾘｱﾜｲﾊﾟｰ動作,6291,0,"{""1"": 0, ""2"": 1}","[{""source"": 18, ""menu"": 1}]",metadata_present
+08/15,Rear Wiper Washer Interlock,,ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動,6313,0,"{""1"": 0, ""2"": 1}","[{""source"": 20, ""menu"": 2}]",metadata_present
+08/16,Rear Wiper Washer Interlock,,ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動,6335,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 14}]",metadata_present
+08/17,Rear Wiper Washer Interlock,,ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動,6357,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 12}]",metadata_present
+08/18,Rear Wiper Washer Interlock,,ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動,6379,0,"{""1"": 0, ""2"": 1}","[{""source"": 18, ""menu"": 2}]",metadata_present
+08/19,Rear Wiper Reverse Interlock,,ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動,6401,0,"{""1"": 0, ""2"": 1}","[{""source"": 20, ""menu"": 3}]",metadata_present
+08/1A,Rear Wiper Reverse Interlock,,ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動,6423,0,"{""1"": 0, ""2"": 1}","[{""source"": 16, ""menu"": 15}]",metadata_present
+08/1B,Rear Wiper Reverse Interlock,,ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動,6445,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 13}]",metadata_present
+08/1C,Rear Wiper Reverse Interlock,,ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動,6467,0,"{""1"": 0, ""2"": 1}","[{""source"": 18, ""menu"": 3}]",metadata_present
+08/1D,Rear Wiper Action on Vehicle Startup,,ﾘｱﾜｲﾊﾟｰ　発進時動作,6489,0,"{""1"": 0, ""2"": 1}","[{""source"": 18, ""menu"": 4}]",metadata_present
+08/1E,Rear Wiper Action,,ﾘｱﾜｲﾊﾟｰ動作,6511,0,"{""1"": 0, ""2"": 1}","[{""source"": 57, ""menu"": 1}]",metadata_present
+08/1F,Rear Wiper Washer Interlock,,ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動,6533,0,"{""1"": 0, ""2"": 1}","[{""source"": 57, ""menu"": 2}]",metadata_present
+08/20,Rear Wiper Reverse Interlock,,ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動,6555,0,"{""1"": 0, ""2"": 1}","[{""source"": 57, ""menu"": 3}]",metadata_present
+08/21,Default,Padrão,default,6577,2,{},[],no_xml_route
+08/22,Auto Headlight On with Wiper On,Acionamento Automático dos Faróis com o Limpador Acionado,ﾜｲﾊﾟｰ連動,6591,0,"{""1"": 0, ""2"": 1}","[{""source"": 24, ""menu"": 26}]",metadata_present
+0A/01,,,PTG ﾊﾝｽﾞﾌﾙｱｸｾｽﾓｰﾄﾞ,6613,0,"{""1"": 0, ""2"": 1}","[{""source"": 49, ""menu"": 3}]",metadata_present
+0A/02,Keyless Open Mode,Abertura automática do porta-malas pelo keyless,PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ,6635,0,"{""1"": 0, ""2"": 1}","[{""source"": 49, ""menu"": 1}]",metadata_present
+0A/03,Power Open By Outer Handle,Abertura por maçaneta externa,PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ,6657,0,"{""1"": 0, ""2"": 1}","[{""source"": 49, ""menu"": 2}]",metadata_present
+0B/01,Preferred IDS Mode,Modo IDS preferido,IDS設定,6679,0,"{""1"": 0, ""2"": 1, ""3"": 2, ""4"": 3}","[{""source"": 80, ""menu"": 39}]",metadata_present

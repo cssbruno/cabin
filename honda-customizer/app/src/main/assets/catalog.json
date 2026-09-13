@@ -1,0 +1,7947 @@
+[
+  {
+    "category": 1,
+    "id": 1,
+    "description": "TPMS Calibration",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "TPMS calibration",
+        "options": []
+      },
+      "pt": {
+        "title": "Calibração TPMS",
+        "options": []
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 1,
+    "description": "ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 2,
+    "description": "CMBS警報ﾀｲﾐﾝｸﾞ",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 3,
+    "description": "CMBS警報ﾀｲﾐﾝｸﾞ",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Forward Collision Warning Distance",
+        "options": [
+          "Long",
+          "Normal",
+          "Short"
+        ]
+      },
+      "pt": {
+        "title": "Distância de Alerta de Colisão Frontal",
+        "options": [
+          "Longo",
+          "NORMAL",
+          "Curto"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 4,
+    "description": "FCW警報ﾀｲﾐﾝｸﾞ",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 1,
+      "3": 2,
+      "4": 4
+    },
+    "labels": {
+      "(default)": {
+        "title": "Forward Collision Warning Distance",
+        "options": [
+          "Long",
+          "Normal",
+          "Short",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Distância de Alerta de Colisão Frontal",
+        "options": [
+          "Longo",
+          "NORMAL",
+          "Curto",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 5,
+    "description": "FCW警報ﾀｲﾐﾝｸﾞ",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 0,
+      "3": 1,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Forward Collision Warning Distance",
+        "options": [
+          "Long",
+          "Normal",
+          "Short",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Distância de Alerta de Colisão Frontal",
+        "options": [
+          "Longo",
+          "NORMAL",
+          "Curto",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 6,
+    "description": "TSR常駐表示ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Traffic Sign Recognition Function",
+        "options": [
+          "Resident Visualization ON",
+          "Resident Visualization OFF"
+        ]
+      },
+      "pt": {
+        "title": "Função de reconhec. de sinais de trânsito",
+        "options": [
+          "Visualização residente LIG",
+          "Visualização residente DESL"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 7,
+    "description": "HSS ON/OFF設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "HSS ON/OFF Setting",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 8,
+    "description": "HSS機能復帰条件（走行距離）",
+    "type": 0,
+    "values": {
+      "1": 7,
+      "2": 6,
+      "3": 5,
+      "4": 4,
+      "5": 3,
+      "6": 2,
+      "7": 1,
+      "8": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "HSS function recovery condition (Distance driven)",
+        "options": [
+          "1667m",
+          "1333m",
+          "1167m",
+          "1000m",
+          "833m",
+          "667m",
+          "500m",
+          "20m"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "1667m",
+          "1333m",
+          "1167m",
+          "1000m",
+          "833m",
+          "667m",
+          "500m",
+          "20m"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 9,
+    "description": "HSS機能復帰条件（パッシングSW固定時間）",
+    "type": 0,
+    "values": {
+      "1": 7,
+      "2": 6,
+      "3": 5,
+      "4": 4,
+      "5": 3,
+      "6": 2,
+      "7": 1,
+      "8": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "HSS function recovery condition (passing SW fixed time)",
+        "options": [
+          "2.5s",
+          "2.0s",
+          "1.5s",
+          "1.25s",
+          "1.0s",
+          "0.75s",
+          "0.5s",
+          "0.35s"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "2,5s",
+          "2,0s",
+          "1,5s",
+          "1,25s",
+          "1,0s",
+          "0,75s",
+          "0,5s",
+          "0,35s"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 10,
+    "description": "先行車検知音",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "ACC Forward Vehicle Detect Beep",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Aviso Sonoro de Detecção de Veículo Frontal de ACC",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 11,
+    "description": "リアクティブフォースペダル設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Reactive Force Pedal",
+        "options": [
+          "High Force",
+          "Low Force",
+          "ECON interlock"
+        ]
+      },
+      "pt": {
+        "title": "Pedal de força reativa",
+        "options": [
+          "Alta",
+          "Baixa",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 12,
+    "description": "リアクティブフォースペダル 車間維持支援 車間距離設定",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 1,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "IDA inter-vehicle control: inter-vehicle distance",
+        "options": [
+          "Long",
+          "Middle",
+          "Short"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Longo",
+          "MÉDIO",
+          "Curto"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 13,
+    "description": "リアクティブフォースペダルカーブ進入支援速度設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Curve entry support speed setting",
+        "options": [
+          "SLOW",
+          "Middle",
+          "FAST"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "DEVAGAR",
+          "MÉDIO",
+          "RÁPIDO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 14,
+    "description": "リアクティブフォースペダル車間制御ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "IDA inter-vehicle maintenance functions ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 15,
+    "description": "リアクティブフォースペダル カーブ進入機能ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "IDA curve entry function ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 16,
+    "description": "IDA 規制速度機能ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 17,
+    "description": "ﾊﾞｯｸ→前進時のGV自動表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "GV automatic display when going from reverse to forward",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Sim",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 18,
+    "description": "後退から前進時カメラ映像切換え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Camera video switching from reverse to forward",
+        "options": [
+          "No",
+          "Yes"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "Sim"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 19,
+    "description": "IGｵﾝ後、MVC起動時の表示画面",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Screen display when MVC is turned on after IG ON",
+        "options": [
+          "GV",
+          "Screen preceding IG OFF"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "GV",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 20,
+    "description": "カメラシステム起動後の前方画面",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4
+    },
+    "labels": {
+      "(default)": {
+        "title": "Forward view screen after the camera system is turned on",
+        "options": [
+          "Ｆ・Ｇ",
+          "Last screen",
+          "ＦＢ",
+          "ＳＶ"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "F･G",
+          "",
+          "FB",
+          "SV"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 21,
+    "description": "カメラシステム起動後の側方画面",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Side view screen after the camera system is turned on",
+        "options": [
+          "SV",
+          "Last screen",
+          "SWV"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "SV",
+          "",
+          "SWV"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 22,
+    "description": "カメラシステム起動後の後方画面",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 4,
+      "4": 5
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear view screen after the camera system is turned on",
+        "options": [
+          "R･G",
+          "Last screen",
+          "RW",
+          "RV"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "R･G",
+          "",
+          "RW",
+          "RV"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 23,
+    "description": "減速時のカメラ自動表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Automatic camera display when slowing down",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Sim",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 24,
+    "description": "ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Ground view display when door mirrors are stored",
+        "options": [
+          "Storage change detected",
+          "No storage change"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 25,
+    "description": "駐車ガイド線自動消去",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Automatic deletion of parking guidelines",
+        "options": [
+          "3 minutes",
+          "No restriction"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 26,
+    "description": "サイドビュー表示車速制限",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Side view display speed restriction",
+        "options": [
+          "Yes",
+          "No (no restriction)"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Sim",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 27,
+    "description": "リアビュー全画面での表示画面",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Display screen for rear view full screen",
+        "options": [
+          "Wide",
+          "Normal"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Largo",
+          "NORMAL"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 28,
+    "description": "ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Ground view display when door mirrors are stored",
+        "options": [
+          "Storage change detected",
+          "No storage change"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 29,
+    "description": "Set Parking course(Right Parking. Start Point.X)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Right Parking. Start Point.X)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de\nestacionamento (Est. à\ndireita. Ponto de início.X)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 30,
+    "description": "Set Parking course(Right Parking. Start Point.Y)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Right Parking. Start Point.Y)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de\nestacionamento (Est. à\ndireita. Ponto de início.Y)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 31,
+    "description": "Set Parking course(Right Parking. Start Point.THETA)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Right Parking. Start Point.THETA)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento\n(Est. à direita. Ponto de\ninício.TETA)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 32,
+    "description": "Set Parking course(Left Parking. Start Point.X)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Left Parking. Start Point.X)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de\nestacionamento (Est. à\nesquerda. Ponto de início.X)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 33,
+    "description": "Set Parking course(Left Parking. Start Point.Y)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Left Parking. Start Point.Y)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de\nestacionamento (Est. à\nesquerda. Ponto de início.Y)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 34,
+    "description": "Set Parking course(Left Parking. Start Point.THETA)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Left Parking. Start Point.THETA)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento\n(Est. à esquerda. Ponto de\ninício.TETA)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 35,
+    "description": "Set Parking course(Parallel Right Parking. Start Point.X)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Right Parking. Start Point.X)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento (Est.\nparalelo à direita. Ponto de início.X)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 36,
+    "description": "Set Parking course(Parallel Right Parking. Start Point.Y)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Right Parking. Start Point.Y)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento (Est.\nparalelo à direita. Ponto de início.Y)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 37,
+    "description": "Set Parking course(Parallel Right Parking. Start Point.THETA)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Right Parking. Start Point.THETA)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento (Est.\nparalelo à direita. Ponto de início.TETA)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 38,
+    "description": "Set Parking course(Parallel Left Parking. Start Point.X)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Left Parking. Start Point.X)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento\n(Est. paralelo à esquerda. Ponto de\ninício.X)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 39,
+    "description": "Set Parking course(Parallel Left Parking. Start Point.Y)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Left Parking. Start Point.Y)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento\n(Est. paralelo à esquerda. Ponto de\ninício.Y)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 40,
+    "description": "Set Parking course(Parallel Left Parking. Start Point.THETA)",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Set Parking Course\n(Parallel Left Parking. Start Point.THETA)",
+        "options": []
+      },
+      "pt": {
+        "title": "Configurar rota de estacionamento (Est.\nparalelo à esquerda. Ponto de\ninício.TETA)",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 41,
+    "description": "Clear Parking course",
+    "type": 0,
+    "values": {
+      "1": 16,
+      "2": 32,
+      "3": 48,
+      "4": 64
+    },
+    "labels": {
+      "(default)": {
+        "title": "Clear Parking Course",
+        "options": [
+          "Right Parking",
+          "Left Parking",
+          "Parallel Right Parking",
+          "Parallel Left Parking"
+        ]
+      },
+      "pt": {
+        "title": "Limpar rota de estacionamento",
+        "options": [
+          "Estacionamento à Direita",
+          "Estacionamento à Esquerda",
+          "Estacionamento Paralelo à Direita",
+          "Estacionamento Paralelo à Esquerda"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 42,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝ ｶﾞｲﾄﾞ線表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: Guideline Display",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Sim",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 43,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝ 自動映像切替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: Automatic Video Switching",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Sim",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 44,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝ 映像明るさ設定",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: Video Brightness Setting",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 45,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝ 映像ｺﾝﾄﾗｽﾄ設定",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: Video Contrast Setting",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 46,
+    "description": "安全運転コーチングON/OFF機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Safe Driving Coach ON/OFF Function",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 47,
+    "description": "安全運転コーチング機能別ON/OFF機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Safe Driving Coach\nIndividual Functions ON/OFF Function",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 48,
+    "description": "安全運転コーチング乗車中情報提供地点別ON/OFF機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 49,
+    "description": "BSIシステムON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Blind Spot Info ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Inform. dos pontos cegos lig/desl",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 50,
+    "description": "BSIシステムインジケータ輝度変更",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Blind Spot Info Brightness",
+        "options": [
+          "High",
+          "Medium",
+          "Low"
+        ]
+      },
+      "pt": {
+        "title": "Brilho das informações de pontos cegos",
+        "options": [
+          "Alta",
+          "Médio",
+          "Baixa"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 51,
+    "description": "BSIシステム警報音ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "BSI System\nAlarm ON/OFF",
+        "options": [
+          "On",
+          "Off",
+          "Unavailable"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO",
+          "Indisponível"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 52,
+    "description": "BSIシステムインジケータ及び警報音ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Blind Spot Info",
+        "options": [
+          "Audible and Visual Alert",
+          "Visual Alert",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Informações de Ponto Cego",
+        "options": [
+          "Alerta Sonoro e Visual",
+          "Alerta Visual",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 53,
+    "description": "CTM(BSIレーダ方式)システムON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "CTM (BSI Radar Scheme)\nSystem ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 54,
+    "description": "LKAS解除ブザー",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Lane Keeping Assist Suspend Beep",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Aviso Sonoro de Suspensão do Auxílio na Permanência de Faixa",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 55,
+    "description": "CTBAシステムON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "City Brake Active System",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Sistema ativo de freio urbano",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 56,
+    "description": "CTBAシステム警報音ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "CTBA System\nAlarm ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 57,
+    "description": "発進お知らせ設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Start Information",
+        "options": [
+          "Normal",
+          "Early",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Informações iniciais",
+        "options": [
+          "NORMAL",
+          "Antecipado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 58,
+    "description": "路外逸脱機能設定Road Departure Mitigation Settings",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Road Departure Mitigation Setting",
+        "options": [
+          "Normal",
+          "Wide",
+          "Warning Only"
+        ]
+      },
+      "pt": {
+        "title": "Configuração de Mitigação de Saída de Estrada",
+        "options": [
+          "NORMAL",
+          "Largo",
+          "Somente Aviso"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 59,
+    "description": "割り込み予測付ACC機能設定i-ACC　setting",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "ACC Function Setting with Interruption Predictor\ni-ACC Setting",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 60,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 61,
+    "description": "信号情報活用運転支援表示 ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Traffic Signal Information Driving Support - Drive Information Transmission",
+        "options": [
+          "Function ON - with Interrupt Display",
+          "Function ON - No Interrupt Display",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Inf. de sinais de trânsito de suporte à condução - Transmissão de inf. de condução",
+        "options": [
+          "Função LIG - com interrupção de exibição",
+          "Função LIG - sem interrupção de exibição",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 62,
+    "description": "ナイトビジョン注意喚起",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 63,
+    "description": "BSIシステム インジケータ及びステアリングインフォメーションON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Blind Spot Info",
+        "options": [
+          "Tactile and Visual Alert",
+          "Visual Alert",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Informações de Ponto Cego",
+        "options": [
+          "",
+          "Alerta Visual",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 64,
+    "description": "眠気検知システム休憩喚起モード切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 65,
+    "description": "眠気検知システム休憩喚起 感度切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 2,
+    "id": 66,
+    "description": "HUW 機能 ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Head-up Warning",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Aviso Head-up",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 67,
+    "description": "ACC設定車速表示単位",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "ACC Display Speed Unit",
+        "options": [
+          "mph",
+          "km/h"
+        ]
+      },
+      "pt": {
+        "title": "Unidade de Velocidade no Visor de ACC",
+        "options": [
+          "mph",
+          "km/h"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 2,
+    "id": 68,
+    "description": "RevMatch制御",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rev Match",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Adaptação de rotações",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 1,
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ１機能",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Speed Alarm 1 Function",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 2,
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ１車速設定値",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Speed Alarm 1 Vehicle Speed Setting",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 3,
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ２機能",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Speed Alarm 2 Function",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 4,
+    "description": "ｽﾋﾟｰﾄﾞｱﾗｰﾑ２車速設定値",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Speed Alarm 2 Vehicle Speed Setting",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 5,
+    "description": "ACC設定車速表示単位",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 6,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝｲﾙﾐｺﾝﾄﾛｰﾙ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: Light Control",
+        "options": [
+          "100%",
+          "80%",
+          "60%",
+          "40%"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 7,
+    "description": "ﾅｲﾄﾋﾞｼﾞｮﾝｼｽﾃﾑ起動設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Night Vision: System Start-Up Settings",
+        "options": [
+          "MANUAL",
+          "Auto"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "MANUAL",
+          "Auto"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 8,
+    "description": "HUD表示ｲﾙﾐｺﾝﾄﾛｰﾙ",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "HUD Light Control",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 9,
+    "description": "言語設定 (US)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "English",
+          "Français",
+          "Español"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "English",
+          "Français",
+          "Español"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 10,
+    "description": "言語設定 (US)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "English",
+          "Français",
+          "Español"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "English",
+          "Français",
+          "Español"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 11,
+    "description": "ﾒｰﾀｰ表示言語切り替え",
+    "type": 0,
+    "values": {},
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 12,
+    "description": "言語設定 (中国)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "中文",
+          "English"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "中文",
+          "English"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 13,
+    "description": "言語設定 (EU) 6ヶ国語",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 255
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "English",
+          "Français",
+          "Español",
+          "German",
+          "Italian",
+          "Português"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "English",
+          "Français",
+          "Español",
+          "",
+          "",
+          "Português"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 14,
+    "description": "言語設定（南米ポルトガル語）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "Português",
+          "English"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "Português",
+          "English"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 15,
+    "description": "言語設定 (EU) 12ヶ国語",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10,
+      "12": 11,
+      "13": 255
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "English",
+          "German",
+          "Italian",
+          "Français",
+          "Español",
+          "Português",
+          "Dutch",
+          "Danish",
+          "Swedish",
+          "Norwegian",
+          "Finnish",
+          "русский"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "English",
+          "Alemão",
+          "Italiano",
+          "Français",
+          "Español",
+          "Português",
+          "Holandês",
+          "Dinamarquês",
+          "Sueco",
+          "Norueguês",
+          "Finlandês",
+          "РУССКИЙ"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 16,
+    "description": "言語設定 (EU) 13ヶ国語",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10,
+      "12": 11,
+      "13": 12,
+      "14": 255
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "English",
+          "German",
+          "Italian",
+          "Français",
+          "Español",
+          "Português",
+          "Dutch",
+          "Danish",
+          "Swedish",
+          "Norwegian",
+          "Finnish",
+          "русский",
+          "Polish"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "English",
+          "Alemão",
+          "Italiano",
+          "Français",
+          "Español",
+          "Português",
+          "Holandês",
+          "Dinamarquês",
+          "Sueco",
+          "Norueguês",
+          "Finlandês",
+          "РУССКИЙ",
+          "Polaco"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 17,
+    "description": "言語設定 (ロシア)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "русский",
+          "English"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "РУССКИЙ",
+          "English"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 18,
+    "description": "ﾜｰﾆﾝｸﾞﾒｯｾｰｼﾞ表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Warning Message",
+        "options": [
+          "ON",
+          "OFF"
+        ]
+      },
+      "pt": {
+        "title": "Mensagem de aviso",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 19,
+    "description": "外気温表示補正(℃表示)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6
+    },
+    "labels": {
+      "(default)": {
+        "title": "Adjust Outside Temp. Display",
+        "options": [
+          "-3℃",
+          "-2℃",
+          "-1℃",
+          "±0℃",
+          "+1℃",
+          "+2℃",
+          "+3℃"
+        ]
+      },
+      "pt": {
+        "title": "Ajustar tela de temperatura ext.",
+        "options": [
+          "-3℃",
+          "-2℃",
+          "-1℃",
+          "±0℃",
+          "+1℃",
+          "+2℃",
+          "+3℃"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 20,
+    "description": "外気温表示補正(°F表示)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10
+    },
+    "labels": {
+      "(default)": {
+        "title": "Adjust Outside Temp. Display",
+        "options": [
+          "-5℉",
+          "-4℉",
+          "-3℉",
+          "-2℉",
+          "-1℉",
+          "±0℉",
+          "+1℉",
+          "+2℉",
+          "+3℉",
+          "+4℉",
+          "+5℉"
+        ]
+      },
+      "pt": {
+        "title": "Ajustar tela de temperatura ext.",
+        "options": [
+          "-5℉",
+          "-4℉",
+          "-3℉",
+          "-2℉",
+          "-1℉",
+          "±0℉",
+          "+1℉",
+          "+2℉",
+          "+3℉",
+          "+4℉",
+          "+5℉"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 21,
+    "description": "TRIP A & 平均燃費Aの給油連動リセット",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Trip A & Average Fuel Economy A Refueling Interlock Reset",
+        "options": [
+          "Off",
+          "On"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 22,
+    "description": "ﾄﾘｯﾌﾟA&平均電費Aの充電連動ﾘｾｯﾄ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Trip A & Average Power Consumption A Charging Interlock Reset",
+        "options": [
+          "Off",
+          "On"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 23,
+    "description": "経過時間のﾘｾｯﾄ条件切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Change Reset Conditions for Elapsed Time",
+        "options": [
+          "IG-OFF",
+          "TRIP A RESET",
+          "TRIP B RESET"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "IG-DESLIGADO",
+          "ZERAR VIAGEM A",
+          "ZERAR VIAGEM B"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 24,
+    "description": "TRIP A リセット条件(非PHEV車)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "\"Trip A\" Reset Timing",
+        "options": [
+          "When Refueled",
+          "IGN Off",
+          "Manually Reset"
+        ]
+      },
+      "pt": {
+        "title": "Zerar o tempo da Viagem A",
+        "options": [
+          "Com abastecimento",
+          "Ignição desligada",
+          "Zerar manualmente"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 25,
+    "description": "TRIP B リセット条件(非PHEV車)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "\"Trip B\" Reset Timing",
+        "options": [
+          "When Refueled",
+          "IGN Off",
+          "Manually Reset"
+        ]
+      },
+      "pt": {
+        "title": "Zerar o tempo da Viagem B",
+        "options": [
+          "Com abastecimento",
+          "Ignição desligada",
+          "Zerar manualmente"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 26,
+    "description": "TRIP A リセット条件(PHEV車)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "\"Trip A\" Reset Timing",
+        "options": [
+          "When Refueled",
+          "When Charged",
+          "IGN Off",
+          "Manually Reset"
+        ]
+      },
+      "pt": {
+        "title": "Zerar o tempo da Viagem A",
+        "options": [
+          "Quando reabastecido",
+          "Quando carregado",
+          "Ignição desligada",
+          "Zerar manualmente"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 27,
+    "description": "TRIP B リセット条件(PHEV車)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "\"Trip B\" Reset Timing",
+        "options": [
+          "When Refueled",
+          "When Charged",
+          "IGN Off",
+          "Manually Reset"
+        ]
+      },
+      "pt": {
+        "title": "Zerar o tempo da Viagem B",
+        "options": [
+          "Quando reabastecido",
+          "Quando carregado",
+          "Ignição desligada",
+          "Zerar manualmente"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 28,
+    "description": "ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4
+    },
+    "labels": {
+      "(default)": {
+        "title": "Select Drive Computer Display",
+        "options": [
+          "Instant fuel economy",
+          "Average fuel economy",
+          "Cruising distance",
+          "Elapsed time",
+          "Average speed"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 29,
+    "description": "ｱﾗｰﾑ音量調整",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Adjust Alarm Volume",
+        "options": [
+          "High",
+          "Mid",
+          "Low"
+        ]
+      },
+      "pt": {
+        "title": "Ajustar Volume do Alarme",
+        "options": [
+          "Alta",
+          "Média",
+          "Baixa"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 30,
+    "description": "ｺﾝﾊﾟｽｿﾞｰﾝ設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Compass Zone Settings",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 31,
+    "description": "WELCOMEｽｸﾛｰﾙ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "WELCOME Scroll Duration",
+        "options": [
+          "0.1 seconds",
+          "0.2 seconds"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 32,
+    "description": "ｳｪﾙｶﾑ照明の初期点灯輝度設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Initial Brightness Setting for Welcome Lights\n",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 33,
+    "description": "ｳｪﾙｶﾑ照明の初期点灯輝度設定",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Initial Brightness Setting for Welcome Lights\n",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 34,
+    "description": "ｳｪﾙｶﾑ照明設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Welcome Light Settings\n",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 35,
+    "description": "REVインジケータ設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Shift Up Backlight",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 36,
+    "description": "ECOインジケータ設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "ECO Indicator ON/OFF\n",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 37,
+    "description": "ﾃﾞｼﾞﾀﾙｽﾋﾟｰﾄﾞﾒｰﾀの表示単位系切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Change Units for Digital Speedometer Display",
+        "options": [
+          "Auto",
+          "km/h",
+          "mph"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Auto",
+          "km/h",
+          "mph"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 38,
+    "description": "パワーメータの表示単位切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 39,
+    "description": "ストップウオッチ機能の設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Stopwatch Function Settings",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 40,
+    "description": "アンビエントメーター照明色変化設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Fuel Efficiency Backlight",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Retroiluminação de eficiência de combustível",
+        "options": [
+          "Ligada",
+          "Desligada"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 41,
+    "description": "アンビエントメーター照明色設定（ホワイト色なし）",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7
+    },
+    "labels": {
+      "(default)": {
+        "title": "Fuel Efficiency Backlight Color",
+        "options": [
+          "Blue",
+          "Violet",
+          "Pink",
+          "Red",
+          "Amber",
+          "Yellow",
+          "Random"
+        ]
+      },
+      "pt": {
+        "title": "Luz do Consumo de Combustível",
+        "options": [
+          "Azul",
+          "Violeta Púrpura",
+          "",
+          "Vermelho",
+          "Âmbar",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 42,
+    "description": "アンビエントメーター照明色設定（ホワイト色あり）",
+    "type": 0,
+    "values": {
+      "1": 7,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7
+    },
+    "labels": {
+      "(default)": {
+        "title": "Fuel Efficiency Backlight Color",
+        "options": [
+          "White",
+          "Blue",
+          "Violet",
+          "Pink",
+          "Red",
+          "Amber",
+          "Yellow",
+          "Random"
+        ]
+      },
+      "pt": {
+        "title": "Luz do Consumo de Combustível",
+        "options": [
+          "",
+          "Azul",
+          "Violeta Púrpura",
+          "",
+          "Vermelho",
+          "Âmbar",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 43,
+    "description": "CLOCK機能",
+    "type": 1,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "CLOCK Function",
+        "options": []
+      },
+      "pt": {
+        "title": "",
+        "options": []
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 44,
+    "description": "CLOCK機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "CLOCK Function",
+        "options": [
+          "12h",
+          "24h",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "12h",
+          "24h",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 45,
+    "description": "タイマー充電機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Timed Charging Function",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 46,
+    "description": "タイマー充電モード",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Timed Charging Mode",
+        "options": [
+          "Prioritize full charge",
+          "Prioritize set time"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 47,
+    "description": "タイマー充電開始時刻（時間）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 12,
+      "3": 23
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 48,
+    "description": "タイマー充電開始時刻（分）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 30,
+      "3": 50
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 49,
+    "description": "タイマー充電終了時刻（時間）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 12,
+      "3": 23
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 50,
+    "description": "タイマー充電終了時刻（分）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 30,
+      "3": 50
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 51,
+    "description": "SILインジケータ表示設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "SIL display settings",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "SIL display settings",
+        "options": [
+          "On",
+          "Off"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 52,
+    "description": "ECOＮモード保持",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Hold ECON Mode",
+        "options": [
+          "ON",
+          "OFF"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 53,
+    "description": "スマートスタートのガイダンス表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Smart Start Guidance Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 54,
+    "description": "車速表示単位",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Speed Display Unit",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      },
+      "pt": {
+        "title": "Unid. de exibição de velocidade",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 55,
+    "description": "アイドルストップガイダンス表示設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Engine Idle Stop Guidance Screens",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "On",
+          "Off"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 56,
+    "description": "Turn by Turn表示（メータのみ）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Turn By Turn Auto Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Exibição curva-a-curva",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 57,
+    "description": "HUW 機能 ON/OFF",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 58,
+    "description": "HUD デジタルスピードメーターの表示単位切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Change Display Unit for HUD Digital Speedometer",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 59,
+    "description": "Turn by Turn表示（HUD装備時）",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Turn By Turn Auto Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Exibição curva-a-curva",
+        "options": [
+          "Ligada",
+          "Desligada"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 60,
+    "description": "言語設定 (アラビア語)",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Language Selection",
+        "options": [
+          "العربية",
+          "English"
+        ]
+      },
+      "pt": {
+        "title": "Seleção de Idioma",
+        "options": [
+          "العربية",
+          "English"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 61,
+    "description": "コンテンツ切替",
+    "type": 2,
+    "values": {},
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 62,
+    "description": "フェイバリット切替",
+    "type": 2,
+    "values": {},
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 63,
+    "description": "コンテンツ切替音　有無切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Contents Change Sound ON/OFF",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 64,
+    "description": "新着（Mail/News/SNS）割り込み表示　有無切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "New Message Notifications",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Notificação de nova mensagem",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 65,
+    "description": "壁紙選択",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Select Wallpaper",
+        "options": [
+          "CLOCK",
+          "IMAGE1",
+          "IMAGE2",
+          "IMAGE3"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "RELÓGIO",
+          "IMAGEM1",
+          "IMAGEM2",
+          "IMAGEM3"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 66,
+    "description": "画像読込",
+    "type": 2,
+    "values": {},
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 67,
+    "description": "壁紙削除",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Delete Wallpaper",
+        "options": [
+          "IMAGE1",
+          "IMAGE2",
+          "IMAGE3"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "IMAGEM1",
+          "IMAGEM2",
+          "IMAGEM3"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 68,
+    "description": "ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4
+    },
+    "labels": {
+      "(default)": {
+        "title": "Select Drive Computer Display",
+        "options": [
+          "Instant fuel economy",
+          "Average fuel economy",
+          "Cruising distance",
+          "Elapsed time",
+          "Average speed"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 69,
+    "description": "オープニングアニメーション",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Opening Animation",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 70,
+    "description": "背景色",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Background Color",
+        "options": [
+          "BLUE",
+          "RED",
+          "AMBER",
+          "GRAY"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "AZUL",
+          "VERMELHO",
+          "ÂMBAR",
+          "CINZA"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 71,
+    "description": "スマートスタートのガイダンス表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Start Guidance Screens",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Telas de orientação inicial sem chave",
+        "options": [
+          "On",
+          "Off"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 72,
+    "description": "交差点案内表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Turn by Turn Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Exibição Curva a Curva",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 73,
+    "description": "アイドルストップガイダンス表示設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Engine Idle Stop Guidance Screens",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Telas de interrupção de guia com motor ocioso",
+        "options": [
+          "On",
+          "Off"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 74,
+    "description": "ワーニングメッセージ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Warning Message",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Mensagem de aviso",
+        "options": [
+          "LIGADO",
+          "DESLIGADO"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 75,
+    "description": "TSR常駐表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Traffic Sign Recognition System Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Exibição do sistema de reconhecimento de sinais de trânsito",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 76,
+    "description": "DISPLY表示言語切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 77,
+    "description": "DISPLY表示言語切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 78,
+    "description": "DISPLY表示言語切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 79,
+    "description": "DISPLY表示言語切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10,
+      "12": 11,
+      "13": 12
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 80,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 81,
+    "description": "非パドル操作時ギヤ段常時表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 82,
+    "description": "MTギヤ段表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Gear Position Display",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Exibição da posição de marcha",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 83,
+    "description": "ターン音色",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 84,
+    "description": "1周期吹鳴タイプリバースアラーム",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Reverse Alert Tone",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Tom de Alerta de Marcha à Ré",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 85,
+    "description": "タイヤ角度モニター",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Tire Angle Monitor",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Monitor de ângulo de pneu",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 86,
+    "description": "距離表示単位",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Display Speed Unit",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      },
+      "pt": {
+        "title": "Exibir unid. de velocidade",
+        "options": [
+          "km/h",
+          "mph"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 87,
+    "description": "車速・距離表示単位",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Speed/Distance Units",
+        "options": [
+          "km/h・km",
+          "mph・miles"
+        ]
+      },
+      "pt": {
+        "title": "Unid. de distância/velocidade",
+        "options": [
+          "km/h・km",
+          "mph・milhas"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 88,
+    "description": "室内照明自動減光設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Interior Illumination",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Inluminação interna autom.",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 89,
+    "description": "IDS設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 90,
+    "description": "Trip Computerの表示単位切替",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 91,
+    "description": "メータ表示コンフィグレーション設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Panel configuration",
+        "options": [
+          "Preset 1",
+          "Preset 2",
+          "Preset 3"
+        ]
+      },
+      "pt": {
+        "title": "Configuração do painel",
+        "options": [
+          "Configuração 1",
+          "Configuração 2",
+          "Configuração 3"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 92,
+    "description": "タコメータ表示",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Tachometer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Conta-giros",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 3,
+    "id": 93,
+    "description": "タイマー充電開始時刻",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 94,
+    "description": "タイマー充電終了時刻",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 3,
+    "id": 95,
+    "description": "DISPLY表示言語切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10,
+      "12": 11,
+      "13": 12,
+      "14": 13,
+      "15": 14,
+      "16": 15,
+      "17": 16,
+      "18": 17,
+      "19": 18,
+      "20": 19
+    },
+    "labels": {
+      "(default)": {
+        "title": "Change Display Language 5",
+        "options": [
+          "English",
+          "Deutsch",
+          "Italiano",
+          "Français",
+          "Español",
+          "Português",
+          "Nederlands",
+          "Dansk",
+          "Svenska",
+          "Norsk",
+          "Suomi",
+          "русский",
+          "Polski"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "English",
+          "",
+          "",
+          "Français",
+          "Español",
+          "Português",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "РУССКИЙ",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 4,
+    "id": 1,
+    "description": "ﾒﾓﾘｰｼｰﾄ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Memory Position Link",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ligação da Posição de Memória",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 4,
+    "id": 2,
+    "description": "ﾁﾙﾄ・ﾃﾚｽｺ跳ね上げ設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Steering Wheel Movement at Entry/Exit",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Movimento do Volante na Entrada/Saída",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 4,
+    "id": 3,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 4,
+    "id": 4,
+    "description": "乗降時シート位置動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Seat Position Movement At Entry/Exit",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Movimiento de Asiento en Entrada / Salida",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 4,
+    "id": 5,
+    "description": "乗降時チルト/テレスコ自動跳ね上げ/シート位置動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Easy Entry/Exit",
+        "options": [
+          "Seat & Steering Wheel",
+          "Seat Only",
+          "Steering Wheel Only",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Entrada/Saída Fácil",
+        "options": [
+          "Assento e volante",
+          "Somente assento",
+          "Somente volante",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 4,
+    "id": 6,
+    "description": "ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Seat Belt Tension",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Tensão do cinto de segurança modo sport",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 1,
+    "description": "ｶｽﾀﾏｲｽﾞのｶｰﾄﾞｷｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Customize Card Key Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 2,
+    "description": "ｶｽﾀﾏｲｽﾞの連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Customize Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 3,
+    "description": "ｽﾏｰﾄ機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Smart Functions",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 4,
+    "description": "リモートスタート機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Remote Start System On/Off",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ligar/Desligar Sistema de Partida por Controle Remoto",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 5,
+    "description": "WAL",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 6,
+    "description": "ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 7,
+    "description": "ｷｰﾚｽﾘﾛｯｸ時間",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 8,
+    "description": "ｾｷｭﾘﾃｨ機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 9,
+    "description": "ｾｷｭﾘﾃｨ機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 10,
+    "description": "電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 11,
+    "description": "PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTG Keyless Lock Answer Back Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 12,
+    "description": "PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTL Keyless Lock Answer Back Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 13,
+    "description": "PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTG Keyless Lock Answer Back Hazard",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 14,
+    "description": "PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTL Keyless Lock Answer Back Hazard",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 15,
+    "description": "PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTG Keyless Lock Answer Back Buzzer Sound",
+        "options": [
+          "Standard",
+          "Small"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 16,
+    "description": "PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "PTL Keyless Lock Answer Back Buzzer Sound",
+        "options": [
+          "Standard",
+          "Small"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 17,
+    "description": "PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 18,
+    "description": "PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 19,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 5,
+    "id": 20,
+    "description": "リモートスタート機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Remote Start System On/Off",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ligar/Desligar Sistema de Partida por Controle Remoto",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 21,
+    "description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Door Unlock Mode",
+        "options": [
+          "Driver Door Only",
+          "All Doors"
+        ]
+      },
+      "pt": {
+        "title": "Modo de destravamento das portas",
+        "options": [
+          "Apenas porta do motorista",
+          "Todas as portas"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 22,
+    "description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Door Unlock Mode",
+        "options": [
+          "Driver Door Only",
+          "All Doors"
+        ]
+      },
+      "pt": {
+        "title": "Modo de destravamento das portas",
+        "options": [
+          "Apenas porta do motorista",
+          "Todas as portas"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 23,
+    "description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Beep Volume",
+        "options": [
+          "High",
+          "Low"
+        ]
+      },
+      "pt": {
+        "title": "Volume do bipe do acesso keyless",
+        "options": [
+          "Alto",
+          "Baixo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 24,
+    "description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Beep Volume",
+        "options": [
+          "High",
+          "Low"
+        ]
+      },
+      "pt": {
+        "title": "Volume do bipe do acesso keyless",
+        "options": [
+          "Alto",
+          "Baixo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 25,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Light Flash",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Localizar carro",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 26,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Light Flash",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Localizar carro",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 27,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Beep",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Aviso sonoro do acesso keyless",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 5,
+    "id": 28,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Access Beep",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Aviso sonoro do acesso keyless",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 1,
+    "description": "CC&ASL／ACC&ASL設定車速表示単位",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "CC&ASL/ACC&ASL Settings for Vehicle Speed Display Unit",
+        "options": [
+          "mph",
+          "km/h"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "mph",
+          "km/h"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 2,
+    "description": "WELCOME LTのSMART連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 3,
+    "description": "WELCOME LT時間",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "WELCOME LT Time",
+        "options": [
+          "TBD",
+          "TBD"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 4,
+    "description": "ｲﾝﾃﾘｱﾗｲﾄ点灯時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Interior Light Dimming Time",
+        "options": [
+          "15seconds",
+          "30seconds",
+          "60seconds"
+        ]
+      },
+      "pt": {
+        "title": "Tempo redução luz interior",
+        "options": [
+          "15Segundos",
+          "30Segundos",
+          "60Segundos"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 5,
+    "description": "ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 15,
+      "3": 30,
+      "4": 60
+    },
+    "labels": {
+      "(default)": {
+        "title": "Headlight Auto Off Timer",
+        "options": [
+          "0seconds",
+          "15seconds",
+          "30seconds",
+          "60seconds"
+        ]
+      },
+      "pt": {
+        "title": "Ajuste temporiz. farol desl.",
+        "options": [
+          "0Segundos",
+          "15Segundos",
+          "30Segundos",
+          "60Segundos"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 6,
+    "description": "ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 15,
+      "3": 30,
+      "4": 60
+    },
+    "labels": {
+      "(default)": {
+        "title": "Headlight Auto Off Timer",
+        "options": [
+          "0seconds",
+          "15seconds",
+          "30seconds",
+          "60seconds"
+        ]
+      },
+      "pt": {
+        "title": "Ajuste temporiz. farol desl.",
+        "options": [
+          "0Segundos",
+          "15Segundos",
+          "30Segundos",
+          "60Segundos"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 7,
+    "description": "ｵｰﾄﾗｲﾄ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Light Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade da luz automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 8,
+    "description": "ｵｰﾄﾗｲﾄ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Light Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade da luz automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 9,
+    "description": "ﾗｲﾄ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Light Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade da luz automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 10,
+    "description": "室内ｲﾙﾐ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Interior Illumination Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade de Iluminação Interior Automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 11,
+    "description": "ﾗｲﾄ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Light Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade da luz automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 12,
+    "description": "室内ｲﾙﾐ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Interior Illumination Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade de Iluminação Interior Automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 13,
+    "description": "ﾌｯﾄﾗｲﾄ ｽﾓｰﾙﾗｲﾄ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 14,
+    "description": "点灯モード設定",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 15,
+    "description": "ハンドル点灯角度",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 16,
+    "description": "点灯タイマー",
+    "type": 0,
+    "values": {
+      "1": 2,
+      "2": 1,
+      "3": 3
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 17,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 18,
+    "description": "ｱｸｾｻﾘﾗﾝﾌﾟ点灯",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Accessory Light",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Luz acessória",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 19,
+    "description": "ﾗｲﾄ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Light Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade da luz automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 6,
+    "id": 20,
+    "description": "室内ｲﾙﾐ感度設定",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 4,
+      "3": 3,
+      "4": 2,
+      "5": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Interior Illumination Sensitivity",
+        "options": [
+          "Max",
+          "High",
+          "Mid",
+          "Low",
+          "Min"
+        ]
+      },
+      "pt": {
+        "title": "Sensibilidade de Iluminação Interior Automática",
+        "options": [
+          "Máx",
+          "Alta",
+          "Média",
+          "Baixa",
+          "Mín"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 21,
+    "description": "ﾜｲﾊﾟｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Headlight ON With Wiper ON",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 6,
+    "id": 22,
+    "description": "ﾜｲﾊﾟｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Headlight ON With Wiper ON",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 1,
+    "description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 2,
+    "description": "ｾﾚｸﾀﾌﾞﾙ切り替え",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 3,
+    "description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 4,
+    "description": "ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 5,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 6,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 7,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 8,
+    "description": "ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 9,
+    "description": "ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Lock Start-up Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 10,
+    "description": "ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Lock Start-up Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 11,
+    "description": "ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Lock Answer Back Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 12,
+    "description": "ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Lock Answer Back Buzzer",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 13,
+    "description": "ｱﾝﾛｯｸｾﾝｻ禁止時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Unlock Sensor Prohibited Time",
+        "options": [
+          "0 seconds",
+          "2 seconds",
+          "4 seconds",
+          "6 seconds"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 14,
+    "description": "ｱﾝﾛｯｸｾﾝｻ禁止時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Unlock sensor Prohibited Time",
+        "options": [
+          "0 seconds",
+          "2 seconds",
+          "4 seconds",
+          "6 seconds"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 15,
+    "description": "自動ﾄﾞｱﾛｯｸ連動機能(AT)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Lock",
+        "options": [
+          "With Vehicle Speed",
+          "Shift from P",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Trava automática de portas",
+        "options": [
+          "Com velocidade do veículo",
+          "C/ alav câmbio saindo pos P",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 16,
+    "description": "自動ﾄﾞｱﾛｯｸ連動機能(MT)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Lock",
+        "options": [
+          "With Vehicle Speed",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Trava automática de portas",
+        "options": [
+          "Com velocidade do veículo",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 17,
+    "description": "自動ﾄﾞｱﾛｯｸ連動機能(MT)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Lock",
+        "options": [
+          "With Vehicle Speed",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Trava automática de portas",
+        "options": [
+          "Com velocidade do veículo",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 18,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/1モーション)",
+    "type": 0,
+    "values": {
+      "1": 4,
+      "2": 6,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "Shift To P",
+          "IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Câmbio na posição P",
+          "Ignição desligada",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 19,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)",
+    "type": 0,
+    "values": {
+      "1": 6,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Ignição desligada",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 20,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)",
+    "type": 0,
+    "values": {
+      "1": 6,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Ignição desligada",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 21,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 4,
+      "3": 5,
+      "4": 6,
+      "5": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "Driver Door with Shift to P",
+          "All Doors with Shift to P",
+          "Driver Door with IGN Off",
+          "All Doors with IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Porta motorist câmbio pos P",
+          "Todas portas câmbio pos P",
+          "Porta motorista c/ ignição desl",
+          "Todas portas c/ ignição desl",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 22,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 4,
+      "3": 5,
+      "4": 6,
+      "5": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "Driver Door with Shift to P",
+          "All Doors with Shift to P",
+          "Driver Door with IGN Off",
+          "All Doors with IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Porta motorist câmbio pos P",
+          "Todas portas câmbio pos P",
+          "Porta motorista c/ ignição desl",
+          "Todas portas c/ ignição desl",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 23,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 6,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "Driver Door with IGN Off",
+          "All Doors with IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Porta motorista c/ ignição desl",
+          "Todas portas c/ ignição desl",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 24,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)",
+    "type": 0,
+    "values": {
+      "1": 5,
+      "2": 6,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "Driver Door with IGN Off",
+          "All Doors with IGN Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Porta motorista c/ ignição desl",
+          "Todas portas c/ ignição desl",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 25,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 4,
+      "3": 6,
+      "4": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "All Doors When Driver’s Door Opens",
+          "All Doors When Shifted to Park",
+          "All Doors When Ignition Switched Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Todas as portas ao abrir a porta do motorista",
+          "Todas as portas com o câmbio na pos P",
+          "Todas as portas ao desligar a ignição",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 26,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 4,
+      "3": 6,
+      "4": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "All Doors When Driver’s Door Opens",
+          "All Doors When Shifted to Park",
+          "All Doors When Ignition Switched Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Todas as portas ao abrir a porta do motorista",
+          "Todas as portas com o câmbio na pos P",
+          "Todas as portas ao desligar a ignição",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 27,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 6,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "All Doors When Driver’s Door Opens",
+          "All Doors When Ignition Switched Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Todas as portas ao abrir a porta do motorista",
+          "Todas as portas ao desligar a ignição",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 28,
+    "description": "自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 6,
+      "3": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Door Unlock",
+        "options": [
+          "All Doors When Driver’s Door Opens",
+          "All Doors When Ignition Switched Off",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Destravam autom de portas",
+        "options": [
+          "Todas as portas ao abrir a porta do motorista",
+          "Todas as portas ao desligar a ignição",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 29,
+    "description": "ﾄﾞｱﾛｯｸ動作",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Key and Remote Unlock Mode",
+        "options": [
+          "Driver Door",
+          "All Doors"
+        ]
+      },
+      "pt": {
+        "title": "Modo destravamento via chave e remoto",
+        "options": [
+          "Porta do motorista",
+          "Todas as portas"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 30,
+    "description": "ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Sunroof Key Off Timer Time",
+        "options": [
+          "45 seconds",
+          "0 seconds"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 31,
+    "description": "ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Sunroof Key Off Timer Time",
+        "options": [
+          "45 seconds",
+          "0 seconds"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 32,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰｼﾘﾝﾀﾞｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Windows (Sunroof) Key Cylinder Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Interconexão do cilindro da chave das janelas elétricas (teto solar)",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 33,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰｼﾘﾝﾀﾞｰ連動",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Windows (Sunroof) Key Cylinder Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 34,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰﾚｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Windows (Sunroof) Keyless Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Interconexão keyless de janelas elétricas (teto solar)",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 35,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰﾚｽ連動",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Windows (Sunroof) Keyless Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 36,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 37,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 38,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ) ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 39,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 40,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 41,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 42,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 2
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 43,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 44,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 45,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 46,
+    "description": "ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 3
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 47,
+    "description": "Power Slide Door Keyless Open Mode",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Slide Door Keyless Open Mode",
+        "options": [
+          "Anytime",
+          "When Unlocked"
+        ]
+      },
+      "pt": {
+        "title": "Abertura da porta deslizante via keyless",
+        "options": [
+          "A qualquer momento",
+          "Quando destravada"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 48,
+    "description": "降車時ドアオートロック機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Walk Away Auto Lock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Travamento Automático de Afastamento",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 49,
+    "description": "降車時ドアオートロック機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Walk Away Auto Lock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Travamento Automático de Afastamento",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 7,
+    "id": 50,
+    "description": "ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Lock Answer Back",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Reconhecimento de travas via keyless",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 51,
+    "description": "ｷｰﾚｽﾘﾛｯｸ時間",
+    "type": 0,
+    "values": {
+      "1": 3,
+      "2": 2,
+      "3": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Security Relock Timer",
+        "options": [
+          "90seconds",
+          "60seconds",
+          "30seconds"
+        ]
+      },
+      "pt": {
+        "title": "Tempor retravam segurança",
+        "options": [
+          "90s",
+          "60s",
+          "30s"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 52,
+    "description": "ｾｷｭﾘﾃｨ機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Security Alarm",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Alarme de Segurança",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 53,
+    "description": "ｾｷｭﾘﾃｨ機能",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Security Alarm",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Alarme de Segurança",
+        "options": [
+          "Ligado",
+          "Desligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 54,
+    "description": "WAL",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Walk Away Auto Lock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Travamento Automático de Afastamento",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 7,
+    "id": 55,
+    "description": "電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Folding Door Mirror",
+        "options": [
+          "Auto Fold With Keyless",
+          "Manual Only"
+        ]
+      },
+      "pt": {
+        "title": "Retrovisor lateral com recolhimento automático",
+        "options": [
+          "Recolhimento automático com função sem chave",
+          "Somente manual"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 1,
+    "description": "ﾜｲﾊﾟｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 8,
+    "id": 2,
+    "description": "ﾜｲﾊﾟｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {},
+    "hasRoute": false
+  },
+  {
+    "category": 8,
+    "id": 3,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Front Wiper Action",
+        "options": [
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Configuração do limpador do para-brisas",
+        "options": [
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 4,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Front Wiper Action",
+        "options": [
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Configuração do limpador do para-brisas",
+        "options": [
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 5,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Front Wiper Action",
+        "options": [
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Configuração do limpador do para-brisas",
+        "options": [
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 6,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 1,
+      "2": 0
+    },
+    "labels": {
+      "(default)": {
+        "title": "Front Wiper Action",
+        "options": [
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Configuração do limpador do para-brisas",
+        "options": [
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 7,
+    "description": "ｵｰﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action",
+        "options": [
+          "Rain Sensing",
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Ajuste do limpador do para-brisas",
+        "options": [
+          "Sensor de chuva",
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 8,
+    "description": "ｵｰﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action",
+        "options": [
+          "Rain Sensing",
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Ajuste do limpador do para-brisas",
+        "options": [
+          "Sensor de chuva",
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 9,
+    "description": "ｵｰﾄﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action",
+        "options": [
+          "Rain Sensing",
+          "Intermittent",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "Ajuste do limpador do para-brisas",
+        "options": [
+          "Sensor de chuva",
+          "Intermitente",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 10,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Interconexão do esguichador do para-brisas",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 11,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Interconexão do esguichador do para-brisas",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 12,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Interconexão do esguichador do para-brisas",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 13,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 14,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action on Vehicle Startup",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ação do limp. no arranque do veículo",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 15,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action on Vehicle Startup",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ação do limp. no arranque do veículo",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 16,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action on Vehicle Startup",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Ação do limp. no arranque do veículo",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 17,
+    "description": "ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Wiper Action on Vehicle Startup",
+        "options": [
+          "On",
+          "Speed Sensitive"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          "Com velocidade do veículo"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 18,
+    "description": "ﾘｱﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Action",
+        "options": [
+          "Intermittent",
+          "Continuous"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 19,
+    "description": "ﾘｱﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Action",
+        "options": [
+          "Intermittent",
+          "Continuous"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 20,
+    "description": "ﾘｱﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Action",
+        "options": [
+          "Intermittent",
+          "Continuous"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 21,
+    "description": "ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 22,
+    "description": "ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 23,
+    "description": "ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 24,
+    "description": "ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 25,
+    "description": "ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Reverse Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 26,
+    "description": "ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Reverse Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 27,
+    "description": "ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Reverse Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 28,
+    "description": "ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Reverse Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 29,
+    "description": "ﾘｱﾜｲﾊﾟｰ　発進時動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Action on Vehicle Startup",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 30,
+    "description": "ﾘｱﾜｲﾊﾟｰ動作",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Action",
+        "options": [
+          "Intermittent",
+          "Continuous"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 31,
+    "description": "ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Washer Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 32,
+    "description": "ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Rear Wiper Reverse Interlock",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 8,
+    "id": 33,
+    "description": "default",
+    "type": 2,
+    "values": {},
+    "labels": {
+      "(default)": {
+        "title": "Default",
+        "options": [
+          "Yes",
+          "No"
+        ]
+      },
+      "pt": {
+        "title": "Padrão",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      }
+    },
+    "hasRoute": false
+  },
+  {
+    "category": 8,
+    "id": 34,
+    "description": "ﾜｲﾊﾟｰ連動",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Auto Headlight On with Wiper On",
+        "options": [
+          "On",
+          "Off"
+        ]
+      },
+      "pt": {
+        "title": "Acionamento Automático dos Faróis com o Limpador Acionado",
+        "options": [
+          "",
+          ""
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 10,
+    "id": 1,
+    "description": "PTG ﾊﾝｽﾞﾌﾙｱｸｾｽﾓｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "",
+        "options": [
+          "Off",
+          "On"
+        ]
+      },
+      "pt": {
+        "title": "",
+        "options": [
+          "Desligado",
+          "Ligado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 10,
+    "id": 2,
+    "description": "PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Keyless Open Mode",
+        "options": [
+          "Anytime",
+          "When Unlocked"
+        ]
+      },
+      "pt": {
+        "title": "Abertura automática do porta-malas pelo keyless",
+        "options": [
+          "Qualquer momento",
+          "Quando destravado"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 10,
+    "id": 3,
+    "description": "PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1
+    },
+    "labels": {
+      "(default)": {
+        "title": "Power Open By Outer Handle",
+        "options": [
+          "Off (Manual only)",
+          "On (Power/Manual)"
+        ]
+      },
+      "pt": {
+        "title": "Abertura por maçaneta externa",
+        "options": [
+          "Desligado (Apenas manual)",
+          "Ligado (Energia/Manual)"
+        ]
+      }
+    },
+    "hasRoute": true
+  },
+  {
+    "category": 11,
+    "id": 1,
+    "description": "IDS設定",
+    "type": 0,
+    "values": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3
+    },
+    "labels": {
+      "(default)": {
+        "title": "Preferred IDS Mode",
+        "options": [
+          "Last Used",
+          "Comfort",
+          "Normal",
+          "Sport"
+        ]
+      },
+      "pt": {
+        "title": "Modo IDS preferido",
+        "options": [
+          "Última utilização",
+          "Conforto",
+          "NORMAL",
+          "Esportivo"
+        ]
+      }
+    },
+    "hasRoute": true
+  }
+]

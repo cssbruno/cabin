@@ -1,0 +1,950 @@
+[
+  {
+    "signature": "notifyAtCodeCollation(II[B)V",
+    "line": 18
+  },
+  {
+    "signature": "notifyAudioCommand(Lcom/mitsubishielectric/ada/framework/cpucomservice/AudioCommandData;)V",
+    "line": 26
+  },
+  {
+    "signature": "notifyAudioFadeOut(I)V",
+    "line": 34
+  },
+  {
+    "signature": "notifyAudioInterrupt(Lcom/mitsubishielectric/ada/framework/cpucomservice/AudioInterruptData;)V",
+    "line": 42
+  },
+  {
+    "signature": "notifyAudioPowerOnMute(I)V",
+    "line": 50
+  },
+  {
+    "signature": "notifyBcanAirConSw(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 58
+  },
+  {
+    "signature": "notifyBcanAirConTouch(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 66
+  },
+  {
+    "signature": "notifyBcanAirconditioningControl(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 74
+  },
+  {
+    "signature": "notifyBcanCooperate(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 82
+  },
+  {
+    "signature": "notifyBcanCtmSystemOnOff(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 90
+  },
+  {
+    "signature": "notifyBcanCurrentSpotName(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 98
+  },
+  {
+    "signature": "notifyBcanCustomFrame(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 106
+  },
+  {
+    "signature": "notifyBcanData(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 114
+  },
+  {
+    "signature": "notifyBcanDataMulti(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 122
+  },
+  {
+    "signature": "notifyBcanDefaultContentsId(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 130
+  },
+  {
+    "signature": "notifyBcanGuideSpotInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 138
+  },
+  {
+    "signature": "notifyBcanIllInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 146
+  },
+  {
+    "signature": "notifyBcanLwcCmd(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 154
+  },
+  {
+    "signature": "notifyBcanMvcStatus(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 162
+  },
+  {
+    "signature": "notifyBcanMvcTouchCoordinate(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 170
+  },
+  {
+    "signature": "notifyBcanMvcpaStatus(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 178
+  },
+  {
+    "signature": "notifyBcanNaviPosInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 186
+  },
+  {
+    "signature": "notifyBcanReceiveSetting(I[B)V",
+    "line": 194
+  },
+  {
+    "signature": "notifyBcanSolarAngle(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 202
+  },
+  {
+    "signature": "notifyBcanTimeZoneInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 210
+  },
+  {
+    "signature": "notifyBeaconReceiveDataResult(I)V",
+    "line": 218
+  },
+  {
+    "signature": "notifyBeaconSendData(III[B)V",
+    "line": 226
+  },
+  {
+    "signature": "notifyBeepControl(Lcom/mitsubishielectric/ada/framework/cpucomservice/BeepControlData;)V",
+    "line": 234
+  },
+  {
+    "signature": "notifyCameraPowerAndModeControl(Lcom/mitsubishielectric/ada/framework/cpucomservice/CameraPowerAndModeData;)V",
+    "line": 242
+  },
+  {
+    "signature": "notifyChannelData(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 250
+  },
+  {
+    "signature": "notifyCidLuminanceControl([B)I",
+    "line": 258
+  },
+  {
+    "signature": "notifyCidTouchPanelCalibration([B)I",
+    "line": 266
+  },
+  {
+    "signature": "notifyCpuStatus(Lcom/mitsubishielectric/ada/framework/cpucomservice/CpuStatusData;)V",
+    "line": 274
+  },
+  {
+    "signature": "notifyCustomCheckStart()V",
+    "line": 282
+  },
+  {
+    "signature": "notifyDialingData(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 290
+  },
+  {
+    "signature": "notifyDisplayTiltAdjustment(II)I",
+    "line": 298
+  },
+  {
+    "signature": "notifyDownloadCommand(IIII)V",
+    "line": 306
+  },
+  {
+    "signature": "notifyDvdSettingInitilize(Lcom/mitsubishielectric/ada/framework/cpucomservice/DvdSettingData;)V",
+    "line": 314
+  },
+  {
+    "signature": "notifyEmergencyReportState(I)V",
+    "line": 322
+  },
+  {
+    "signature": "notifyEqChangeInfo(III)V",
+    "line": 330
+  },
+  {
+    "signature": "notifyEtcSendData([B)V",
+    "line": 338
+  },
+  {
+    "signature": "notifyExamAntiTheftControl(I)V",
+    "line": 346
+  },
+  {
+    "signature": "notifyExamAudioAdjustControl([B)V",
+    "line": 354
+  },
+  {
+    "signature": "notifyExamLwLoopBackTestStart()V",
+    "line": 362
+  },
+  {
+    "signature": "notifyExternalDisplayData(IIII[B)V",
+    "line": 370
+  },
+  {
+    "signature": "notifyExternalDtvTunerDiagStart(I)V",
+    "line": 378
+  },
+  {
+    "signature": "notifyGanetTimeInformation()V",
+    "line": 386
+  },
+  {
+    "signature": "notifyHdRadioFunctionControl(III)V",
+    "line": 394
+  },
+  {
+    "signature": "notifyHflStatus(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 402
+  },
+  {
+    "signature": "notifyIconUpdate([B)I",
+    "line": 410
+  },
+  {
+    "signature": "notifyIconUpdateControl([I)I",
+    "line": 418
+  },
+  {
+    "signature": "notifyIncallData(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 426
+  },
+  {
+    "signature": "notifyIndicationLanguageSetting(I)V",
+    "line": 434
+  },
+  {
+    "signature": "notifyKeyOffStartUp(I)V",
+    "line": 442
+  },
+  {
+    "signature": "notifyLetDiagCameraStatus(I)V",
+    "line": 450
+  },
+  {
+    "signature": "notifyLetDiagDtcClear(I)V",
+    "line": 458
+  },
+  {
+    "signature": "notifyLetDiagInLineClear(I)V",
+    "line": 466
+  },
+  {
+    "signature": "notifyLetDiagModelInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/LetDiagModelData;)V",
+    "line": 474
+  },
+  {
+    "signature": "notifyLetDiagOperatingInfo(I)V",
+    "line": 482
+  },
+  {
+    "signature": "notifyLetDiagVSPConnectInfo(I)V",
+    "line": 490
+  },
+  {
+    "signature": "notifyLetInLineDiagResultInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/LetInLineDiagResultData;)V",
+    "line": 498
+  },
+  {
+    "signature": "notifyLvdsDisplayOperationStatus(ZZZ)I",
+    "line": 506
+  },
+  {
+    "signature": "notifyLvdsDisplayingStatus(II)I",
+    "line": 514
+  },
+  {
+    "signature": "notifyLvdsInterrupt(I)I",
+    "line": 522
+  },
+  {
+    "signature": "notifyLwcCustom(IIII)V",
+    "line": 530
+  },
+  {
+    "signature": "notifyMenuBackgroundColor(III)V",
+    "line": 538
+  },
+  {
+    "signature": "notifyModeChangeFlowInfo(I[B)V",
+    "line": 546
+  },
+  {
+    "signature": "notifyMvcVideoDispCancel(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 554
+  },
+  {
+    "signature": "notifyNaviTimeInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/NaviTimeInfoData;)V",
+    "line": 562
+  },
+  {
+    "signature": "notifyNewInfoData(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 570
+  },
+  {
+    "signature": "notifyRadioDiagAntPower(I)V",
+    "line": 578
+  },
+  {
+    "signature": "notifyRadioDiagAntType(I)V",
+    "line": 586
+  },
+  {
+    "signature": "notifyRadioDiagMode(II)V",
+    "line": 594
+  },
+  {
+    "signature": "notifyRadioFunctionControl(IIII)V",
+    "line": 602
+  },
+  {
+    "signature": "notifySelfRebootStartUpTime(I)V",
+    "line": 610
+  },
+  {
+    "signature": "notifySpeakerCheck(IIIII)V",
+    "line": 618
+  },
+  {
+    "signature": "notifySpiExamCommand([B)V",
+    "line": 626
+  },
+  {
+    "signature": "notifySpiSendResult(I)V",
+    "line": 634
+  },
+  {
+    "signature": "notifySpiSendStart(I)V",
+    "line": 642
+  },
+  {
+    "signature": "notifyStrgVolKey(I)V",
+    "line": 650
+  },
+  {
+    "signature": "notifySysComDebugInfoDisplayOnOff(I)V",
+    "line": 658
+  },
+  {
+    "signature": "notifySysComInfoDisplayOperate(I)V",
+    "line": 666
+  },
+  {
+    "signature": "notifySyscomFifoControl(I)V",
+    "line": 674
+  },
+  {
+    "signature": "notifyTegraReboot(I)V",
+    "line": 682
+  },
+  {
+    "signature": "notifyTimeInformation(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 690
+  },
+  {
+    "signature": "notifyTouchSensitivitySetting(I)I",
+    "line": 698
+  },
+  {
+    "signature": "notifyVehicleCustomize(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 706
+  },
+  {
+    "signature": "notifyXmAntennaPowerSetting(I)V",
+    "line": 714
+  },
+  {
+    "signature": "registerCallbackAcura(Lcom/mitsubishielectric/ada/framework/cpucomservice/IAcuraLinkApServiceListener;)V",
+    "line": 722
+  },
+  {
+    "signature": "registerCallbackAv(Lcom/mitsubishielectric/ada/framework/cpucomservice/IAvApServiceListener;)V",
+    "line": 730
+  },
+  {
+    "signature": "registerCallbackCamera(Lcom/mitsubishielectric/ada/framework/cpucomservice/ICameraApServiceListener;)V",
+    "line": 738
+  },
+  {
+    "signature": "registerCallbackCoordination(Lcom/mitsubishielectric/ada/framework/cpucomservice/IVehicleCoordinationApServiceListener;)V",
+    "line": 746
+  },
+  {
+    "signature": "registerCallbackDiag(Lcom/mitsubishielectric/ada/framework/cpucomservice/IDiagApServiceListener;)V",
+    "line": 754
+  },
+  {
+    "signature": "registerCallbackEmergency(Lcom/mitsubishielectric/ada/framework/cpucomservice/IEmergencyApServiceListener;)V",
+    "line": 762
+  },
+  {
+    "signature": "registerCallbackError(Lcom/mitsubishielectric/ada/framework/cpucomservice/IErrorApServiceListener;)V",
+    "line": 770
+  },
+  {
+    "signature": "registerCallbackExternalDisplay(Lcom/mitsubishielectric/ada/framework/cpucomservice/IExternalDisplayApServiceListener;)V",
+    "line": 778
+  },
+  {
+    "signature": "registerCallbackHud(Lcom/mitsubishielectric/ada/framework/cpucomservice/IHudApServiceListener;)V",
+    "line": 786
+  },
+  {
+    "signature": "registerCallbackNavi(Lcom/mitsubishielectric/ada/framework/cpucomservice/INavigationApServiceListener;)V",
+    "line": 794
+  },
+  {
+    "signature": "registerCallbackPhone(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPhoneApServiceListener;)V",
+    "line": 802
+  },
+  {
+    "signature": "registerCallbackPhoneCoordination(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPhoneCoordinationApServiceListener;)V",
+    "line": 810
+  },
+  {
+    "signature": "registerCallbackPower(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPowerManagerApServiceListener;)V",
+    "line": 818
+  },
+  {
+    "signature": "registerCallbackRasp(Lcom/mitsubishielectric/ada/framework/cpucomservice/IRaspApServiceListener;)V",
+    "line": 826
+  },
+  {
+    "signature": "registerCallbackRoadToVehicle(Lcom/mitsubishielectric/ada/framework/cpucomservice/IRoadToVehicleApServiceListener;)V",
+    "line": 834
+  },
+  {
+    "signature": "registerCallbackStrgSw(Lcom/mitsubishielectric/ada/framework/cpucomservice/IStrgSwApServiceListener;)V",
+    "line": 842
+  },
+  {
+    "signature": "registerCallbackUnitInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/IUnitInfoManagerApServiceListener;)V",
+    "line": 850
+  },
+  {
+    "signature": "registerCallbackUpdate(Lcom/mitsubishielectric/ada/framework/cpucomservice/ISystemUpdateApServiceListener;)V",
+    "line": 858
+  },
+  {
+    "signature": "registerCallbackVehicleInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/IVehicleInfoManagerApServiceListener;)V",
+    "line": 866
+  },
+  {
+    "signature": "replyDownloadSeqComplete(II)V",
+    "line": 874
+  },
+  {
+    "signature": "replyLetDiagOff()V",
+    "line": 882
+  },
+  {
+    "signature": "replyLetDiagStartUp()V",
+    "line": 890
+  },
+  {
+    "signature": "replyTegraForceSleepTransition()V",
+    "line": 898
+  },
+  {
+    "signature": "requestAndroidStateChange([B)V",
+    "line": 906
+  },
+  {
+    "signature": "requestAntiTheftForceTemporaryCancel()V",
+    "line": 914
+  },
+  {
+    "signature": "requestAntiTheftStatus()V",
+    "line": 922
+  },
+  {
+    "signature": "requestAtSerialCode()V",
+    "line": 930
+  },
+  {
+    "signature": "requestAtSerialCodeWrite(I[BI[B)V",
+    "line": 938
+  },
+  {
+    "signature": "requestAudioFuncStatus()V",
+    "line": 946
+  },
+  {
+    "signature": "requestAudioInterrupt(I)V",
+    "line": 954
+  },
+  {
+    "signature": "requestAudioMode()V",
+    "line": 962
+  },
+  {
+    "signature": "requestAudioStatus(I)V",
+    "line": 970
+  },
+  {
+    "signature": "requestBackSearchSetting(II)V",
+    "line": 978
+  },
+  {
+    "signature": "requestBackupInfoClear(II)V",
+    "line": 986
+  },
+  {
+    "signature": "requestBcanContentsChange(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 994
+  },
+  {
+    "signature": "requestBcanGuideDispDemand(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1002
+  },
+  {
+    "signature": "requestBcanHudAudioCurrent(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1010
+  },
+  {
+    "signature": "requestBcanHudDisp(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1018
+  },
+  {
+    "signature": "requestBcanHudLinkHunit(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1026
+  },
+  {
+    "signature": "requestBcanHudListTab(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1034
+  },
+  {
+    "signature": "requestBcanMultiHudContents(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;I[B)V",
+    "line": 1042
+  },
+  {
+    "signature": "requestBcanReceiveData(II)V",
+    "line": 1050
+  },
+  {
+    "signature": "requestCameraConnect()V",
+    "line": 1058
+  },
+  {
+    "signature": "requestCameraPictureControl(I)V",
+    "line": 1066
+  },
+  {
+    "signature": "requestCameraPowerAndModeInfo()V",
+    "line": 1074
+  },
+  {
+    "signature": "requestCenterDisplayConnectInfo()I",
+    "line": 1082
+  },
+  {
+    "signature": "requestCenterDisplayOnOff(I)V",
+    "line": 1090
+  },
+  {
+    "signature": "requestCidStatus()I",
+    "line": 1098
+  },
+  {
+    "signature": "requestCidVersion()I",
+    "line": 1106
+  },
+  {
+    "signature": "requestCornerCameraViewAdjustValue(II)V",
+    "line": 1114
+  },
+  {
+    "signature": "requestCornerCameraViewAdjustValueWrite(Lcom/mitsubishielectric/ada/framework/cpucomservice/CornerCameraViewData;)V",
+    "line": 1122
+  },
+  {
+    "signature": "requestDabCharacterData(I)V",
+    "line": 1130
+  },
+  {
+    "signature": "requestDabDisplayData(I)V",
+    "line": 1138
+  },
+  {
+    "signature": "requestDabListInfo(II)V",
+    "line": 1146
+  },
+  {
+    "signature": "requestDabSetting(II)V",
+    "line": 1154
+  },
+  {
+    "signature": "requestDabTunerReceiveInfo()V",
+    "line": 1162
+  },
+  {
+    "signature": "requestDisplayReproStart()I",
+    "line": 1170
+  },
+  {
+    "signature": "requestDtcClear(II)V",
+    "line": 1178
+  },
+  {
+    "signature": "requestDtcRead(II)V",
+    "line": 1186
+  },
+  {
+    "signature": "requestExamAntiTheftStatus()V",
+    "line": 1194
+  },
+  {
+    "signature": "requestExamBeaconResult()V",
+    "line": 1202
+  },
+  {
+    "signature": "requestExamEtcResult()V",
+    "line": 1210
+  },
+  {
+    "signature": "requestExamIgVoltageValue()V",
+    "line": 1218
+  },
+  {
+    "signature": "requestExamMvcChkState()V",
+    "line": 1226
+  },
+  {
+    "signature": "requestExamSubClockResult()V",
+    "line": 1234
+  },
+  {
+    "signature": "requestExamTelMuteState()V",
+    "line": 1242
+  },
+  {
+    "signature": "requestExamXmTunerState()V",
+    "line": 1250
+  },
+  {
+    "signature": "requestExitControl(I)V",
+    "line": 1258
+  },
+  {
+    "signature": "requestExternalDiskDriveDisplayData(II[B)V",
+    "line": 1266
+  },
+  {
+    "signature": "requestExternalDtvTunerDisplayData(II)V",
+    "line": 1274
+  },
+  {
+    "signature": "requestExternalDtvTunerStatus()V",
+    "line": 1282
+  },
+  {
+    "signature": "requestFcanReceiveData(I)V",
+    "line": 1290
+  },
+  {
+    "signature": "requestGpsAntConnect()V",
+    "line": 1298
+  },
+  {
+    "signature": "requestHdDataPacket()V",
+    "line": 1306
+  },
+  {
+    "signature": "requestHdDataPacketReset()V",
+    "line": 1314
+  },
+  {
+    "signature": "requestHdTmcServiceList()V",
+    "line": 1322
+  },
+  {
+    "signature": "requestHdTmcServiceListUpdate()V",
+    "line": 1330
+  },
+  {
+    "signature": "requestHdTmcStationInfo()V",
+    "line": 1338
+  },
+  {
+    "signature": "requestHdTmcStatus()V",
+    "line": 1346
+  },
+  {
+    "signature": "requestHftMuteSignalInfo()V",
+    "line": 1354
+  },
+  {
+    "signature": "requestHuContStateForInspect()V",
+    "line": 1362
+  },
+  {
+    "signature": "requestIgnitionInfo()V",
+    "line": 1370
+  },
+  {
+    "signature": "requestInternalTemperature()V",
+    "line": 1378
+  },
+  {
+    "signature": "requestInterruptCancel(I)V",
+    "line": 1386
+  },
+  {
+    "signature": "requestLcdSetting([B)I",
+    "line": 1394
+  },
+  {
+    "signature": "requestLwcAimingStart()V",
+    "line": 1402
+  },
+  {
+    "signature": "requestLwcDiagResultRead()V",
+    "line": 1410
+  },
+  {
+    "signature": "requestLwcMarkerDetectStart()V",
+    "line": 1418
+  },
+  {
+    "signature": "requestMeterDisplayConnectInfo()I",
+    "line": 1426
+  },
+  {
+    "signature": "requestModelInfo(I)V",
+    "line": 1434
+  },
+  {
+    "signature": "requestMvcStatus()V",
+    "line": 1442
+  },
+  {
+    "signature": "requestOperationProhibitedChange(II)V",
+    "line": 1450
+  },
+  {
+    "signature": "requestProgramVersion(II)[B",
+    "line": 1458
+  },
+  {
+    "signature": "requestRTDataBaseClear()V",
+    "line": 1466
+  },
+  {
+    "signature": "requestRTDebugInfoDisplayData()V",
+    "line": 1474
+  },
+  {
+    "signature": "requestRTInternalLogInfo(II)V",
+    "line": 1482
+  },
+  {
+    "signature": "requestRadioArtistExperience(II)V",
+    "line": 1490
+  },
+  {
+    "signature": "requestRadioCharacterData(II)V",
+    "line": 1498
+  },
+  {
+    "signature": "requestRadioControl()V",
+    "line": 1506
+  },
+  {
+    "signature": "requestRadioDispData(I)V",
+    "line": 1514
+  },
+  {
+    "signature": "requestRadioHdTmc(II)V",
+    "line": 1522
+  },
+  {
+    "signature": "requestRadioItunesTagging(II)V",
+    "line": 1530
+  },
+  {
+    "signature": "requestRadioPresetMemoryData(I)V",
+    "line": 1538
+  },
+  {
+    "signature": "requestRadioTmcInfo(II)V",
+    "line": 1546
+  },
+  {
+    "signature": "requestRadioTmcServiceListInfo()V",
+    "line": 1554
+  },
+  {
+    "signature": "requestRadioTmcServiceReceive(III)V",
+    "line": 1562
+  },
+  {
+    "signature": "requestRadioTunerReceiveInfo()V",
+    "line": 1570
+  },
+  {
+    "signature": "requestRadioVicsRticInfo(II)V",
+    "line": 1578
+  },
+  {
+    "signature": "requestRadioVicsRticReceive(I)V",
+    "line": 1586
+  },
+  {
+    "signature": "requestRdsTmcStatus()V",
+    "line": 1594
+  },
+  {
+    "signature": "requestReprogramSend(I)V",
+    "line": 1602
+  },
+  {
+    "signature": "requestReprogramSendSpi(Lcom/mitsubishielectric/ada/framework/cpucomservice/ReprogramSendData;)V",
+    "line": 1610
+  },
+  {
+    "signature": "requestReprogramStart(I[B)V",
+    "line": 1618
+  },
+  {
+    "signature": "requestReprogramStop()V",
+    "line": 1626
+  },
+  {
+    "signature": "requestSpeakerCheckStatus()V",
+    "line": 1634
+  },
+  {
+    "signature": "requestSpeakerConnectInfo()V",
+    "line": 1642
+  },
+  {
+    "signature": "requestStationList(I)V",
+    "line": 1650
+  },
+  {
+    "signature": "requestStrgSwEventFb(Lcom/mitsubishielectric/ada/framework/cpucomservice/BcanCommonData;)V",
+    "line": 1658
+  },
+  {
+    "signature": "requestSubTunerTune(II)V",
+    "line": 1666
+  },
+  {
+    "signature": "requestSyscomHardwareErrorInfo(I)V",
+    "line": 1674
+  },
+  {
+    "signature": "requestTcuSelfDiag()V",
+    "line": 1682
+  },
+  {
+    "signature": "requestTunerVersionInfo()V",
+    "line": 1690
+  },
+  {
+    "signature": "requestVehicleSpeedInfo()V",
+    "line": 1698
+  },
+  {
+    "signature": "requestVideoSetting(IIII)I",
+    "line": 1706
+  },
+  {
+    "signature": "requestVinCodeInfo()V",
+    "line": 1714
+  },
+  {
+    "signature": "requestVstMuteStateChange(I)V",
+    "line": 1722
+  },
+  {
+    "signature": "requestVstMuteStatus()V",
+    "line": 1730
+  },
+  {
+    "signature": "requestXmTerminalInfo()V",
+    "line": 1738
+  },
+  {
+    "signature": "requestXmTunerReset()V",
+    "line": 1746
+  },
+  {
+    "signature": "responseStartUpSeqComplete(II)V",
+    "line": 1754
+  },
+  {
+    "signature": "unregisterCallbackAcura(Lcom/mitsubishielectric/ada/framework/cpucomservice/IAcuraLinkApServiceListener;)V",
+    "line": 1762
+  },
+  {
+    "signature": "unregisterCallbackAv(Lcom/mitsubishielectric/ada/framework/cpucomservice/IAvApServiceListener;)V",
+    "line": 1770
+  },
+  {
+    "signature": "unregisterCallbackCamera(Lcom/mitsubishielectric/ada/framework/cpucomservice/ICameraApServiceListener;)V",
+    "line": 1778
+  },
+  {
+    "signature": "unregisterCallbackCoordination(Lcom/mitsubishielectric/ada/framework/cpucomservice/IVehicleCoordinationApServiceListener;)V",
+    "line": 1786
+  },
+  {
+    "signature": "unregisterCallbackDiag(Lcom/mitsubishielectric/ada/framework/cpucomservice/IDiagApServiceListener;)V",
+    "line": 1794
+  },
+  {
+    "signature": "unregisterCallbackEmergency(Lcom/mitsubishielectric/ada/framework/cpucomservice/IEmergencyApServiceListener;)V",
+    "line": 1802
+  },
+  {
+    "signature": "unregisterCallbackError(Lcom/mitsubishielectric/ada/framework/cpucomservice/IErrorApServiceListener;)V",
+    "line": 1810
+  },
+  {
+    "signature": "unregisterCallbackExternalDisplay(Lcom/mitsubishielectric/ada/framework/cpucomservice/IExternalDisplayApServiceListener;)V",
+    "line": 1818
+  },
+  {
+    "signature": "unregisterCallbackHud(Lcom/mitsubishielectric/ada/framework/cpucomservice/IHudApServiceListener;)V",
+    "line": 1826
+  },
+  {
+    "signature": "unregisterCallbackNavi(Lcom/mitsubishielectric/ada/framework/cpucomservice/INavigationApServiceListener;)V",
+    "line": 1834
+  },
+  {
+    "signature": "unregisterCallbackPhone(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPhoneApServiceListener;)V",
+    "line": 1842
+  },
+  {
+    "signature": "unregisterCallbackPhoneCoordination(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPhoneCoordinationApServiceListener;)V",
+    "line": 1850
+  },
+  {
+    "signature": "unregisterCallbackPower(Lcom/mitsubishielectric/ada/framework/cpucomservice/IPowerManagerApServiceListener;)V",
+    "line": 1858
+  },
+  {
+    "signature": "unregisterCallbackRasp(Lcom/mitsubishielectric/ada/framework/cpucomservice/IRaspApServiceListener;)V",
+    "line": 1866
+  },
+  {
+    "signature": "unregisterCallbackRoadToVehicle(Lcom/mitsubishielectric/ada/framework/cpucomservice/IRoadToVehicleApServiceListener;)V",
+    "line": 1874
+  },
+  {
+    "signature": "unregisterCallbackStrgSw(Lcom/mitsubishielectric/ada/framework/cpucomservice/IStrgSwApServiceListener;)V",
+    "line": 1882
+  },
+  {
+    "signature": "unregisterCallbackUnitInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/IUnitInfoManagerApServiceListener;)V",
+    "line": 1890
+  },
+  {
+    "signature": "unregisterCallbackUpdate(Lcom/mitsubishielectric/ada/framework/cpucomservice/ISystemUpdateApServiceListener;)V",
+    "line": 1898
+  },
+  {
+    "signature": "unregisterCallbackVehicleInfo(Lcom/mitsubishielectric/ada/framework/cpucomservice/IVehicleInfoManagerApServiceListener;)V",
+    "line": 1906
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "version": "2.0",
+  "tests": 67,
+  "failures": 0,
+  "lint_errors": 0,
+  "lint_warnings": 10,
+  "hardware_tested": false,
+  "target": "Original Mitsubishi Electric Honda head unit"
+}

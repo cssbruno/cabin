@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites><testsuite name="com.cabin.hondacustom.CameraIntegrationTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:11.449Z" hostname="fedora" time="2.055">
+  <properties />
+  <testcase name="wrongServiceDescriptorCannotBeUsed" classname="com.cabin.hondacustom.CameraIntegrationTest" time="1.093" />
+  <testcase name="rearWritePreservesFreshSiblingAndParkingView" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.06" />
+  <testcase name="rejectionClosesLaneSession" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.037" />
+  <testcase name="incompleteBundleFailsClosedBeforeAnyWrite" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.033" />
+  <testcase name="mismatchClearsValuesAndClosesLaneSession" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.035" />
+  <testcase name="laneWriteClosesSessionAfterVerifiedReadback" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.038" />
+  <testcase name="parkedRangeAndAngleChecksPreventWrites" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.025" />
+  <testcase name="readsOnlyAvailableCamerasWithoutEnteringSession" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.028" />
+  <testcase name="cameraScreenLaunchesWithoutHondaService" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.586" />
+  <testcase name="changingCapabilityIsCheckedAgainBeforeWrite" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.032" />
+  <testcase name="timeoutIgnoresLateResultAndCleansSession" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.032" />
+  <testcase name="durationLabelsAreActualOemValues" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.016" />
+  <testcase name="defaultsUseOutOnlyBundleAndReadback" classname="com.cabin.hondacustom.CameraIntegrationTest" time="0.036" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.CatalogSafetyTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:13.507Z" hostname="fedora" time="0.098">
+  <properties />
+  <testcase name="editorNeverExpandsVehicleReportedRange" classname="com.cabin.hondacustom.CatalogSafetyTest" time="0.029" />
+  <testcase name="civicOfflineFilterExcludesUnrelatedEquipment" classname="com.cabin.hondacustom.CatalogSafetyTest" time="0.016" />
+  <testcase name="separatePanelPresetHasNamedWritableValues" classname="com.cabin.hondacustom.CatalogSafetyTest" time="0.02" />
+  <testcase name="ambiguousAndUnmappedValuesCannotBeWritten" classname="com.cabin.hondacustom.CatalogSafetyTest" time="0.016" />
+  <testcase name="portugueseLanguageKeepsExactApiOrder" classname="com.cabin.hondacustom.CatalogSafetyTest" time="0.017" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.HondaActionTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:13.610Z" hostname="fedora" time="0.355">
+  <properties />
+  <testcase name="noActionWithoutLiveSupportOrPark" classname="com.cabin.hondacustom.HondaActionTest" time="0.048" />
+  <testcase name="resetRediscoverAllSettings" classname="com.cabin.hondacustom.HondaActionTest" time="0.07" />
+  <testcase name="allDueWireAndUnknownItems" classname="com.cabin.hondacustom.HondaActionTest" time="0.014" />
+  <testcase name="rejectedActionFailsClosed" classname="com.cabin.hondacustom.HondaActionTest" time="0.045" />
+  <testcase name="actionTimeoutCleansModeAndIgnoresLateResult" classname="com.cabin.hondacustom.HondaActionTest" time="0.039" />
+  <testcase name="tpmsWaitsForCorrectCallbackAndReadback" classname="com.cabin.hondacustom.HondaActionTest" time="0.055" />
+  <testcase name="maintenanceUsesExactItemAndCleansBothModes" classname="com.cabin.hondacustom.HondaActionTest" time="0.066" />
+  <testcase name="maintenanceOptionsUseVariantAndLiveFlags" classname="com.cabin.hondacustom.HondaActionTest" time="0.018" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.HondaIntegrationTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:13.970Z" hostname="fedora" time="0.549">
+  <properties />
+  <testcase name="unsupportedActionAndMalformedRangeAreReadOnly" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.015" />
+  <testcase name="timeoutInvalidatesLateCallback" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.042" />
+  <testcase name="writeRequiresCallbackThenMatchingReadback" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.051" />
+  <testcase name="binderRejectionFailsClosed" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.046" />
+  <testcase name="disconnectPreventsQueuedSettingWrite" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.034" />
+  <testcase name="missingParkAndInvalidValuesCannotWrite" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.04" />
+  <testcase name="wireFormatPreservesFieldsAndNullArrays" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.012" />
+  <testcase name="mainActivityLaunchesWithoutHondaService" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.166" />
+  <testcase name="catalogHasUniqueSettingsAndVerifiedSpeedLabels" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.012" />
+  <testcase name="mismatchDisconnectsInsteadOfReportingSuccess" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.057" />
+  <testcase name="discoveryDoesNotWriteModeOrValues" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.033" />
+  <testcase name="unknownCategoryCallbackCannotAdvanceRead" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.029" />
+  <testcase name="wrongServiceDescriptorIsRejected" classname="com.cabin.hondacustom.HondaIntegrationTest" time="0.012" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.HondaTachometerPreferenceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:14.521Z" hostname="fedora" time="0.267">
+  <properties />
+  <testcase name="preferenceIsVerifiedBeforeVehicleRequest" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.063" />
+  <testcase name="readbackMismatchCannotChangeVehicle" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.051" />
+  <testcase name="vehicleFailureAfterPreferenceHasHonestOutcome" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.046" />
+  <testcase name="preferenceRejectionReportsPartialOutcome" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.042" />
+  <testcase name="bindingFailureCannotChangeVehicle" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.033" />
+  <testcase name="timedOutBindingAndStaleConnectionDoNotWrite" classname="com.cabin.hondacustom.HondaTachometerPreferenceTest" time="0.032" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.MeterClientTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:14.792Z" hostname="fedora" time="0.447">
+  <properties />
+  <testcase name="readbackMismatchFailsClosed" classname="com.cabin.hondacustom.MeterClientTest" time="0.048" />
+  <testcase name="connectionReadsCapabilitiesWithoutWriting" classname="com.cabin.hondacustom.MeterClientTest" time="0.033" />
+  <testcase name="leavingDuringSavePreservesUnknownOutcome" classname="com.cabin.hondacustom.MeterClientTest" time="0.033" />
+  <testcase name="runtimeCapabilityChangeBlocksSave" classname="com.cabin.hondacustom.MeterClientTest" time="0.038" />
+  <testcase name="defaultPresetCannotBeWrittenDirectly" classname="com.cabin.hondacustom.MeterClientTest" time="0.026" />
+  <testcase name="editingHonorsCapabilitiesProtectionAndParkedGate" classname="com.cabin.hondacustom.MeterClientTest" time="0.027" />
+  <testcase name="rejectedAckNeverStartsReadback" classname="com.cabin.hondacustom.MeterClientTest" time="0.038" />
+  <testcase name="dirtyDraftBlocksSilentPresetSwitch" classname="com.cabin.hondacustom.MeterClientTest" time="0.026" />
+  <testcase name="saveRequiresAckAndMatchingPresetReadback" classname="com.cabin.hondacustom.MeterClientTest" time="0.043" />
+  <testcase name="malformedReplyAndMissingCapabilityDataAreUnavailable" classname="com.cabin.hondacustom.MeterClientTest" time="0.037" />
+  <testcase name="timeoutAndOldSessionCallbacksCannotReviveState" classname="com.cabin.hondacustom.MeterClientTest" time="0.048" />
+  <testcase name="presetsAndDefaultsUseDistinctReadRequests" classname="com.cabin.hondacustom.MeterClientTest" time="0.049" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.MeterProtocolTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:15.241Z" hostname="fedora" time="0.056">
+  <properties />
+  <testcase name="incompatibleOrRejectedServiceFailsClosed" classname="com.cabin.hondacustom.MeterProtocolTest" time="0.015" />
+  <testcase name="exactWireTransactionsAndParcelable" classname="com.cabin.hondacustom.MeterProtocolTest" time="0.011" />
+  <testcase name="defensiveCopiesProtectState" classname="com.cabin.hondacustom.MeterProtocolTest" time="0.01" />
+  <testcase name="capabilityModelKeepsUnknownExistingButNeverAddsUnknown" classname="com.cabin.hondacustom.MeterProtocolTest" time="0.009" />
+  <testcase name="callbacksDecodeGoldenWireAndNullablePayload" classname="com.cabin.hondacustom.MeterProtocolTest" time="0.01" />
+  <system-out />
+  <system-err />
+</testsuite><testsuite name="com.cabin.hondacustom.OemScreensTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-13T19:44:15.298Z" hostname="fedora" time="0.155">
+  <properties />
+  <testcase name="parkedAcknowledgementRequired" classname="com.cabin.hondacustom.OemScreensTest" time="0.02" />
+  <testcase name="missingHeadUnitScreenIsExplained" classname="com.cabin.hondacustom.OemScreensTest" time="0.012" />
+  <testcase name="panelEditorLaunchesWithoutWritingOrOpeningVendorApps" classname="com.cabin.hondacustom.OemScreensTest" time="0.052" />
+  <testcase name="headUnitScreenDoesNotLaunchVendorAppOnOpen" classname="com.cabin.hondacustom.OemScreensTest" time="0.056" />
+  <testcase name="nonExportedScreenCannotBeOpened" classname="com.cabin.hondacustom.OemScreensTest" time="0.013" />
+  <system-out />
+  <system-err />
+</testsuite></testsuites>

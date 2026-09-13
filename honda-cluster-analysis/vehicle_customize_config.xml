@@ -1,0 +1,6703 @@
+<CustomizeList>
+    <Item ID="0x0001">
+        <!--TPMS Calibration-->
+        <Category>0x01</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0002">
+        <!--ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定-->
+        <Category>0x02</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0003">
+        <!--CMBS警報ﾀｲﾐﾝｸﾞ-->
+        <Category>0x02</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0004">
+        <!--CMBS警報ﾀｲﾐﾝｸﾞ-->
+        <Category>0x02</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0005">
+        <!--FCW警報ﾀｲﾐﾝｸﾞ-->
+        <Category>0x02</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x04</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x08</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0006">
+        <!--FCW警報ﾀｲﾐﾝｸﾞ-->
+        <Category>0x02</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x00</entry>
+            <entry key="0x03">0x01</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0007">
+        <!--TSR常駐表示ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x34</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0008">
+        <!--HSS ON/OFF設定-->
+        <Category>0x02</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0009">
+        <!--HSS機能復帰条件（走行距離）-->
+        <Category>0x02</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x07</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x05</entry>
+            <entry key="0x04">0x04</entry>
+            <entry key="0x05">0x03</entry>
+            <entry key="0x06">0x02</entry>
+            <entry key="0x07">0x01</entry>
+            <entry key="0x08">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x08</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000A">
+        <!--HSS機能復帰条件（パッシングSW固定時間）-->
+        <Category>0x02</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x07</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x05</entry>
+            <entry key="0x04">0x04</entry>
+            <entry key="0x05">0x03</entry>
+            <entry key="0x06">0x02</entry>
+            <entry key="0x07">0x01</entry>
+            <entry key="0x08">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x08</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000B">
+        <!--先行車検知音-->
+        <Category>0x02</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000C">
+        <!--リアクティブフォースペダル設定-->
+        <Category>0x02</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000D">
+        <!--リアクティブフォースペダル 車間維持支援 車間距離設定-->
+        <Category>0x02</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000E">
+        <!--リアクティブフォースペダルカーブ進入支援速度設定-->
+        <Category>0x02</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x000F">
+        <!--リアクティブフォースペダル車間制御ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0010">
+        <!--リアクティブフォースペダル カーブ進入機能ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0011">
+        <!--IDA 規制速度機能ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0012">
+        <!--ﾊﾞｯｸ→前進時のGV自動表示-->
+        <Category>0x02</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0013">
+        <!--後退から前進時カメラ映像切換え-->
+        <Category>0x02</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0014">
+        <!--IGｵﾝ後、MVC起動時の表示画面-->
+        <Category>0x02</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0015">
+        <!--カメラシステム起動後の前方画面-->
+        <Category>0x02</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x04</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0016">
+        <!--カメラシステム起動後の側方画面-->
+        <Category>0x02</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0017">
+        <!--カメラシステム起動後の後方画面-->
+        <Category>0x02</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x04</entry>
+            <entry key="0x04">0x05</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0018">
+        <!--減速時のカメラ自動表示-->
+        <Category>0x02</Category>
+        <Id>0x17</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0019">
+        <!--ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示-->
+        <Category>0x02</Category>
+        <Id>0x18</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001A">
+        <!--駐車ガイド線自動消去-->
+        <Category>0x02</Category>
+        <Id>0x19</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001B">
+        <!--サイドビュー表示車速制限-->
+        <Category>0x02</Category>
+        <Id>0x1A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001C">
+        <!--リアビュー全画面での表示画面-->
+        <Category>0x02</Category>
+        <Id>0x1B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001D">
+        <!--ドアミラー格納時のｸﾞﾗｳﾝﾄﾞﾋﾞｭｰ表示-->
+        <Category>0x02</Category>
+        <Id>0x1C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001E">
+        <!--Set Parking course(Right Parking. Start Point.X)-->
+        <Category>0x02</Category>
+        <Id>0x1D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x001F">
+        <!--Set Parking course(Right Parking. Start Point.Y)-->
+        <Category>0x02</Category>
+        <Id>0x1E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0020">
+        <!--Set Parking course(Right Parking. Start Point.THETA)-->
+        <Category>0x02</Category>
+        <Id>0x1F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0021">
+        <!--Set Parking course(Left Parking. Start Point.X)-->
+        <Category>0x02</Category>
+        <Id>0x20</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0022">
+        <!--Set Parking course(Left Parking. Start Point.Y)-->
+        <Category>0x02</Category>
+        <Id>0x21</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0023">
+        <!--Set Parking course(Left Parking. Start Point.THETA)-->
+        <Category>0x02</Category>
+        <Id>0x22</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0024">
+        <!--Set Parking course(Parallel Right Parking. Start Point.X)-->
+        <Category>0x02</Category>
+        <Id>0x23</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0025">
+        <!--Set Parking course(Parallel Right Parking. Start Point.Y)-->
+        <Category>0x02</Category>
+        <Id>0x24</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0026">
+        <!--Set Parking course(Parallel Right Parking. Start Point.THETA)-->
+        <Category>0x02</Category>
+        <Id>0x25</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0027">
+        <!--Set Parking course(Parallel Left Parking. Start Point.X)-->
+        <Category>0x02</Category>
+        <Id>0x26</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0028">
+        <!--Set Parking course(Parallel Left Parking. Start Point.Y)-->
+        <Category>0x02</Category>
+        <Id>0x27</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0029">
+        <!--Set Parking course(Parallel Left Parking. Start Point.THETA)-->
+        <Category>0x02</Category>
+        <Id>0x28</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0xFB</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002A">
+        <!--Clear Parking course-->
+        <Category>0x02</Category>
+        <Id>0x29</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x10</entry>
+            <entry key="0x02">0x20</entry>
+            <entry key="0x03">0x30</entry>
+            <entry key="0x04">0x40</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002B">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝ ｶﾞｲﾄﾞ線表示-->
+        <Category>0x02</Category>
+        <Id>0x2A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002C">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝ 自動映像切替え-->
+        <Category>0x02</Category>
+        <Id>0x2B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002D">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝ 映像明るさ設定-->
+        <Category>0x02</Category>
+        <Id>0x2C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x00</entry>
+            <entry>0x64</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002E">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝ 映像ｺﾝﾄﾗｽﾄ設定-->
+        <Category>0x02</Category>
+        <Id>0x2D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x00</entry>
+            <entry>0x64</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x002F">
+        <!--安全運転コーチングON/OFF機能-->
+        <Category>0x02</Category>
+        <Id>0x2E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0030">
+        <!--安全運転コーチング機能別ON/OFF機能-->
+        <Category>0x02</Category>
+        <Id>0x2F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0031">
+        <!--安全運転コーチング乗車中情報提供地点別ON/OFF機能-->
+        <Category>0x02</Category>
+        <Id>0x30</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0032">
+        <!--BSIシステムON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x31</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0033">
+        <!--BSIシステムインジケータ輝度変更-->
+        <Category>0x02</Category>
+        <Id>0x32</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0034">
+        <!--BSIシステム警報音ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x33</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0035">
+        <!--BSIシステムインジケータ及び警報音ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x34</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0036">
+        <!--CTM(BSIレーダ方式)システムON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x35</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0037">
+        <!--LKAS解除ブザー-->
+        <Category>0x02</Category>
+        <Id>0x36</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0038">
+        <!--CTBAシステムON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x37</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0039">
+        <!--CTBAシステム警報音ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x38</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003A">
+        <!--発進お知らせ設定-->
+        <Category>0x02</Category>
+        <Id>0x39</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003B">
+        <!--路外逸脱機能設定Road Departure Mitigation Settings-->
+        <Category>0x02</Category>
+        <Id>0x3A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003C">
+        <!--割り込み予測付ACC機能設定i-ACC　setting-->
+        <Category>0x02</Category>
+        <Id>0x3B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x0D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FC">
+        <!--default-->
+        <Category>0x02</Category>
+        <Id>0x3C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FE">
+        <!--信号情報活用運転支援表示 ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x3D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x38</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0103">
+        <!--ナイトビジョン注意喚起-->
+        <Category>0x02</Category>
+        <Id>0x3E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0xA5">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0103">
+        <!--BSIシステム インジケータ及びステアリングインフォメーションON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x3F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x9F">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0103">
+        <!--眠気検知システム休憩喚起モード切替-->
+        <Category>0x02</Category>
+        <Id>0x40</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0103">
+        <!--眠気検知システム休憩喚起 感度切替-->
+        <Category>0x02</Category>
+        <Id>0x41</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0075">
+        <!--HUW 機能 ON/OFF-->
+        <Category>0x02</Category>
+        <Id>0x42</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x28</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0041">
+        <!--ACC設定車速表示単位-->
+        <Category>0x02</Category>
+        <Id>0x43</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0042">
+        <!--RevMatch制御-->
+        <Category>0x02</Category>
+        <Id>0x44</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x0E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003D">
+        <!--ｽﾋﾟｰﾄﾞｱﾗｰﾑ１機能-->
+        <Category>0x03</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003E">
+        <!--ｽﾋﾟｰﾄﾞｱﾗｰﾑ１車速設定値-->
+        <Category>0x03</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x3C</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x003F">
+        <!--ｽﾋﾟｰﾄﾞｱﾗｰﾑ２機能-->
+        <Category>0x03</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0040">
+        <!--ｽﾋﾟｰﾄﾞｱﾗｰﾑ２車速設定値-->
+        <Category>0x03</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x3C</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0041">
+        <!--ACC設定車速表示単位-->
+        <Category>0x03</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0042">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝｲﾙﾐｺﾝﾄﾛｰﾙ-->
+        <Category>0x03</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0043">
+        <!--ﾅｲﾄﾋﾞｼﾞｮﾝｼｽﾃﾑ起動設定-->
+        <Category>0x03</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0044">
+        <!--HUD表示ｲﾙﾐｺﾝﾄﾛｰﾙ-->
+        <Category>0x03</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x00</entry>
+            <entry>0x64</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0045">
+        <!--言語設定 (US)-->
+        <Category>0x03</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0046">
+        <!--言語設定 (US)-->
+        <Category>0x03</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0047">
+        <!--ﾒｰﾀｰ表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0048">
+        <!--言語設定 (中国)-->
+        <Category>0x03</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0049">
+        <!--言語設定 (EU) 6ヶ国語-->
+        <Category>0x03</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0xFF</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x07</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004A">
+        <!--言語設定（南米ポルトガル語）-->
+        <Category>0x03</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x23</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004B">
+        <!--言語設定 (EU) 12ヶ国語-->
+        <Category>0x03</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+            <entry key="0x09">0x08</entry>
+            <entry key="0x0A">0x09</entry>
+            <entry key="0x0B">0x0A</entry>
+            <entry key="0x0C">0x0B</entry>
+            <entry key="0x0D">0xFF</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x0D</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1F</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004C">
+        <!--言語設定 (EU) 13ヶ国語-->
+        <Category>0x03</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+            <entry key="0x09">0x08</entry>
+            <entry key="0x0A">0x09</entry>
+            <entry key="0x0B">0x0A</entry>
+            <entry key="0x0C">0x0B</entry>
+            <entry key="0x0D">0x0C</entry>
+            <entry key="0x0E">0xFF</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x0E</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x24</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004D">
+        <!--言語設定 (ロシア)-->
+        <Category>0x03</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x22</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004E">
+        <!--ﾜｰﾆﾝｸﾞﾒｯｾｰｼﾞ表示-->
+        <Category>0x03</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x004F">
+        <!--外気温表示補正(℃表示)-->
+        <Category>0x03</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x07</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x06</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0050">
+        <!--外気温表示補正(°F表示)-->
+        <Category>0x03</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+            <entry key="0x09">0x08</entry>
+            <entry key="0x0A">0x09</entry>
+            <entry key="0x0B">0x0A</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x0B</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x07</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0051">
+        <!--TRIP A & 平均燃費Aの給油連動リセット-->
+        <Category>0x03</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x08</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0052">
+        <!--ﾄﾘｯﾌﾟA&平均電費Aの充電連動ﾘｾｯﾄ-->
+        <Category>0x03</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0053">
+        <!--経過時間のﾘｾｯﾄ条件切り替え-->
+        <Category>0x03</Category>
+        <Id>0x17</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0054">
+        <!--TRIP A リセット条件(非PHEV車)-->
+        <Category>0x03</Category>
+        <Id>0x18</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0055">
+        <!--TRIP B リセット条件(非PHEV車)-->
+        <Category>0x03</Category>
+        <Id>0x19</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0056">
+        <!--TRIP A リセット条件(PHEV車)-->
+        <Category>0x03</Category>
+        <Id>0x1A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x03</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x17</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0057">
+        <!--TRIP B リセット条件(PHEV車)-->
+        <Category>0x03</Category>
+        <Id>0x1B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x03</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x18</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0058">
+        <!--ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択-->
+        <Category>0x03</Category>
+        <Id>0x1C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0059">
+        <!--ｱﾗｰﾑ音量調整-->
+        <Category>0x03</Category>
+        <Id>0x1D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x0B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005A">
+        <!--ｺﾝﾊﾟｽｿﾞｰﾝ設定-->
+        <Category>0x03</Category>
+        <Id>0x1E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005B">
+        <!--WELCOMEｽｸﾛｰﾙ時間-->
+        <Category>0x03</Category>
+        <Id>0x1F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005C">
+        <!--ｳｪﾙｶﾑ照明の初期点灯輝度設定-->
+        <Category>0x03</Category>
+        <Id>0x20</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005D">
+        <!--ｳｪﾙｶﾑ照明の初期点灯輝度設定-->
+        <Category>0x03</Category>
+        <Id>0x21</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange>
+            <entry>0x00</entry>
+            <entry>0x64</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005E">
+        <!--ｳｪﾙｶﾑ照明設定-->
+        <Category>0x03</Category>
+        <Id>0x22</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x005F">
+        <!--REVインジケータ設定-->
+        <Category>0x03</Category>
+        <Id>0x23</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x11</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0060">
+        <!--ECOインジケータ設定-->
+        <Category>0x03</Category>
+        <Id>0x24</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x12</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0061">
+        <!--ﾃﾞｼﾞﾀﾙｽﾋﾟｰﾄﾞﾒｰﾀの表示単位系切り替え-->
+        <Category>0x03</Category>
+        <Id>0x25</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0062">
+        <!--パワーメータの表示単位切替-->
+        <Category>0x03</Category>
+        <Id>0x26</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x14</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0063">
+        <!--ストップウオッチ機能の設定-->
+        <Category>0x03</Category>
+        <Id>0x27</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0064">
+        <!--アンビエントメーター照明色変化設定-->
+        <Category>0x03</Category>
+        <Id>0x28</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x16</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0065">
+        <!--アンビエントメーター照明色設定（ホワイト色なし）-->
+        <Category>0x03</Category>
+        <Id>0x29</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x04</entry>
+            <entry key="0x05">0x05</entry>
+            <entry key="0x06">0x06</entry>
+            <entry key="0x07">0x07</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x07</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x32</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0066">
+        <!--アンビエントメーター照明色設定（ホワイト色あり）-->
+        <Category>0x03</Category>
+        <Id>0x2A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x07</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x08</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x33</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0067">
+        <!--CLOCK機能-->
+        <Category>0x03</Category>
+        <Id>0x2B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x01</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0068">
+        <!--CLOCK機能-->
+        <Category>0x03</Category>
+        <Id>0x2C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0069">
+        <!--タイマー充電機能-->
+        <Category>0x03</Category>
+        <Id>0x2D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006A">
+        <!--タイマー充電モード-->
+        <Category>0x03</Category>
+        <Id>0x2E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006B">
+        <!--タイマー充電開始時刻（時間）-->
+        <Category>0x03</Category>
+        <Id>0x2F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x0C</entry>
+            <entry key="0x03">0x17</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006C">
+        <!--タイマー充電開始時刻（分）-->
+        <Category>0x03</Category>
+        <Id>0x30</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x1E</entry>
+            <entry key="0x03">0x32</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006D">
+        <!--タイマー充電終了時刻（時間）-->
+        <Category>0x03</Category>
+        <Id>0x31</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x0C</entry>
+            <entry key="0x03">0x17</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006E">
+        <!--タイマー充電終了時刻（分）-->
+        <Category>0x03</Category>
+        <Id>0x32</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x1E</entry>
+            <entry key="0x03">0x32</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x006F">
+        <!--SILインジケータ表示設定-->
+        <Category>0x03</Category>
+        <Id>0x33</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0070">
+        <!--ECOＮモード保持-->
+        <Category>0x03</Category>
+        <Id>0x34</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x19</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0071">
+        <!--スマートスタートのガイダンス表示-->
+        <Category>0x03</Category>
+        <Id>0x35</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0072">
+        <!--車速表示単位-->
+        <Category>0x03</Category>
+        <Id>0x36</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0073">
+        <!--アイドルストップガイダンス表示設定-->
+        <Category>0x03</Category>
+        <Id>0x37</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x1E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0074">
+        <!--Turn by Turn表示（メータのみ）-->
+        <Category>0x03</Category>
+        <Id>0x38</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x20</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0075">
+        <!--HUW 機能 ON/OFF-->
+        <Category>0x03</Category>
+        <Id>0x39</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0076">
+        <!--HUD デジタルスピードメーターの表示単位切替-->
+        <Category>0x03</Category>
+        <Id>0x3A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0077">
+        <!--Turn by Turn表示（HUD装備時）-->
+        <Category>0x03</Category>
+        <Id>0x3B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x31</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0078">
+        <!--言語設定 (アラビア語)-->
+        <Category>0x03</Category>
+        <Id>0x3C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x21</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0079">
+        <!--コンテンツ切替-->
+        <Category>0x03</Category>
+        <Id>0x3D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007A">
+        <!--フェイバリット切替-->
+        <Category>0x03</Category>
+        <Id>0x3E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007B">
+        <!--コンテンツ切替音　有無切替-->
+        <Category>0x03</Category>
+        <Id>0x3F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007C">
+        <!--新着（Mail/News/SNS）割り込み表示　有無切替-->
+        <Category>0x03</Category>
+        <Id>0x40</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x37</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007D">
+        <!--壁紙選択-->
+        <Category>0x03</Category>
+        <Id>0x41</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007E">
+        <!--画像読込-->
+        <Category>0x03</Category>
+        <Id>0x42</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x007F">
+        <!--壁紙削除-->
+        <Category>0x03</Category>
+        <Id>0x43</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0080">
+        <!--ﾄﾞﾗｲﾌﾞｺﾝﾋﾟｭｰﾀ表示選択-->
+        <Category>0x03</Category>
+        <Id>0x44</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0081">
+        <!--オープニングアニメーション-->
+        <Category>0x03</Category>
+        <Id>0x45</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0082">
+        <!--背景色-->
+        <Category>0x03</Category>
+        <Id>0x46</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0083">
+        <!--スマートスタートのガイダンス表示-->
+        <Category>0x03</Category>
+        <Id>0x47</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0084">
+        <!--交差点案内表示-->
+        <Category>0x03</Category>
+        <Id>0x48</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0085">
+        <!--アイドルストップガイダンス表示設定-->
+        <Category>0x03</Category>
+        <Id>0x49</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0086">
+        <!--ワーニングメッセージ-->
+        <Category>0x03</Category>
+        <Id>0x4A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0087">
+        <!--TSR常駐表示-->
+        <Category>0x03</Category>
+        <Id>0x4B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0088">
+        <!--DISPLY表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x4C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0089">
+        <!--DISPLY表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x4D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008A">
+        <!--DISPLY表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x4E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008B">
+        <!--DISPLY表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x4F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+            <entry key="0x09">0x08</entry>
+            <entry key="0x0A">0x09</entry>
+            <entry key="0x0B">0x0A</entry>
+            <entry key="0x0C">0x0B</entry>
+            <entry key="0x0D">0x0C</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x0D</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0104">
+        <!--default-->
+        <Category>0x03</Category>
+        <Id>0x50</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0105">
+        <!--非パドル操作時ギヤ段常時表示-->
+        <Category>0x03</Category>
+        <Id>0x51</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0106">
+        <!--MTギヤ段表示-->
+        <Category>0x03</Category>
+        <Id>0x52</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x36</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0107">
+        <!--ターン音色-->
+        <Category>0x03</Category>
+        <Id>0x53</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x0D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0107">
+        <!--1周期吹鳴タイプリバースアラーム-->
+        <Category>0x03</Category>
+        <Id>0x54</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0107">
+        <!--タイヤ角度モニター-->
+        <Category>0x03</Category>
+        <Id>0x55</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x35</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0107">
+        <!--距離表示単位-->
+        <Category>0x03</Category>
+        <Id>0x56</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x0E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0108">
+        <!--車速・距離表示単位-->
+        <Category>0x03</Category>
+        <Id>0x57</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x2F</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0109">
+        <!--室内照明自動減光設定-->
+        <Category>0x03</Category>
+        <Id>0x58</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x06</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x26</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x010A">
+        <!--IDS設定-->
+        <Category>0x03</Category>
+        <Id>0x59</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x010A">
+        <!--Trip Computerの表示単位切替-->
+        <Category>0x03</Category>
+        <Id>0x5A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x13</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x010A">
+        <!--メータ表示コンフィグレーション設定-->
+        <Category>0x03</Category>
+        <Id>0x5B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x15</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x010A">
+        <!--タコメータ表示-->
+        <Category>0x03</Category>
+        <Id>0x5C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x2E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0104">
+        <!--タイマー充電開始時刻-->
+        <Category>0x03</Category>
+        <Id>0x5D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0104">
+        <!--タイマー充電終了時刻-->
+        <Category>0x03</Category>
+        <Id>0x5E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0104">
+        <!--DISPLY表示言語切り替え-->
+        <Category>0x03</Category>
+        <Id>0x5F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+            <entry key="0x05">0x04</entry>
+            <entry key="0x06">0x05</entry>
+            <entry key="0x07">0x06</entry>
+            <entry key="0x08">0x07</entry>
+            <entry key="0x09">0x08</entry>
+            <entry key="0x0A">0x09</entry>
+            <entry key="0x0B">0x0A</entry>
+            <entry key="0x0C">0x0B</entry>
+            <entry key="0x0D">0x0C</entry>
+            <entry key="0x0E">0x0D</entry>
+            <entry key="0x0F">0x0E</entry>
+            <entry key="0x10">0x0F</entry>
+            <entry key="0x11">0x10</entry>
+            <entry key="0x12">0x11</entry>
+            <entry key="0x13">0x12</entry>
+            <entry key="0x14">0x13</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x14</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008C">
+        <!--ﾒﾓﾘｰｼｰﾄ連動-->
+        <Category>0x04</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x95">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008D">
+        <!--ﾁﾙﾄ・ﾃﾚｽｺ跳ね上げ設定-->
+        <Category>0x04</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x95">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009F">
+        <!--default-->
+        <Category>0x04</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008D">
+        <!--乗降時シート位置動作-->
+        <Category>0x04</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008D">
+        <!--乗降時チルト/テレスコ自動跳ね上げ/シート位置動作-->
+        <Category>0x04</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0002">
+        <!--ﾍﾞﾙﾄﾌｨｯﾄｱｼｽﾄ設定-->
+        <Category>0x04</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x06</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008E">
+        <!--ｶｽﾀﾏｲｽﾞのｶｰﾄﾞｷｰ連動-->
+        <Category>0x05</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x28</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x008F">
+        <!--ｶｽﾀﾏｲｽﾞの連動-->
+        <Category>0x05</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x28</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0090">
+        <!--ｽﾏｰﾄ機能-->
+        <Category>0x05</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0091">
+        <!--リモートスタート機能-->
+        <Category>0x05</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x30</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0092">
+        <!--WAL-->
+        <Category>0x05</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0093">
+        <!--ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ-->
+        <Category>0x05</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0094">
+        <!--ｷｰﾚｽﾘﾛｯｸ時間-->
+        <Category>0x05</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0095">
+        <!--ｾｷｭﾘﾃｨ機能-->
+        <Category>0x05</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0096">
+        <!--ｾｷｭﾘﾃｨ機能-->
+        <Category>0x05</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0097">
+        <!--電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動-->
+        <Category>0x05</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>true</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0098">
+        <!--PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x05</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0099">
+        <!--PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x05</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009A">
+        <!--PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x05</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009B">
+        <!--PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x05</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009C">
+        <!--PTGｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音-->
+        <Category>0x05</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009D">
+        <!--PTLｷｰﾚｽｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音-->
+        <Category>0x05</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009E">
+        <!--PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ-->
+        <Category>0x05</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009F">
+        <!--PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ-->
+        <Category>0x05</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009F">
+        <!--default-->
+        <Category>0x05</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009F">
+        <!--リモートスタート機能-->
+        <Category>0x05</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B0">
+        <!--ｾﾚｸﾀﾌﾞﾙ切り替え-->
+        <Category>0x05</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B1">
+        <!--ｾﾚｸﾀﾌﾞﾙ切り替え-->
+        <Category>0x05</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x29</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B2">
+        <!--ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量-->
+        <Category>0x05</Category>
+        <Id>0x17</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x06</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B3">
+        <!--ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量-->
+        <Category>0x05</Category>
+        <Id>0x18</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B4">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x05</Category>
+        <Id>0x19</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x07</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B5">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x05</Category>
+        <Id>0x1A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B6">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x05</Category>
+        <Id>0x1B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x08</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B7">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x05</Category>
+        <Id>0x1C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A0">
+        <!--CC&ASL／ACC&ASL設定車速表示単位-->
+        <Category>0x06</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x00">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A1">
+        <!--WELCOME LTのSMART連動-->
+        <Category>0x06</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>true</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A2">
+        <!--WELCOME LT時間-->
+        <Category>0x06</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A3">
+        <!--ｲﾝﾃﾘｱﾗｲﾄ点灯時間-->
+        <Category>0x06</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x06</entry>
+            <entry key="0x13">0x06</entry>
+            <entry key="0x18">0x06</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A4">
+        <!--ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間-->
+        <Category>0x06</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x0F</entry>
+            <entry key="0x03">0x1E</entry>
+            <entry key="0x04">0x3C</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x08</entry>
+            <entry key="0x13">0x08</entry>
+            <entry key="0x18">0x08</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A5">
+        <!--ﾍｯﾄﾞﾗｲﾄｵｰﾄｵﾌ時間-->
+        <Category>0x06</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x0F</entry>
+            <entry key="0x03">0x1E</entry>
+            <entry key="0x04">0x3C</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x11">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A6">
+        <!--ｵｰﾄﾗｲﾄ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x14">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A7">
+        <!--ｵｰﾄﾗｲﾄ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A8">
+        <!--ﾗｲﾄ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x72">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00A9">
+        <!--室内ｲﾙﾐ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x72">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AA">
+        <!--ﾗｲﾄ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x74">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AB">
+        <!--室内ｲﾙﾐ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x74">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AC">
+        <!--ﾌｯﾄﾗｲﾄ ｽﾓｰﾙﾗｲﾄ連動-->
+        <Category>0x06</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AD">
+        <!--点灯モード設定-->
+        <Category>0x06</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x04</entry>
+            <entry key="0x05">0x05</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AE">
+        <!--ハンドル点灯角度-->
+        <Category>0x06</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x04</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00AF">
+        <!--点灯タイマー-->
+        <Category>0x06</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x02</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FC">
+        <!--default-->
+        <Category>0x06</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FC">
+        <!--ｱｸｾｻﾘﾗﾝﾌﾟ点灯-->
+        <Category>0x06</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DC">
+        <!--ﾗｲﾄ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DC">
+        <!--室内ｲﾙﾐ感度設定-->
+        <Category>0x06</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x03</entry>
+            <entry key="0x04">0x02</entry>
+            <entry key="0x05">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x19</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DC">
+        <!--ﾜｲﾊﾟｰ連動-->
+        <Category>0x06</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x72">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DD">
+        <!--ﾜｲﾊﾟｰ連動-->
+        <Category>0x06</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x74">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B0">
+        <!--ｾﾚｸﾀﾌﾞﾙ切り替え-->
+        <Category>0x07</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B1">
+        <!--ｾﾚｸﾀﾌﾞﾙ切り替え-->
+        <Category>0x07</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B2">
+        <!--ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量-->
+        <Category>0x07</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B3">
+        <!--ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ音量-->
+        <Category>0x07</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B4">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x07</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B5">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾊｻﾞｰﾄﾞ-->
+        <Category>0x07</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B6">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B7">
+        <!--ﾄﾞｱﾊﾝﾄﾞﾙ操作ｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B8">
+        <!--ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00B9">
+        <!--ｵｰﾄﾛｯｸ起動ﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BA">
+        <!--ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BB">
+        <!--ｵｰﾄﾛｯｸｱﾝｻｰﾊﾞｯｸﾌﾞｻﾞｰ-->
+        <Category>0x07</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2F</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BC">
+        <!--ｱﾝﾛｯｸｾﾝｻ禁止時間-->
+        <Category>0x07</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x90">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BD">
+        <!--ｱﾝﾛｯｸｾﾝｻ禁止時間-->
+        <Category>0x07</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x2A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BE">
+        <!--自動ﾄﾞｱﾛｯｸ連動機能(AT)-->
+        <Category>0x07</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x01</entry>
+            <entry key="0x13">0x01</entry>
+            <entry key="0x18">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00BF">
+        <!--自動ﾄﾞｱﾛｯｸ連動機能(MT)-->
+        <Category>0x07</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x11</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C0">
+        <!--自動ﾄﾞｱﾛｯｸ連動機能(MT)-->
+        <Category>0x07</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x13</entry>
+            <entry key="0x13">0x13</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C1">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/1モーション)-->
+        <Category>0x07</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x04</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x02</entry>
+            <entry key="0x13">0x02</entry>
+            <entry key="0x18">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C2">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)-->
+        <Category>0x07</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x06</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x12</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C3">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/1モーション)-->
+        <Category>0x07</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x06</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x14</entry>
+            <entry key="0x13">0x14</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C4">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x05</entry>
+            <entry key="0x04">0x06</entry>
+            <entry key="0x05">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x13</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C5">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x05</entry>
+            <entry key="0x04">0x06</entry>
+            <entry key="0x05">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x05</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x15</entry>
+            <entry key="0x13">0x15</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C6">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x17</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x14</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C7">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x18</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x05</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x16</entry>
+            <entry key="0x13">0x16</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C8">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x19</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x06</entry>
+            <entry key="0x04">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x17</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00C9">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(AT/北米2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x1A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x04</entry>
+            <entry key="0x03">0x06</entry>
+            <entry key="0x04">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x19</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CA">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x1B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x18</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CB">
+        <!--自動ﾄﾞｱｱﾝﾛｯｸ連動機能(MT/北米2モーション)-->
+        <Category>0x07</Category>
+        <Id>0x1C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x06</entry>
+            <entry key="0x03">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x1A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CC">
+        <!--ﾄﾞｱﾛｯｸ動作-->
+        <Category>0x07</Category>
+        <Id>0x1D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x03</entry>
+            <entry key="0x13">0x03</entry>
+            <entry key="0x18">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CD">
+        <!--ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x1E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CE">
+        <!--ｻﾝﾙｰﾌ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x1F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x10</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00CF">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰｼﾘﾝﾀﾞｰ連動-->
+        <Category>0x07</Category>
+        <Id>0x20</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x30">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D0">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰｼﾘﾝﾀﾞｰ連動-->
+        <Category>0x07</Category>
+        <Id>0x21</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D1">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳｷｰﾚｽ連動-->
+        <Category>0x07</Category>
+        <Id>0x22</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x30">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D2">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ)ｷｰﾚｽ連動-->
+        <Category>0x07</Category>
+        <Id>0x23</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D3">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x24</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x10</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D4">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x25</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x12</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D5">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ(ｻﾝﾙｰﾌ) ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x26</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D6">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x27</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x16</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D7">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x28</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x18</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D8">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x29</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x30">0x06</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00D9">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x2A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DA">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x2B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x15</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DB">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x2C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x17</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FC">
+        <!--default-->
+        <Category>0x07</Category>
+        <Id>0x2D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DB">
+        <!--ﾊﾟﾜｰｳｨﾝﾄﾞｳ ｷｰｵﾌﾀｲﾏｰ時間-->
+        <Category>0x07</Category>
+        <Id>0x2E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DB">
+        <!--Power Slide Door Keyless Open Mode-->
+        <Category>0x07</Category>
+        <Id>0x2F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DB">
+        <!--降車時ドアオートロック機能-->
+        <Category>0x07</Category>
+        <Id>0x30</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DB">
+        <!--降車時ドアオートロック機能-->
+        <Category>0x07</Category>
+        <Id>0x31</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0093">
+        <!--ｷｰﾚｽｱﾝｻｰﾊﾞｯｸ-->
+        <Category>0x07</Category>
+        <Id>0x32</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x04</entry>
+            <entry key="0x13">0x04</entry>
+            <entry key="0x18">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0094">
+        <!--ｷｰﾚｽﾘﾛｯｸ時間-->
+        <Category>0x07</Category>
+        <Id>0x33</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x03</entry>
+            <entry key="0x02">0x02</entry>
+            <entry key="0x03">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x05</entry>
+            <entry key="0x13">0x05</entry>
+            <entry key="0x18">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0095">
+        <!--ｾｷｭﾘﾃｨ機能-->
+        <Category>0x07</Category>
+        <Id>0x34</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0F</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0096">
+        <!--ｾｷｭﾘﾃｨ機能-->
+        <Category>0x07</Category>
+        <Id>0x35</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x11</entry>
+            <entry key="0x13">0x11</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0092">
+        <!--WAL-->
+        <Category>0x07</Category>
+        <Id>0x36</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x31</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x0097">
+        <!--電格ﾐﾗｰのFOB/ｽﾏｰﾄ連動-->
+        <Category>0x07</Category>
+        <Id>0x37</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x30">0x07</entry>
+        </InfoFrom>
+        <FobDisp>true</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DC">
+        <!--ﾜｲﾊﾟｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DD">
+        <!--ﾜｲﾊﾟｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DE">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x09</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00DF">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x04</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0A</entry>
+            <entry key="0x13">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E0">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x05</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x76">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E1">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x06</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x01</entry>
+            <entry key="0x02">0x00</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x11">0x05</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E2">
+        <!--ｵｰﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x07</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x07</entry>
+            <entry key="0x13">0x07</entry>
+            <entry key="0x18">0x07</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E3">
+        <!--ｵｰﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x08</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x76">0x07</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E4">
+        <!--ｵｰﾄﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x09</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x03</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x11">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E5">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x0A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E6">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x0B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0B</entry>
+            <entry key="0x13">0x0B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E7">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x0C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x76">0x0B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E8">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　ｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x0D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x11">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00E9">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作-->
+        <Category>0x08</Category>
+        <Id>0x0E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0B</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00EA">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作-->
+        <Category>0x08</Category>
+        <Id>0x0F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0C</entry>
+            <entry key="0x13">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00EB">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作-->
+        <Category>0x08</Category>
+        <Id>0x10</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x76">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00EC">
+        <!--ﾌﾛﾝﾄﾜｲﾊﾟｰ　発進時動作-->
+        <Category>0x08</Category>
+        <Id>0x11</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x11">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00ED">
+        <!--ﾘｱﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x12</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x14">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00EE">
+        <!--ﾘｱﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x13</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00EF">
+        <!--ﾘｱﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x14</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x12">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F0">
+        <!--ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x15</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x14">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F1">
+        <!--ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x16</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0E</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F2">
+        <!--ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x17</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0C</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F3">
+        <!--ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x18</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x12">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F4">
+        <!--ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動-->
+        <Category>0x08</Category>
+        <Id>0x19</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x14">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F5">
+        <!--ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動-->
+        <Category>0x08</Category>
+        <Id>0x1A</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x10">0x0F</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F6">
+        <!--ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動-->
+        <Category>0x08</Category>
+        <Id>0x1B</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x0D</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F7">
+        <!--ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動-->
+        <Category>0x08</Category>
+        <Id>0x1C</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x12">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F8">
+        <!--ﾘｱﾜｲﾊﾟｰ　発進時動作-->
+        <Category>0x08</Category>
+        <Id>0x1D</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x12">0x04</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00F9">
+        <!--ﾘｱﾜｲﾊﾟｰ動作-->
+        <Category>0x08</Category>
+        <Id>0x1E</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x39">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FA">
+        <!--ﾘｱﾜｲﾊﾟｰｳｫｯｼｬｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x1F</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x39">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FB">
+        <!--ﾘｱﾜｲﾊﾟｰﾘﾊﾞｰｽ連動-->
+        <Category>0x08</Category>
+        <Id>0x20</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x39">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x00FC">
+        <!--default-->
+        <Category>0x08</Category>
+        <Id>0x21</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x02</DataType>
+        <DataList></DataList>
+        <DataRange></DataRange>
+        <InfoFrom></InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009E">
+        <!--ﾜｲﾊﾟｰ連動-->
+        <Category>0x08</Category>
+        <Id>0x22</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x18">0x1A</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009E">
+        <!--PTG ﾊﾝｽﾞﾌﾙｱｸｾｽﾓｰﾄﾞ-->
+        <Category>0x0A</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x31">0x03</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009E">
+        <!--PTGｷｰﾚｽｵｰﾌﾟﾝﾓｰﾄﾞ-->
+        <Category>0x0A</Category>
+        <Id>0x02</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x31">0x01</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x009F">
+        <!--PTGｱｳﾀｰﾊﾝﾄﾞﾙｵｰﾄ-->
+        <Category>0x0A</Category>
+        <Id>0x03</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x02</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x31">0x02</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+    <Item ID="0x010A">
+        <!--IDS設定-->
+        <Category>0x0B</Category>
+        <Id>0x01</Id>
+        <Function>false</Function>
+        <DataValue>0x00</DataValue>
+        <DataType>0x00</DataType>
+        <DataList>
+            <entry key="0x01">0x00</entry>
+            <entry key="0x02">0x01</entry>
+            <entry key="0x03">0x02</entry>
+            <entry key="0x04">0x03</entry>
+        </DataList>
+        <DataRange>
+            <entry>0x01</entry>
+            <entry>0x04</entry>
+        </DataRange>
+        <InfoFrom>
+            <entry key="0x50">0x27</entry>
+        </InfoFrom>
+        <FobDisp>false</FobDisp>
+        <Setting>
+        </Setting>
+    </Item>
+</CustomizeList>
