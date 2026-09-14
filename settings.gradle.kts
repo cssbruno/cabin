@@ -19,4 +19,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "cabin-native"
 include(":app")
-include(":hardware-lab")
+include(":diagnostics")

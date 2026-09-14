@@ -1,7 +1,6 @@
 plugins { id("com.android.library") }
 
 android {
-    sourceSets.getByName("main").java.srcDir("../shared/report-export/src/main/java")
     namespace = "com.cabin.hardware"
     compileSdk = 36
     ndkVersion = "29.0.14206865"

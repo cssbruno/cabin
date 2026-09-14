@@ -27,10 +27,20 @@ live service. See [MCU framing evidence and next milestones](../documents/resear
 
 The app uses an explicit simulation fixture with profile 1048874 and legacy field numbers. This paragraph describes the original simulator: its state persists only for the bound service lifetime. The separate 0.5 replacement runtime adds five-second telemetry expiry and manual session restart, a limited CAN decoder and DSP packet library. Full DSP/main modules, privileged UID, boot receiver and production handover remain unimplemented. Existing Cabin still connects to the vendor service.
 
+## Source layout
+
+- `src/main/java/com/cabin/hardware`: internal diagnostic screens and vehicle-service clients.
+- `src/main/java/com/cabin/hardware/replacement`: protocol models and offline test tools.
+- `src/main/java/com/cabin/reports`: report export, event journal and live debug UI.
+- `src/main/cpp`: native hardware interfaces.
+- `src/test`: JVM and native tests.
+
+This is an Android library consumed by `:app`; it has no separate APK. Existing Java package names are retained to preserve component identities.
+
 ## Build and test
 
 ```
-./gradlew :hardware-lab:testDebugUnitTest :app:assembleDebug
+./gradlew :diagnostics:testDebugUnitTest :app:assembleDebug
 ```
 
 Cabin APK: `app/build/outputs/apk/debug/app-debug.apk`. This library produces no standalone diagnostic APK or launcher entry.
