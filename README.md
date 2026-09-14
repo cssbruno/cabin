@@ -3,7 +3,7 @@
 ## Apps
 
 This repository builds and distributes **Cabin**.
-Diagnostics ship inside Cabin. The `hardware-lab` directory is an internal library,
+Diagnostics ship inside Cabin. The `diagnostics` directory is an internal library,
 not a third app; do not build or publish a Hardware Lab APK.
 
 A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto projection, and compatible FYT vehicle integration.
