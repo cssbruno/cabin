@@ -48,6 +48,16 @@ internal fun additionalVehicleFieldKnown(module: DashboardModule, state: TeyesCl
     }
 }
 
+/** Count only fresh reported fields; a missing field is never interpreted as closed. */
+internal data class DoorWidgetReading(val open: Int, val reported: Int)
+internal fun doorWidgetReading(state: TeyesClimateState): DoorWidgetReading? {
+    if (!state.connected || state.health != TeyesTelemetryHealth.LIVE) return null
+    val fields = listOf(state.hoodOpen, state.frontLeftDoorOpen, state.frontRightDoorOpen,
+        state.rearLeftDoorOpen, state.rearRightDoorOpen, state.bootOpen)
+        .filterIndexed { index, _ -> index + 36 in state.availableCodes }
+    return fields.takeIf { it.isNotEmpty() }?.let { DoorWidgetReading(it.count { open -> open }, it.size) }
+}
+
 @Composable
 internal fun AdditionalDashboardWidget(module: DashboardModule, vehicle: TeyesClimateState,
     phone: CabinManager.State, onAssistant: () -> Unit = {}) {

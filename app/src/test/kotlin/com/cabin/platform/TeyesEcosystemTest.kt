@@ -122,6 +122,8 @@ class TeyesEcosystemTest {
         assertEquals("LEGACY", decoded.getString("vehicleDataLayout"))
         assertEquals("Carlink normalized fields", decoded.getString("vehicleCodeNamespace"))
         assertEquals(2, decoded.getInt("schemaVersion"))
+        assertEquals("NOT_CHECKED", decoded.getString("syuFrameworkAccess"))
+        assertEquals("UNVERIFIED", decoded.getString("syuBspEventSupport"))
         assertFalse(report.contains("obdPhase"))
         assertFalse(report.contains("obdSupportedPids"))
     }

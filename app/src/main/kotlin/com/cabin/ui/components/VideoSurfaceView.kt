@@ -38,7 +38,7 @@ class VideoSurfaceView
          *
          * Idempotency: [onSurfaceDestroyed] may be invoked more than once per logical
          * surface because VideoSurface.kt's DisposableEffect.onDispose also calls it
-         * on Compose teardown. Consumers MUST treat destroy as idempotent.
+         * on Compose teardown. The Compose wrapper deduplicates teardown and forwards the owned Surface.
          *
          * Edge case: if [surfaceChanged] never arrives after [surfaceCreated]
          * (e.g. zero-size window), [onSurfaceCreated] is never fired and the
@@ -130,6 +130,8 @@ class VideoSurfaceView
             // Acceptable at INFO for debugging surface sizing; switch to logDebugOnly if noisy.
             logInfo("[VIDEO_SURFACE_VIEW] Surface: ${width}x$height", tag = "UI")
 
+            if (width <= 0 || height <= 0) return
+
             if (isSurfaceCreated) {
                 isSurfaceCreated = false
                 callback?.onSurfaceCreated(holder.surface, width, height)
@@ -141,8 +143,7 @@ class VideoSurfaceView
         /**
          * Stage 3: teardown. Clears the latch (in case destroy arrives before the
          * first surfaceChanged had a chance to fire) and notifies the consumer.
-         * Note: VideoSurface.kt also fires onSurfaceDestroyed from its
-         * DisposableEffect.onDispose, so consumers may see this twice — see [Callback].
+         * The Compose wrapper deduplicates this with its disposal callback.
          */
         override fun surfaceDestroyed(holder: SurfaceHolder) {
             logWarn("[VIDEO_SURFACE_VIEW] Surface destroyed", tag = "UI")

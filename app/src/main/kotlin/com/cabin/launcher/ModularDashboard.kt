@@ -63,7 +63,6 @@ internal fun DashboardModule.title(): Int = when (this) {
     DashboardModule.PROJECTION -> R.string.launcher_page_carplay
     DashboardModule.MEDIA -> R.string.launcher_now_playing
     DashboardModule.NAVIGATION -> R.string.launcher_navigation
-    DashboardModule.SPEED -> R.string.vehicle_speed
     DashboardModule.RPM -> R.string.vehicle_engine_speed
     DashboardModule.OIL -> R.string.vehicle_oil_life
     DashboardModule.SERVICE -> R.string.vehicle_oil_service
@@ -121,8 +120,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     var priorCompact by rememberSaveable { mutableIntStateOf(0) }
     var quick by remember { mutableStateOf(false) }
     val layout = if (glance) DashboardLayout(1, listOf(
-        DashboardTile(10001, DashboardModule.SPEED, 0, 0, 0, 4, 4),
-        DashboardTile(10002, DashboardModule.NAVIGATION, 0, 4, 0, 4, 4),
+        DashboardTile(10002, DashboardModule.NAVIGATION, 0, 0, 0, 8, 4),
     )) else storedLayout
     val history by prefs.history.collectAsStateWithLifecycle()
     val launcher by launcherPreferences.state.collectAsStateWithLifecycle()
@@ -500,7 +498,7 @@ private fun DashboardModuleContent(module: DashboardModule, manager: CabinManage
         val wide = maxWidth >= 220.dp
         val padding = if (short) 8.dp else 20.dp
         val gauge = when (module) {
-            DashboardModule.SPEED -> VehicleGauge.SPEED; DashboardModule.RPM -> VehicleGauge.RPM
+            DashboardModule.RPM -> VehicleGauge.RPM
             DashboardModule.OIL -> VehicleGauge.OIL; DashboardModule.SERVICE -> VehicleGauge.SERVICE; else -> null
         }
         if (module == DashboardModule.ENERGY_FLOW) {
@@ -542,13 +540,13 @@ private fun DashboardModuleContent(module: DashboardModule, manager: CabinManage
             Column(Modifier.fillMaxSize().padding(padding).semantics { contentDescription = title; stateDescription = availability },
                 verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(reading.value, fontSize = if (short) 32.sp else 64.sp, fontWeight = FontWeight.Light, maxLines = 1)
-                if (reading.available) Text(reading.unit, style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant)
-                if (!short && gauge != VehicleGauge.SPEED && gauge != VehicleGauge.RPM) Text(title, Modifier.padding(top = 12.dp), style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant, maxLines = 1)
+                Text(if (reading.available) reading.unit else stringResource(R.string.gauge_unavailable), style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant)
+                if (!short && gauge != VehicleGauge.RPM) Text(title, Modifier.padding(top = 12.dp), style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant, maxLines = 1)
             }
         } else if (module == DashboardModule.ROUTE_OVERVIEW) {
             RouteOverviewWidget(nav, health.connection == CabinManager.State.STREAMING, now)
         } else if (module == DashboardModule.AUDIO_CONTROL) {
-            AudioControlWidget()
+            AudioControlWidget(moving, onParkedAction)
         } else if (module == DashboardModule.PINNED_APPS) {
             PinnedAppsWidget(preferences, moving, onParkedAction)
         } else if (module in climateDashboardModules) {
@@ -602,9 +600,12 @@ private fun DashboardModuleContent(module: DashboardModule, manager: CabinManage
                     stringResource(module.title()), Modifier.padding(bottom = 16.dp).size(28.dp), tint = colors.onSurfaceVariant)
                 when (module) {
                     DashboardModule.DOORS -> {
-                        val valid = vehicle.connected && vehicle.health == TeyesTelemetryHealth.LIVE && vehicle.doorsAvailable
-                        val count = listOf(vehicle.hoodOpen, vehicle.frontLeftDoorOpen, vehicle.frontRightDoorOpen, vehicle.rearLeftDoorOpen, vehicle.rearRightDoorOpen, vehicle.bootOpen).count { it }
-                        Text(if (valid) stringResource(R.string.module_doors_open, count) else "—", style = MaterialTheme.typography.headlineSmall)
+                        val reading = doorWidgetReading(vehicle)
+                        Text(when {
+                            reading == null -> "—"
+                            reading.reported < 6 -> stringResource(R.string.module_doors_partial, reading.open, reading.reported)
+                            else -> stringResource(R.string.module_doors_open, reading.open)
+                        }, style = MaterialTheme.typography.headlineSmall)
                     }
                     DashboardModule.CLIMATE -> {
                         val valid = vehicle.connected && vehicle.health == TeyesTelemetryHealth.LIVE

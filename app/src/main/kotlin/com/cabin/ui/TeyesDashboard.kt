@@ -217,8 +217,17 @@ fun TeyesDashboard(
                 retryVehicle = { onParkedAction(onRetryVehicle) },
                 exportReport = {
                     onParkedAction {
-                        // Capture current local observations before opening the document picker.
-                        previewReport = TeyesDiagnostics.encode(projection, vehicle, shortcuts.size, Build.VERSION.SDK_INT)
+                        if (!saving && previewReport == null && pendingReport == null) {
+                            saving = true
+                            scope.launch {
+                                try {
+                                    val framework = withContext(Dispatchers.IO) { com.cabin.platform.SyuFrameworkProbe.inspect() }
+                                    previewReport = TeyesDiagnostics.encode(projection, vehicle, shortcuts.size, Build.VERSION.SDK_INT, framework)
+                                } finally {
+                                    saving = false
+                                }
+                            }
+                        }
                     }
                 },
             ),
