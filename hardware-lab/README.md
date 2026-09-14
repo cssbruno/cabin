@@ -33,7 +33,7 @@ The app uses an explicit simulation fixture with profile 1048874 and legacy fiel
 ./gradlew :hardware-lab:testDebugUnitTest :app:assembleDebug
 ```
 
-Cabin APK: `app/build/outputs/apk/debug/app-debug.apk`. This library produces no standalone diagnostic APK or launcher entry. Honda Customizer remains a separate app.
+Cabin APK: `app/build/outputs/apk/debug/app-debug.apk`. This library produces no standalone diagnostic APK or launcher entry.
 
 ## Binding from a test client
 
