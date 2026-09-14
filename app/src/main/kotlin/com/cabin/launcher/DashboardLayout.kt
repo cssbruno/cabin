@@ -15,7 +15,7 @@ private fun DashboardTile.finerGrid(): DashboardTile {
     return copy(x = x * 2, y = y * 2, width = width * 2, height = height * 2)
 }
 
-enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, SPEED, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET, DRIVER_TEMPERATURE, PASSENGER_TEMPERATURE, AIRFLOW, RECIRCULATION, HOOD, TRUNK, CAN_CONNECTION, DATE, PHONE_CONNECTION, ASSISTANT, ROUTE_OVERVIEW, AUDIO_CONTROL, PINNED_APPS, TRIP_CONSUMPTION, HYBRID_BATTERY, VEHICLE_LIGHTING, TIRE_PRESSURE, FACTORY_AMPLIFIER, CAMERA_MODE, MIRROR_SETTINGS, PARKING_SETTINGS, VEHICLE_ALERTS, TIRE_HISTORY, TRIP_HISTORY, VEHICLE_OVERVIEW, ENERGY_FLOW, CHARGING_SETTINGS, AMBIENT_LIGHTING, SEAT_PRESET }
+enum class DashboardModule { PROJECTION, MEDIA, NAVIGATION, RPM, OIL, SERVICE, DOORS, CLIMATE, FAN, REAR_CLIMATE, SEATS, DEFROST, CLOCK, WIDGET, DRIVER_TEMPERATURE, PASSENGER_TEMPERATURE, AIRFLOW, RECIRCULATION, HOOD, TRUNK, CAN_CONNECTION, DATE, PHONE_CONNECTION, ASSISTANT, ROUTE_OVERVIEW, AUDIO_CONTROL, PINNED_APPS, TRIP_CONSUMPTION, HYBRID_BATTERY, VEHICLE_LIGHTING, TIRE_PRESSURE, FACTORY_AMPLIFIER, CAMERA_MODE, MIRROR_SETTINGS, PARKING_SETTINGS, VEHICLE_ALERTS, TIRE_HISTORY, TRIP_HISTORY, VEHICLE_OVERVIEW, ENERGY_FLOW, CHARGING_SETTINGS, AMBIENT_LIGHTING, SEAT_PRESET }
 /** Legacy kinds remain readable; new layouts expose one climate widget. */
 internal val climateDashboardModules = setOf(
     DashboardModule.CLIMATE, DashboardModule.FAN, DashboardModule.REAR_CLIMATE,
@@ -30,7 +30,6 @@ data class DashboardTile(val id: Int, val module: DashboardModule, val page: Int
 data class DashboardLayout(val pages: Int = 2, val tiles: List<DashboardTile> = listOf(
     DashboardTile(1, DashboardModule.PROJECTION, 0, 0, 0, 3, 2),
     DashboardTile(2, DashboardModule.MEDIA, 0, 3, 0, 1, 1),
-    DashboardTile(3, DashboardModule.SPEED, 0, 3, 1, 1, 1),
     DashboardTile(4, DashboardModule.RPM, 1, 0, 0, 2, 1),
     DashboardTile(5, DashboardModule.OIL, 1, 2, 0, 2, 1),
     DashboardTile(6, DashboardModule.SERVICE, 1, 0, 1, 2, 1),
@@ -142,7 +141,7 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
             DashboardPreset.COMMUTE -> listOf(DashboardModule.MEDIA, DashboardModule.CLIMATE, DashboardModule.NAVIGATION, DashboardModule.CLOCK)
             DashboardPreset.NAVIGATION -> listOf(DashboardModule.NAVIGATION, DashboardModule.MEDIA)
             DashboardPreset.PARKING -> listOf(DashboardModule.CAMERA_MODE, DashboardModule.PARKING_SETTINGS, DashboardModule.TIRE_PRESSURE, DashboardModule.DOORS)
-            DashboardPreset.GLANCE -> listOf(DashboardModule.SPEED, DashboardModule.NAVIGATION)
+            DashboardPreset.GLANCE -> listOf(DashboardModule.NAVIGATION)
         }.filter { it in available }
         if (modules.isEmpty()) return false
         val firstId = (current.tiles.maxOfOrNull { it.id } ?: 0) + 1
@@ -214,8 +213,9 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
         if (raw == null || raw.length > 16384) DashboardLayout() else {
             val json = JSONObject(raw); require(json.optInt("gridVersion", 1) in 1..2); val array = json.getJSONArray("tiles")
             require(array.length() <= 32)
-            DashboardLayout(json.getInt("pages"), (0 until array.length()).map { i ->
+            DashboardLayout(json.getInt("pages"), (0 until array.length()).mapNotNull { i ->
                 val t = array.getJSONObject(i)
+                if (t.getString("kind") == "SPEED") return@mapNotNull null
                 DashboardTile(t.getInt("id"), DashboardModule.valueOf(t.getString("kind")), t.getInt("page"), t.getInt("x"), t.getInt("y"), t.getInt("w"), t.getInt("h"), t.optInt("widget", 0)).let { if (json.optInt("gridVersion", 1) == 1) it.finerGrid() else it }
             }).takeIf(::validDashboard) ?: DashboardLayout()
         }

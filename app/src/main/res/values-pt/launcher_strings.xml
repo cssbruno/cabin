@@ -91,4 +91,5 @@
     <string name="module_android_widget">Widget Android %1$d</string>
     <string name="module_widget_size">Widget indisponível ou grande demais. Redimensione este módulo.</string>
     <string name="module_widget_parked">Widget Android disponível com o veículo parado</string>
+    <string name="module_doors_partial">%1$d abertas · %2$d/6 informadas</string>
 </resources>

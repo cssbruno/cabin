@@ -55,18 +55,31 @@ class DashboardLayoutTest {
         assertEquals(1, prefs().state.value.tiles.first { it.id == 5 }.width)
     }
 
+    @Test fun `saved speed block is removed without resetting other widgets`() {
+        for (version in listOf(1, 2)) {
+            context.getSharedPreferences("carlink_dashboard_v1", 0).edit().putString("0.1.LEGACY",
+                """{"gridVersion":$version,"pages":3,"tiles":[{"id":9,"kind":"SPEED","page":0,"x":0,"y":0,"w":1,"h":1},{"id":12,"kind":"MEDIA","page":2,"x":2,"y":1,"w":1,"h":1}]}""").commit()
+            val layout = prefs().state.value
+            assertEquals(3, layout.pages)
+            val scale = if (version == 1) 2 else 1
+            assertEquals(listOf(DashboardTile(12, DashboardModule.MEDIA, 2, 2 * scale, scale, scale, scale)), layout.tiles)
+        }
+        assertFalse(dashboardPickerModules.any { it.name == "SPEED" })
+        assertFalse(VehicleGauge.entries.any { it.name == "SPEED" })
+    }
+
     @Test fun `legacy grid migrates once without changing relative placement`() {
         context.getSharedPreferences("carlink_dashboard_v1", 0).edit().putString("0.1.LEGACY",
-            """{"pages":1,"tiles":[{"id":1,"kind":"SPEED","page":0,"x":2,"y":1,"w":2,"h":1}]}""").commit()
+            """{"pages":1,"tiles":[{"id":1,"kind":"CLOCK","page":0,"x":2,"y":1,"w":2,"h":1}]}""").commit()
         val p = prefs()
-        assertEquals(DashboardTile(1, DashboardModule.SPEED, 0, 4, 2, 4, 2), p.state.value.tiles.single())
+        assertEquals(DashboardTile(1, DashboardModule.CLOCK, 0, 4, 2, 4, 2), p.state.value.tiles.single())
         assertTrue(p.resizeInPlace(1, 3, 1))
         assertEquals(p.state.value, prefs().state.value)
     }
 
     @Test fun `drop rearranges multiple widgets and keeps sizes ids and other pages`() {
         val before = DashboardLayout(2, listOf(
-            DashboardTile(1, DashboardModule.SPEED, 0, 0, 0, 4, 2),
+            DashboardTile(1, DashboardModule.CLOCK, 0, 0, 0, 4, 2),
             DashboardTile(2, DashboardModule.RPM, 0, 4, 0, 2, 2),
             DashboardTile(3, DashboardModule.OIL, 0, 6, 0, 2, 2),
             DashboardTile(4, DashboardModule.CLOCK, 1, 0, 0, 8, 4),

@@ -379,15 +379,18 @@ class TeyesClimateBinderIntegrationTest {
         value: Int,
     ) {
         val parcel = Parcel.obtain()
+        val reply = Parcel.obtain()
         try {
             parcel.writeInterfaceToken("com.syu.ipc.IModuleCallback")
             parcel.writeInt(code)
             parcel.writeIntArray(intArrayOf(value))
             parcel.writeFloatArray(null)
             parcel.writeStringArray(null)
-            assertTrue(callback.transact(1, parcel, null, IBinder.FLAG_ONEWAY))
+            assertTrue(callback.transact(1, parcel, reply, 0))
+            reply.readException()
         } finally {
             parcel.recycle()
+            reply.recycle()
         }
     }
 
@@ -435,6 +438,8 @@ class TeyesClimateBinderIntegrationTest {
             reply: Parcel?,
             flags: Int,
         ): Boolean {
+            assertEquals(0, flags)
+            requireNotNull(reply)
             data.enforceInterface("com.syu.ipc.IRemoteModule")
             when (code) {
                 1 -> {
@@ -453,6 +458,7 @@ class TeyesClimateBinderIntegrationTest {
                 }
                 else -> return false
             }
+            reply.writeNoException()
             return true
         }
     }

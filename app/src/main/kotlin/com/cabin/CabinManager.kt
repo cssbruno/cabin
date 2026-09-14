@@ -1974,7 +1974,10 @@ class CabinManager(
      *
      * Call this from VideoSurface's onSurfaceDestroyed callback.
      */
-    fun onSurfaceDestroyed() {
+    fun onSurfaceDestroyed(expectedSurface: Surface? = null) {
+        // A disposed view can report teardown after a new view queued its surface.
+        // Preserve that replacement and its pending codec update.
+        if (expectedSurface != null && (pendingSurface ?: videoSurface) !== expectedSurface) return
         logInfo("[LIFECYCLE] Surface destroyed - pausing codec immediately", tag = Logger.Tags.VIDEO)
 
         // Cancel any pending surface updates

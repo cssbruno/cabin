@@ -9,6 +9,15 @@ class AdditionalDashboardWidgetTest {
     private val fresh = TeyesClimateState(connected = true, health = TeyesTelemetryHealth.LIVE,
         leftTemperature = 44, rightTemperature = 46)
 
+    @Test fun `partial door readings preserve known opens without treating missing fields as closed`() {
+        val partial = fresh.copy(availableCodes = setOf(37, 38), frontLeftDoorOpen = true, hoodOpen = true)
+        assertEquals(DoorWidgetReading(1, 2), doorWidgetReading(partial))
+        assertEquals(DoorWidgetReading(2, 6), doorWidgetReading(partial.copy(availableCodes = (36..41).toSet())))
+        assertNull(doorWidgetReading(partial.copy(availableCodes = setOf(90))))
+        assertNull(doorWidgetReading(partial.copy(health = TeyesTelemetryHealth.STALE)))
+        assertNull(doorWidgetReading(partial.copy(connected = false)))
+    }
+
     @Test fun `each vehicle widget needs its own fresh fields`() {
         val required = mapOf(
             DashboardModule.DRIVER_TEMPERATURE to setOf(25, 33),

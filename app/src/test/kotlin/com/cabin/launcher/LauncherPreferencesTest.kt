@@ -22,12 +22,12 @@ class LauncherPreferencesTest {
 
     @Test fun `vehicle profiles and decoder layouts keep independent gauge choices`() {
         val first = LauncherPreferences(context, 0, 1048874)
-        first.toggleGauge(VehicleGauge.SPEED)
+        first.toggleGauge(VehicleGauge.RPM)
         first.toggleGauge(VehicleGauge.SERVICE)
-        assertFalse(VehicleGauge.SPEED in LauncherPreferences(context, 0, 1048874).state.value.gauges)
-        assertTrue(VehicleGauge.SPEED in LauncherPreferences(context, 0, 262465).state.value.gauges)
-        assertTrue(VehicleGauge.SPEED in LauncherPreferences(context, 1, 1048874).state.value.gauges)
-        assertTrue(VehicleGauge.SPEED in LauncherPreferences(context, 0, 1048874, com.cabin.platform.TeyesVehicleDataLayout.CIVIC_0298).state.value.gauges)
+        assertFalse(VehicleGauge.RPM in LauncherPreferences(context, 0, 1048874).state.value.gauges)
+        assertTrue(VehicleGauge.RPM in LauncherPreferences(context, 0, 262465).state.value.gauges)
+        assertTrue(VehicleGauge.RPM in LauncherPreferences(context, 1, 1048874).state.value.gauges)
+        assertTrue(VehicleGauge.RPM in LauncherPreferences(context, 0, 1048874, com.cabin.platform.TeyesVehicleDataLayout.CIVIC_0298).state.value.gauges)
         assertTrue(VehicleGauge.SERVICE in LauncherPreferences(context, 0, 1048874).state.value.gauges)
     }
 
@@ -38,11 +38,11 @@ class LauncherPreferencesTest {
 
     @Test fun `gauge choices persist independently for each driver`() {
         val first = LauncherPreferences(context, 0)
-        first.toggleGauge(VehicleGauge.SPEED)
+        first.toggleGauge(VehicleGauge.RPM)
         first.toggleGauge(VehicleGauge.SERVICE)
-        assertFalse(VehicleGauge.SPEED in LauncherPreferences(context, 0).state.value.gauges)
+        assertFalse(VehicleGauge.RPM in LauncherPreferences(context, 0).state.value.gauges)
         assertTrue(VehicleGauge.SERVICE in LauncherPreferences(context, 0).state.value.gauges)
-        assertTrue(VehicleGauge.SPEED in LauncherPreferences(context, 1).state.value.gauges)
+        assertTrue(VehicleGauge.RPM in LauncherPreferences(context, 1).state.value.gauges)
         context.getSharedPreferences(LauncherPreferences.FILE, 0).edit().putString("gauges.0", "[\"UNKNOWN\",\"RPM\",\"RPM\"]").commit()
         assertEquals(listOf(VehicleGauge.RPM), LauncherPreferences(context, 0).state.value.gauges)
     }
