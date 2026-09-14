@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /** Read-only inventory. Never opens device nodes, loads libraries, binds vendor services or requests root. */
 final class HardwareInventory {
     static final String[] LIBRARIES = {"libsqlserial.so", "libjni_serial.so", "libsqlcontrol.so", "libsqltouch.so", "libjni_i2c.so", "libjni_spectrum.so", "libjni_toolkit.so", "libsyu_jni.so"};
-    private static final String[] PROPERTIES = {"ro.board.platform", "ro.hardware", "ro.build.display.id", "ro.build.fytmanufacturer"};
+    private static final String[] PROPERTIES = {"ro.board.platform", "ro.hardware", "ro.build.display.id", "ro.build.fytmanufacturer", "ro.fyt.platform", "sys.fyt.platform", "ro.fyt.realplatform", "ro.fyt.mcu_type"};
 
     static JSONObject collect(Context context) throws JSONException {
         JSONObject root = new JSONObject();
@@ -84,7 +84,7 @@ final class HardwareInventory {
         for (String dir : dirs) for (String name : LIBRARIES) libs.put(pathInfo(new File(dir, name)));
         root.put("referenceNativeLibraries", libs);
         root.put("libraryNote", "These names come from the 9853i reference. Presence does not prove ABI, protocol, DSP or replacement compatibility.");
-        root.put("deviceNodes", directoryMatches(new File("/dev"), "^(tty(S|USB|ACM)[0-9]+|can[0-9]+)$"));
+        root.put("deviceNodes", directoryMatches(new File("/dev"), "^(tty(S|USB|ACM|Mbx)[0-9]+|can[0-9]+|i2c-[0-9]+)$"));
         root.put("networkInterfaces", directoryMatches(new File("/sys/class/net"), "^can[0-9]+$"));
         root.put("interfaceNote", "Directory metadata only. Nodes are never opened. No visible entry does not prove that hardware is absent.");
         return root;

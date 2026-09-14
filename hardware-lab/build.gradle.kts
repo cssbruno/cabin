@@ -1,22 +1,23 @@
-plugins { id("com.android.application") }
+plugins { id("com.android.library") }
 
 android {
+    sourceSets.getByName("main").java.srcDir("../shared/report-export/src/main/java")
     namespace = "com.cabin.hardware"
     compileSdk = 36
+    ndkVersion = "29.0.14206865"
     defaultConfig {
-        applicationId = "com.cabin.hardware.lab"
         minSdk = 27
-        targetSdk = 36
-        versionCode = 3
-        versionName = "0.3-firmware-export"
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
     testOptions { unitTests.isIncludeAndroidResources = true }
+    externalNativeBuild { cmake { path = file("src/main/cpp/CMakeLists.txt"); version = "3.22.1" } }
 }
 dependencies {
+    implementation("androidx.core:core:1.18.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
 }

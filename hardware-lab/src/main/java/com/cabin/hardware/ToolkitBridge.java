@@ -17,6 +17,7 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
     static final String CALLBACK = "com.syu.ipc.IModuleCallback";
     static final int CAN_MODULE = 7;
     private final VehicleBackend backend;
+    private final boolean strictCommands;
     private final Map<IBinder, Subscription> clients = new HashMap<>();
     private Map<Integer, Integer> last;
     private boolean closed;
@@ -25,6 +26,7 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
         @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
             if (code == INTERFACE_TRANSACTION) { if (reply != null) reply.writeString(MODULE); return true; }
             if (code != 1 && code != 3 && code != 4) return false;
+            if (reply == null || flags != 0) return false;
             bounded(data);
             data.enforceInterface(MODULE);
             synchronized (ToolkitBridge.this) { if (closed) return false; }
@@ -39,7 +41,10 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
                 int floats = data.readInt(), strings = data.readInt();
                 if (floats < -1 || floats > 0 || strings < -1 || strings > 0) throw new IllegalArgumentException("Unsupported command payload");
                 exhausted(data);
-                if (!backend.command(command, values)) synchronized (ToolkitBridge.this) { rejectedCommands++; }
+                if (!backend.command(command, values)) {
+                    synchronized (ToolkitBridge.this) { rejectedCommands++; }
+                    if (strictCommands) throw new UnsupportedOperationException("Command not implemented by replacement");
+                }
             } else {
                 IBinder callback = data.readStrongBinder();
                 if (data.dataAvail() < (code == 3 ? 8 : 4)) throw new IllegalArgumentException("Truncated subscription");
@@ -58,8 +63,9 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
         }
     };
 
-    ToolkitBridge(VehicleBackend backend) {
-        this.backend = backend;
+    ToolkitBridge(VehicleBackend backend) { this(backend, false); }
+    ToolkitBridge(VehicleBackend backend, boolean strictCommands) {
+        this.backend = backend; this.strictCommands = strictCommands;
         last = backend.snapshot();
         backend.onChange(this::publish);
     }
@@ -107,21 +113,23 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
         Subscription sub = clients.remove(binder);
         if (sub != null) binder.unlinkToDeath(sub, 0);
     }
-    private void send(IBinder binder, int field, int value) {
+    private void send(IBinder binder, int field, Integer value) {
         synchronized (this) {
             Subscription sub = clients.get(binder);
             if (closed || sub == null || !sub.fields.contains(field)) return;
         }
-        Parcel parcel = Parcel.obtain();
+        Parcel parcel = Parcel.obtain(), reply = Parcel.obtain();
         try {
             parcel.writeInterfaceToken(CALLBACK);
             parcel.writeInt(field);
-            parcel.writeIntArray(new int[] {value});
+            parcel.writeIntArray(value == null ? null : new int[] {value});
             parcel.writeFloatArray(null);
             parcel.writeStringArray(null);
-            if (!binder.transact(1, parcel, null, IBinder.FLAG_ONEWAY)) remove(binder);
+            if (!binder.transact(1, parcel, reply, 0)) { remove(binder); return; }
+            if (reply.dataSize() > 4096 || reply.dataAvail() < 4) { remove(binder); return; }
+            reply.readException();
         } catch (RemoteException | RuntimeException ex) { remove(binder); }
-        finally { parcel.recycle(); }
+        finally { parcel.recycle(); reply.recycle(); }
     }
     private void publish() {
         Map<Integer, Integer> current = backend.snapshot();
@@ -130,6 +138,7 @@ final class ToolkitBridge extends Binder implements AutoCloseable {
         synchronized (this) {
             if (closed) return;
             current.forEach((field, value) -> { if (!value.equals(last.get(field))) changes.put(field, value); });
+            last.keySet().forEach(field -> { if (!current.containsKey(field)) changes.put(field, null); });
             last = current;
             targets = new ArrayList<>(clients.keySet());
         }

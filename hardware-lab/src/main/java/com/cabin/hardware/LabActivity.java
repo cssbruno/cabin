@@ -1,20 +1,16 @@
 package com.cabin.hardware;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Parcel;
-import android.os.RemoteException;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/** Small test client exercising the Binder interface, with clearly simulated data. */
+/** Cabin diagnostics using the installed FYT service; no synthetic fallback. */
 public final class LabActivity extends Activity {
     private TextView status;
     private TextView inventoryStatus;
@@ -23,47 +19,20 @@ public final class LabActivity extends Activity {
     private final java.util.concurrent.ExecutorService worker = java.util.concurrent.Executors.newSingleThreadExecutor();
     private static final int EXPORT_REPORT = 41;
     private static final int EXPORT_FIRMWARE = 42;
-    private Button toggle;
-    private boolean bound;
-    private IBinder module;
-    private ToolkitBridge localBridge;
-    private final Binder callback = new Binder() {
-        @Override protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) {
-            if (code == INTERFACE_TRANSACTION) { if (reply != null) reply.writeString(ToolkitBridge.CALLBACK); return true; }
-            if (code != 1) return false;
-            data.enforceInterface(ToolkitBridge.CALLBACK);
-            int field = data.readInt();
-            int[] value = data.createIntArray();
-            if (field == 37 && value != null && value.length == 1) {
-                runOnUiThread(() -> status.setText("Simulated front-left door: " + (value[0] == 1 ? "Open" : "Closed")));
-            }
-            return true;
+    private LiveCanReceiver receiver;
+    private final Handler ui = new Handler(Looper.getMainLooper());
+    private final Runnable refresh = new Runnable() {
+        @Override public void run() {
+            if (receiver != null) status.setText(receiver.report());
+            ui.postDelayed(this, 500);
         }
     };
-    private final ServiceConnection connection = new ServiceConnection() {
-        @Override public void onServiceConnected(ComponentName name, IBinder binder) {
-            localBridge = binder instanceof ToolkitBridge ? (ToolkitBridge) binder : null;
-            Parcel data = Parcel.obtain(), reply = Parcel.obtain();
-            try {
-                data.writeInterfaceToken(ToolkitBridge.TOOLKIT);
-                data.writeInt(ToolkitBridge.CAN_MODULE);
-                if (!binder.transact(1, data, reply, 0)) throw new IllegalStateException("Toolkit unavailable");
-                reply.readException();
-                module = reply.readStrongBinder();
-                if (module == null) throw new IllegalStateException("CAN module unavailable");
-                subscribe(true);
-                toggle.setEnabled(localBridge != null);
-            } catch (RemoteException | RuntimeException ex) {
-                status.setText("Simulator connection failed");
-                toggle.setEnabled(false);
-            } finally { data.recycle(); reply.recycle(); }
-        }
-        @Override public void onServiceDisconnected(ComponentName name) {
-            module = null; localBridge = null;
-            toggle.setEnabled(false);
-            status.setText("Simulator disconnected");
-        }
-    };
+    private void connect() {
+        if (receiver != null) receiver.close();
+        receiver = new LiveCanReceiver(this);
+        receiver.start();
+        status.setText(receiver.report());
+    }
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
         LinearLayout column = new LinearLayout(this);
@@ -72,18 +41,25 @@ public final class LabActivity extends Activity {
         int pad = (int) (24 * getResources().getDisplayMetrics().density);
         column.setPadding(pad, pad, pad, pad);
         TextView heading = new TextView(this);
-        heading.setText("Cabin Hardware Lab"); heading.setTextSize(28);
+        heading.setText("Cabin diagnostics"); heading.setTextSize(28);
         column.addView(heading);
         TextView note = new TextView(this);
-        note.setText("SIMULATION ONLY\nPrototype service interface. No real CAN, MCU or DSP connection.");
-        note.setTextSize(18); note.setPadding(0, pad, 0, pad);
+        note.setText("Live FYT CAN data from the installed vehicle service. Initial values may be cached. If the service is unavailable, no vehicle values are substituted.");
         column.addView(note);
-        status = new TextView(this); status.setTextSize(22); status.setText("Connecting to simulator…");
-        column.addView(status);
-        toggle = new Button(this); toggle.setText("Toggle simulated door"); toggle.setMinHeight((int) (56 * getResources().getDisplayMetrics().density));
-        toggle.setEnabled(false);
-        toggle.setOnClickListener(v -> { if (localBridge != null) localBridge.toggleSimulatedDoor(); });
-        column.addView(toggle);
+        Button reconnect = new Button(this); reconnect.setText("Reconnect to FYT");
+        reconnect.setOnClickListener(v -> connect()); column.addView(reconnect);
+        Button saveLive = new Button(this); saveLive.setText("Save live CAN report");
+        saveLive.setOnClickListener(v -> com.cabin.reports.ReportExport.show(this, "live-can-report.json",
+            receiver != null ? receiver.report() : status.getText().toString())); column.addView(saveLive);
+        Button debug = new Button(this); debug.setText("Live debug");
+        debug.setOnClickListener(v -> com.cabin.reports.LiveDebugMenu.show(this)); column.addView(debug);
+        status = new TextView(this); status.setTextSize(16); status.setTextIsSelectable(true);
+        status.setText("Connecting to FYT…"); column.addView(status);
+        Button replacement = new Button(this); replacement.setText("Offline test bench (simulated data)");
+        replacement.setOnClickListener(v -> startActivity(new Intent(this, ReplacementActivity.class))); column.addView(replacement);
+        Button capture = new Button(this); capture.setText("Analyze saved MCU capture");
+        capture.setOnClickListener(v -> startActivity(new Intent(this, McuCaptureActivity.class)));
+        column.addView(capture);
         inventoryStatus = new TextView(this);
         inventoryStatus.setText("Inspect this unit to identify its firmware and visible hardware interfaces.");
         inventoryStatus.setTextSize(18); inventoryStatus.setPadding(0, pad, 0, pad);
@@ -91,19 +67,14 @@ public final class LabActivity extends Activity {
         inspect = new Button(this); inspect.setText("Inspect this unit");
         inspect.setOnClickListener(v -> inspectUnit()); column.addView(inspect);
         export = new Button(this); export.setText("Export hardware report"); export.setEnabled(false);
-        export.setOnClickListener(v -> {
-            Intent save = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("application/json").putExtra(Intent.EXTRA_TITLE, "cabin-hardware-report.json");
-            try { startActivityForResult(save, EXPORT_REPORT); }
-            catch (android.content.ActivityNotFoundException ex) { inventoryStatus.setText("No file picker available on this unit."); }
-        });
+        export.setOnClickListener(v -> com.cabin.reports.ReportExport.show(this,"cabin-hardware-report.json",report));
         column.addView(export);
         Button firmware = new Button(this);
         firmware.setText("Export SYU firmware bundle");
         firmware.setOnClickListener(v -> {
-            Intent save = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
+            Intent saveFirmware = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("application/zip").putExtra(Intent.EXTRA_TITLE, "cabin-syu-firmware.zip");
-            try { startActivityForResult(save, EXPORT_FIRMWARE); }
+            try { startActivityForResult(saveFirmware, EXPORT_FIRMWARE); }
             catch (android.content.ActivityNotFoundException ex) { inventoryStatus.setText("No file picker available on this unit."); }
         });
         column.addView(firmware);
@@ -168,24 +139,13 @@ public final class LabActivity extends Activity {
     @Override protected void onDestroy() { worker.shutdownNow(); super.onDestroy(); }
     @Override protected void onStart() {
         super.onStart();
-        bound = bindService(new Intent(this, ToolkitService.class), connection, BIND_AUTO_CREATE);
-        if (!bound) status.setText("Simulator unavailable");
-    }
-    private void subscribe(boolean register) throws RemoteException {
-        if (module == null) return;
-        Parcel data = Parcel.obtain();
-        try {
-            data.writeInterfaceToken(ToolkitBridge.MODULE);
-            data.writeStrongBinder(callback);
-            data.writeInt(37);
-            if (register) data.writeInt(1);
-            module.transact(register ? 3 : 4, data, null, IBinder.FLAG_ONEWAY);
-        } finally { data.recycle(); }
+        connect();
+        ui.post(refresh);
     }
     @Override protected void onStop() {
-        try { subscribe(false); } catch (RemoteException | RuntimeException ignored) { }
-        if (bound) unbindService(connection);
-        bound = false; module = null; localBridge = null; toggle.setEnabled(false);
+        ui.removeCallbacks(refresh);
+        if (receiver != null) receiver.close();
+        receiver = null;
         super.onStop();
     }
 }

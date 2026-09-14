@@ -5,13 +5,17 @@
     </queries>
     <permission android:name="com.cabin.hardware.permission.CONNECT" android:protectionLevel="signature" />
     <uses-permission android:name="com.cabin.hardware.permission.CONNECT" />
-    <application android:label="Cabin Hardware Lab" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:supportsRtl="true">
-        <activity android:name=".LabActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+    <application>
+        <provider android:name="com.cabin.reports.ReportFileProvider" android:authorities="${applicationId}.reports" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths_reports" />
+        </provider>
+        <activity android:name=".LabActivity" android:exported="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <activity android:name=".ReplacementActivity" android:exported="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <activity android:name=".LiveCanActivity" android:exported="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <service android:name=".ReplacementService" android:exported="true" android:permission="com.cabin.hardware.permission.CONNECT">
+            <intent-filter><action android:name="com.cabin.hardware.REPLACEMENT" /></intent-filter>
+        </service>
+        <activity android:name=".McuCaptureActivity" android:exported="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
         <service android:name=".ToolkitService" android:exported="true" android:permission="com.cabin.hardware.permission.CONNECT">
             <intent-filter><action android:name="com.cabin.hardware.TOOLKIT" /></intent-filter>
         </service>
