@@ -1,0 +1,58 @@
+
+SOURCE /tmp/honda-inspect/deodex/DiagApService/com/mitsubishielectric/ada/appservice/diag/IDiagService$Stub.smali
+29: .field static final TRANSACTION_cancel:I = 0x4
+57: .field static final TRANSACTION_initialize:I = 0x1
+69: .field static final TRANSACTION_request:I = 0x3
+95: .field static final TRANSACTION_terminate:I = 0x2
+
+SOURCE /tmp/honda-inspect/deodex/DiagApService/com/mitsubishielectric/ada/appservice/diag/IDiagServiceListner$Stub.smali
+29: .field static final TRANSACTION_notifyCancelEnd:I = 0x7
+39: .field static final TRANSACTION_notifyResponse:I = 0x1
+
+SOURCE /tmp/honda-inspect/deodex/DiagApService/com/mitsubishielectric/ada/appservice/diag/ParamHardwareGetError.smali
+7: .field public static final KEY_DATA:Ljava/lang/String; = "data"
+9: .field public static final KEY_ECODE:Ljava/lang/String; = "ecode"
+11: .field public static final KEY_EXTRA_INFO:Ljava/lang/String; = "extra_info"
+13: .field public static final KEY_INFO:Ljava/lang/String; = "info"
+15: .field public static final KEY_TIME:Ljava/lang/String; = "time"
+17: .field public static final VALUE_ECODE_AIRCON_DIAG:I = 0xa8f
+19: .field public static final VALUE_ECODE_AUDIO_ERROR1:I = 0x579
+21: .field public static final VALUE_ECODE_AUDIO_ERROR4:I = 0x57c
+23: .field public static final VALUE_ECODE_AUDIO_ERROR6:I = 0x57e
+25: .field public static final VALUE_ECODE_AUDIO_ERROR7:I = 0x57f
+27: .field public static final VALUE_ECODE_AUDIO_ERROR8:I = 0x580
+29: .field public static final VALUE_ECODE_DRAM_DIAG:I = 0xa32
+31: .field public static final VALUE_ECODE_DVD_HIGH_TEMP:I = 0x4b1
+33: .field public static final VALUE_ECODE_DVD_LOW_TEMP:I = 0x4b2
+35: .field public static final VALUE_ECODE_DVD_TEMP_ERROR:I = 0x4b3
+37: .field public static final VALUE_ECODE_ETC_DIAG:I = 0xa3d
+39: .field public static final VALUE_ECODE_GPS_ANTENNA_ERROR:I = 0x515
+41: .field public static final VALUE_ECODE_GPS_DIAG_ANTENNA:I = 0xa8d
+43: .field public static final VALUE_ECODE_GPS_DIAG_SELF:I = 0xa8e
+45: .field public static final VALUE_ECODE_GPS_RECEIVER_ERROR1:I = 0x516
+47: .field public static final VALUE_ECODE_GPS_RECEIVER_ERROR2:I = 0x517
+49: .field public static final VALUE_ECODE_GYRO_DIAG:I = 0xa92
+51: .field public static final VALUE_ECODE_GYRO_ERROR1:I = 0x518
+53: .field public static final VALUE_ECODE_GYRO_ERROR2:I = 0x519
+55: .field public static final VALUE_ECODE_HFL_DIAG:I = 0xa91
+57: .field public static final VALUE_ECODE_LANEWATCH_DIAG:I = 0xa3a
+59: .field public static final VALUE_ECODE_MVC_DIAG:I = 0xa39
+61: .field public static final VALUE_ECODE_RCAMERA_DIAG:I = 0xa30
+63: .field public static final VALUE_ECODE_USB_DIAG:I = 0x44e
+65: .field public static final VALUE_ECODE_VEHICLE_SPEED_PULSE:I = 0x51a
+67: .field public static final VALUE_ECODE_XM_ANTENNA_ERROR:I = 0x6a6
+
+SOURCE /tmp/honda-inspect/deodex/DiagApService/com/mitsubishielectric/ada/appservice/diag/ParamHardwareDeleteError.smali
+7: .field public static final KEY_CONTINUE:Ljava/lang/String; = "continue"
+9: .field public static final KEY_PROGRESS:Ljava/lang/String; = "progress"
+11: .field public static final KEY_STATUS:Ljava/lang/String; = "status"
+13: .field public static final RANGE_PROGRESS_MAX:I = 0x64
+15: .field public static final RANGE_PROGRESS_MIN:I = 0x0
+17: .field public static final VAULE_STATUS_COMPLETE:I = 0x1
+19: .field public static final VAULE_STATUS_ERROR_NOEMPTY:I = -0x2
+21: .field public static final VAULE_STATUS_ERROR_WRITE:I = -0x1
+23: .field public static final VAULE_STATUS_EXEC:I
+
+SOURCE /tmp/honda-inspect/deodex/DiagApService/com/mitsubishielectric/ada/appservice/diag/ParamTcuCommon.smali
+7: .field public static final KEY_COLUMNS:Ljava/lang/String; = "columns"
+9: .field public static final KEY_ROWS:Ljava/lang/String; = "rows"

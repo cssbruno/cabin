@@ -32,7 +32,8 @@ public final class MainActivity extends Activity {
         tool(destinations,"Panel",()->open(MeterActivity.class));
         tool(destinations,"Cameras",()->open(CameraActivity.class));
         tool(destinations,"Head unit",()->open(HeadUnitActivity.class));
-        tool(destinations,"Service",this::serviceActions);root.addView(destinations);
+        tool(destinations,"Service",this::serviceActions);
+        tool(destinations,"Check unit",()->open(ValidationActivity.class));root.addView(destinations);
         status=text(client.status,16,blue);status.setPadding(0,dp(12),0,dp(8));root.addView(status);
         LinearLayout actions=new LinearLayout(this);
         connect=button("Connect",v->{parked.setChecked(false);if(client.phase==HondaClient.Phase.DISCONNECTED)client.connect();else client.disconnect();});
@@ -99,7 +100,7 @@ public final class MainActivity extends Activity {
             else client.change(entry,value,parked.isChecked());
         }).show();}
     private void report(){
-        StringBuilder out=new StringBuilder("Honda Customizer 2.0\nTarget: original Honda VehicleInfoManager\nCivic catalog is an offline candidate filter; live values come from Honda discovery.\n");
+        StringBuilder out=new StringBuilder("Honda Customizer 2.1.0\nTarget: original Honda VehicleInfoManager\nCivic catalog is an offline candidate filter; live values come from Honda discovery.\n");
         out.append("State: ").append(client.phase).append("\n").append(client.status).append("\n\n");
         for(Setting s:client.values.values()){Catalog.Entry e=catalog.byKey.get(s.key());out.append(e==null?s.key():e.title).append(" [").append(s.key()).append("] = ").append(s.value).append("; type=").append(s.type).append("; range=").append(Arrays.toString(s.range)).append("\n");}
         out.append("\nSession log\n");for(String line:client.log)out.append(line).append("\n");
@@ -119,14 +120,15 @@ public final class MainActivity extends Activity {
         reset.setEnabled(parked.isChecked()&&client.canResetCustomization());panel.addView(reset);
         Button maintenance=button("Maintenance items and service reset",v->{closeServiceActions();maintenanceRequested=true;client.requestMaintenanceStatus();});
         maintenance.setEnabled(client.phase==HondaClient.Phase.READY);panel.addView(maintenance);
-        panel.addView(button("Honda diagnostics",v->{
+        panel.addView(button("Diagnostic readings",v->{closeServiceActions();open(DiagnosticsActivity.class);}));
+        panel.addView(button("Honda diagnostic app",v->{
             if(!parked.isChecked()){Toast.makeText(this,"Confirm that the car is parked first.",Toast.LENGTH_SHORT).show();return;}
             String unavailable=OemScreens.unavailable(this,OemScreens.Screen.DIAGNOSTICS);
             if(unavailable!=null){new AlertDialog.Builder(this).setMessage(unavailable).setPositiveButton("OK",null).show();return;}
             closeServiceActions();client.disconnect();String error=OemScreens.open(this,OemScreens.Screen.DIAGNOSTICS,true);
             if(error!=null)new AlertDialog.Builder(this).setMessage(error).setPositiveButton("OK",null).show();
         }));
-        panel.addView(text("Diagnostics opens Honda's installed diagnostic app. This app does not generate raw OBD commands.",14,muted));
+        panel.addView(text("Diagnostic readings uses the recovered Honda service when permission is granted. Honda diagnostic app opens the installed OEM editor. Neither option invents OBD commands.",14,muted));
         ScrollView scroll=new ScrollView(this);scroll.addView(panel);
         serviceDialog=new AlertDialog.Builder(this).setTitle("Service actions").setView(scroll).setNegativeButton("Close",null).show();
     }

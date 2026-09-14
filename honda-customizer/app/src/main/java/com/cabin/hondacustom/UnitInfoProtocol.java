@@ -23,4 +23,28 @@ public final class UnitInfoProtocol {
    return (Integer)value==1?1:2;
   }finally{p.recycle();r.recycle();}
  }
+ /** Read-only identity API traced from getUnitInformation (0x21), not user-setting writes. */
+ public String getVehicleModel()throws RemoteException{
+  Object value=identity(7);
+  if(!(value instanceof String)&&!(value instanceof Integer))throw new RemoteException("Unsupported Honda model identifier type");
+  String model=String.valueOf(value);
+  if(model.trim().isEmpty()||model.length()>256)throw new RemoteException("Invalid Honda model identifier");
+  return model;
+ }
+ public int getDestinationCode()throws RemoteException{
+  Object value=identity(4);
+  if(!(value instanceof Integer))throw new RemoteException("Unsupported Honda destination code type");
+  return (Integer)value;
+ }
+ private Object identity(int type)throws RemoteException{
+  Parcel p=Parcel.obtain(),r=Parcel.obtain();try{
+   p.writeInterfaceToken(DESCRIPTOR);p.writeInt(1);p.writeInt(type);p.writeValue(null);p.writeList(null);p.writeIntArray(null);
+   if(!remote.transact(0x21,p,r,0))throw new RemoteException("Honda identity read unsupported");
+   r.readException();int status=r.readInt();
+   if(status!=0)throw new RemoteException("Honda identity read rejected ("+status+")");
+   if(r.readInt()!=1||r.readInt()!=type)throw new RemoteException("Invalid Honda identity response");
+   Object value=r.readValue(UnitInfoProtocol.class.getClassLoader());r.readArrayList(null);r.createIntArray();
+   return value;
+  }finally{p.recycle();r.recycle();}
+ }
 }

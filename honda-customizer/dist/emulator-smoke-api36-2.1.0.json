@@ -1,0 +1,26 @@
+{
+  "passed": 11,
+  "failures": 0,
+  "checks": [
+    "main_installs_and_launches",
+    "missing_vehicle_service_fails_closed",
+    "offline_civic_catalog_and_search",
+    "panel_navigation_missing_service",
+    "camera_navigation_missing_service",
+    "head_unit_missing_editors_disabled",
+    "native_head_unit_missing_service",
+    "native_display_missing_service",
+    "compatibility_report_is_read_only",
+    "diagnostic_navigation_missing_service",
+    "service_actions_require_live_support"
+  ],
+  "apk_sha256": "8e1dde6a8fdbf1d53fc40f34dc6864e46b927f305b55a7bbab2fefc8d939321f",
+  "test_apk_sha256": "0cd0f4699f8359db49081b4efc6147339204ea8a29cfbda029d78c45cf507280",
+  "tested_at_utc": "2026-09-14T16:49:20.867152+00:00",
+  "emulator_api": "36",
+  "emulator_android_version": "16",
+  "emulator_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BE4B.251210.005/14574095:user/release-keys",
+  "display": "Physical size: 800x480",
+  "scope": "Release APK installation, navigation and unavailable-service gating; no Honda hardware/services",
+  "hardware_tested": false
+}

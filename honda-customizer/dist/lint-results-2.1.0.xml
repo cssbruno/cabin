@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 9.0.0">
+
+    <issue
+        id="PluralsCandidate"
+        severity="Warning"
+        message="Formatting %d followed by words (&quot;settings&quot;): This should probably be a plural rather than a string"
+        category="Correctness:Messages"
+        priority="5"
+        summary="Potential Plurals"
+        explanation="This lint check looks for potential errors in internationalization where you have translated a message which involves a quantity and it looks like other parts of the string may need grammatical changes.&#xA;&#xA;For example, rather than something like this:&#xA;```xml&#xA;  &lt;string name=&quot;try_again&quot;>Try again in %d seconds.&lt;/string>&#xA;```&#xA;you should be using a plural:&#xA;```xml&#xA;   &lt;plurals name=&quot;try_again&quot;>&#xA;        &lt;item quantity=&quot;one&quot;>Try again in %d second&lt;/item>&#xA;        &lt;item quantity=&quot;other&quot;>Try again in %d seconds&lt;/item>&#xA;    &lt;/plurals>&#xA;```&#xA;This will ensure that in other languages the right set of translations are provided for the different quantity classes.&#xA;&#xA;(This check depends on some heuristics, so it may not accurately determine whether a string really should be a quantity. You can use tools:ignore to filter out false positives."
+        url="https://developer.android.com/guide/topics/resources/string-resource.html#Plurals"
+        urls="https://developer.android.com/guide/topics/resources/string-resource.html#Plurals"
+        errorLine1="&lt;string name=&quot;setting_count&quot;>%1$s • %2$d settings&lt;/string>"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/res/values/strings.xml"
+            line="5"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        severity="Warning"
+        message="Formatting %d followed by words (&quot;unknown&quot;): This should probably be a plural rather than a string"
+        category="Correctness:Messages"
+        priority="5"
+        summary="Potential Plurals"
+        explanation="This lint check looks for potential errors in internationalization where you have translated a message which involves a quantity and it looks like other parts of the string may need grammatical changes.&#xA;&#xA;For example, rather than something like this:&#xA;```xml&#xA;  &lt;string name=&quot;try_again&quot;>Try again in %d seconds.&lt;/string>&#xA;```&#xA;you should be using a plural:&#xA;```xml&#xA;   &lt;plurals name=&quot;try_again&quot;>&#xA;        &lt;item quantity=&quot;one&quot;>Try again in %d second&lt;/item>&#xA;        &lt;item quantity=&quot;other&quot;>Try again in %d seconds&lt;/item>&#xA;    &lt;/plurals>&#xA;```&#xA;This will ensure that in other languages the right set of translations are provided for the different quantity classes.&#xA;&#xA;(This check depends on some heuristics, so it may not accurately determine whether a string really should be a quantity. You can use tools:ignore to filter out false positives."
+        url="https://developer.android.com/guide/topics/resources/string-resource.html#Plurals"
+        urls="https://developer.android.com/guide/topics/resources/string-resource.html#Plurals"
+        errorLine1="&lt;string name=&quot;unknown_count&quot;> • %1$d unknown entries in report&lt;/string>"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/res/values/strings.xml"
+            line="6"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.string.catalog` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;string name=&quot;catalog&quot;>Catalog&lt;/string>"
+        errorLine2="        ~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/res/values/strings.xml"
+            line="4"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="        parked = new CheckBox(this); parked.setText(&quot;The vehicle is parked&quot;); body.addView(parked);"
+        errorLine2="                                                    ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/CameraActivity.java"
+            line="39"
+            column="53"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="            if (!parked.isChecked()) { status.setText(&quot;Confirm that the vehicle is parked first.&quot;); return; }"
+        errorLine2="                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/CameraActivity.java"
+            line="43"
+            column="55"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="            catch (ActivityNotFoundException | SecurityException e) { status.setText(&quot;The original Honda camera screen is unavailable on this head unit.&quot;); }"
+        errorLine2="                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/CameraActivity.java"
+            line="46"
+            column="86"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="        parked=new CheckBox(this);parked.setText(&quot;The vehicle is parked&quot;);body.addView(parked);parked.setOnCheckedChangeListener((b,on)->render());"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/DisplayActivity.java"
+            line="24"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="            if(!confirmed){status.setText(&quot;Confirm that the car is parked before opening Honda settings.&quot;);return;}"
+        errorLine2="                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/HeadUnitActivity.java"
+            line="76"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="        all=new CheckBox(this);all.setText(&quot;Civic catalog&quot;);all.setOnCheckedChangeListener((b,on)->renderRows());filters.addView(all);root.addView(filters);"
+        errorLine2="                                           ~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/MainActivity.java"
+            line="47"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="        count.setText(getString(R.string.setting_count,all.isChecked()?&quot;Catalog&quot;:&quot;Live vehicle&quot;,shown)+(unmapped>0?getString(R.string.unknown_count,unmapped):&quot;&quot;));"
+        errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/MainActivity.java"
+            line="83"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        severity="Warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        category="Internationalization"
+        priority="6"
+        summary="TextView Internationalization"
+        explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
+        url="https://developer.android.com/guide/topics/resources/localization.html"
+        urls="https://developer.android.com/guide/topics/resources/localization.html"
+        errorLine1="        status.setText(client.status+(client.live==null?&quot;&quot;:&quot;\nPreset &quot;+client.live.preset+&quot; · &quot;+client.draft().size()+&quot; / &quot;+client.capacity()+&quot; items&quot;));connect.setText(client.phase==MeterClient.Phase.DISCONNECTED?&quot;Connect&quot;:&quot;Disconnect&quot;);"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/tmp/cabin-honda-native/honda-customizer/app/src/main/java/com/cabin/hondacustom/MeterActivity.java"
+            line="42"
+            column="24"/>
+    </issue>
+
+</issues>

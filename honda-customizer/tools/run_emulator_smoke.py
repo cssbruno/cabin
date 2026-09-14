@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
+from smoke_contract import expected_checks, parse_results
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
@@ -39,31 +40,38 @@ reports.mkdir(parents=True, exist_ok=True)
 report_path = reports / 'emulator-smoke.json'
 # A failed rerun must never leave a prior success report available for packaging.
 report_path.unlink(missing_ok=True)
+api = int(run('shell', 'getprop', 'ro.build.version.sdk'))
+(reports / f'emulator-smoke-api{api}.json').unlink(missing_ok=True)
 for path in (apk, test_apk):
     output = run('install', '-r', '-t', str(path))
     if 'Success' not in output:
         raise RuntimeError(output)
 run('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
-run('shell', 'wm', 'dismiss-keyguard')
+if api >= 18:
+    run('shell', 'wm', 'dismiss-keyguard')
+else:
+    run('shell', 'input', 'keyevent', '82')
 output = run('shell', 'am', 'instrument', '-w', '-r',
              'com.cabin.hondacustom.test/com.cabin.hondacustom.SmokeInstrumentation', timeout=120)
 (reports / 'emulator-smoke.log').write_text(output + '\n')
+(reports / f'emulator-smoke-api{api}.log').write_text(output + '\n')
 print(output)
-passed = re.search(r'INSTRUMENTATION_RESULT: passed=(\d+)', output)
-failures = re.search(r'INSTRUMENTATION_RESULT: failures=(\d+)', output)
-if not passed or not failures or passed[1] != '7' or failures[1] != '0' or 'INSTRUMENTATION_CODE: -1' not in output:
-    sys.exit('Emulator smoke checks failed; see app/build/reports/emulator-smoke.log')
+try:
+    result = parse_results(output, expected_checks(root))
+except (ValueError, json.JSONDecodeError) as error:
+    sys.exit(f'Emulator smoke checks failed: {error}; see app/build/reports/emulator-smoke.log')
 report = {
-    'passed': int(passed[1]), 'failures': int(failures[1]),
+    **result,
     'apk_sha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
     'test_apk_sha256': hashlib.sha256(test_apk.read_bytes()).hexdigest(),
     'tested_at_utc': datetime.now(timezone.utc).isoformat(),
     'emulator_api': run('shell', 'getprop', 'ro.build.version.sdk'),
     'emulator_android_version': run('shell', 'getprop', 'ro.build.version.release'),
     'emulator_fingerprint': run('shell', 'getprop', 'ro.build.fingerprint'),
-    'display': run('shell', 'wm', 'size'),
+    'display': run('shell', 'wm', 'size') if api >= 18 else run('shell', 'dumpsys', 'display'),
     'scope': 'Release APK installation, navigation and unavailable-service gating; no Honda hardware/services',
     'hardware_tested': False,
 }
 report_path.write_text(json.dumps(report, indent=2) + '\n')
+(reports / f'emulator-smoke-api{api}.json').write_text(json.dumps(report, indent=2) + '\n')
 print('Verified release APK:', report['apk_sha256'])

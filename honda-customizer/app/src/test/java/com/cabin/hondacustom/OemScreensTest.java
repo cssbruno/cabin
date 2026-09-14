@@ -59,9 +59,9 @@ public class OemScreensTest {
             HeadUnitActivity activity=controller.get();View root=activity.getWindow().getDecorView();
             CheckBox parked=find(root,CheckBox.class,null);Button language=find(root,Button.class,"Head-unit language");
             assertNotNull(parked);assertNotNull(language);assertTrue(language.isEnabled());
-            parked.setChecked(true);controller.pause().resume();assertFalse(parked.isChecked());
+            parked.setChecked(true);assertTrue(parked.isChecked());controller.pause().resume();assertFalse(parked.isChecked());
             language.performClick();assertNull(Shadows.shadowOf(activity).getNextStartedActivity());
-            parked.setChecked(true);language.performClick();
+            parked.setChecked(true);assertTrue(parked.isChecked());language.performClick();
             assertEquals(screen.component,Shadows.shadowOf(activity).getNextStartedActivity().getComponent());assertFalse(parked.isChecked());
         }
     }

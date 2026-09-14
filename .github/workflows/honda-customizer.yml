@@ -23,6 +23,16 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - api: 17
+            target: default
+            arch: x86
+          - api: 35
+            target: google_apis
+            arch: x86_64
     defaults:
       run:
         working-directory: honda-customizer
@@ -35,6 +45,8 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Install compile SDK and build tools
         run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Validate smoke-result parser
+        run: python3 -m unittest discover -s tools -p 'test_*.py' -v
       - name: Test, lint and build release plus instrumentation APKs
         run: |
           set -euo pipefail
@@ -47,13 +59,14 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Smoke-test release APK on Android 15
+      - name: Smoke-test release APK on API ${{ matrix.api }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
+          api-level: ${{ matrix.api }}
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
           emulator-port: 5554
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none -skin 800x480
           disable-animations: true
           working-directory: honda-customizer
           script: python3 tools/run_emulator_smoke.py --serial emulator-5554
@@ -66,7 +79,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: honda-customizer-reports-${{ github.run_number }}
+          name: honda-customizer-reports-api${{ matrix.api }}-${{ github.run_number }}
           if-no-files-found: warn
           retention-days: 14
           path: |
@@ -76,7 +89,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: honda-customizer-ci-only-apks-${{ github.run_number }}
+          name: honda-customizer-ci-only-apks-api${{ matrix.api }}-${{ github.run_number }}
           if-no-files-found: warn
           retention-days: 14
           path: |

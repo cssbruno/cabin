@@ -29,15 +29,39 @@ public final class SmokeInstrumentation extends Instrumentation {
             check("panel_navigation_missing_service",()->{click("Panel");waitForIdleSync();awaitActivity(MeterActivity.class);click("Connect");awaitText("Honda meter service unavailable");});
             check("camera_navigation_missing_service",()->{open(MainActivity.class);click("Cameras");waitForIdleSync();awaitActivity(CameraActivity.class);click("Connect to Honda");awaitText("Honda camera service is unavailable");});
             check("head_unit_missing_editors_disabled",()->{open(MainActivity.class);click("Head unit");waitForIdleSync();awaitActivity(HeadUnitActivity.class);require(!find("Head-unit language").isEnabled(),"Missing OEM editor enabled");});
+            check("native_head_unit_missing_service",()->{click("Connect to head unit");awaitText("Original Honda head-unit service is unavailable");});
+            check("native_display_missing_service",()->{
+                click("Display adjustment");awaitText("Display adjustment");require(activity instanceof DisplayActivity,"Wrong display destination");
+                click("Connect to Honda display");awaitText("Original Honda AV service is unavailable");
+            });
+            check("compatibility_report_is_read_only",()->{
+                open(MainActivity.class);click("Check unit");awaitText("Honda compatibility report");require(activity instanceof ValidationActivity,"Wrong validation destination");
+                click("Run read-only checks");awaitText("Package checks finished");click("Copy report");
+                final String[] copied=new String[1];runOnMainSync(()->{
+                    android.content.ClipboardManager clipboard=(android.content.ClipboardManager)getTargetContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    copied[0]=clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+                });
+                org.json.JSONObject report=new org.json.JSONObject(copied[0]);
+                require(report.getInt("automated_vehicle_writes")==0,"Compatibility scan wrote vehicle settings");
+                require(!report.getBoolean("independently_verified_hardware"),"Emulator claimed hardware verification");
+                require("PREFLIGHT_BLOCKED".equals(report.getJSONObject("identity_read").getString("status")),"Missing service was not reported");
+            });
+            check("diagnostic_navigation_missing_service",()->{
+                open(MainActivity.class);click("Service");clickServiceDialog("Diagnostic readings");awaitText("Honda diagnostic readings");
+                require(activity instanceof DiagnosticsActivity,"Wrong diagnostics destination");click("Connect diagnostics");
+                require(!find("Read hardware history").isEnabled(),"Hardware read enabled without Honda service");
+                require(!find("Clear hardware history").isEnabled(),"Hardware deletion enabled without Honda service");
+            });
             check("service_actions_require_live_support",()->{
                 open(MainActivity.class);click("Service");waitForIdleSync();
                 requireDisabledDialogControl("Calibrate tire-pressure system");
                 requireDisabledDialogControl("Restore vehicle customization defaults");
             });
             result.putInt("passed",passed.size());result.putInt("failures",0);
-            result.putString("checks",passed.toString());result.putString("stream","\nPASS "+passed.size()+" emulator smoke checks\n"+passed+"\n");
+            result.putString("checks",new org.json.JSONArray(passed).toString());result.putString("stream","\nPASS "+passed.size()+" emulator smoke checks\n"+passed+"\n");
             finish(Activity.RESULT_OK,result);
         } catch(Throwable e){
+            android.util.Log.e("HondaSmoke","Instrumentation failed",e);
             result.putInt("passed",passed.size());result.putInt("failures",1);result.putString("stream","\nFAIL "+e+"\nPassed: "+passed+"\n");
             finish(Activity.RESULT_CANCELED,result);
         }
@@ -70,7 +94,23 @@ public final class SmokeInstrumentation extends Instrumentation {
         if(view instanceof ViewGroup)for(int i=0;i<((ViewGroup)view).getChildCount();i++){View found=findControl(((ViewGroup)view).getChildAt(i),label);if(found!=null)return found;}
         return null;
     }
-    private void requireDisabledDialogControl(String label){
+    private void clickServiceDialog(String label)throws Exception{
+        java.lang.reflect.Field field=MainActivity.class.getDeclaredField("serviceDialog");field.setAccessible(true);
+        AlertDialog dialog=(AlertDialog)field.get(activity);
+        require(dialog!=null&&dialog.isShowing(),"Service dialog is not showing");
+        final View[] target=new View[1];runOnMainSync(()->target[0]=findControl(dialog.getWindow().getDecorView(),label));
+        require(target[0]!=null&&target[0].isEnabled(),"Missing dialog action: "+label);
+        runOnMainSync(()->target[0].performClick());waitForIdleSync();
+    }
+    private void requireDisabledDialogControl(String label)throws Exception{
+        if(Build.VERSION.SDK_INT<18){
+            // UiAutomation starts at API18. Inspect our own application's visible dialog on API17.
+            java.lang.reflect.Field field=MainActivity.class.getDeclaredField("serviceDialog");field.setAccessible(true);
+            AlertDialog dialog=(AlertDialog)field.get(activity);
+            require(dialog!=null&&dialog.isShowing(),"Service dialog is not showing");
+            final View[] target=new View[1];runOnMainSync(()->target[0]=findText(dialog.getWindow().getDecorView(),label));
+            require(target[0]!=null&&!target[0].isEnabled(),"Offline action missing or enabled: "+label);return;
+        }
         android.app.UiAutomation automation=getUiAutomation();
         android.view.accessibility.AccessibilityNodeInfo root=null;
         long deadline=SystemClock.uptimeMillis()+5000;

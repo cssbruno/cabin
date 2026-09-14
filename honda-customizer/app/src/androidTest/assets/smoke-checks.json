@@ -1,0 +1,13 @@
+[
+  "main_installs_and_launches",
+  "missing_vehicle_service_fails_closed",
+  "offline_civic_catalog_and_search",
+  "panel_navigation_missing_service",
+  "camera_navigation_missing_service",
+  "head_unit_missing_editors_disabled",
+  "native_head_unit_missing_service",
+  "native_display_missing_service",
+  "compatibility_report_is_read_only",
+  "diagnostic_navigation_missing_service",
+  "service_actions_require_live_support"
+]

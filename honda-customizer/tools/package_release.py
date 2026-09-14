@@ -18,6 +18,7 @@ import sys
 import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
+from smoke_contract import expected_checks, parse_results
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -110,7 +111,7 @@ def source_inputs() -> tuple[list[Path], list[Path]]:
     for optional in ('gradlew.bat', 'LICENSE', 'LICENSE.md', 'NOTICE', 'app/proguard-rules.pro'):
         if (ROOT / optional).is_file():
             files.append(ROOT / optional)
-    for folder in ('app/src', 'gradle', 'tools'):
+    for folder in ('app/src', 'gradle', 'tools', 'documents'):
         files.extend(tree_files(ROOT / folder))
     files = sorted(set(files))
     for path in files:
@@ -190,26 +191,36 @@ def package(sdk: Path | None) -> dict:
     test_apk = ROOT / 'app/build/outputs/apk/androidTest/release/app-release-androidTest.apk'
     fresh(test_apk, instrumentation_inputs, 'release instrumentation APK')
     smoke_inputs = instrumentation_inputs + [apk_input, test_apk]
-    for runner in ('emulator_smoke.py', 'run_emulator_smoke.py'):
+    for runner in ('smoke_contract.py', 'run_emulator_smoke.py'):
         if (ROOT / 'tools' / runner).exists():
             smoke_inputs.append(ROOT / 'tools' / runner)
     fresh(smoke_json, smoke_inputs, 'emulator smoke report')
     fresh(smoke_log, smoke_inputs, 'emulator smoke log')
     smoke = json.loads(smoke_json.read_text())
     require(isinstance(smoke, dict), 'Emulator smoke report must be a JSON object.')
-    require(type(smoke.get('passed')) is int and smoke['passed'] == 7 and
-            type(smoke.get('failures')) is int and smoke['failures'] == 0,
-            'Emulator smoke must report exactly 7 passed checks and zero failures.')
+    expected = expected_checks(ROOT)
     require(smoke.get('errors', 0) == 0 and smoke.get('skipped', 0) == 0,
             'Emulator smoke errors or skips prevent packaging.')
     require(smoke.get('apk_sha256') == apk_digest, 'Emulator smoke verified a different APK; rerun smoke for this release APK.')
     require(smoke.get('test_apk_sha256') == sha256(test_apk),
             'Emulator smoke verified a different instrumentation APK; rebuild and rerun smoke.')
-    log = smoke_log.read_text()
-    require(re.search(r'^INSTRUMENTATION_RESULT: passed=7\s*$', log, re.MULTILINE) is not None and
-            re.search(r'^INSTRUMENTATION_RESULT: failures=0\s*$', log, re.MULTILINE) is not None and
-            re.search(r'^INSTRUMENTATION_CODE: -1\s*$', log, re.MULTILINE) is not None,
-            'Emulator smoke log does not confirm the successful report.')
+    verified = parse_results(smoke_log.read_text(), expected)
+    require(all(type(smoke.get(key)) is type(value) and smoke[key] == value for key, value in verified.items()),
+            'Emulator smoke log and report disagree.')
+
+    matrix, matrix_inputs = [], []
+    for path in sorted((ROOT / 'app/build/reports').glob('emulator-smoke-api*.json')):
+        match = re.fullmatch(r'emulator-smoke-api(\d+)\.json', path.name)
+        require(match is not None, 'Malformed emulator matrix report filename')
+        api = int(match.group(1)); log_path = path.with_suffix('.log')
+        fresh(path, smoke_inputs, 'emulator matrix report'); fresh(log_path, smoke_inputs, 'emulator matrix log')
+        row = json.loads(path.read_text()); result = parse_results(log_path.read_text(), expected)
+        require(all(type(row.get(k)) is type(v) and row[k] == v for k,v in result.items()), 'Emulator matrix log and report disagree')
+        require(row.get('apk_sha256') == apk_digest and row.get('test_apk_sha256') == sha256(test_apk), 'Emulator matrix used different APKs')
+        require(str(row.get('emulator_api')) == str(api) and row.get('hardware_tested') is False, 'Invalid emulator matrix provenance')
+        matrix.append(row); matrix_inputs.extend([path, log_path])
+    require(any(str(row['emulator_api']) == '17' for row in matrix), 'Android API17 smoke coverage is required for the declared minimum version')
+    require(any(int(row['emulator_api']) >= 35 for row in matrix), 'A modern Android API35+ smoke run is required')
 
     source_hashes = {str(p.relative_to(ROOT)): sha256(p) for p in files}
     summary = {
@@ -219,11 +230,11 @@ def package(sdk: Path | None) -> dict:
         'tests': count, 'failures': 0, 'errors': 0, 'skipped': 0,
         'unit_test_task': 'testReleaseUnitTest', 'lint_task': 'lintRelease',
         'lint_errors': 0, 'lint_warnings': sum(i.get('severity') == 'Warning' for i in issues),
-        'emulator_smoke': smoke, 'hardware_tested': False,
+        'emulator_smoke': smoke, 'emulator_smoke_runs': matrix, 'hardware_tested': False,
         'target': 'Original Mitsubishi Electric Honda head unit',
         'source_sha256': source_hashes,
         'verification_inputs_sha256': {str(p.relative_to(ROOT)): sha256(p)
-                                     for p in [metadata_path, *junit_inputs, lint_xml, lint_html, test_apk, smoke_json, smoke_log]},
+                                     for p in [metadata_path, *junit_inputs, lint_xml, lint_html, test_apk, smoke_json, smoke_log, *matrix_inputs]},
         'freshness': 'Production/build inputs predate APK, unit XML and lint; test inputs predate their reports; emulator evidence matches APK SHA-256.',
     }
     dist = ROOT / 'dist'
@@ -241,6 +252,8 @@ def package(sdk: Path | None) -> dict:
         for path, name in ((lint_html, f'lint-results-{version}.html'), (lint_xml, f'lint-results-{version}.xml'),
                            (smoke_json, f'emulator-smoke-{version}.json'), (smoke_log, f'emulator-smoke-{version}.log')):
             shutil.copy2(path, stage / name)
+        for path in matrix_inputs:
+            shutil.copy2(path, stage / f'{path.stem}-{version}{path.suffix}')
         (stage / f'verification-{version}.json').write_text(json.dumps(summary, indent=2) + '\n')
         artifacts = sorted(stage.iterdir())
         (stage / f'SHA256SUMS-{version}').write_text(''.join(f'{sha256(p)}  {p.name}\n' for p in artifacts))
