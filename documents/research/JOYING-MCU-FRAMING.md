@@ -26,7 +26,7 @@ command, then inspect those method descriptors. The inspected `y/k.smali` SHA-25
 was `67b4de3f52163c19e083fbbd68363de3a23f6d8d9ae707584aac66ce2964b606` and
 `y/i.smali` was `f1a169fceda442381d6240d4e973f6a4df7a72dcd82d4655e778fd7c0d99357d`.
 Smali formatting hashes are tool-version dependent; the APK hash pins the evidence.
-No vendor implementation or binary is included in the Hardware Lab APK.
+No vendor implementation or binary is included in the Cabin diagnostics library.
 
 ## Observed envelope
 
@@ -84,7 +84,7 @@ success. Caller owns and closes the input stream.
 ## Try it
 
 Build with `./gradlew :diagnostics:testDebugUnitTest :diagnostics:assembleDebug`.
-Open Hardware Lab → **Analyze saved MCU capture** → **Analyze example data**.
+Open Cabin → Car Settings → My car → Diagnostics → **Analyze saved MCU capture** → **Analyze example data**.
 Expected: 3 valid frames, 1 checksum failure, 1 invalid length, 5 incomplete bytes,
 13 discarded bytes. **Open capture file** uses Android's file picker; **Save analysis
 report** exports JSON. Example reports are explicitly marked `synthetic-example`.

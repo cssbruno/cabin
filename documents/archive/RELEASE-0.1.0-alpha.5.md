@@ -1,3 +1,5 @@
+> Historical reference. This document describes an earlier release, not the current app.
+
 # Cabin 0.1.0-alpha.5
 
 Car Settings now groups existing vehicle controls in one place: lights, mirrors and wipers, parking and camera, comfort, audio and steering, and personal vehicle settings. Supported hybrid vehicles also have charging preferences.

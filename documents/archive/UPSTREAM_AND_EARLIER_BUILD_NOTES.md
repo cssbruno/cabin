@@ -1,3 +1,5 @@
+> Historical reference. This document describes an earlier release, not the current app.
+
 # Archived upstream and earlier build notes
 
 Historical reference: the distribution flavors described below have been removed.
@@ -17,7 +19,7 @@ The source namespace is `com.cabin`, and the repository folder is `cabin`.
 The Android application ID, external navigation IPC interface, preference keys and backup format stay
 unchanged for compatibility with existing installations. GitHub `origin` still points
 to upstream; the Cabin release repository has not been configured.
-See [rename compatibility details](documents/RENAMING.md).
+See [rename compatibility details](../RENAMING.md).
 
 ### Requirments
 
@@ -104,11 +106,8 @@ Audio:
 
 ## Screen Shots from Android Emulator with USB-PassThrough for CPC200-CCPA Use
 
-![Screenshot of Android Auto via Adapter from Pixel 10](/screenshots/Aauto.png)
-![Screenshot of Apple Carplay via Adapter from iPhone Air](/screenshots/Carplay.png)
 
 ## Main App UI/Page
-![Screenshot of Main App Screen](/screenshots/MainPage.png)
 
 ### Projection first
 
@@ -154,7 +153,7 @@ direct link to Android app settings.
 The native interface includes English, Portuguese, Spanish, French, German and Italian.
 Choose **Settings → Control → Language**, or **Follow system**. Translations work offline;
 Android 13+ also offers these choices in its per-app language settings. See
-[language coverage and validation](documents/LANGUAGES.md).
+[language coverage and validation](../LANGUAGES.md).
 CarPlay/Android Auto language remains controlled by the phone. **Settings → Control →
 Projection experience → Measurement units** selects System, Metric or Imperial
 independently from language. This affects native speed, distance and maintenance displays,
@@ -249,7 +248,7 @@ Hub health now includes bounded connection-event snapshots and return timing. Re
 show an exact privacy preview before saving; no automatic upload takes place. File logs
 are pruned on enable/rotation to seven days,20 files and approximately100 MiB, protecting
 the active file. Save important logs before they age out or exceed these limits.
-The [60-feature delivery tracker](documents/FEATURE_ROADMAP.md) distinguishes delivered,
+The [60-feature delivery tracker](../FEATURE_ROADMAP.md) distinguishes delivered,
 partial and unimplemented features; the full roadmap is not yet complete.
 
 The TEYES build also mirrors CarPlay/Android Auto title, artist, album, and playback
@@ -335,22 +334,18 @@ Native UI test fixtures are generated under `app/build/reports/ui/`. They are so
 renders, not live vehicle/CarPlay proof. Actual TPRO/Civic hardware testing remains required,
 including short-landscape/large-font layouts, widget resizing, A/C projection aspect ratio
 and touch alignment after resizing.
-See [TEYES ecosystem setup, APIs and parked acceptance checklist](documents/TEYES_ECOSYSTEM.md).
+See [TEYES ecosystem setup, APIs and parked acceptance checklist](../TEYES_ECOSYSTEM.md).
 A successful debug build is not a vehicle-hardware compatibility certification.
 
 ## Adapter Configuaration Options
 
 These options can be set for user preferance, but will require an adapter reboot upon tapping 'Apply & Restart'
 
-![](/screenshots/adapter_config-Audio.png)
-![](/screenshots/adapter_confid-Visual.png)
-![](/screenshots/adapter_config-Misc.png)
 
 ## App specific Setting
 
 Controls what is hidden or shown to allow more space for the Cabin app to configure and render the Projection UI Stream.
 
-![](/screenshots/Settings-DisplayMode.png)
 
 ### App Logging to File Export
 
@@ -359,13 +354,11 @@ If enabled allows exporting app logs to a file. Uses the createDocument function
 > [!CAUTION]
 >OS restrictions will apply.
 
-![](/screenshots/File_Logging.png)
 
 ### Log Levels
 
 Due to how verbose and active this app can be. Espically regarding troubleshooting (the more the information the easier to diagnose). Various log levels are available to help narrow down and focus on the needed areas.
 
-![](/screenshots/LogLevels.png)
 
 # Documentation
 
@@ -373,7 +366,7 @@ Due to how verbose and active this app can be. Espically regarding troubleshooti
 
 The TEYES APK includes **Cabin Home** with fixed dashboard pages and movable, resizable modules—including the actual live CarPlay surface. Add media, navigation, built-in CANBUS gauges, doors, climate, clock, and Android widgets. Apps and launcher settings use pagination. Open **Edit layout** to customize modules, or **Page switcher → Settings → Choose default Home** to select the launcher.
 
-Joying and other compatible Android units can use the standard launcher and installed factory-app shortcuts. Direct vehicle integration depends on verified firmware support. See [launcher setup and compatibility](documents/LAUNCHER.md).
+Joying and other compatible Android units can use the standard launcher and installed factory-app shortcuts. Direct vehicle integration depends on verified firmware support. See [launcher setup and compatibility](../LAUNCHER.md).
 
 I, or mostly CLAUDE, have tried to collect and organize as much documentation as I can in regards to every aspect of this app, adapter, gminfo etc. To not only help me better understand, but others as well. If updates come across without code changes. It's likely new documentation or corrections.
 
