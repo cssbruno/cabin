@@ -84,6 +84,11 @@ def command(args: list[str]) -> str:
 
 def verify_apk(apk: Path, version: str, version_code: int, application_id: str,
                sdk: Path | None) -> dict:
+    with zipfile.ZipFile(apk) as archive:
+        dex = b''.join(archive.read(name) for name in archive.namelist() if name.endswith('.dex'))
+        require(b'com.syu.ipc.IRemoteToolkit' in dex, 'FYT toolkit missing from APK')
+        require(b'com.mitsubishielectric' not in dex and b'Lcom/cabin/hondacustom/HondaClient;' not in dex,
+                'Original Honda service code must not be packaged in the FYT app')
     aapt, apksigner = build_tools(sdk)
     badging = command([str(aapt), 'dump', 'badging', str(apk)])
     package_line = next((line for line in badging.splitlines() if line.startswith('package: ')), '')
@@ -105,7 +110,7 @@ def verify_apk(apk: Path, version: str, version_code: int, application_id: str,
 
 
 def source_inputs() -> tuple[list[Path], list[Path]]:
-    names = ('README.md', 'build.gradle.kts', 'settings.gradle.kts', 'gradle.properties',
+    names = ('README.md', 'README-OEM-reference.md', 'build.gradle.kts', 'settings.gradle.kts', 'gradle.properties',
              'gradlew', 'app/build.gradle.kts')
     files = [required_file(ROOT / name) for name in names]
     for optional in ('gradlew.bat', 'LICENSE', 'LICENSE.md', 'NOTICE', 'app/proguard-rules.pro'):
@@ -141,7 +146,7 @@ def unit_results(inputs: list[Path]) -> tuple[ET.Element, int, list[Path]]:
         # A removed test class must not survive as an old XML file and inflate the count.
         class_name = suite.get('name', '').split('.')[-1].split('$')[0]
         require(any(p.stem == class_name for p in inputs if p.suffix in ('.java', '.kt')
-                    and p.is_relative_to(ROOT / 'app/src/test')),
+                    and p.is_relative_to(ROOT / 'app/src/fytTest')),
                 f'JUnit suite has no matching current test source: {suite.get("name")}')
         merged.append(suite)
         total += count
@@ -151,9 +156,9 @@ def unit_results(inputs: list[Path]) -> tuple[ET.Element, int, list[Path]]:
 
 def package(sdk: Path | None) -> dict:
     files, configs = source_inputs()
-    production = configs + tree_files(ROOT / 'app/src/main')
-    unit_inputs = production + tree_files(ROOT / 'app/src/test')
-    lint_inputs = production + tree_files(ROOT / 'app/src/test') + tree_files(ROOT / 'app/src/androidTest')
+    production = configs + tree_files(ROOT / 'app/src/fyt') + tree_files(ROOT / 'app/src/main/res')
+    unit_inputs = production + tree_files(ROOT / 'app/src/fytTest')
+    lint_inputs = production + tree_files(ROOT / 'app/src/fytTest') + tree_files(ROOT / 'app/src/fytAndroidTest')
     metadata_path = ROOT / 'app/build/outputs/apk/release/output-metadata.json'
     fresh(metadata_path, production, 'release output metadata')
     metadata = json.loads(metadata_path.read_text())
@@ -187,7 +192,7 @@ def package(sdk: Path | None) -> dict:
 
     smoke_json = ROOT / 'app/build/reports/emulator-smoke.json'
     smoke_log = ROOT / 'app/build/reports/emulator-smoke.log'
-    instrumentation_inputs = production + tree_files(ROOT / 'app/src/androidTest')
+    instrumentation_inputs = production + tree_files(ROOT / 'app/src/fytAndroidTest')
     test_apk = ROOT / 'app/build/outputs/apk/androidTest/release/app-release-androidTest.apk'
     fresh(test_apk, instrumentation_inputs, 'release instrumentation APK')
     smoke_inputs = instrumentation_inputs + [apk_input, test_apk]
@@ -231,7 +236,7 @@ def package(sdk: Path | None) -> dict:
         'unit_test_task': 'testReleaseUnitTest', 'lint_task': 'lintRelease',
         'lint_errors': 0, 'lint_warnings': sum(i.get('severity') == 'Warning' for i in issues),
         'emulator_smoke': smoke, 'emulator_smoke_runs': matrix, 'hardware_tested': False,
-        'target': 'Original Mitsubishi Electric Honda head unit',
+        'target': 'FYT/SYU CANBUS module 7',
         'source_sha256': source_hashes,
         'verification_inputs_sha256': {str(p.relative_to(ROOT)): sha256(p)
                                      for p in [metadata_path, *junit_inputs, lint_xml, lint_html, test_apk, smoke_json, smoke_log, *matrix_inputs]},
@@ -242,7 +247,7 @@ def package(sdk: Path | None) -> dict:
     # Validate everything before publishing files, then stage a complete artifact set.
     with tempfile.TemporaryDirectory(prefix='.release-', dir=dist) as temp:
         stage = Path(temp)
-        apk = stage / f'Honda-Customizer-{version}-original-HU.apk'
+        apk = stage / f'Honda-Customizer-{version}-FYT.apk'
         shutil.copy2(apk_input, apk)
         source = stage / f'Honda-Customizer-{version}-source.zip'
         with zipfile.ZipFile(source, 'w', zipfile.ZIP_DEFLATED) as archive:

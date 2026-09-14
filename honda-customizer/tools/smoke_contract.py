@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 def expected_checks(root: Path) -> list[str]:
-    checks = json.loads((root / 'app/src/androidTest/assets/smoke-checks.json').read_text())
+    checks = json.loads((root / 'app/src/fytAndroidTest/assets/smoke-checks.json').read_text())
     if not isinstance(checks, list) or not checks or any(not isinstance(c, str) or not re.fullmatch(r'[a-z][a-z0-9_]+', c) for c in checks) or len(set(checks)) != len(checks):
         raise ValueError('Invalid or duplicate expected smoke check names')
     return checks
