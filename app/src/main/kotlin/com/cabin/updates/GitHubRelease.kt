@@ -21,7 +21,7 @@ private fun releaseAssetUrl(url: String, tag: String, name: String): Boolean {
     return trustedUpdateDownload(url) && uri.host == "github.com" && uri.query == null &&
         uri.path == "/$UPDATE_REPOSITORY/releases/download/$tag/$name"
 }
-/** Stable installations stay on stable releases; alpha installations can receive prereleases too. */
+/** Accept two- or three-part versions; legacy preview parsing remains available for compatibility. */
 internal fun releaseAssets(body: String, previews: Boolean): List<ReleaseAssets> {
     require(body.length <= 1_048_576)
     val releases = JSONArray(body)
@@ -30,7 +30,7 @@ internal fun releaseAssets(body: String, previews: Boolean): List<ReleaseAssets>
         val root = releases.optJSONObject(i) ?: return@mapNotNull null
         val tag = root.optString("tag_name")
         if (root.optBoolean("draft") || (!previews && (root.optBoolean("prerelease") || '-' in tag)) ||
-            !Regex("v[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?").matches(tag)) return@mapNotNull null
+            !Regex("v[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?").matches(tag)) return@mapNotNull null
         val assets = root.optJSONArray("assets") ?: return@mapNotNull null
         require(assets.length() <= 200)
         fun asset(name: String) = (0 until assets.length()).mapNotNull { assets.optJSONObject(it) }.singleOrNull {

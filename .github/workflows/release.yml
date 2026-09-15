@@ -15,6 +15,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Validate release version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -93,8 +97,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          flags=()
-          if [[ "$RELEASE_TAG" == *-* ]]; then flags+=(--prerelease --latest=false); fi
+          flags=(--prerelease=false --latest)
           notes=(--notes 'Signed Cabin APK and additive OEM integration ZIP. Android 8.1+. Vehicle support depends on firmware and CAN profile.')
           notes_file="documents/releases/${RELEASE_TAG#v}.md"
           if [[ -f "$notes_file" ]]; then notes=(--notes-file "$notes_file"); fi

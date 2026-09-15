@@ -1,4 +1,4 @@
-# Cabin · Alpha
+# Cabin
 
 ## Apps
 
@@ -17,7 +17,7 @@ A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto p
 
 **[Download the latest APK](https://github.com/cssbruno/cabin/releases)**
 
-Release builds may require uninstalling an earlier debug build. Updates: Settings → Launcher → Updates. Automatic daily checks; download and Android install approval are manual. Alpha builds also receive alpha releases.
+Release builds may require uninstalling an earlier debug build. Updates: Settings → Launcher → Updates. Automatic daily checks; download and Android install approval are manual. Versions use plain numbers such as 0.1.
 
 Push a `v*` tag to build and publish a signed APK and `cabin-oem-integration.zip`, with SHA-256 checksums. CI requires app, diagnostics and native transport tests to pass before signing and publishing. The ZIP is an additive firmware-integration bundle, **not a self-installing FYT USB update**.
 

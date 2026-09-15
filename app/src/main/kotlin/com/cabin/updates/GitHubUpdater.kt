@@ -37,7 +37,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
         val old = mutable.value
         mutable.value = old.copy(phase = UpdatePhase.CHECKING, errorRes = null)
         try {
-            val assets = releaseAssets(readText("https://api.github.com/repos/$UPDATE_REPOSITORY/releases?per_page=20", 1_048_576), '-' in BuildConfig.VERSION_NAME)
+            val assets = releaseAssets(readText("https://api.github.com/repos/$UPDATE_REPOSITORY/releases?per_page=20", 1_048_576), false)
             var malformed = false
             val candidates = assets.mapNotNull { asset ->
                 try { parseUpdateManifest(readText(asset.manifestUrl, 16_384), asset, installed) }

@@ -25,6 +25,17 @@ class GitHubReleaseTest {
         assertEquals(2, releaseAssets(body, true).size)
         assertEquals(listOf("0.1.0"), releaseAssets(body, false).map { it.versionName })
     }
+    @Test fun `two part version is discoverable and upgrades using numeric version code`() {
+        val assets = releaseAssets(JSONArray().put(release("v0.1", false)).toString(), false).single()
+        assertEquals("0.1", assets.versionName)
+        val update = parseUpdateManifest(manifest(2000130).put("versionName", "0.1").toString(), assets, 2000129)
+        assertEquals("0.1", update!!.versionName)
+        assertEquals(update, cachedRelease(update.json()))
+        assertNull(parseUpdateManifest(manifest(2000130).put("versionName", "0.1").toString(), assets, 2000130))
+        for (tag in listOf("v0", "v0.1.2.3", "v0..1", "v0.1/other")) {
+            assertTrue(releaseAssets(JSONArray().put(release(tag, false)).toString(), false).isEmpty())
+        }
+    }
     @Test fun `wrong repository drafts missing assets and incomplete uploads are ignored`() {
         assertTrue(releaseAssets(JSONArray().put(release(repo = "other/repo")).toString(), true).isEmpty())
         assertTrue(releaseAssets(JSONArray().put(release().put("draft", true)).toString(), true).isEmpty())
