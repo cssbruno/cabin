@@ -95,11 +95,14 @@ jobs:
         run: |
           flags=()
           if [[ "$RELEASE_TAG" == *-* ]]; then flags+=(--prerelease --latest=false); fi
+          notes=(--notes 'Signed Cabin APK and additive OEM integration ZIP. Android 8.1+. Vehicle support depends on firmware and CAN profile.')
+          notes_file="documents/releases/${RELEASE_TAG#v}.md"
+          if [[ -f "$notes_file" ]]; then notes=(--notes-file "$notes_file"); fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json cabin-oem-integration.zip cabin-oem-integration.zip.sha256 --clobber
-            gh release edit "$RELEASE_TAG" "${flags[@]}"
+            gh release edit "$RELEASE_TAG" "${flags[@]}" "${notes[@]}"
           else
             gh release create "$RELEASE_TAG" cabin.apk cabin.apk.sha256 update.json cabin-oem-integration.zip cabin-oem-integration.zip.sha256 \
               --verify-tag --title "Cabin ${RELEASE_TAG#v}" "${flags[@]}" \
-              --notes 'Signed Cabin APK and additive OEM integration ZIP. The ZIP is for firmware integration; it is not a self-installing FYT USB update. Android 8.1+. Vehicle/A/C support depends on firmware and CAN profile. Replacing a debug install may require uninstalling it first.'
+              "${notes[@]}"
           fi
