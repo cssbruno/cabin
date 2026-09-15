@@ -184,7 +184,7 @@ fun SettingsScreen(
             val content: @Composable () -> Unit = {
                 when (selectedTab) {
                     SettingsTab.CONTROL -> ControlTabContent(cabinManager, onResetCluster, onReinitForDisplayMode)
-                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager, initialConnection = initialCarPlayConnection)
+                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager, initialConnection = initialCarPlayConnection, onReinitForDisplayMode = onReinitForDisplayMode)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
                     SettingsTab.CAR -> com.cabin.ui.settings.CarSettingsScreen(vehicleState, moving, carActions, onParkedAction, onOpenClimate)
                     SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState)
@@ -305,7 +305,7 @@ private enum class ButtonSeverity {
     DESTRUCTIVE, // Destructive action (error/red)
 }
 
-/** Adapter settings and recovery actions, arranged for the actual available content width. */
+/** Launcher appearance, app preferences and cluster controls. */
 @Composable
 private fun ControlTabContent(
     cabinManager: CabinManager,
@@ -314,15 +314,9 @@ private fun ControlTabContent(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val resources = androidx.compose.ui.platform.LocalResources.current
     val colorScheme = MaterialTheme.colorScheme
-    var processingAction by remember { mutableStateOf<String?>(null) }
-    val isProcessing = processingAction != null
-    var actionStatus by remember { mutableStateOf("") }
     var showResetClusterDialog by remember { mutableStateOf(false) }
     var showClusterNavOffDialog by remember { mutableStateOf(false) }
-    val projection by cabinManager.dashboardState.collectAsStateWithLifecycle()
-    val isDeviceConnected = projection.connection != CabinManager.State.DISCONNECTED
     val clusterHostAvailable =
         remember(context) {
             canResetAndroidClusterHost(
@@ -342,7 +336,6 @@ private fun ControlTabContent(
     var showDisplayModeDialog by remember { mutableStateOf(false) }
 
     val adapterConfigPreference = remember { AdapterConfigPreference.getInstance(context) }
-    var showAdapterConfigDialog by remember { mutableStateOf(false) }
     val clusterNavigationEnabled by adapterConfigPreference.clusterNavigationFlow.collectAsStateWithLifecycle(
         initialValue = adapterConfigPreference.getClusterNavigationSync(),
     )
@@ -361,7 +354,6 @@ private fun ControlTabContent(
                     .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (actionStatus.isNotEmpty()) SettingsNotice(actionStatus)
             com.cabin.updates.UpdateSettingsSection()
             com.cabin.ui.settings.LanguageSettingsSection()
             com.cabin.ui.settings.MeasurementSettingsSection()
@@ -371,69 +363,6 @@ private fun ControlTabContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 maxItemsInEachRow = cardColumns,
             ) {
-                // Adapter Configuration Card (includes device control actions)
-                ControlCard(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.label_connection),
-                    icon = Icons.Default.SettingsInputComponent,
-                ) {
-                    // Configure button
-                    FilledTonalButton(
-                        onClick = { showAdapterConfigDialog = true },
-                        modifier = Modifier.fillMaxWidth().heightIn(min = AutomotiveDimens.ButtonMinHeight),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.settings_configure_adapter),
-                            modifier = Modifier.size(AutomotiveDimens.IconSize),
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(R.string.settings_configure),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    ControlButton(
-                        label = stringResource(R.string.settings_disconnect_phone),
-                        icon = Icons.Default.PhoneDisabled,
-                        severity = ButtonSeverity.WARNING,
-                        enabled = isDeviceConnected && !isProcessing,
-                        isProcessing = false,
-                        onClick = {
-                            logWarn("[UI_ACTION] Disconnect Phone button clicked", tag = "UI")
-                            cabinManager.disconnectPhone()
-                            actionStatus = resources.getString(R.string.settings_phone_disconnect_requested)
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    ControlButton(
-                        label = stringResource(R.string.settings_disconnect_adapter),
-                        icon = Icons.Default.PowerOff,
-                        severity = ButtonSeverity.DESTRUCTIVE,
-                        enabled = isDeviceConnected && !isProcessing,
-                        isProcessing = processingAction == "disconnect",
-                        onClick = {
-                            logWarn("[UI_ACTION] Disconnect Adapter button clicked", tag = "UI")
-                            processingAction = "disconnect"
-                            scope.launch {
-                                try {
-                                    cabinManager.stopAndWait()
-                                    actionStatus = resources.getString(R.string.settings_adapter_stopped)
-                                } finally {
-                                    processingAction = null
-                                }
-                            }
-                        },
-                    )
-                }
-
                 // App Control Card
                 ControlCard(
                     modifier = Modifier.weight(1f),
@@ -470,29 +399,13 @@ private fun ControlTabContent(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        ControlButton(
-                            label = stringResource(R.string.settings_reset_decoder),
-                            icon = Icons.Default.VideoSettings,
-                            severity = ButtonSeverity.WARNING,
-                            enabled = !isProcessing,
-                            isProcessing = false,
-                            onClick = {
-                                logWarn("[UI_ACTION] Reset Decoder button clicked", tag = "UI")
-                                actionStatus =
-                                    when (cabinManager.resetVideoDecoder()) {
-                                        CabinManager.VideoResetResult.REQUESTED -> resources.getString(R.string.settings_video_requested)
-                                        CabinManager.VideoResetResult.QUEUED -> resources.getString(R.string.settings_video_queued)
-                                        CabinManager.VideoResetResult.UNAVAILABLE -> resources.getString(R.string.settings_video_unavailable)
-                                    }
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+
 
                         ControlButton(
                             label = stringResource(R.string.settings_reset_cluster),
                             icon = Icons.Default.Speed,
                             severity = ButtonSeverity.WARNING,
-                            enabled = clusterHostAvailable && !isProcessing,
+                            enabled = clusterHostAvailable,
                             isProcessing = false,
                             onClick = {
                                 if (clusterNavigationEnabled) {
@@ -516,25 +429,7 @@ private fun ControlTabContent(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    ControlButton(
-                        label = stringResource(R.string.settings_reset_connection),
-                        icon = Icons.Default.Usb,
-                        severity = ButtonSeverity.DESTRUCTIVE,
-                        enabled = isDeviceConnected && !isProcessing,
-                        isProcessing = processingAction == "restart",
-                        onClick = {
-                            logWarn("[UI_ACTION] Reset Connection button clicked", tag = "UI")
-                            processingAction = "restart"
-                            launchSettingsRestart(
-                                scope = scope,
-                                restart = {
-                                    cabinManager.restart()
-                                    actionStatus = resources.getString(R.string.settings_connection_requested)
-                                },
-                                onFinished = { processingAction = null },
-                            )
-                        },
-                    )
+
                 }
             }
         }
@@ -593,20 +488,6 @@ private fun ControlTabContent(
                 TextButton(onClick = { showClusterNavOffDialog = false }) {
                     Text("OK")
                 }
-            },
-        )
-    }
-
-    // Adapter Configuration Dialog
-    if (showAdapterConfigDialog) {
-        AdapterConfigurationDialog(
-            adapterConfigPreference = adapterConfigPreference,
-            cabinManager = cabinManager,
-            currentDisplayMode = currentDisplayMode,
-            onDismiss = { showAdapterConfigDialog = false },
-            onReinitAdapter = {
-                showAdapterConfigDialog = false
-                onReinitForDisplayMode(currentDisplayMode)
             },
         )
     }
@@ -809,4 +690,140 @@ private fun ControlButton(
             }
         }
     }
+}
+
+
+/** Dongle-only controls; composed exclusively by the CCPA settings branch. */
+@Composable
+internal fun DongleAdapterSettings(cabinManager: CabinManager, onReinitForDisplayMode: (DisplayMode) -> Unit) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    val scope = rememberCoroutineScope()
+    var processingAction by remember { mutableStateOf<String?>(null) }
+    val isProcessing = processingAction != null
+    var actionStatus by remember { mutableStateOf("") }
+    var showAdapterConfigDialog by remember { mutableStateOf(false) }
+    val adapterConfigPreference = remember { AdapterConfigPreference.getInstance(context) }
+    val displayModePreference = remember { DisplayModePreference.getInstance(context) }
+    val currentDisplayMode by displayModePreference.displayModeFlow.collectAsStateWithLifecycle(
+        initialValue = DisplayMode.platformDefault(context),
+    )
+    val projection by cabinManager.dashboardState.collectAsStateWithLifecycle()
+    val isDeviceConnected = projection.connection != CabinManager.State.DISCONNECTED
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (actionStatus.isNotEmpty()) SettingsNotice(actionStatus)
+        // Adapter Configuration Card (includes device control actions)
+        ControlCard(
+            modifier = Modifier.fillMaxWidth(),
+            title = stringResource(R.string.settings_configure_adapter),
+            icon = Icons.Default.SettingsInputComponent,
+        ) {
+            // Configure button
+            FilledTonalButton(
+                onClick = { showAdapterConfigDialog = true },
+                modifier = Modifier.fillMaxWidth().heightIn(min = AutomotiveDimens.ButtonMinHeight),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = stringResource(R.string.settings_configure_adapter),
+                    modifier = Modifier.size(AutomotiveDimens.IconSize),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.settings_configure),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ControlButton(
+                label = stringResource(R.string.settings_disconnect_phone),
+                icon = Icons.Default.PhoneDisabled,
+                severity = ButtonSeverity.WARNING,
+                enabled = isDeviceConnected && !isProcessing,
+                isProcessing = false,
+                onClick = {
+                    logWarn("[UI_ACTION] Disconnect Phone button clicked", tag = "UI")
+                    cabinManager.disconnectPhone()
+                    actionStatus = resources.getString(R.string.settings_phone_disconnect_requested)
+                },
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ControlButton(
+                label = stringResource(R.string.settings_disconnect_adapter),
+                icon = Icons.Default.PowerOff,
+                severity = ButtonSeverity.DESTRUCTIVE,
+                enabled = isDeviceConnected && !isProcessing,
+                isProcessing = processingAction == "disconnect",
+                onClick = {
+                    logWarn("[UI_ACTION] Disconnect Adapter button clicked", tag = "UI")
+                    processingAction = "disconnect"
+                    scope.launch {
+                        try {
+                            cabinManager.stopAndWait()
+                            actionStatus = resources.getString(R.string.settings_adapter_stopped)
+                        } finally {
+                            processingAction = null
+                        }
+                    }
+                },
+            )
+        }
+        ControlButton(
+            label = stringResource(R.string.settings_reset_decoder),
+            icon = Icons.Default.VideoSettings,
+            severity = ButtonSeverity.WARNING,
+            enabled = !isProcessing,
+            isProcessing = false,
+            onClick = {
+                logWarn("[UI_ACTION] Reset Decoder button clicked", tag = "UI")
+                actionStatus =
+                    when (cabinManager.resetVideoDecoder()) {
+                        CabinManager.VideoResetResult.REQUESTED -> resources.getString(R.string.settings_video_requested)
+                        CabinManager.VideoResetResult.QUEUED -> resources.getString(R.string.settings_video_queued)
+                        CabinManager.VideoResetResult.UNAVAILABLE -> resources.getString(R.string.settings_video_unavailable)
+                    }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        ControlButton(
+            label = stringResource(R.string.settings_reset_connection),
+            icon = Icons.Default.Usb,
+            severity = ButtonSeverity.DESTRUCTIVE,
+            enabled = isDeviceConnected && !isProcessing,
+            isProcessing = processingAction == "restart",
+            onClick = {
+                logWarn("[UI_ACTION] Reset Connection button clicked", tag = "UI")
+                processingAction = "restart"
+                launchSettingsRestart(
+                    scope = scope,
+                    restart = {
+                        cabinManager.restart()
+                        actionStatus = resources.getString(R.string.settings_connection_requested)
+                    },
+                    onFinished = { processingAction = null },
+                )
+            },
+        )
+    }
+
+    // Adapter Configuration Dialog
+    if (showAdapterConfigDialog) {
+        AdapterConfigurationDialog(
+            adapterConfigPreference = adapterConfigPreference,
+            cabinManager = cabinManager,
+            currentDisplayMode = currentDisplayMode,
+            onDismiss = { showAdapterConfigDialog = false },
+            onReinitAdapter = {
+                showAdapterConfigDialog = false
+                onReinitForDisplayMode(currentDisplayMode)
+            },
+        )
+    }
+
 }

@@ -17,7 +17,7 @@ import com.cabin.CabinManager
 import com.cabin.R
 
 @Composable
-internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false) {
+internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false, onReinitForDisplayMode: (DisplayMode) -> Unit = {}) {
     val backends = com.cabin.ui.rememberCarPlayBackends()
     Column(Modifier.fillMaxSize()) {
         if (backends.available.isEmpty()) {
@@ -30,12 +30,12 @@ internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Bo
         if (backends.available.size > 1 && backends.selected == null) return@Column
         if (backends.selected == com.cabin.platform.CarPlayBackend.JOYING) {
             NativeCarPlaySettings()
-        } else DongleCarPlaySettings(manager, initialConnection)
+        } else DongleCarPlaySettings(manager, initialConnection, onReinitForDisplayMode)
     }
 }
 
 @Composable
-private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean) {
+private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean, onReinitForDisplayMode: (DisplayMode) -> Unit) {
     var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -46,6 +46,7 @@ private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Bool
         }
         if (controls) Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            com.cabin.ui.DongleAdapterSettings(manager, onReinitForDisplayMode)
             ProjectionPreferencesSection(showMeasurements = false)
         } else Box(Modifier.weight(1f)) { PhonesTabContent(manager) }
     }

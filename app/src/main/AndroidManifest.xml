@@ -84,6 +84,7 @@
     <!-- TEYES TPRO's exported vehicle-data service. Package visibility is scoped;
          no broad QUERY_ALL_PACKAGES permission. -->
     <queries>
+        <package android:name="com.syu.canbus" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

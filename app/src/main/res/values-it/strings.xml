@@ -31,4 +31,14 @@
     <string name="carplay_backend_open">Apri CarPlay</string>
     <string name="carplay_backend_switch_failed">Impossibile cambiare connessione. Riprova.</string>
     <string name="carplay_backend_none">Nessuna connessione CarPlay rilevata</string>
+    <string name="vehicle_decoder_fields">Campi identificati: %1$d</string>
+    <string name="vehicle_raw_fields">Campi FYT grezzi</string>
+    <string name="vehicle_no_packet_reader">Firmware senza lettore per questo profilo</string>
+    <string name="vehicle_raw_field_count">Campi grezzi disponibili: %1$d</string>
+    <string name="vehicle_find_field">Cerca campo</string>
+    <string name="vehicle_syu_readings">Dati SYU</string>
+    <string name="vehicle_syu_checked">Selezionato</string>
+    <string name="vehicle_syu_unchecked">Non selezionato</string>
+    <string name="vehicle_syu_original">Impostazioni originali SYU</string>
+    <string name="vehicle_syu_open_failed">Impossibile aprire le impostazioni SYU.</string>
 </resources>

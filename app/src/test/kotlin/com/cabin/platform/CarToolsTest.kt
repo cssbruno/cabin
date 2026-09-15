@@ -55,6 +55,8 @@ class CarToolsTest {
     @Test fun `diagnostic export excludes all untrusted strings and raw telemetry`() {
         val marker = "private-user-phone-token-location"
         val report = vehicleDiagnosticReport(TeyesClimateState(connected = true,
+            fytRawValues = mapOf(1005 to FytRawSample(strings = listOf(marker))),
+            fytMainRawValues = mapOf(18 to FytRawSample(strings = listOf(marker))),
             controlUnavailableReason = marker, syuAir = SyuAirState(17, marker, mapOf(marker to 123), setOf(marker))))
         assertFalse(report.contains(marker))
         val json = org.json.JSONObject(report)

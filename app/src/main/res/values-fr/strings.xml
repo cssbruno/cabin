@@ -31,4 +31,14 @@
     <string name="carplay_backend_open">Ouvrir CarPlay</string>
     <string name="carplay_backend_switch_failed">Impossible de changer de connexion. Réessayez.</string>
     <string name="carplay_backend_none">Aucune connexion CarPlay détectée</string>
+    <string name="vehicle_decoder_fields">Champs identifiés : %1$d</string>
+    <string name="vehicle_raw_fields">Champs FYT bruts</string>
+    <string name="vehicle_no_packet_reader">Aucun lecteur pour ce profil dans le firmware</string>
+    <string name="vehicle_raw_field_count">Champs bruts disponibles : %1$d</string>
+    <string name="vehicle_find_field">Rechercher un champ</string>
+    <string name="vehicle_syu_readings">Données SYU</string>
+    <string name="vehicle_syu_checked">Sélectionné</string>
+    <string name="vehicle_syu_unchecked">Non sélectionné</string>
+    <string name="vehicle_syu_original">Réglages SYU d’origine</string>
+    <string name="vehicle_syu_open_failed">Impossible d’ouvrir les réglages SYU.</string>
 </resources>

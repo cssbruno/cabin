@@ -13,6 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -60,7 +68,7 @@ internal fun teyesVehicleSettingsStatus(resources: android.content.res.Resources
         vehicle.health == TeyesTelemetryHealth.CONNECTING -> resources.getString(R.string.vehicle_status_connecting)
         !vehicle.connected -> resources.getString(R.string.vehicle_status_unavailable)
         vehicle.health == TeyesTelemetryHealth.STALE -> resources.getString(R.string.vehicle_status_waiting)
-        teyesVehicleSettingsReadings(vehicle) == TeyesVehicleSettingsReadings() && teyesOilServiceReading(vehicle) == "—" -> resources.getString(R.string.vehicle_status_no_readings)
+        vehicle.fytSyuReadings.isEmpty() && teyesVehicleSettingsReadings(vehicle) == TeyesVehicleSettingsReadings() && teyesOilServiceReading(vehicle) == "—" -> resources.getString(R.string.vehicle_status_no_readings)
         else -> resources.getString(R.string.vehicle_status_available)
     }
 
@@ -81,6 +89,35 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
     val measurementPreferences = remember(context) { MeasurementPreferences.get(context) }
     val measurementUnit by measurementPreferences.unit.collectAsStateWithLifecycle()
     val readings = teyesVehicleSettingsReadings(vehicle, measurementUnit)
+    val stockAvailable = com.cabin.platform.SyuOriginalSettings.intent(context) != null
+    var stockUnavailable by remember { mutableStateOf(false) }
+    var showRawFields by remember { mutableStateOf(false) }
+    var showSyuFields by remember { mutableStateOf(false) }
+    if (showSyuFields) SyuReadingsDialog(vehicle, onClose = { showSyuFields = false })
+    var fieldFilter by remember { mutableStateOf("") }
+    if (showRawFields) AlertDialog(
+        onDismissRequest = { showRawFields = false },
+        title = { Text(stringResource(R.string.vehicle_raw_fields)) },
+        text = {
+            Column {
+            OutlinedTextField(value = fieldFilter, onValueChange = { fieldFilter = it },
+                label = { Text(stringResource(R.string.vehicle_find_field)) }, singleLine = true)
+            LazyColumn(Modifier.heightIn(max = 360.dp)) {
+                items(vehicle.fytPublishedFields.filter { id -> ("CAN $id " + vehicle.fytFieldNames[id].orEmpty().joinToString(" ").replace('_', ' ')).contains(fieldFilter.trim(), ignoreCase = true) }.sorted(), key = { "can:$it" }) { id ->
+                    Column(Modifier.padding(vertical = 6.dp)) {
+                        vehicle.fytFieldNames[id]?.joinToString(" / ") { it.removePrefix("U_").replace('_', ' ') }
+                            ?.let { Text(it, style = MaterialTheme.typography.labelMedium) }
+                        Text("CAN · $id: ${vehicle.fytRawValues[id]?.toString() ?: "—"}")
+                    }
+                }
+                items(vehicle.fytMainFields.filter { "MAIN $it".contains(fieldFilter.trim(), ignoreCase = true) }.sorted(), key = { "main:$it" }) { id ->
+                    Text("MAIN · $id: ${vehicle.fytMainRawValues[id]?.toString() ?: "—"}", Modifier.padding(vertical = 6.dp))
+                }
+            }
+            }
+        },
+        confirmButton = { TextButton(onClick = { showRawFields = false }) { Text(stringResource(R.string.action_close)) } },
+    )
     SettingsSection(
         stringResource(R.string.vehicle_readings),
     ) {
@@ -88,9 +125,28 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
         if (vehicle.connected && vehicle.profileId != 0) {
             Text(stringResource(R.string.vehicle_profile_detail, vehicle.profileId))
         }
+        if (stockAvailable) {
+            TextButton(onClick = { stockUnavailable = !com.cabin.platform.SyuOriginalSettings.open(context) }) {
+                Text(stringResource(R.string.vehicle_syu_original))
+            }
+            if (stockUnavailable) Text(stringResource(R.string.vehicle_syu_open_failed))
+        }
+        if (vehicle.fytSyuReadings.isNotEmpty()) {
+            TextButton(onClick = { showSyuFields = true }) { Text(stringResource(R.string.vehicle_syu_readings)) }
+        }
+        if (vehicle.fytPublishedFields.isNotEmpty() || vehicle.fytMainFields.isNotEmpty()) {
+            TextButton(onClick = { showRawFields = true }) { Text(stringResource(R.string.vehicle_raw_fields)) }
+        }
         Text(stringResource(R.string.vehicle_firmware_detected, vehicle.fytFirmwareVersion.ifBlank { "—" }))
-        if (vehicle.vehicleDataLayout == TeyesVehicleDataLayout.UNKNOWN) {
-            Text(stringResource(R.string.vehicle_decoder_unknown))
+        if (vehicle.fytDetectedFields.isNotEmpty()) {
+            Text(stringResource(R.string.vehicle_decoder_fields, vehicle.fytDetectedFields.size))
+        }
+        if (vehicle.fytCodeStatus == "no_packet_reader") {
+            Text(stringResource(R.string.vehicle_no_packet_reader))
+        } else if (vehicle.vehicleDataLayout == TeyesVehicleDataLayout.UNKNOWN) {
+            val rawCount = vehicle.fytPublishedFields.size + vehicle.fytMainFields.size
+            if (rawCount > 0) Text(stringResource(R.string.vehicle_raw_field_count, rawCount))
+            else Text(stringResource(R.string.vehicle_decoder_unknown))
         }
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -116,4 +172,39 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
             }
         }
     }
+}
+
+@Composable
+private fun SyuReadingsDialog(vehicle: TeyesClimateState, onClose: () -> Unit) {
+    var search by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = { Text(stringResource(R.string.vehicle_syu_readings)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(value = search, onValueChange = { search = it }, singleLine = true,
+                    label = { Text(stringResource(R.string.vehicle_find_field)) })
+                LazyColumn(Modifier.heightIn(max = 400.dp)) {
+                    val rows = vehicle.fytSyuReadings.map { row ->
+                        val names = row.fields.sorted().joinToString(" / ") { id ->
+                            vehicle.fytFieldNames[id]?.joinToString(" / ") { it.removePrefix("U_").replace('_', ' ') } ?: "CAN $id"
+                        }
+                        row to names
+                    }.filter { (row, names) ->
+                        "$names ${row.fields.joinToString()} ${row.text.orEmpty()}".contains(search.trim(), ignoreCase = true)
+                    }
+                    items(rows, key = { (row, _) -> "${row.screen}:${row.viewId}" }) { (row, names) ->
+                        Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(names, style = MaterialTheme.typography.labelMedium)
+                            Text(row.text ?: stringResource(if (row.checked == true) R.string.vehicle_syu_checked else R.string.vehicle_syu_unchecked),
+                                style = MaterialTheme.typography.titleMedium)
+                            Text(row.screen.substringAfterLast('/').removeSuffix(";"), style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onClose) { Text(stringResource(R.string.action_close)) } },
+    )
 }

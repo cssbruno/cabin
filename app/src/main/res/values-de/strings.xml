@@ -31,4 +31,14 @@
     <string name="carplay_backend_open">CarPlay öffnen</string>
     <string name="carplay_backend_switch_failed">Verbindung konnte nicht gewechselt werden. Erneut versuchen.</string>
     <string name="carplay_backend_none">Keine CarPlay-Verbindung erkannt</string>
+    <string name="vehicle_decoder_fields">Erkannte Felder: %1$d</string>
+    <string name="vehicle_raw_fields">FYT-Rohfelder</string>
+    <string name="vehicle_no_packet_reader">Kein Paketleser für dieses Profil</string>
+    <string name="vehicle_raw_field_count">Verfügbare Rohfelder: %1$d</string>
+    <string name="vehicle_find_field">Feld suchen</string>
+    <string name="vehicle_syu_readings">SYU-Daten</string>
+    <string name="vehicle_syu_checked">Ausgewählt</string>
+    <string name="vehicle_syu_unchecked">Nicht ausgewählt</string>
+    <string name="vehicle_syu_original">Originale SYU-Einstellungen</string>
+    <string name="vehicle_syu_open_failed">SYU-Einstellungen konnten nicht geöffnet werden.</string>
 </resources>

@@ -36,6 +36,19 @@ data class TeyesClimateState(
     val vehicleDataLayout: TeyesVehicleDataLayout = TeyesVehicleDataLayout.UNKNOWN,
     val fytFirmwareVersion: String = "",
     val fytFirmwareSha256: String = "",
+    val fytCodeStatus: String = "not_scanned",
+    val fytReadOnly: Boolean = false,
+    val fytDetectedFields: Map<Int, Int> = emptyMap(),
+    val fytUnmatchedFields: Set<Int> = emptySet(),
+    val fytPublishedFields: Set<Int> = emptySet(),
+    val fytReceiver: String = "",
+    val fytClientCallback: String = "",
+    val fytFieldNames: Map<Int, List<String>> = emptyMap(),
+    val fytSyuReadings: List<FytSyuReading> = emptyList(),
+    val fytProfileName: String = "",
+    val fytRawValues: Map<Int, FytRawSample> = emptyMap(),
+    val fytMainFields: Set<Int> = emptySet(),
+    val fytMainRawValues: Map<Int, FytRawSample> = emptyMap(),
     val power: Boolean = false,
     val ac: Boolean = false,
     val auto: Boolean = false,
@@ -120,12 +133,17 @@ class TeyesClimateController(
     private val tripHistory by lazy(LazyThreadSafetyMode.NONE) { TripHistory(appContext) }
     private val tripRecorder = TripRecorder { profile, trip -> tripHistory.save(profile, trip) }
     private val tireHistory by lazy(LazyThreadSafetyMode.NONE) { TireHistory(appContext) }
+    private val profileCatalog by lazy(LazyThreadSafetyMode.NONE) { FytProfileCatalog.load(appContext) }
     private val airRegistry by lazy(LazyThreadSafetyMode.NONE) { SyuAirRegistry.load(appContext) }
     private val registeredCodes = java.util.concurrent.ConcurrentHashMap.newKeySet<Int>()
     private var airProfile: SyuAirProfile? = null
     internal var firmwareDetector: () -> FytFirmware = { detectFytFirmware(appContext) }
     private var firmware = FytFirmware("", TeyesVehicleDataLayout.UNKNOWN)
     private var activeLayout = TeyesVehicleDataLayout.UNKNOWN
+    private var detectedProfile: FytDetectedProfile? = null
+    private val rawSamples = mutableMapOf<Int, Pair<Long, FytRawSample>>()
+    private val mainRawSamples = mutableMapOf<Int, Pair<Long, FytRawSample>>()
+    private var mainMonitor: FytRawModuleMonitor? = null
     private val worker = HandlerThread("TeyesTelemetry").apply { start() }
     private val handler = Handler(worker.looper)
     private val started = AtomicBoolean(false)
@@ -188,23 +206,25 @@ class TeyesClimateController(
                 }
                 if (code != 1) return super.onTransact(code, data, reply, flags)
                 data.enforceInterface(CALLBACK_DESCRIPTOR)
-                // Only a small integer sample is consumed. Never allocate unused vendor
-                // float/string arrays, or trust an unbounded array length from IPC.
-                if (data.dataAvail() > 4096 || data.dataAvail() < 8) return false
+                if (data.dataAvail() > SyuBinderTransport.MAX_PARCEL_BYTES || data.dataAvail() < 8) return false
                 val sample = try {
                     val updateCode = data.readInt()
                     if (updateCode !in registeredCodes) { reply?.writeNoException(); return true }
-                    val count = data.readInt()
-                    if (count == -1 || count == 0) { reply?.writeNoException(); return true }
-                    if (count !in 1..16 || count > data.dataAvail() / 4) return false
-                    updateCode to data.readInt()
+                    val payload = FytRawSample.read(data)
+                    if (updateCode == 1000 && payload.integers.size != 1) return false
+                    updateCode to payload
                 } catch (_: RuntimeException) {
                     return false
                 }
                 if (closed.get()) { reply?.writeNoException(); return true }
                 handler.post {
                     if (!closed.get() && connection === owner && moduleBinder != null) {
-                        update(sample.first, sample.second)
+                        rawSamples[sample.first] = SystemClock.elapsedRealtime() to sample.second
+                        val scalar = sample.second.integers.singleOrNull()
+                        if (scalar != null) update(sample.first, scalar) else {
+                            samples.remove(sample.first)
+                            publishState()
+                        }
                     }
                 }
                 reply?.writeNoException()
@@ -326,7 +346,8 @@ class TeyesClimateController(
     private fun bind() {
         if (suspended.get() || closed.get() || connection != null) return
         firmware = firmwareDetector()
-        activeLayout = firmware.layout
+        detectedProfile = null
+        activeLayout = if (firmware.profiles.isEmpty() && firmware.resolveProfile == null) firmware.layout else TeyesVehicleDataLayout.UNKNOWN
         val nextConnection = createConnection()
         connection = nextConnection
         mutableState.value = TeyesClimateState(health = TeyesTelemetryHealth.CONNECTING, controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_waiting_profile))
@@ -503,6 +524,25 @@ class TeyesClimateController(
         if (code == 1000) {
             val newProfile = lastProfile != value
             lastProfile = value
+            detectedProfile = firmware.resolveProfile?.invoke(value) ?: firmware.profiles[value]
+            if ((firmware.profiles.isNotEmpty() || firmware.resolveProfile != null)) activeLayout =
+                if (detectedProfile?.fields?.isNotEmpty() == true) TeyesVehicleDataLayout.JOYING_2023 else TeyesVehicleDataLayout.UNKNOWN
+            if (newProfile && (firmware.profiles.isNotEmpty() || firmware.resolveProfile != null)) {
+                com.cabin.reports.DebugJournal.record("CAN", "code_detection",
+                    "profile=$value; status=${detectedProfile?.reason ?: "profile_not_supported"}; fields=${detectedProfile?.fields.orEmpty()}; unmatched=${detectedProfile?.unmatched.orEmpty()}")
+            }
+            if (newProfile) {
+                mainMonitor?.close()
+                mainMonitor = null
+                val mainFields = detectedProfile?.moduleFields?.get(0).orEmpty()
+                if (mainFields.isNotEmpty()) mainMonitor = FytRawModuleMonitor(appContext, handler, mainFields,
+                    onSample = { id, payload ->
+                        mainRawSamples[id] = SystemClock.elapsedRealtime() to payload
+                        publishState()
+                    }, onClear = { mainRawSamples.clear(); publishState() })
+            }
+            detectedProfile?.publishedFields?.forEach { if (it !in registeredCodes) register(it) }
+            detectedProfile?.fields?.values?.distinct()?.forEach { if (it !in registeredCodes) register(it) }
             // Preserve established Civic firmware layouts. Other profiles use their SYU definitions.
             airProfile = if (TeyesClimateControlPolicy.supports(value)) null else airRegistry.profiles[value]
             SyuVehicleProtocol.codes(value).forEach { if (it !in registeredCodes) register(it) }
@@ -514,7 +554,8 @@ class TeyesClimateController(
         val changed = samples.update(code, value, now)
         publishState()
         val climateField =
-            if (activeLayout == TeyesVehicleDataLayout.CIVIC_0298 &&
+            if (detectedProfile != null) detectedProfile!!.fields.any { (canonical, installed) -> canonical in CLIMATE_POPUP_CODES && installed == code }
+            else if (activeLayout == TeyesVehicleDataLayout.CIVIC_0298 &&
                 TeyesClimateControlPolicy.isCivic0298(lastProfile ?: 0)
             ) {
                 code in setOf(11, 18, 19, 20, 21) ||
@@ -530,14 +571,18 @@ class TeyesClimateController(
         val now = SystemClock.elapsedRealtime()
         val rawValues = samples.snapshot(now)
         val profile = rawValues[1000] ?: 0
-        val values = if (airProfile != null || profile in SyuFactoryProtocol.cameraProfiles || profile in setOf(SyuFactoryProtocol.HYBRID_PROFILE, SyuFactoryProtocol.AMBIENT_PROFILE, SyuFactoryProtocol.SEAT_PRESET_PROFILE)) {
+        val values = if (detectedProfile?.fields?.isNotEmpty() == true || detectedProfile != null && TeyesClimateControlPolicy.isCivic0298(profile)) detectedProfile!!.normalize(samples.rawSnapshot(now) + (1000 to profile)) else if (airProfile != null || profile in SyuFactoryProtocol.cameraProfiles || profile in setOf(SyuFactoryProtocol.HYBRID_PROFILE, SyuFactoryProtocol.AMBIENT_PROFILE, SyuFactoryProtocol.SEAT_PRESET_PROFILE)) {
             // Shared SYU air fields must never be interpreted as legacy Civic gauges.
             buildMap {
                 put(1000, profile)
                 // Profile 131109 uses field 4 for camera mode, not the shared door dialect.
                 for (door in if (profile == 131109) IntRange.EMPTY else 0..5) rawValues[door]?.takeIf { it in 0..1 }?.let { put(door + 36, it) }
             }
+        } else if (detectedProfile != null) {
+            detectedProfile!!.normalize(samples.rawSnapshot(now) + (1000 to profile))
         } else TeyesClimateControlPolicy.climateValues(profile, rawValues, activeLayout)
+        // Read ID remapping never authorizes a new command interface.
+        val originalCommandInterface = detectedProfile?.fields?.filterKeys { it in 20..35 }?.all { (canonical, installed) -> canonical == installed } != false
         val alternate = profile == PROFILE_2016_CIVIC_ALT
         val mode = values[73]
         val airValues = samples.airSnapshot(now)
@@ -546,6 +591,9 @@ class TeyesClimateController(
                 definition.fields.mapNotNull { (name, code) -> airValues[code]?.let { name to it } }.toMap(),
                 definition.commands.keys, definition.low, definition.high, definition.unavailable, definition.temperatureFormats)
         }
+        val syuReadings = detectedProfile?.syuClient?.display?.read(samples.rawSnapshot(now).filterKeys {
+            it in detectedProfile?.publishedFields.orEmpty()
+        }).orEmpty()
         mutableState.value =
             TeyesClimateState(
                 connected = moduleBinder != null,
@@ -555,15 +603,15 @@ class TeyesClimateController(
                     when {
                         moduleBinder == null && connection != null -> TeyesTelemetryHealth.CONNECTING
                         moduleBinder == null -> TeyesTelemetryHealth.DISCONNECTED
-                        values.keys.none { it != 1000 } && airValues.keys.none { it in (airProfile?.fields?.values ?: emptyList()) || it in SyuVehicleProtocol.codes(profile) } -> TeyesTelemetryHealth.STALE
+                        syuReadings.isEmpty() && values.keys.none { it != 1000 } && airValues.keys.none { it in (airProfile?.fields?.values ?: emptyList()) || it in SyuVehicleProtocol.codes(profile) } -> TeyesTelemetryHealth.STALE
                         else -> TeyesTelemetryHealth.LIVE
                     },
                 lastUpdateElapsedRealtimeMs = samples.lastUpdateElapsedRealtimeMs,
                 availableCodes = values.keys.toSet(),
                 doorsAvailable = (36..41).all { values.containsKey(it) },
                 controlsSupported = TeyesClimateControlPolicy.supports(profile),
-                controlsAvailable = TeyesClimateControlPolicy.canControl(moduleBinder != null, profile, values),
-                fanControlsAvailable = TeyesClimateControlPolicy.canControlFan(moduleBinder != null, profile, values),
+                controlsAvailable = originalCommandInterface && TeyesClimateControlPolicy.canControl(moduleBinder != null, profile, values),
+                fanControlsAvailable = originalCommandInterface && TeyesClimateControlPolicy.canControlFan(moduleBinder != null, profile, values),
                 controlUnavailableReason =
                     when {
                         moduleBinder == null -> appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected)
@@ -575,8 +623,23 @@ class TeyesClimateController(
                     },
                 profileId = profile,
                 vehicleDataLayout = activeLayout,
+                fytReadOnly = !originalCommandInterface,
                 fytFirmwareVersion = firmware.version,
                 fytFirmwareSha256 = firmware.sha256,
+                fytCodeStatus = detectedProfile?.reason ?: if (firmware.profiles.isEmpty() && firmware.resolveProfile == null) "not_scanned" else if (profile == 0) "waiting_profile" else "profile_not_supported",
+                fytDetectedFields = detectedProfile?.fields.orEmpty(),
+                fytUnmatchedFields = detectedProfile?.unmatched.orEmpty(),
+                fytPublishedFields = detectedProfile?.publishedFields.orEmpty(),
+                fytReceiver = detectedProfile?.receiver.orEmpty(),
+                fytClientCallback = detectedProfile?.syuClient?.callback.orEmpty(),
+                fytFieldNames = detectedProfile?.syuClient?.names.orEmpty(),
+                fytSyuReadings = syuReadings,
+                fytMainFields = detectedProfile?.moduleFields?.get(0).orEmpty(),
+                fytMainRawValues = mainRawSamples.filterValues { now - it.first in 0 until 60_000L }.mapValues { it.value.second },
+                fytProfileName = profileCatalog[profile].orEmpty(),
+                fytRawValues = rawSamples.filter { (id, sample) ->
+                    id in detectedProfile?.publishedFields.orEmpty() && now - sample.first in 0 until 60_000L
+                }.mapValues { it.value.second },
                 power = values[32] == 1,
                 ac = values[if (alternate) 30 else 24] == 1,
                 auto = values[20] == 1,
@@ -701,6 +764,8 @@ class TeyesClimateController(
         deathRecipient = null
         callback = null
         airProfile = null
+        detectedProfile = null
+        if ((firmware.profiles.isNotEmpty() || firmware.resolveProfile != null)) activeLayout = TeyesVehicleDataLayout.UNKNOWN
         connectedAt = null
         // Release the old subscription even if the exported service remains alive after unbinding.
         // Use the captured binder directly: failed cleanup must not recursively start another retry.
@@ -730,7 +795,11 @@ class TeyesClimateController(
                 // Includes rejected bindings and a service already removed by firmware.
             }
         }
+        mainMonitor?.close()
+        mainMonitor = null
+        mainRawSamples.clear()
         samples.clear()
+        rawSamples.clear()
         lastProfile = null
         tripRecorder.finish()
         mutableState.value = TeyesClimateState(controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected))

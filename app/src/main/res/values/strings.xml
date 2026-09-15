@@ -31,4 +31,14 @@
     <string name="carplay_backend_open">Open CarPlay</string>
     <string name="carplay_backend_switch_failed">Could not switch connection. Retry.</string>
     <string name="carplay_backend_none">No CarPlay connection detected</string>
+    <string name="vehicle_decoder_fields">Identified fields: %1$d</string>
+    <string name="vehicle_raw_fields">Raw FYT fields</string>
+    <string name="vehicle_no_packet_reader">No packet reader in this firmware</string>
+    <string name="vehicle_raw_field_count">Raw fields available: %1$d</string>
+    <string name="vehicle_find_field">Find field</string>
+    <string name="vehicle_syu_readings">SYU readings</string>
+    <string name="vehicle_syu_checked">Selected</string>
+    <string name="vehicle_syu_unchecked">Not selected</string>
+    <string name="vehicle_syu_original">Original SYU settings</string>
+    <string name="vehicle_syu_open_failed">Could not open SYU settings.</string>
 </resources>

@@ -12,6 +12,17 @@ import org.robolectric.shadows.ShadowParcel;
  */
 @Implements(Parcel.class)
 public class Utf16ParcelShadow extends ShadowParcel {
+    // Android 10 uses the pre-String16 native method names, with the same UTF-16 wire format.
+    @Implementation(maxSdk = 29)
+    protected static void nativeWriteString(long pointer, String value) {
+        nativeWriteString16(pointer, value);
+    }
+
+    @Implementation(maxSdk = 29)
+    protected static String nativeReadString(long pointer) {
+        return nativeReadString16(pointer);
+    }
+
     @Implementation
     protected static void nativeWriteString16(long pointer, String value) {
         nativeWriteInt(pointer, value == null ? -1 : value.length());

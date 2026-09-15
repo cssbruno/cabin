@@ -52,6 +52,11 @@ internal object SyuModuleObjectCodec {
         }
     }
 
+    internal fun readPayload(parcel: Parcel): SyuModuleObject {
+        malformedUnless(parcel.dataAvail() <= SyuBinderTransport.MAX_PARCEL_BYTES, "SYU payload too large")
+        return read(parcel).also { malformedUnless(parcel.dataAvail() == 0, "Trailing SYU payload") }
+    }
+
     private fun read(parcel: Parcel): SyuModuleObject {
         val ints = readCount(parcel, MAX_VALUES)?.let { count ->
             malformedUnless(parcel.dataAvail() >= count * 4, "Truncated SYU integers")

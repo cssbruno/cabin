@@ -15,13 +15,13 @@ internal object TeyesClimateControlPolicy {
     fun supportsTemperature(profile: Int): Boolean = profile == 1048874 || profile == 1114410
 
     fun canToggle(state: TeyesClimateState, control: TeyesClimateSwitch): Boolean =
-        supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
+        !state.fytReadOnly && supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
             control.feedbackCode in state.availableCodes
 
     fun canAdjustTemperature(state: TeyesClimateState, zone: TeyesTemperatureZone, increase: Boolean): Boolean {
         val raw = if (zone == TeyesTemperatureZone.DRIVER) state.leftTemperature else state.rightTemperature
         val code = if (zone == TeyesTemperatureZone.DRIVER) 25 else 31
-        return supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
+        return !state.fytReadOnly && supportsTemperature(state.profileId) && state.connected && state.health == TeyesTelemetryHealth.LIVE &&
             code in state.availableCodes && 33 in state.availableCodes && raw != null &&
             (raw == -2 || raw == -3 || raw in 0..255) &&
             !(increase && raw == -3) && !(!increase && raw == -2)
@@ -137,6 +137,13 @@ internal class TeyesTelemetryFreshness {
         val age = now - sample.receivedAt
         age >= 0 && (code == 1000 || (age < 60_000L && sample.value in -65_535..65_535))
     }.mapValues { it.value.value }
+
+    /** Raw diagnostics retain no inferred units or field-specific range assumptions. */
+    fun rawSnapshot(now: Long): Map<Int, Int> = samples.filter { (_, sample) ->
+        now - sample.receivedAt in 0 until 60_000L
+    }.mapValues { it.value.value }
+
+    fun remove(code: Int) { samples.remove(code) }
 
     fun clear() {
         samples.clear()

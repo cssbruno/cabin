@@ -47,7 +47,8 @@ class SettingsNavigationTest {
     @After fun tearDown() = runBlocking { manager.releaseAndWait() }
 
     @Test
-    fun `control settings retain main display controls without external display test`() {
+    fun `launcher retains display settings and excludes dongle actions even when attached`() {
+        com.cabin.test.attachCarPlayDongle(compose.activity)
         compose.setContent {
             CabinTheme {
                 SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL)
@@ -56,7 +57,9 @@ class SettingsNavigationTest {
         compose.onNodeWithText("Test Cluster Display").assertDoesNotExist()
         compose.onNodeWithContentDescription("Test secondary cluster display").assertDoesNotExist()
         compose.onNodeWithText("Display Mode").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Reset Decoder").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Reset Decoder").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Configure adapter").assertDoesNotExist()
+        compose.onNodeWithText("Disconnect Adapter").assertDoesNotExist()
     }
 
     @Test
@@ -106,6 +109,7 @@ class SettingsNavigationTest {
         }
         compose.onNodeWithText("CarPlay").assertIsSelected()
         compose.onNodeWithText("Display & controls").assertIsSelected()
+        compose.onNodeWithText("Reset Decoder").performScrollTo().assertIsDisplayed()
         saveScreenshot("settings-carplay-integrated")
         compose.onNodeWithText("Connection").performClick()
         compose.onNodeWithText("Connection").assertIsSelected()

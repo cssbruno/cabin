@@ -24,7 +24,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [29], manifest = Config.NONE)
+@Config(sdk = [29], manifest = Config.NONE, shadows = [Utf16ParcelShadow::class])
 @LooperMode(LooperMode.Mode.PAUSED)
 class TeyesClimateBinderIntegrationTest {
     private lateinit var context: ToolkitContext
@@ -59,6 +59,117 @@ class TeyesClimateBinderIntegrationTest {
         }
         worker.join(1_000)
         assertFalse("Vehicle worker must terminate after close", worker.isAlive)
+    }
+
+    @Test fun `detected callback IDs are subscribed normalized and cleared on profile change`() {
+        controller.suspendUpdates(); drain()
+        val mapping = FytDetectedProfile(262442, mapOf(24 to 324, 29 to 37, 37 to 337), "partial_match", setOf(38))
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.JOYING_2023,
+            profiles = mapOf(262442 to mapping)) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 262442)
+        assertTrue(context.module.registrations.containsAll(listOf(324, 37, 337)))
+        emit(324, 1); emit(37, 4); emit(337, 1)
+        val state = controller.state.value
+        assertTrue(state.ac && state.frontLeftDoorOpen)
+        assertEquals(4, state.fanLevel)
+        assertEquals("partial_match", state.fytCodeStatus)
+        assertEquals(mapping.fields, state.fytDetectedFields)
+        assertTrue(state.fytReadOnly)
+        assertNull(state.speedKph)
+        context.module.commands.clear()
+        controller.setAc(false); controller.setFan(2); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(1000, 1048874)
+        drain()
+        assertFalse(controller.state.value.ac)
+        assertFalse(controller.state.value.frontLeftDoorOpen)
+    }
+
+    @Test fun `generic profile exposes payloads without inventing gauges and clears on disconnect`() {
+        controller.suspendUpdates(); drain()
+        val mapping = FytDetectedProfile(999999, emptyMap(), "raw_fields_only", publishedFields = setOf(89, 90, 181, 350))
+        controller.firmwareDetector = { FytFirmware("vendor", TeyesVehicleDataLayout.UNKNOWN,
+            resolveProfile = { mapping }) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 999999)
+        assertTrue(context.module.registrations.contains(350))
+        emit(89, 50); emit(90, 2000); emit(181, 13)
+        assertNull(controller.state.value.speedKph)
+        assertNull(controller.state.value.engineRpm)
+        assertNull(controller.state.value.oilServiceDistance)
+        val parcel = Parcel.obtain()
+        try {
+            parcel.writeInterfaceToken("com.syu.ipc.IModuleCallback")
+            parcel.writeInt(350)
+            parcel.writeIntArray(intArrayOf(1, 2, 3))
+            parcel.writeFloatArray(floatArrayOf(2.5f))
+            parcel.writeStringArray(arrayOf("local value"))
+            assertTrue(context.module.callback!!.transact(1, parcel, null, IBinder.FLAG_ONEWAY))
+        } finally { parcel.recycle() }
+        drain()
+        assertEquals(FytRawSample(listOf(1, 2, 3), listOf(2.5f), listOf("local value")), controller.state.value.fytRawValues[350])
+        controller.suspendUpdates(); drain()
+        assertTrue(controller.state.value.fytRawValues.isEmpty())
+    }
+
+    @Test fun `MAIN discovery subscribes live only isolates module IDs and drops previous profile callbacks`() {
+        controller.suspendUpdates(); drain()
+        val mapping = FytDetectedProfile(999998, emptyMap(), "raw_fields_only",
+            publishedFields = setOf(89), moduleFields = mapOf(7 to setOf(89), 0 to setOf(89, 18)))
+        controller.firmwareDetector = { FytFirmware("vendor", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = { mapping }) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 999998); drain()
+        assertEquals(setOf(89, 18), context.mainModule.registrations)
+        val oldCallback = requireNotNull(context.mainModule.callback)
+        send(oldCallback, 89, 777); drain()
+        emit(89, 12)
+        assertEquals(listOf(777), controller.state.value.fytMainRawValues[89]?.integers)
+        assertEquals(listOf(12), controller.state.value.fytRawValues[89]?.integers)
+        assertNull(controller.state.value.speedKph)
+        assertTrue(context.mainModule.commands.isEmpty())
+        controller.suspendUpdates(); drain()
+        send(oldCallback, 89, 999); drain()
+        assertTrue(controller.state.value.fytMainRawValues.isEmpty())
+    }
+
+    @Test fun `stock formatted readings drive live health and clear when the profile changes`() {
+        val apk = java.io.File("../artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.canbus/190000000_com.syu.canbus.apk")
+        org.junit.Assume.assumeTrue(apk.exists())
+        controller.suspendUpdates(); drain()
+        val client = FytSyuClientCatalog.resolver(listOf(apk)) { "res:$it" }(262442)
+        val mapping = FytDetectedProfile(262442, emptyMap(), "raw_fields_only", publishedFields = setOf(61), syuClient = client)
+        controller.firmwareDetector = { FytFirmware("stock", TeyesVehicleDataLayout.UNKNOWN, profiles = mapOf(262442 to mapping)) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 262442)
+        assertTrue(controller.state.value.fytSyuReadings.isEmpty())
+        emit(61, 2)
+        assertTrue(controller.state.value.fytSyuReadings.any { it.fields == setOf(61) && it.text == "middle" })
+        assertEquals(TeyesTelemetryHealth.LIVE, controller.state.value.health)
+        assertTrue(context.module.commands.isEmpty())
+        emit(1000, 1)
+        assertTrue(controller.state.value.fytSyuReadings.isEmpty())
+    }
+
+    @Test fun `stock maintenance and temperatures use verified fields without disabling existing climate controls`() {
+        controller.suspendUpdates(); drain()
+        val mapping = FytDetectedProfile(262442,
+            mapOf(24 to 24, 29 to 29, 25 to 25, 31 to 31, 33 to 33, 94 to 94, 179 to 135, 180 to 136, 181 to 137), "matched")
+        controller.firmwareDetector = { FytFirmware("stock", TeyesVehicleDataLayout.JOYING_2023, profiles = mapOf(262442 to mapping)) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 262442)
+        emit(24, 1); emit(29, 4); emit(25, 44); emit(31, -3); emit(94, 2); emit(137, 2500); emit(181, 13)
+        assertNull(controller.state.value.leftTemperature)
+        assertNull(controller.state.value.oilServiceDistance)
+        emit(33, 0); emit(135, 1); emit(136, 1)
+        val state = controller.state.value
+        assertEquals(44, state.leftTemperature); assertEquals(-3, state.rightTemperature)
+        assertEquals(2, state.driverSeatCooling)
+        assertEquals(-2500, state.oilServiceDistance)
+        assertTrue(state.oilServiceDistanceMiles)
+        assertNull(state.oilLifePercent)
+        assertFalse(state.fytReadOnly)
+        assertTrue(state.controlsAvailable)
     }
 
     @Test fun `Honda panel writes require feedback and use the live vendor module`() {
@@ -515,6 +626,7 @@ class TeyesClimateBinderIntegrationTest {
 
     private class ToolkitContext(base: Context) : ContextWrapper(base) {
         val module = Module()
+        val mainModule = Module(notify = 0)
         var toolkitUnavailable = false
         var failToolkitRegistration = false
         val actions = mutableListOf<String?>()
@@ -528,9 +640,10 @@ class TeyesClimateBinderIntegrationTest {
                 ): Boolean {
                     assertEquals(1, code)
                     data.enforceInterface("com.syu.ipc.IRemoteToolkit")
-                    assertEquals(7, data.readInt())
+                    val id = data.readInt()
+                    assertTrue(id == 7 || id == 0)
                     requireNotNull(reply).writeNoException()
-                    reply.writeStrongBinder(module)
+                    reply.writeStrongBinder(if (id == 7) module else mainModule)
                     return true
                 }
             }
@@ -552,7 +665,7 @@ class TeyesClimateBinderIntegrationTest {
         override fun unbindService(conn: ServiceConnection) = Unit
     }
 
-    private class Module : Binder() {
+    private class Module(private val notify: Int = 1) : Binder() {
         init { attachInterface(null, "com.syu.ipc.IRemoteModule") }
         var callback: IBinder? = null
         var rejectRegistration = false
@@ -582,7 +695,7 @@ class TeyesClimateBinderIntegrationTest {
                     val field = data.readInt()
                     registrations += field
                     registrationHistory += field
-                    assertEquals(1, data.readInt())
+                    assertEquals(notify, data.readInt())
                 }
                 4 -> {
                     data.readStrongBinder()

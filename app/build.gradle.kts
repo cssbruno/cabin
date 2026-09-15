@@ -16,8 +16,8 @@ android {
         applicationId = ownerApplicationId
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1015
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.4"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1016
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.5"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
         require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
@@ -125,6 +125,8 @@ detekt {
 }
 
 dependencies {
+    // Read installed vendor DEX as data; never load or execute vendor classes.
+    implementation("org.smali:dexlib2:2.5.2")
     implementation(project(":diagnostics"))
     implementation("io.sentry:sentry-android-core:8.56.0")
     implementation("io.sentry:sentry-android-ndk:8.56.0")
