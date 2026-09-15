@@ -29,6 +29,8 @@ class JoyingCarPlayServiceTest {
     }
     internal class TestService : JoyingCarPlayService() {
         val runtimes = mutableListOf<Runtime>()
+        var exhaustionReports = 0
+        override fun reportRecoveryExhausted() { exhaustionReports++ }
         override fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: () -> Unit): JoyingSessionRuntime =
             Runtime(status, failed).also(runtimes::add)
     }
@@ -50,6 +52,9 @@ class JoyingCarPlayServiceTest {
         service.runtimes.last().failed()
         advance(60)
         assertEquals(4, service.runtimes.size)
+        repeat(5) { service.runtimes.last().failed() }
+        advance(0)
+        assertEquals(1, service.exhaustionReports)
         service.restart()
         service.runtimes.last().failed()
         advance(2)

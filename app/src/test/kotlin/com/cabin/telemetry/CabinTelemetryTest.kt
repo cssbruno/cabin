@@ -114,6 +114,18 @@ class CabinTelemetryTest {
         assertEquals("decc9a24-92cd-4274-8acf-7da0de64b6bc", clean.debugMeta!!.images!!.single().uuid)
     }
 
+    @Test fun `warning messages omit reporting stacks while real exceptions retain theirs`() {
+        val options = io.sentry.SentryOptions().apply { CabinTelemetry.configureStackCapture(this) }
+        io.sentry.MainEventProcessor(options).use { processor ->
+            val warning = SentryEvent().apply { message = Message().apply { formatted = "JOYING_EXHAUSTED" } }
+            val processed = processor.process(warning, io.sentry.Hint())
+            assertTrue(processed.threads.isNullOrEmpty())
+            assertTrue(processed.exceptions.isNullOrEmpty())
+            val error = processor.process(SentryEvent(IllegalStateException("private error")), io.sentry.Hint())
+            assertTrue(error.exceptions.orEmpty().any { !it.stacktrace?.frames.isNullOrEmpty() })
+        }
+    }
+
     @Test fun `log budget bounds bursts and resets on monotonic window boundary`() {
         val budget = TelemetryBudget(2)
         assertTrue(budget.take(10)); assertTrue(budget.take(11)); assertFalse(budget.take(12))

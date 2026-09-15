@@ -52,6 +52,7 @@ object CabinTelemetry {
                 options.dsn = BuildConfig.SENTRY_DSN
                 options.release = "${BuildConfig.APPLICATION_ID}@${BuildConfig.VERSION_NAME}+${BuildConfig.VERSION_CODE}"
                 options.environment = if (BuildConfig.DEBUG) "development" else "production"
+                configureStackCapture(options)
                 options.isSendDefaultPii = false
                 options.isAttachScreenshot = false
                 options.isAttachViewHierarchy = false
@@ -106,6 +107,13 @@ object CabinTelemetry {
             Sentry.close()
             File(context.noBackupFilesDir, "sentry").deleteRecursively()
         }
+    }
+
+    internal fun configureStackCapture(options: io.sentry.SentryOptions) {
+        // Message reports describe state, not a failure at the reporting call site.
+        // Throwable stacks and the SDK's forced ANR thread capture are unaffected.
+        options.isAttachStacktrace = false
+        options.isAttachThreads = false
     }
 
     fun record(event: DiagnosticEvent, report: Boolean = false): Boolean {

@@ -75,7 +75,8 @@ internal open class JoyingCarPlayService : Service() {
     private fun scheduleRecovery(failedGeneration: Int) {
         if (generation != failedGeneration || recoveryPending) return
         if (retries >= 3) {
-            CabinTelemetry.record(DiagnosticEvent.JOYING_EXHAUSTED, report = true)
+            recoveryPending = true
+            reportRecoveryExhausted()
             mutable.update { it.copy(status = getString(R.string.joying_recovery_exhausted)) }
             return
         }
@@ -88,6 +89,10 @@ internal open class JoyingCarPlayService : Service() {
             if (generation == failedGeneration) startSession()
         }, delay)
     }
+    protected open fun reportRecoveryExhausted() {
+        CabinTelemetry.record(DiagnosticEvent.JOYING_EXHAUSTED, report = true)
+    }
+
     protected open fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: () -> Unit): JoyingSessionRuntime =
         JoyingEmbeddedSession(applicationContext, resources.displayMetrics.widthPixels,
             resources.displayMetrics.heightPixels, status, size, failed)
