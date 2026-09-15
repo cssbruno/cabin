@@ -306,6 +306,7 @@ class CabinLauncherTest {
 
     @Test fun `live projection module resizes the same native surface without connecting`() {
         if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
+        com.cabin.test.attachCarPlayDongle(compose.activity)
         val guard = com.cabin.platform.TeyesDrivingGuard().apply { confirmParked() }
         compose.setContent {
             CabinTheme(darkTheme = true) {

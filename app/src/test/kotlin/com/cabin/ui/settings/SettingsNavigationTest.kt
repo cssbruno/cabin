@@ -98,6 +98,7 @@ class SettingsNavigationTest {
     }
 
     @Test fun `CarPlay groups connection and display controls inside launcher settings`() {
+        com.cabin.test.attachCarPlayDongle(compose.activity)
         compose.setContent {
             CabinTheme(darkTheme = true) {
                 SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.PHONES, embedded = true)
@@ -114,6 +115,7 @@ class SettingsNavigationTest {
     }
 
     @Test fun `change device shortcut opens connection directly`() {
+        com.cabin.test.attachCarPlayDongle(compose.activity)
         compose.setContent {
             CabinTheme(darkTheme = true) {
                 SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.PHONES,

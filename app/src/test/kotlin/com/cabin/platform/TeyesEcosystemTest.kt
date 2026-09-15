@@ -119,7 +119,7 @@ class TeyesEcosystemTest {
         assertTrue(report.contains("configuredShortcutCount"))
         val decoded = org.json.JSONObject(report)
         assertEquals("TEYES/SYU", decoded.getString("vehicleDataSource"))
-        assertEquals("LEGACY", decoded.getString("vehicleDataLayout"))
+        assertEquals("UNKNOWN", decoded.getString("vehicleDataLayout"))
         assertEquals("Carlink normalized fields", decoded.getString("vehicleCodeNamespace"))
         assertEquals(2, decoded.getInt("schemaVersion"))
         assertEquals("NOT_CHECKED", decoded.getString("syuFrameworkAccess"))
