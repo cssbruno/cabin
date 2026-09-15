@@ -4,7 +4,18 @@ This tracks the user's 60-feature request. **The full list is not complete.**
 “Available” means a software path exists, not that every adapter/TEYES firmware has
 been hardware-certified. No external OBD adapter or guessed CAN interface is added.
 
-## Current batch
+## Current status — 2026-09-14
+
+Use [the implementation ledger](FEATURE-IMPLEMENTATION-STATUS.md) for launcher and
+vehicle features, [Joying CarPlay](research/JOYING-CARPLAY.md) for native projection,
+and [live replacement status](research/JOYING-LIVE-SERVICE.md) for SYU independence.
+The original batch notes below are historical; their version number is not the
+current release version. Software coverage does not establish hardware validation.
+
+Current additions: dark defaults for new driver profiles, bounded Joying session
+recovery, and app/diagnostics unit-test gates before release publication.
+
+## Original batch
 
 TEYES build146 (`1.0.0-teyes.146`); other distribution version numbers are unchanged.
 
@@ -41,7 +52,7 @@ or on-vehicle compatibility.
 |5|Actionable errors|Available: readiness/help with Android permission-settings actions and explicit audio/GPS checks; coverage of all vendor failures remains partial.|
 |6|USB instability|Partial/new: real detach-event history and repeated-event notice; no cable diagnosis or complete USB-reset classifier.|
 |7|Connection history|Available/new: bounded events, snapshots and return timing.|
-|8|Recovery escalation|Partial: decoder-only recovery and existing reconnect logic; unified audio/video escalation remains.|
+|8|Recovery escalation|Partial: decoder/reconnect paths exist; Joying native failures now get three delayed retries. Unified adapter audio/video escalation remains.|
 |9|Cancel reconnect|Available: explicit phone Disconnect pauses automatic phone connection.|
 |10|Manual-connect mode|Available through persistent explicit Disconnect, followed by manual Connect.|
 |11|Independent audio volumes|Partial: music/navigation gains exist; independent Siri volume not implemented.|
@@ -50,7 +61,7 @@ or on-vehicle compatibility.
 |14|Mic clipping indicator|Available in the foreground microphone diagnostic; hardware verification remains.|
 |15|Audio-route status|Partial: audio diagnostics/logging exist; user-facing route explanation remains.|
 |16|Gentle audio resume|Not implemented.|
-|17|Startup volume ceiling|Not implemented; must not change system/call volume unexpectedly.|
+|17|Startup volume ceiling|Available: configurable quiet-start hours with a 20% media-volume ceiling; see implementation ledger.|
 |18|Per-phone audio|Partial: driver-profile gains exist; automatic per-phone association remains.|
 |19|Speaker test|Available: bounded left/silence/right tone, explicit idle-session action; verify the actual head-unit route.|
 |20|Audio-only recovery|Partial: internal audio/mic recovery exists; separate user-facing recovery action remains.|
@@ -70,16 +81,16 @@ or on-vehicle compatibility.
 |34|Partial-door status|Available: missing fields cannot establish all doors closed.|
 |35|Oil-service reminder|Partial: verified service-distance display; user-configurable reminder threshold remains.|
 |36|Overdue maintenance|Partial: negative distance and explanation exist; proactive notice remains.|
-|37|Manual maintenance|Not implemented.|
+|37|Manual maintenance|Available: date-based service reminder and due alert; odometer scheduling still needs verified mapping.|
 |38|Brief A/C notices|Available: non-resizing summary; changed-field-only presentation remains.|
 |39|Climate layout comparison|Partial: explicit selector and limitations; detailed comparison remains.|
 |40|Camera-return protection|Partial: generic overlay recovery exists; reverse-camera event verification remains.|
 |41|Passenger media panel|Available through existing Tools playback controls.|
 |42|Short/long steering presses|Partial: key mapping exists; distinct event support must be verified per firmware.|
 |43|Accidental-action protection|Partial: existing confirmation/parked checks; consistent long-press policy remains.|
-|44|Parking location|Not implemented; requires explicit opt-in and location lifecycle/privacy design.|
+|44|Parking location|Available: explicit save/find/forget parked location with permission and fix-quality checks.|
 |45|Parking timer|Not implemented; background reminder delivery needs a complete permission/lifecycle path.|
-|46|Trip duration|Not implemented; reconnect timing is not a trip duration.|
+|46|Trip duration|Available: locally recorded CAN-speed trip segments; distance is estimated and gaps end a segment.|
 |47|Driver home screen|Partial: driver profiles exist; per-driver shortcut layout remains.|
 |48|Guest mode|Not implemented.|
 |49|Return to CarPlay|Available through Hub projection action/conditional explicit-connect return.|
@@ -87,9 +98,9 @@ or on-vehicle compatibility.
 |51|Drop snapshots|New in-memory bounded stream-end snapshots; survive ordinary UI navigation but not process termination.|
 |52|Support report|Available/extended with build details and recorder snapshots.|
 |53|Privacy preview|New exact JSON confirmation before document picker.|
-|54|Build identification|Available/extended in exported report; no new updater.|
+|54|Build identification|Available: build details in reports and GitHub release updater in Settings.|
 |55|Pre-update backup|Partial: manual settings export exists; automatic pre-update backup remains.|
-|56|Previous APK access|Not implemented; no release archive, updater or guaranteed downgrade compatibility.|
+|56|Previous APK access|Partial: GitHub releases provide previous APK access; in-app archive and guaranteed downgrade compatibility remain unavailable.|
 |57|Targeted resets|Partial: video-only and vehicle-only refresh exist; audio-only and narrowly scoped preference reset remain.|
 |58|Installation checklist|Partial: reopenable USB/phone/audio/permissions setup guide and explicit diagnostics; vehicle-specific guided verification remains.|
 |59|Log storage limits|New count/byte/age retention on enable and rotation; active file protected.|

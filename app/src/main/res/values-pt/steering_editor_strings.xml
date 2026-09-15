@@ -1,0 +1,15 @@
+<resources>
+    <string name="steering_back">Voltar</string>
+    <string name="steering_none">Não fazer nada</string>
+    <string name="steering_scope">Escolha uma ação e pressione um botão. Toques curtos e longos podem ter ações diferentes. Os mapeamentos funcionam enquanto o Cabin está em foco, para botões enviados pelo Android. Botões controlados pelo carro podem não aparecer aqui.</string>
+    <string name="steering_app_unavailable">O app mapeado está indisponível. Escolha outro nas configurações dos botões.</string>
+    <string name="steering_add">Atribuir um botão</string>
+    <string name="steering_change">Alterar ação</string>
+    <string name="steering_remove">Remover mapeamento</string>
+    <string name="steering_choose_action">Escolher ação do botão</string>
+    <string name="steering_open_app">Abrir um app</string>
+    <string name="steering_no_apps">Nenhum app disponível.</string>
+    <string name="steering_backup_hint">As alterações são salvas automaticamente. O backup das configurações inclui toques curtos, longos e apps mapeados.</string>
+    <string name="steering_reset">Redefinir mapeamentos</string>
+    <string name="steering_reset_detail">Remover todos os mapeamentos de toques curtos e longos do Cabin? Os botões voltam ao comportamento normal. O aprendizado de fábrica não será alterado.</string>
+</resources>

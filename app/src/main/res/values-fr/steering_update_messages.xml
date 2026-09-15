@@ -1,0 +1,23 @@
+<resources>
+    <string name="steering_back">Retour</string>
+    <string name="steering_none">Ne rien faire</string>
+    <string name="steering_scope">Choisissez une action, puis appuyez sur un bouton. Les appuis courts et longs peuvent différer. Les affectations fonctionnent lorsque Cabin a le focus et reçoit les boutons d’Android. Ceux gérés par le véhicule peuvent ne pas apparaître.</string>
+    <string name="steering_app_unavailable">L’application affectée est indisponible. Choisissez-en une autre dans les réglages des boutons.</string>
+    <string name="steering_add">Affecter un bouton</string>
+    <string name="steering_change">Modifier l’action</string>
+    <string name="steering_remove">Supprimer l’affectation</string>
+    <string name="steering_choose_action">Choisir l’action du bouton</string>
+    <string name="steering_open_app">Ouvrir une application</string>
+    <string name="steering_no_apps">Aucune application pouvant être lancée.</string>
+    <string name="steering_backup_hint">Les modifications sont enregistrées automatiquement. La sauvegarde et la restauration incluent les deux types d’appui et les applications affectées.</string>
+    <string name="steering_reset">Réinitialiser les affectations</string>
+    <string name="steering_reset_detail">Supprimer toutes les affectations d’appui court et long dans Cabin ? Les boutons retrouvent leur comportement normal. L’apprentissage d’origine reste inchangé.</string>
+    <string name="update_error_signature">Cette mise à jour utilise une autre clé de signature que la version installée. Installez une mise à jour signée avec la même clé. Un nouveau téléchargement ne résoudra pas le problème.</string>
+    <string name="update_error_apk">L’APK téléchargé ne correspond pas à cette mise à jour de Cabin. Recherchez à nouveau les mises à jour.</string>
+    <string name="update_error_android">Cette mise à jour nécessite une version plus récente d’Android.</string>
+    <string name="update_error_integrity">Le téléchargement est incomplet ou ne correspond pas à la somme de contrôle publiée. Recherchez les mises à jour et téléchargez à nouveau.</string>
+    <string name="update_error_storage">Impossible d’enregistrer la mise à jour. Vérifiez l’espace disponible et réessayez.</string>
+    <string name="update_error_server">GitHub n’a pas pu fournir la mise à jour. Recherchez les mises à jour et réessayez plus tard.</string>
+    <string name="update_error_network">Impossible de joindre GitHub. Vérifiez votre connexion internet et réessayez.</string>
+    <string name="update_error_tls">Impossible d’établir une connexion sécurisée. Vérifiez la date et l’heure de l’appareil, puis réessayez.</string>
+</resources>

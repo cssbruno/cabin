@@ -1,0 +1,33 @@
+<resources>
+    <string name="syu_sound_title">Som</string>
+    <string name="syu_sound_close">Fechar ajustes de som</string>
+    <string name="syu_sound_connecting">Conectando aos ajustes de som…</string>
+    <string name="syu_sound_unsupported">Use o equalizador de fábrica para este sistema de som.</string>
+    <string name="syu_sound_waiting">Aguardando ajustes de som…</string>
+    <string name="syu_sound_parked">Estacione para ajustar o som.</string>
+    <string name="syu_sound_pending">Aplicando…</string>
+    <string name="syu_sound_factory">Equalizador de fábrica</string>
+    <string name="syu_sound_presets">Equalizador</string>
+    <string name="syu_sound_advanced">Avançado</string>
+    <string name="syu_sound_balance">Balanço</string>
+    <string name="syu_sound_fader">Frente e traseira</string>
+    <string name="syu_sound_loudness">Loudness</string>
+    <string name="syu_sound_band">Banda %1$d</string>
+    <string name="syu_sound_failed">Não foi possível confirmar o ajuste. Tente novamente.</string>
+    <string name="syu_sound_preset_number">Predefinição %1$d</string>
+    <string name="syu_sound_subwoofer">Nível do subwoofer</string>
+    <string name="syu_diag_title">Diagnóstico de hardware</string>
+    <string name="syu_diag_unknown">Desconhecido</string>
+    <string name="syu_diag_connected">Conectado</string>
+    <string name="syu_diag_disconnected">Desconectado</string>
+    <string name="syu_diag_service">Serviço SYU: %1$s</string>
+    <string name="syu_diag_profile">Perfil DSP informado: %1$s</string>
+    <string name="syu_diag_device">Dispositivo: %1$s %2$s</string>
+    <string name="syu_diag_unmapped">Não mapeado no Cabin</string>
+    <string name="syu_diag_received">Leitura recente recebida</string>
+    <string name="syu_diag_missing">Sem leitura recente</string>
+    <string name="syu_diag_bands">Bandas EQ com leituras recentes: %1$d</string>
+    <string name="syu_diag_note">As leituras confirmam os valores informados, não alterações no hardware. O perfil é informado pelo SYU, sem verificação física do chip.</string>
+    <string name="syu_diag_copy">Copiar relatório</string>
+    <string name="syu_diag_copied">Copiado</string>
+</resources>

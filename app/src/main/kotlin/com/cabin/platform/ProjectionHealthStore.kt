@@ -60,6 +60,13 @@ class ProjectionHealthStore(private val nowMillis: () -> Long) {
     fun connection(value: CabinManager.State) {
         val previous = mutableState.value
         if (previous.connection == value) return
+        val event = when (value) {
+            CabinManager.State.DISCONNECTED -> com.cabin.telemetry.DiagnosticEvent.PROJECTION_DISCONNECTED
+            CabinManager.State.CONNECTING -> com.cabin.telemetry.DiagnosticEvent.PROJECTION_CONNECTING
+            CabinManager.State.STREAMING -> com.cabin.telemetry.DiagnosticEvent.PROJECTION_STREAMING
+            else -> null
+        }
+        event?.let { com.cabin.telemetry.CabinTelemetry.record(it) }
         val disconnected = value == CabinManager.State.DISCONNECTED
         val clearMedia = disconnected || value == CabinManager.State.CONNECTING
         val elapsed = elapsedNow()

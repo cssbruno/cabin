@@ -1,0 +1,7 @@
+<resources>
+    <string name="reporting_title">Fehlerberichte teilen</string>
+    <string name="reporting_detail">Optional: Abstürze, Hänger, App- und Android-Version sowie Verbindungsschritte an Sentry senden. Keine Screenshots, Audiodaten, GPS-, Telefoninformationen oder Rohprotokolle. Ausschalten löscht wartende Berichte; bereits empfangene bleiben in Sentry.</string>
+    <string name="reporting_unconfigured">Berichte sind in dieser Version nicht verfügbar.</string>
+    <string name="reporting_test">Testbericht senden</string>
+    <string name="reporting_queued">Testbericht vorgemerkt; Versand benötigt eine Verbindung.</string>
+</resources>

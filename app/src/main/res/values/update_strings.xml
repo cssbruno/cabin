@@ -14,4 +14,12 @@
     <string name="update_download">Download</string>
     <string name="update_install">Install</string>
     <string name="update_cancel">Cancel</string>
+    <string name="update_error_signature">This update uses a different signing key from the installed Cabin build. Install an update signed with the same key. Retrying this download will not fix it.</string>
+    <string name="update_error_apk">The downloaded APK does not match this Cabin update. Check for updates again.</string>
+    <string name="update_error_android">This update requires a newer Android version.</string>
+    <string name="update_error_integrity">The download is incomplete or does not match the published checksum. Check for updates and download again.</string>
+    <string name="update_error_storage">Could not save the update. Check available storage and try again.</string>
+    <string name="update_error_server">GitHub could not provide the update. Check for updates and try again later.</string>
+    <string name="update_error_network">Could not reach GitHub. Check your internet connection and try again.</string>
+    <string name="update_error_tls">Could not establish a secure connection. Check the device date and time, then try again.</string>
 </resources>

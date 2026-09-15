@@ -1,0 +1,33 @@
+<resources>
+    <string name="syu_sound_title">Sound</string>
+    <string name="syu_sound_close">Close sound settings</string>
+    <string name="syu_sound_connecting">Connecting to sound settings…</string>
+    <string name="syu_sound_unsupported">Use the factory equalizer for this sound system.</string>
+    <string name="syu_sound_waiting">Waiting for sound settings…</string>
+    <string name="syu_sound_parked">Park to adjust sound.</string>
+    <string name="syu_sound_pending">Applying…</string>
+    <string name="syu_sound_factory">Factory equalizer</string>
+    <string name="syu_sound_presets">Equalizer</string>
+    <string name="syu_sound_advanced">Advanced</string>
+    <string name="syu_sound_balance">Balance</string>
+    <string name="syu_sound_fader">Fader</string>
+    <string name="syu_sound_loudness">Loudness</string>
+    <string name="syu_sound_band">Band %1$d</string>
+    <string name="syu_sound_failed">Could not confirm the change. Try again.</string>
+    <string name="syu_sound_preset_number">Preset %1$d</string>
+    <string name="syu_sound_subwoofer">Subwoofer level</string>
+    <string name="syu_diag_title">Hardware diagnostics</string>
+    <string name="syu_diag_unknown">Unknown</string>
+    <string name="syu_diag_connected">Connected</string>
+    <string name="syu_diag_disconnected">Disconnected</string>
+    <string name="syu_diag_service">SYU service: %1$s</string>
+    <string name="syu_diag_profile">Reported DSP profile: %1$s</string>
+    <string name="syu_diag_device">Device: %1$s %2$s</string>
+    <string name="syu_diag_unmapped">Not mapped in Cabin</string>
+    <string name="syu_diag_received">Fresh reading received</string>
+    <string name="syu_diag_missing">No fresh reading</string>
+    <string name="syu_diag_bands">EQ bands with fresh readings: %1$d</string>
+    <string name="syu_diag_note">Readings confirm reported settings, not successful hardware changes. The profile is reported by SYU, not a physical chip check.</string>
+    <string name="syu_diag_copy">Copy report</string>
+    <string name="syu_diag_copied">Copied</string>
+</resources>

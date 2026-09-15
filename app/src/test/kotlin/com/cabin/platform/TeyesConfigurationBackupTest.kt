@@ -104,7 +104,7 @@ class TeyesConfigurationBackupTest {
 
     @Test fun `strict schema rejects unsupported versions unknown fields duplicate fields and trailing text`() {
         val text = json().toString()
-        assertRejected { TeyesConfigurationBackup.decode(json().put("schema", 4).toString()) }
+        assertRejected { TeyesConfigurationBackup.decode(json().put("schema", 5).toString()) }
         assertRejected { TeyesConfigurationBackup.decode(json().put("schema", "1").toString()) }
         assertRejected { TeyesConfigurationBackup.decode(json().put("extra", true).toString()) }
         assertRejected { TeyesConfigurationBackup.decode(text.replaceFirst("{", "{\"schema\":1,")) }
@@ -167,7 +167,7 @@ class TeyesConfigurationBackupTest {
         ProjectionPreferences.getInstance(context).replace(presentation)
         MeasurementPreferences.get(context).select(MeasurementUnit.IMPERIAL)
         val backup = TeyesConfigurationBackup.encode(preferences.configurationSnapshot())
-        assertEquals(3, JSONObject(backup).getInt("schema"))
+        assertEquals(4, JSONObject(backup).getInt("schema"))
         ProjectionPreferences.getInstance(context).replace(ProjectionPreferencesState())
         MeasurementPreferences.get(context).select(MeasurementUnit.METRIC)
         val decoded = TeyesConfigurationBackup.decode(backup)
@@ -186,7 +186,7 @@ class TeyesConfigurationBackupTest {
             put("schema", 1)
             remove("projection")
             remove("measurementUnit")
-            remove("longKeys")
+            remove("longKeys"); remove("keyApps"); remove("longKeyApps")
         }
         val presentation = ProjectionPreferencesState(controlSide = ProjectionControlSide.LEFT, vehicleHud = true)
         ProjectionPreferences.getInstance(context).replace(presentation)
@@ -232,7 +232,7 @@ class TeyesConfigurationBackupTest {
         preferences.mapKey(KeyEvent.KEYCODE_F1, null, longPress = true)
         assertTrue(preferences.replaceConfiguration(TeyesConfigurationBackup.decode(encoded)))
         assertEquals(TeyesKeyAction.VOICE, preferences.keyAction(KeyEvent.KEYCODE_F1, longPress = true))
-        val versionTwo = JSONObject(encoded).apply { put("schema", 2); remove("longKeys") }
+        val versionTwo = JSONObject(encoded).apply { put("schema", 2); remove("longKeys"); remove("keyApps"); remove("longKeyApps") }
         assertTrue(preferences.replaceConfiguration(TeyesConfigurationBackup.decode(versionTwo.toString())))
         assertNull(preferences.keyAction(KeyEvent.KEYCODE_F1, longPress = true))
     }

@@ -1095,6 +1095,7 @@ class CabinManager(
 
     /** Internal start path. Unlike [start], this never resurrects a user-stopped session. */
     private suspend fun startIfDesired() {
+        if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) return
         withContext(Dispatchers.IO) {
             lifecycleMutex.lock()
             try {
@@ -1738,8 +1739,9 @@ class CabinManager(
             com.cabin.platform.TeyesKeyAction.NEXT -> ProjectionAction.NEXT
             com.cabin.platform.TeyesKeyAction.PREVIOUS -> ProjectionAction.PREVIOUS
             com.cabin.platform.TeyesKeyAction.VOICE -> ProjectionAction.VOICE
-            com.cabin.platform.TeyesKeyAction.CLIMATE, com.cabin.platform.TeyesKeyAction.VOLUME_UP,
+            com.cabin.platform.TeyesKeyAction.LAUNCHER, com.cabin.platform.TeyesKeyAction.CLIMATE, com.cabin.platform.TeyesKeyAction.VOLUME_UP,
             com.cabin.platform.TeyesKeyAction.VOLUME_DOWN, com.cabin.platform.TeyesKeyAction.MUTE,
+            com.cabin.platform.TeyesKeyAction.BACK, com.cabin.platform.TeyesKeyAction.NONE,
             com.cabin.platform.TeyesKeyAction.PAGE_NEXT, com.cabin.platform.TeyesKeyAction.PAGE_PREVIOUS -> return // Activity-owned actions
         }
         performProjectionAction(projectionAction)
@@ -1974,7 +1976,10 @@ class CabinManager(
      *
      * Call this from VideoSurface's onSurfaceDestroyed callback.
      */
-    fun onSurfaceDestroyed() {
+    fun onSurfaceDestroyed(expectedSurface: Surface? = null) {
+        // A disposed view can report teardown after a new view queued its surface.
+        // Preserve that replacement and its pending codec update.
+        if (expectedSurface != null && (pendingSurface ?: videoSurface) !== expectedSurface) return
         logInfo("[LIFECYCLE] Surface destroyed - pausing codec immediately", tag = Logger.Tags.VIDEO)
 
         // Cancel any pending surface updates

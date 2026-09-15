@@ -1,0 +1,7 @@
+<resources>
+    <string name="reporting_title">Compartilhar relatórios de falhas</string>
+    <string name="reporting_detail">Opcional: enviar falhas, travamentos, versão do app e do Android e etapas da conexão ao Sentry. Sem capturas de tela, áudio, GPS, dados do telefone ou logs brutos. Desativar apaga os relatórios na fila; os já recebidos permanecem no Sentry.</string>
+    <string name="reporting_unconfigured">Relatórios indisponíveis nesta versão.</string>
+    <string name="reporting_test">Enviar relatório de teste</string>
+    <string name="reporting_queued">Relatório na fila; o envio precisa de conexão.</string>
+</resources>

@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "inspectionDate": "2026-09-13",
+  "mode": "static-reference-inspection",
+  "targetUnitMatch": "unverified",
+  "serviceVersion": "2.23.0711.1001",
+  "serviceVersionCode": 2123071110,
+  "evidence": [
+    {
+      "path": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.ms/190000000_com.syu.ms.apk",
+      "sha256": "4b428302e29c9e2503ccf7844a127f5bed59450736317629aa42b5eb35a9b577",
+      "bytes": 7128768
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libjni_serial.so",
+      "sha256": "5e995f8178cf2236e50a9a6cf8f7c35b1fd2470b2fe5c5c35f6e983295c42c6e",
+      "bytes": 15168
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libjni_i2c.so",
+      "sha256": "2274a310d18753c64cf50d3b11364f3269119a914241c53e6647d00c647bd7ea",
+      "bytes": 15136
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libsqlcontrol.so",
+      "sha256": "4e1c46732b160f1f64b202cfa40b0cad7566e10172785f071cd25c125f3a687a",
+      "bytes": 27664
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libsyu_jni.so",
+      "sha256": "d486c4b8053442239b8ac4b04f2e4665c8d6758b86b8eb420038afb0ef8a5107",
+      "bytes": 107656
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/vendor-files/ueventd.rc",
+      "sha256": "e923cc091dcce8c24e4626bbf325a60320dd23219254369e1dd9a0da7c2bd269",
+      "bytes": 9884
+    },
+    {
+      "path": "artifacts/joying-uis7862/extracted/vendor-files/etc/selinux/vendor_file_contexts",
+      "sha256": "03a6287a08b56b09ad8739f31914d988fd80d5c3560b3af545c2576e4554d8be",
+      "bytes": 26900
+    }
+  ],
+  "moduleActions": 19,
+  "toolkitModules": [
+    {
+      "id": 0,
+      "action": "com.syu.ms.main",
+      "factory": "Lp0/i;->V2()Lp0/i;"
+    },
+    {
+      "id": 1,
+      "action": "com.syu.ms.radio",
+      "factory": "Lr0/i;->O2()Lr0/i;"
+    },
+    {
+      "id": 2,
+      "action": "com.syu.ms.bt",
+      "factory": "Le0/g;->P2()Le0/g;"
+    },
+    {
+      "id": 3,
+      "action": "com.syu.ms.dvd",
+      "factory": "Lj0/i;->O2()Lj0/i;"
+    },
+    {
+      "id": 4,
+      "action": "com.syu.ms.sound",
+      "factory": "Lt0/i;->F2()Lt0/i;"
+    },
+    {
+      "id": 5,
+      "action": "com.syu.ms.ipod",
+      "factory": "Lo0/a;->O2()Lo0/a;"
+    },
+    {
+      "id": 6,
+      "action": "com.syu.ms.tv",
+      "factory": "Lx0/h;->O2()Lx0/h;"
+    },
+    {
+      "id": 7,
+      "action": "com.syu.ms.canbus",
+      "factory": "Lf0/xp;->S2()Lf0/xp;"
+    },
+    {
+      "id": 8,
+      "action": "com.syu.ms.tpms",
+      "factory": "Lw0/c;->F2()Lw0/c;"
+    },
+    {
+      "id": 9,
+      "action": "com.syu.ms.dvr",
+      "factory": "Lk0/e;->E2()Lk0/e;"
+    },
+    {
+      "id": 10,
+      "action": "com.syu.ms.steer",
+      "factory": "Lu0/e;->E2()Lu0/e;"
+    },
+    {
+      "id": 11,
+      "action": "com.syu.ms.customer",
+      "factory": "Li0/f4;->getInstance()Li0/f4;"
+    },
+    {
+      "id": 12,
+      "action": "com.syu.ms.obd",
+      "factory": "Lq0/h;->E2()Lq0/h;"
+    },
+    {
+      "id": 13,
+      "action": "com.syu.ms.test",
+      "factory": "Lv0/a;->E2()Lv0/a;"
+    },
+    {
+      "id": 14,
+      "action": "com.syu.ms.can.up",
+      "factory": "Lh0/e;->H2()Lh0/e;"
+    },
+    {
+      "id": 15,
+      "action": "com.syu.ms.amp",
+      "factory": "Ld0/g;->S2()Ld0/g;"
+    },
+    {
+      "id": 16,
+      "action": "com.syu.ms.emitter",
+      "factory": "Ll0/e;->E2()Ll0/e;"
+    },
+    {
+      "id": 17,
+      "action": "com.syu.ms.gsensor",
+      "factory": "Ln0/f;->E2()Ln0/f;"
+    },
+    {
+      "id": 18,
+      "action": "com.syu.ms.gestrue",
+      "factory": "Lm0/a;->O2()Lm0/a;"
+    },
+    {
+      "id": 19,
+      "action": null,
+      "factory": "Ls0/b;->O2()Ls0/b;"
+    }
+  ],
+  "soundDrivers": [
+    {
+      "soundModuleId": 1,
+      "class": "Lmodule/sound/C3702;"
+    },
+    {
+      "soundModuleId": 2,
+      "class": "Lmodule/sound/C8288;"
+    },
+    {
+      "soundModuleId": 3,
+      "class": "Lt0/d;"
+    },
+    {
+      "soundModuleId": 4,
+      "class": "Lt0/j;"
+    },
+    {
+      "soundModuleId": 5,
+      "class": "Lt0/b;"
+    },
+    {
+      "soundModuleId": 6,
+      "class": "Lmodule/sound/C32107;"
+    },
+    {
+      "soundModuleId": 7,
+      "class": "Lmodule/sound/a;"
+    },
+    {
+      "soundModuleId": 8,
+      "class": "Lmodule/sound/C2313;"
+    },
+    {
+      "soundModuleId": 9,
+      "class": "Lmodule/sound/C7729;"
+    },
+    {
+      "soundModuleId": 10,
+      "class": "Lmodule/sound/C32107S;"
+    },
+    {
+      "soundModuleId": 11,
+      "class": "Lmodule/sound/C7604;"
+    },
+    {
+      "soundModuleId": 12,
+      "class": "Lmodule/sound/DU561;"
+    },
+    {
+      "soundModuleId": 13,
+      "class": "Lmodule/sound/C7738;"
+    },
+    {
+      "soundModuleId": 14,
+      "class": "Lmodule/sound/C7738FC;"
+    }
+  ],
+  "notes": [
+    "Module 19 has a toolkit factory but no ModuleService action in the inspected map.",
+    "Service and sound module IDs are different namespaces.",
+    "Factories advertise implementations; they do not identify hardware installed in the user unit.",
+    "gestrue is the vendor action spelling."
+  ]
+}

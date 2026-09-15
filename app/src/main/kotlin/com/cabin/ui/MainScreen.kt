@@ -141,6 +141,10 @@ fun MainScreen(
     onRefreshClimate: (() -> Unit)? = null,
     onResetConnection: (() -> Unit)? = null,
 ) {
+    if (rememberJoyingCarPlayAvailable()) {
+        JoyingCarPlayScreen(onOpenLauncher ?: onOpenDashboard)
+        return
+    }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val resources = androidx.compose.ui.platform.LocalResources.current
@@ -157,7 +161,7 @@ fun MainScreen(
     var connectionState by remember(cabinManager) { mutableStateOf(CabinManager.State.DISCONNECTED) }
     var statusText by remember(cabinManager) { mutableStateOf(resources.getString(R.string.main_connect_adapter)) }
     var isResetting by remember(cabinManager) { mutableStateOf(false) }
-    val surfaceState = rememberVideoSurfaceState()
+    val surfaceState = rememberVideoSurfaceState(cabinManager)
     var isAndroidAuto by remember(cabinManager) { mutableStateOf(false) }
     var aaCropParams by remember(cabinManager) { mutableStateOf<CabinManager.AaCropParams?>(null) }
 
@@ -239,6 +243,7 @@ fun MainScreen(
     // manager swap, so a new Surface with the same manager (AA resize) will re-initialize but will
     // NOT re-invoke start() — preserving the session.
     LaunchedEffect(
+        cabinManager,
         surfaceState.surface,
         surfaceState.width,
         surfaceState.height,
@@ -456,12 +461,12 @@ fun MainScreen(
                             logInfo("[UI_SURFACE] Surface available: ${width}x$height (isAA=$isAndroidAuto)", tag = "UI")
                             surfaceState.onSurfaceAvailable(surface, width, height)
                         },
-                        onSurfaceDestroyed = {
+                        onSurfaceDestroyed = { destroyedSurface ->
                             logInfo("[UI_SURFACE] Surface destroyed", tag = "UI")
-                            // Also called on composable disposal; duplicate teardown is harmless.
-                            if (cabinManager.state == CabinManager.State.STREAMING) touchState.cancel() else touchState.clear()
-                            surfaceState.onSurfaceDestroyed()
-                            cabinManager.onSurfaceDestroyed()
+                            if (surfaceState.onSurfaceDestroyed(destroyedSurface)) {
+                                if (cabinManager.state == CabinManager.State.STREAMING) touchState.cancel() else touchState.clear()
+                            }
+                            cabinManager.onSurfaceDestroyed(destroyedSurface)
                         },
                         onSurfaceSizeChanged = { width, height ->
                             logInfo("[UI_SURFACE] Surface size changed: ${width}x$height", tag = "UI")

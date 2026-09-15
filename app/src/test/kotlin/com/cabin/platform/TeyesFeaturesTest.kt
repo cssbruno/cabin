@@ -32,8 +32,20 @@ class TeyesFeaturesTest {
         router = TeyesKeyRouter(preferences, nowMillis = { nowMillis }) { performed.add(it) }
     }
 
+    @Test fun `new profiles default dark and saved appearance choices survive reload`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        for (slot in 0..2) {
+            preferences.select(slot)
+            assertEquals(TeyesAppearance.NIGHT, preferences.profile.value.appearance)
+        }
+        for (choice in TeyesAppearance.entries) {
+            preferences.update { it.copy(appearance = choice) }
+            assertEquals(choice, TeyesFeaturePreferences(context).profile.value.appearance)
+        }
+    }
+
     @Test fun `new audio mappings run once on release and ignore held repeats`() {
-        for (action in listOf(TeyesKeyAction.VOLUME_UP, TeyesKeyAction.VOLUME_DOWN, TeyesKeyAction.MUTE)) {
+        for (action in listOf(TeyesKeyAction.LAUNCHER, TeyesKeyAction.VOLUME_UP, TeyesKeyAction.VOLUME_DOWN, TeyesKeyAction.MUTE)) {
             preferences.mapKey(KeyEvent.KEYCODE_F1, action)
             val before = performed.size
             assertTrue(router.dispatch(event(KeyEvent.ACTION_DOWN)))

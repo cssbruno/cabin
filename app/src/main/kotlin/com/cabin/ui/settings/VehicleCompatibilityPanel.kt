@@ -23,6 +23,7 @@ internal fun VehicleCompatibilityPanel(vehicle: TeyesClimateState) {
     val data = vehicle.syuVehicle
     SettingsDisclosure(stringResource(R.string.compat_title), profile.toString()) {
         val groups = listOf(
+            Triple(R.string.honda_panel_title, profile in SyuHondaPanelProtocol.profiles, data.factoryControls.keys.any { it.group == SyuFactoryGroup.HONDA_PANEL }),
             Triple(R.string.energy_seat_preset, profile == SyuFactoryProtocol.SEAT_PRESET_PROFILE, data.factoryControls.containsKey(SyuFactoryControl.SEAT_PRESET)),
             Triple(R.string.energy_flow, profile == SyuFactoryProtocol.HYBRID_PROFILE, data.energy?.batteryPercent != null || data.energy?.direction != null),
             Triple(R.string.energy_settings, profile == SyuFactoryProtocol.HYBRID_PROFILE, data.factoryControls.keys.any { it.group == SyuFactoryGroup.CHARGING }),

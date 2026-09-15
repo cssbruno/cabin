@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="honda_turn_by_turn">Orientações de navegação</string>
+    <string name="honda_warning_message">Mensagens de aviso</string>
+    <string name="honda_panel_config">Configuração do painel</string>
+    <string name="honda_reverse_tone">Aviso sonoro de ré</string>
+    <string name="honda_speed_tips">Lembretes de velocidade</string>
+    <string name="honda_messages">Lembretes de mensagens</string>
+    <string name="honda_idle_stop_tips">Lembretes do sistema start-stop</string>
+    <string name="honda_eco_backlight">Iluminação de fundo econômica</string>
+    <string name="honda_traffic_signs">Exibição de sinais de trânsito</string>
+    <string name="honda_alarm_volume">Volume dos avisos</string>
+    <string name="honda_trip_b_reset">Condição para zerar percurso B</string>
+    <string name="honda_trip_a_reset">Condição para zerar percurso A</string>
+    <string name="honda_outside_temp">Ajuste da temperatura externa</string>
+    <string name="honda_panel_title">Painel de instrumentos Honda</string>
+    <string name="honda_panel_detail">Configurações informadas pelo veículo conectado</string>
+    <string name="honda_panel_type">Tipo %1$d</string>
+    <string name="honda_low">Baixo</string>
+    <string name="honda_medium">Médio</string>
+    <string name="honda_high">Alto</string>
+    <string name="honda_refuel">Ao abastecer</string>
+    <string name="honda_ignition_off">Ao desligar a ignição</string>
+    <string name="honda_manual">Manual</string>
+    <string name="honda_distance_units">Unidades de velocidade e distância</string>
+    <string name="honda_tachometer_display">Exibir conta-giros</string>
+    <string name="honda_tachometer_setting">Configuração do conta-giros (opção do fabricante)</string>
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="vehicle_key_launcher">Accueil</string>
+    <string name="vehicle_radio">Radio</string>
+    <string name="vehicle_close">Fermer</string>
+    <string name="vehicle_radio_note">Le réglage utilise le service radio installé. Ouvrez la radio d’origine pour activer le son.</string>
+    <string name="vehicle_radio_waiting">En attente des données de la station…</string>
+    <string name="vehicle_seek_down">Rechercher en arrière</string>
+    <string name="vehicle_seek_up">Rechercher en avant</string>
+    <string name="vehicle_presets">Favoris</string>
+    <string name="vehicle_save_preset">Enregistrer</string>
+    <string name="vehicle_factory_radio">Ouvrir la radio d’origine</string>
+    <string name="vehicle_replace_preset">Remplacer le favori %1$d par la station actuelle ?</string>
+    <string name="vehicle_compat_profile">Profil du véhicule : %1$s</string>
+    <string name="vehicle_compat_counts">Portes : %1$d/6 · Commandes de climatisation : %2$d · Réglages du véhicule : %3$d · Pneus : %4$d/4</string>
+    <string name="vehicle_compat_battery">Batterie : %1$s</string>
+    <string name="vehicle_compat_fields">IDs des champs récents : %1$s</string>
+    <string name="vehicle_compat_note">Les nombres indiquent les données et commandes vérifiées actuelles. Les données absentes de carburant, température ou batterie restent indisponibles, jamais à zéro.</string>
+</resources>

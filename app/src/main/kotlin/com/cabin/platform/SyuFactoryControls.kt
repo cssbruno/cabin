@@ -1,8 +1,24 @@
 package com.cabin.platform
 
 /** Source-backed settings only; these do not expose an arbitrary CAN command API. */
-enum class SyuFactoryGroup { CAMERA, MIRRORS, PARKING, CHARGING, AMBIENT, SEAT_MEMORY }
+enum class SyuFactoryGroup { CAMERA, MIRRORS, PARKING, CHARGING, AMBIENT, SEAT_MEMORY, HONDA_PANEL }
 enum class SyuFactoryControl(val group: SyuFactoryGroup, val field: Int, val command: Int, val maximum: Int) {
+    HONDA_TURN_BY_TURN(SyuFactoryGroup.HONDA_PANEL, 109, 106, 1),
+    HONDA_WARNING_MESSAGE(SyuFactoryGroup.HONDA_PANEL, 110, 106, 1),
+    HONDA_PANEL_CONFIG(SyuFactoryGroup.HONDA_PANEL, 111, 106, 2),
+    HONDA_REVERSE_TONE(SyuFactoryGroup.HONDA_PANEL, 88, 106, 1),
+    HONDA_SPEED_TIPS(SyuFactoryGroup.HONDA_PANEL, 65, 106, 1),
+    HONDA_MESSAGES(SyuFactoryGroup.HONDA_PANEL, 66, 106, 1),
+    HONDA_IDLE_STOP_TIPS(SyuFactoryGroup.HONDA_PANEL, 67, 106, 1),
+    HONDA_ECO_BACKLIGHT(SyuFactoryGroup.HONDA_PANEL, 68, 106, 1),
+    HONDA_TRAFFIC_SIGNS(SyuFactoryGroup.HONDA_PANEL, 102, 106, 1),
+    HONDA_ALARM_VOLUME(SyuFactoryGroup.HONDA_PANEL, 69, 106, 2),
+    HONDA_TRIP_B_RESET(SyuFactoryGroup.HONDA_PANEL, 70, 106, 2),
+    HONDA_TRIP_A_RESET(SyuFactoryGroup.HONDA_PANEL, 71, 106, 2),
+    HONDA_OUTSIDE_TEMP(SyuFactoryGroup.HONDA_PANEL, 72, 106, 6),
+    HONDA_DISTANCE_UNITS(SyuFactoryGroup.HONDA_PANEL, 77, 105, 1),
+    HONDA_TACHOMETER_DISPLAY(SyuFactoryGroup.HONDA_PANEL, 78, 105, 1),
+    HONDA_TACHOMETER_SETTING(SyuFactoryGroup.HONDA_PANEL, 87, 105, 1),
     CAMERA_MODE(SyuFactoryGroup.CAMERA, 134, 15, 2),
     MIRROR_SYNC(SyuFactoryGroup.MIRRORS, 148, 67, 1),
     MIRROR_REVERSE_DIP(SyuFactoryGroup.MIRRORS, 149, 68, 1),
@@ -35,6 +51,7 @@ internal object SyuFactoryProtocol {
     )
 
     fun controls(profile: Int): Set<SyuFactoryControl> = when (profile) {
+        in SyuHondaPanelProtocol.profiles -> SyuHondaPanelProtocol.controls(profile)
         in cameraProfiles -> setOf(SyuFactoryControl.CAMERA_MODE)
         SEAT_PRESET_PROFILE -> setOf(SyuFactoryControl.SEAT_PRESET)
         AMBIENT_PROFILE -> setOf(SyuFactoryControl.AMBIENT_PALETTE)
@@ -53,7 +70,9 @@ internal object SyuFactoryProtocol {
     fun decode(profile: Int, readings: Map<Int, Int>): Map<SyuFactoryControl, Int> =
         controls(profile).mapNotNull { control ->
             val raw = readings[field(profile, control)] ?: return@mapNotNull null
-            if (control == SyuFactoryControl.SEAT_PRESET) {
+            if (control.group == SyuFactoryGroup.HONDA_PANEL) {
+                SyuHondaPanelProtocol.decode(control, raw)?.let { control to it }
+            } else if (control == SyuFactoryControl.SEAT_PRESET) {
                 raw.takeIf { it in 0..2 }?.let { control to it }
             } else if (control.group == SyuFactoryGroup.AMBIENT) {
                 raw.takeIf { it in 1..2 }?.let { control to it - 1 }
@@ -86,6 +105,7 @@ internal object SyuFactoryProtocol {
 
     fun frame(profile: Int, control: SyuFactoryControl, value: Int): Pair<Int, List<Int>>? {
         if (control !in controls(profile) || value !in 0..control.maximum) return null
+        if (control.group == SyuFactoryGroup.HONDA_PANEL) return SyuHondaPanelProtocol.frame(profile, control, value)
         if (control == SyuFactoryControl.SEAT_PRESET) return 1 to listOf(152, value)
         if (control.group == SyuFactoryGroup.AMBIENT) return 109 to listOf(1, value + 1)
         if (control.group == SyuFactoryGroup.CHARGING) return 145 to when (control) {

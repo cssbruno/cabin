@@ -12,16 +12,14 @@ class VehicleGaugeWidgetsTest {
         vehicleGaugeReading(gauge, v, units, Locale.US)
 
     @Test fun `fresh TEYES fields display with converted units`() {
-        assertEquals("100", read(VehicleGauge.SPEED).value)
-        assertEquals("62", read(VehicleGauge.SPEED, units = MeasurementUnit.IMPERIAL).value)
         assertEquals("2400", read(VehicleGauge.RPM).value)
         assertEquals("65", read(VehicleGauge.OIL).value)
         assertFalse(read(VehicleGauge.SERVICE).available)
     }
     @Test fun `disconnected expired and unadvertised fields are hidden`() {
-        assertFalse(read(VehicleGauge.SPEED, vehicle.copy(connected = false)).available)
+        assertFalse(read(VehicleGauge.RPM, vehicle.copy(connected = false)).available)
         assertFalse(read(VehicleGauge.RPM, vehicle.copy(health = TeyesTelemetryHealth.STALE)).available)
-        assertFalse(read(VehicleGauge.SPEED, vehicle.copy(availableCodes = emptySet())).available)
+        assertFalse(read(VehicleGauge.RPM, vehicle.copy(availableCodes = emptySet())).available)
         assertFalse(read(VehicleGauge.OIL, vehicle.copy(oilLifePercent = 101)).available)
         assertFalse(read(VehicleGauge.RPM, vehicle.copy(engineRpm = 10001)).available)
     }
@@ -37,9 +35,9 @@ class VehicleGaugeWidgetsTest {
     @Test fun `known profile variants retain only their verified dialect readings`() {
         for (profile in listOf(1048874, 1114410, 196906, 262442, 262465)) {
             val values = TeyesClimateControlPolicy.climateValues(profile, mapOf(89 to 100, 90 to 2400), TeyesVehicleDataLayout.LEGACY)
-            assertTrue(read(VehicleGauge.SPEED, vehicle.copy(profileId = profile, availableCodes = values.keys)).available)
+            assertTrue(read(VehicleGauge.RPM, vehicle.copy(profileId = profile, availableCodes = values.keys)).available)
         }
         val reference = TeyesClimateControlPolicy.climateValues(1048874, mapOf(89 to 1, 90 to 2), TeyesVehicleDataLayout.CIVIC_0298)
-        assertFalse(read(VehicleGauge.SPEED, vehicle.copy(profileId = 1048874, availableCodes = reference.keys)).available)
+        assertFalse(read(VehicleGauge.RPM, vehicle.copy(profileId = 1048874, availableCodes = reference.keys)).available)
     }
 }

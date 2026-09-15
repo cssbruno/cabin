@@ -19,6 +19,12 @@ android {
         versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1006
         versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.0-alpha.5"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
+        val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
+        require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
+        buildConfigField("String", "SENTRY_DSN", "\"$sentryDsn\"")
+        val mappingUuid = providers.environmentVariable("CABIN_SENTRY_MAPPING_UUID").orElse("").get()
+        require(mappingUuid.isEmpty() || mappingUuid.matches(Regex("[a-fA-F0-9-]{36}"))) { "Invalid mapping UUID" }
+        buildConfigField("String", "SENTRY_MAPPING_UUID", "\"$mappingUuid\"")
         manifestPlaceholders["clusterIconAuthority"] = "$ownerApplicationId.teyes.ClusterIconContentProvider"
         buildConfigField("String", "CLUSTER_ICON_AUTHORITY", "\"$ownerApplicationId.teyes.ClusterIconContentProvider\"")
         manifestPlaceholders["automotiveFeatureRequired"] = "false"
@@ -119,6 +125,7 @@ detekt {
 
 dependencies {
     implementation(project(":diagnostics"))
+    implementation("io.sentry:sentry-android-core:8.56.0")
     // Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 

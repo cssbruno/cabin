@@ -1,0 +1,7 @@
+<resources>
+    <string name="reporting_title">Compartir informes de fallos</string>
+    <string name="reporting_detail">Opcional: enviar fallos, bloqueos, versiones del app y Android y etapas de conexión a Sentry. Sin capturas, audio, GPS, datos del teléfono ni registros sin filtrar. Al desactivar se borra la cola; los informes recibidos permanecen en Sentry.</string>
+    <string name="reporting_unconfigured">Informes no disponibles en esta versión.</string>
+    <string name="reporting_test">Enviar informe de prueba</string>
+    <string name="reporting_queued">Informe en cola; el envío requiere conexión.</string>
+</resources>

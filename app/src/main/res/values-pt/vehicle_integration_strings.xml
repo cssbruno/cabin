@@ -1,0 +1,18 @@
+<resources>
+    <string name="vehicle_key_launcher">Launcher</string>
+    <string name="vehicle_radio">Rádio</string>
+    <string name="vehicle_close">Fechar</string>
+    <string name="vehicle_radio_note">A sintonia usa o serviço de rádio instalado. Abra o rádio de fábrica para ativar o áudio.</string>
+    <string name="vehicle_radio_waiting">Aguardando leituras da estação…</string>
+    <string name="vehicle_seek_down">Buscar abaixo</string>
+    <string name="vehicle_seek_up">Buscar acima</string>
+    <string name="vehicle_presets">Favoritos</string>
+    <string name="vehicle_save_preset">Salvar</string>
+    <string name="vehicle_factory_radio">Abrir rádio de fábrica</string>
+    <string name="vehicle_replace_preset">Substituir o favorito %1$d pela estação atual?</string>
+    <string name="vehicle_compat_profile">Perfil do veículo: %1$s</string>
+    <string name="vehicle_compat_counts">Portas: %1$d/6 · Controles de clima: %2$d · Ajustes do veículo: %3$d · Pneus: %4$d/4</string>
+    <string name="vehicle_compat_battery">Bateria: %1$s</string>
+    <string name="vehicle_compat_fields">IDs de campos recentes: %1$s</string>
+    <string name="vehicle_compat_note">Os totais mostram leituras e controles verificados atuais. Dados ausentes de combustível, temperatura ou bateria ficam indisponíveis, nunca como zero.</string>
+</resources>

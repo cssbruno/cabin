@@ -15,12 +15,14 @@ data class TeyesConfigurationSnapshot(
     val projection: ProjectionPreferencesState? = null,
     val measurementUnit: MeasurementUnit? = null,
     val longKeys: Map<Int, TeyesKeyAction> = emptyMap(),
+    val keyApps: Map<Int, String> = emptyMap(),
+    val longKeyApps: Map<Int, String> = emptyMap(),
 )
 
 /** Portable app preferences only. Never includes access tokens, logs, adapter or CAN configuration. */
 object TeyesConfigurationBackup {
     const val MAX_BYTES = 32_768
-    private const val SCHEMA = 3
+    private const val SCHEMA = 4
     private val componentPattern = Regex("[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)+/\\.?[A-Za-z_$][A-Za-z0-9_$]*(\\.[A-Za-z_$][A-Za-z0-9_$]*)*")
 
     fun validComponent(value: String): Boolean = value.length <= 512 && componentPattern.matches(value)
@@ -36,6 +38,10 @@ object TeyesConfigurationBackup {
         }
         require(snapshot.keys.size <= 64 && snapshot.keys.keys.all { TeyesKeyRouter.isMappable(it) }) { "Unsupported steering-wheel key." }
         require(snapshot.longKeys.size <= 64 && snapshot.longKeys.keys.all { TeyesKeyRouter.isMappable(it) }) { "Unsupported long-press key." }
+        listOf(snapshot.keyApps to snapshot.keys, snapshot.longKeyApps to snapshot.longKeys).forEach { (apps, actions) ->
+            require(apps.size + actions.size <= 64 && apps.keys.all(TeyesKeyRouter::isMappable)) { "Unsupported app key." }
+            require(apps.values.all(::validComponent) && apps.keys.none(actions::containsKey)) { "Invalid or conflicting app mapping." }
+        }
         require(snapshot.shortcuts.values.all(::validComponent)) { "Invalid app shortcut." }
         require((snapshot.projection == null) == (snapshot.measurementUnit == null)) { "Incomplete presentation settings." }
     }
@@ -74,6 +80,8 @@ object TeyesConfigurationBackup {
                 snapshot.keys.toSortedMap().forEach { (code, action) -> put(JSONObject().put("code", code).put("action", action.name)) }
             })
             put("longKeys", JSONArray().apply { snapshot.longKeys.toSortedMap().forEach { (code, action) -> put(JSONObject().put("code", code).put("action", action.name)) } })
+            put("keyApps", appMappings(snapshot.keyApps))
+            put("longKeyApps", appMappings(snapshot.longKeyApps))
             put("shortcuts", JSONObject().apply { snapshot.shortcuts.forEach { (kind, component) -> put(kind.name, component) } })
         }.toString(2).also { require(it.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) { "Configuration is too large." } }
     }
@@ -99,7 +107,8 @@ object TeyesConfigurationBackup {
             require(schema in 1..SCHEMA) { "Unsupported backup version." }
             root.exactFields(setOf("format", "schema", "profiles", "keys", "shortcuts") +
                 (if (schema >= 2) setOf("projection", "measurementUnit") else emptySet()) +
-                (if (schema >= 3) setOf("longKeys") else emptySet()))
+                (if (schema >= 3) setOf("longKeys") else emptySet()) +
+                (if (schema >= 4) setOf("keyApps", "longKeyApps") else emptySet()))
             val parsedProjection = if (schema >= 2) {
                 val projection = root.get("projection") as? JSONObject ?: error("Projection settings must be an object.")
                 projection.exactFields(setOf("focusControls", "vehicleHud", "climateNoticeMode", "returnWhenReady", "controlSide"))
@@ -159,10 +168,30 @@ object TeyesConfigurationBackup {
                 val kind = TeyesShortcut.entries.firstOrNull { it.name == name } ?: error("Unknown shortcut kind.")
                 kind to shortcuts.string(name)
             }
-            return TeyesConfigurationSnapshot(parsedProfiles, parsedKeys.toMap(), parsedShortcuts, parsedProjection, parsedUnit, parsedLongKeys.toMap()).also(::validate)
+            return TeyesConfigurationSnapshot(parsedProfiles, parsedKeys.toMap(), parsedShortcuts, parsedProjection, parsedUnit, parsedLongKeys.toMap(),
+                if (schema >= 4) readAppMappings(root.getJSONArray("keyApps")) else emptyMap(),
+                if (schema >= 4) readAppMappings(root.getJSONArray("longKeyApps")) else emptyMap(),
+            ).also(::validate)
         } catch (error: Exception) {
             throw IllegalArgumentException("Invalid or unsupported Cabin backup: ${error.message.orEmpty().take(160)}", error)
         }
+    }
+
+    private fun appMappings(apps: Map<Int, String>) = JSONArray().apply {
+        apps.toSortedMap().forEach { (code, component) -> put(JSONObject().put("code", code).put("component", component)) }
+    }
+
+    private fun readAppMappings(array: JSONArray): Map<Int, String> {
+        require(array.length() <= 64)
+        val result = mutableMapOf<Int, String>()
+        repeat(array.length()) { index ->
+            val entry = array.getJSONObject(index)
+            entry.exactFields(setOf("code", "component"))
+            val code = entry.integer("code")
+            require(!result.containsKey(code)) { "Duplicate app key." }
+            result[code] = entry.string("component")
+        }
+        return result
     }
 
     private fun InputStream.readBytesBounded(): ByteArray {

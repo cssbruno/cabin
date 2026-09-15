@@ -3,6 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.NETWORK_STACK" />
+    <uses-permission android:name="android.permission.TETHER_PRIVILEGED" />
+    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
@@ -82,9 +93,11 @@
             <category android:name="android.intent.category.HOME" />
         </intent>
         <package android:name="com.syu.ms" />
+        <package android:name="com.syu.carlink" />
     </queries>
 
     <application
+        android:name="com.cabin.telemetry.CabinApplication"
         android:allowBackup="true"
         android:appCategory="audio"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -96,6 +109,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CabinNative"
         tools:targetApi="35">
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
         <service android:name="com.cabin.platform.CabinMediaListener"
             android:exported="true" android:label="@string/tools_media_access"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -110,6 +124,7 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
+            android:documentLaunchMode="never"
             android:resizeableActivity="true"
             android:theme="@style/Theme.CabinNative.Fullscreen"
             android:windowSoftInputMode="adjustResize">
@@ -191,6 +206,11 @@
             android:name=".background.CabinProjectionService"
             android:exported="false"
             android:foregroundServiceType="connectedDevice|location|microphone" />
+
+        <service
+            android:name=".joying.JoyingCarPlayService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback|connectedDevice" />
 
         <!-- Media3 MediaLibraryService for AAOS Integration.
              Dual intent-filter: the modern `androidx.media3.session.MediaLibraryService`
@@ -315,6 +335,9 @@
                 android:resource="@xml/file_paths_albumart" />
         </provider>
 
+        <provider android:name="com.cabin.reports.ReportFileProvider" android:authorities="${applicationId}.reports" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths_reports" />
+        </provider>
         <service android:name=".updates.UpdateJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true" />
         <provider android:name=".updates.UpdateFileProvider" android:authorities="${applicationId}.updates"
             android:exported="false" android:grantUriPermissions="true">

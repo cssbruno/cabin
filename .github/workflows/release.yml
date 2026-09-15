@@ -22,8 +22,24 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Install Android SDK
         run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
-      - name: Build signed APK (no tests)
+      - name: Run unit tests
+        run: ./gradlew :app:testDebugUnitTest :diagnostics:testDebugUnitTest --no-daemon --no-configuration-cache --console=plain
+      - name: Run native transport tests
+        run: |
+          cmake -S diagnostics/src/main/cpp -B /tmp/cabin-native-tests
+          cmake --build /tmp/cabin-native-tests
+          ctest --test-dir /tmp/cabin-native-tests --output-on-failure
+      - name: Save test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cabin-test-reports
+          path: |
+            app/build/reports/tests/
+            diagnostics/build/reports/tests/
+      - name: Build signed APK
         env:
+          CABIN_SENTRY_DSN: ${{ secrets.CABIN_SENTRY_DSN }}
           KEYSTORE_BASE64: ${{ secrets.CABIN_KEYSTORE_BASE64 }}
           CABIN_KEYSTORE_PASSWORD: ${{ secrets.CABIN_KEYSTORE_PASSWORD }}
           RELEASE_TAG: ${{ github.ref_name }}
@@ -37,6 +53,8 @@ jobs:
           chmod 600 "$CABIN_KEYSTORE_PATH"
           export CABIN_VERSION_NAME="${RELEASE_TAG#v}"
           export CABIN_VERSION_CODE="$(python3 tools/ci_version_code.py)"
+          export CABIN_SENTRY_MAPPING_UUID="$(python3 -c 'import uuid; print(uuid.uuid4())')"
+          printf '%s' "$CABIN_SENTRY_MAPPING_UUID" > sentry-mapping-uuid.txt
           chmod +x gradlew
           ./gradlew :app:assembleRelease --no-daemon --no-configuration-cache --console=plain
           cp app/build/outputs/apk/release/app-release.apk cabin.apk
@@ -64,6 +82,8 @@ jobs:
             cabin.apk
             cabin.apk.sha256
             update.json
+            app/build/outputs/mapping/release/mapping.txt
+            sentry-mapping-uuid.txt
             cabin-oem-integration.zip
             cabin-oem-integration.zip.sha256
       - name: Publish release

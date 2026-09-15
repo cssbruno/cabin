@@ -30,6 +30,7 @@ signing.properties
 **/tmp/
 *.class
 *.dex
+*.smali
 *.apk
 *.ap_
 *.aab
@@ -84,3 +85,15 @@ mempalace.yaml
 
 # Private release signing material
 .signing/
+
+# Generated downloads, firmware extracts and local captures
+/artifacts/
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]
+
+# Local Sentry credentials and downloaded setup tool
+**/sentry.properties
+**/.sentryclirc
+/sentry-wizard

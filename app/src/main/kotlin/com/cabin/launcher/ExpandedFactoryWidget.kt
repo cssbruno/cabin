@@ -41,6 +41,7 @@ internal fun ExpandedFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimate
     val colors = MaterialTheme.colorScheme
     Column(Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         VehicleWidgetHeading(when (group) {
+            SyuFactoryGroup.HONDA_PANEL -> R.string.honda_panel_title
             SyuFactoryGroup.SEAT_MEMORY -> R.string.energy_seat_preset
             SyuFactoryGroup.CHARGING -> R.string.energy_settings
             SyuFactoryGroup.AMBIENT -> R.string.energy_palette
@@ -48,6 +49,7 @@ internal fun ExpandedFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimate
             SyuFactoryGroup.MIRRORS -> R.string.vehicle_mirror_settings
             SyuFactoryGroup.PARKING -> R.string.vehicle_parking_settings
         }, when (group) {
+            SyuFactoryGroup.HONDA_PANEL -> Icons.Default.DirectionsCar
             SyuFactoryGroup.SEAT_MEMORY -> Icons.Default.AirlineSeatReclineNormal
             SyuFactoryGroup.CHARGING -> Icons.Default.EvStation
             SyuFactoryGroup.AMBIENT -> Icons.Default.Palette
@@ -90,7 +92,7 @@ internal fun ExpandedFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimate
                 val current = vehicle.syuVehicle.factoryControls[control]?.takeIf { vehicle.connected }
                 val enabled = !moving && current != null && onChange != null
                 Surface(Modifier.weight(1f).fillMaxWidth(), shape = RoundedCornerShape(17.dp), color = colors.surfaceContainerHigh.copy(alpha = .65f)) {
-                    if (control.maximum == 1) Row(Modifier.fillMaxSize().padding(horizontal = 14.dp), verticalAlignment = Alignment.CenterVertically,
+                    if (control.maximum == 1 && control != SyuFactoryControl.HONDA_DISTANCE_UNITS) Row(Modifier.fillMaxSize().padding(horizontal = 14.dp), verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Icon(when (control) {
                             SyuFactoryControl.RAIN_WIPERS -> Icons.Default.WaterDrop

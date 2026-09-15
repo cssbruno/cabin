@@ -141,32 +141,8 @@ fun TeyesDashboard(
     val readings = teyesVehicleReadings(vehicle)
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
-    var exportStatus by remember { mutableStateOf("") }
-    var pendingReport by remember { mutableStateOf<String?>(null) }
     var previewReport by remember { mutableStateOf<String?>(null) }
     val shortcuts = remember(revision) { teyesVisibleShortcuts(TeyesShortcut.entries.associateWith(preferences::shortcut)) }
-    val export =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-            val report = pendingReport
-            pendingReport = null
-            if (uri != null && report != null && !saving) {
-                saving = true
-                scope.launch {
-                    try {
-                        withContext(Dispatchers.IO) {
-                            checkNotNull(context.contentResolver.openOutputStream(uri, "wt")).use { it.write(report.toByteArray(Charsets.UTF_8)) }
-                        }
-                        exportStatus = resources.getString(R.string.hub_report_saved)
-                    } catch (cancelled: CancellationException) {
-                        throw cancelled
-                    } catch (_: Exception) {
-                        exportStatus = resources.getString(R.string.hub_save_failed)
-                    } finally {
-                        saving = false
-                    }
-                }
-            }
-        }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -190,8 +166,7 @@ fun TeyesDashboard(
                 moving = moving,
                 speedKnown = speedKnown,
                 climatePanelAvailable = onClimate != null,
-                exportBusy = saving || pendingReport != null || previewReport != null,
-                exportStatus = exportStatus,
+                exportBusy = saving || previewReport != null,
             ),
         actions =
             TeyesDashboardActions(
@@ -217,8 +192,17 @@ fun TeyesDashboard(
                 retryVehicle = { onParkedAction(onRetryVehicle) },
                 exportReport = {
                     onParkedAction {
-                        // Capture current local observations before opening the document picker.
-                        previewReport = TeyesDiagnostics.encode(projection, vehicle, shortcuts.size, Build.VERSION.SDK_INT)
+                        if (!saving && previewReport == null) {
+                            saving = true
+                            scope.launch {
+                                try {
+                                    val framework = withContext(Dispatchers.IO) { com.cabin.platform.SyuFrameworkProbe.inspect() }
+                                    previewReport = TeyesDiagnostics.encode(projection, vehicle, shortcuts.size, Build.VERSION.SDK_INT, framework)
+                                } finally {
+                                    saving = false
+                                }
+                            }
+                        }
                     }
                 },
             ),
@@ -228,14 +212,8 @@ fun TeyesDashboard(
             report = report,
             onSave = {
                 onParkedAction {
-                    pendingReport = report
                     previewReport = null
-                    try {
-                        export.launch("cabin-health.json")
-                    } catch (_: RuntimeException) {
-                        pendingReport = null
-                        exportStatus = resources.getString(R.string.hub_picker_unavailable)
-                    }
+                    com.cabin.reports.ReportExport.show(context, "cabin-health.json", report)
                 }
             },
             onCancel = { previewReport = null },
@@ -607,6 +585,7 @@ private fun HealthCard(
                 },
                 style = MaterialTheme.typography.bodyMedium,
             )
+            VehicleCompatibilityDetails(model.vehicle)
             val oilLife = teyesVehicleSettingsReadings(model.vehicle, model.measurementUnit).oilLife
             Text(stringResource(R.string.hub_oil_life_value, oilLife.takeUnless { it == "—" } ?: stringResource(R.string.state_unavailable)), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.hub_oil_service_value, teyesOilServiceReading(model.vehicle, model.measurementUnit).takeUnless { it == "—" } ?: stringResource(R.string.state_unavailable)), style = MaterialTheme.typography.bodyMedium)

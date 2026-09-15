@@ -1,0 +1,18 @@
+<resources>
+    <string name="vehicle_key_launcher">Launcher</string>
+    <string name="vehicle_radio">Radio</string>
+    <string name="vehicle_close">Close</string>
+    <string name="vehicle_radio_note">Tuning uses the installed radio service. Open the factory radio app to activate radio audio.</string>
+    <string name="vehicle_radio_waiting">Waiting for station readings…</string>
+    <string name="vehicle_seek_down">Seek down</string>
+    <string name="vehicle_seek_up">Seek up</string>
+    <string name="vehicle_presets">Presets</string>
+    <string name="vehicle_save_preset">Save</string>
+    <string name="vehicle_factory_radio">Open factory radio</string>
+    <string name="vehicle_replace_preset">Replace preset %1$d with the current station?</string>
+    <string name="vehicle_compat_profile">Vehicle profile: %1$s</string>
+    <string name="vehicle_compat_counts">Doors: %1$d/6 · Climate controls: %2$d · Vehicle settings: %3$d · Tyres: %4$d/4</string>
+    <string name="vehicle_compat_battery">Battery: %1$s</string>
+    <string name="vehicle_compat_fields">Fresh field IDs: %1$s</string>
+    <string name="vehicle_compat_note">Counts show current verified readings and controls. Missing fuel, temperature or battery data is unavailable, never zero.</string>
+</resources>

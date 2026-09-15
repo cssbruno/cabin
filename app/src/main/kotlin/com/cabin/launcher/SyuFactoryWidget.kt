@@ -18,6 +18,23 @@ import com.cabin.platform.*
 import kotlinx.coroutines.launch
 
 internal fun SyuFactoryControl.title() = when (this) {
+    SyuFactoryControl.HONDA_TURN_BY_TURN -> R.string.honda_turn_by_turn
+    SyuFactoryControl.HONDA_WARNING_MESSAGE -> R.string.honda_warning_message
+    SyuFactoryControl.HONDA_PANEL_CONFIG -> R.string.honda_panel_config
+    SyuFactoryControl.HONDA_REVERSE_TONE -> R.string.honda_reverse_tone
+    SyuFactoryControl.HONDA_SPEED_TIPS -> R.string.honda_speed_tips
+    SyuFactoryControl.HONDA_MESSAGES -> R.string.honda_messages
+    SyuFactoryControl.HONDA_IDLE_STOP_TIPS -> R.string.honda_idle_stop_tips
+    SyuFactoryControl.HONDA_ECO_BACKLIGHT -> R.string.honda_eco_backlight
+    SyuFactoryControl.HONDA_TRAFFIC_SIGNS -> R.string.honda_traffic_signs
+    SyuFactoryControl.HONDA_ALARM_VOLUME -> R.string.honda_alarm_volume
+    SyuFactoryControl.HONDA_TRIP_B_RESET -> R.string.honda_trip_b_reset
+    SyuFactoryControl.HONDA_TRIP_A_RESET -> R.string.honda_trip_a_reset
+    SyuFactoryControl.HONDA_OUTSIDE_TEMP -> R.string.honda_outside_temp
+    SyuFactoryControl.HONDA_DISTANCE_UNITS -> R.string.honda_distance_units
+    SyuFactoryControl.HONDA_TACHOMETER_DISPLAY -> R.string.honda_tachometer_display
+    SyuFactoryControl.HONDA_TACHOMETER_SETTING -> R.string.honda_tachometer_setting
+
     SyuFactoryControl.SEAT_PRESET -> R.string.energy_seat_preset
     SyuFactoryControl.CHARGE_CURRENT -> R.string.energy_current_limit
     SyuFactoryControl.CHARGE_TEMPERATURE -> R.string.energy_temperature
@@ -62,7 +79,7 @@ private fun CompactFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateSt
                     verticalArrangement = Arrangement.Center) {
                     Text(stringResource(control.title()), maxLines = 1, overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.labelMedium)
-                    if (control.maximum == 1 && control != SyuFactoryControl.AMBIENT_PALETTE) {
+                    if (control.maximum == 1 && control !in setOf(SyuFactoryControl.AMBIENT_PALETTE, SyuFactoryControl.HONDA_DISTANCE_UNITS)) {
                         TextButton(onClick = { onParkedAction { current?.let { onChange?.invoke(control, 1 - it) } } },
                             enabled = enabled, modifier = Modifier.heightIn(min = 56.dp)) {
                             Text(if (current == null) "—" else stringResource(if (current == 1) R.string.climate_state_on else R.string.interface_state_off))
@@ -102,7 +119,7 @@ private fun CompactFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateSt
 internal fun SyuFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateState, moving: Boolean,
     onChange: ((SyuFactoryControl, Int) -> Unit)?, onParkedAction: (() -> Unit) -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val expandedHeight = when (group) { SyuFactoryGroup.CAMERA -> 380.dp; SyuFactoryGroup.MIRRORS -> 440.dp; SyuFactoryGroup.PARKING -> 500.dp; SyuFactoryGroup.CHARGING -> 420.dp; SyuFactoryGroup.AMBIENT -> 500.dp; SyuFactoryGroup.SEAT_MEMORY -> 500.dp }
+        val expandedHeight = when (group) { SyuFactoryGroup.CAMERA -> 380.dp; SyuFactoryGroup.MIRRORS -> 440.dp; SyuFactoryGroup.PARKING -> 500.dp; SyuFactoryGroup.CHARGING -> 420.dp; SyuFactoryGroup.AMBIENT -> 500.dp; SyuFactoryGroup.SEAT_MEMORY -> 500.dp; SyuFactoryGroup.HONDA_PANEL -> 700.dp }
         if (group !in setOf(SyuFactoryGroup.AMBIENT, SyuFactoryGroup.SEAT_MEMORY) && maxWidth >= 300.dp && maxHeight >= expandedHeight) {
             ExpandedFactoryWidget(group, vehicle, moving, onChange, onParkedAction)
         } else CompactFactoryWidget(group, vehicle, moving, onChange, onParkedAction)
@@ -111,6 +128,13 @@ internal fun SyuFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateState
 
 @Composable
 internal fun factoryValueLabel(control: SyuFactoryControl, value: Int): String = when (control) {
+    SyuFactoryControl.HONDA_DISTANCE_UNITS -> stringResource(if (value == 0) R.string.honda_units_metric else R.string.honda_units_imperial)
+    SyuFactoryControl.HONDA_PANEL_CONFIG -> stringResource(R.string.honda_panel_type, value + 1)
+    SyuFactoryControl.HONDA_ALARM_VOLUME -> stringResource(listOf(R.string.honda_high, R.string.honda_medium, R.string.honda_low)[value])
+    SyuFactoryControl.HONDA_TRIP_A_RESET, SyuFactoryControl.HONDA_TRIP_B_RESET ->
+        stringResource(listOf(R.string.honda_refuel, R.string.honda_ignition_off, R.string.honda_manual)[value])
+    SyuFactoryControl.HONDA_OUTSIDE_TEMP -> (value - 3).toString()
+
     SyuFactoryControl.SEAT_PRESET -> stringResource(listOf(R.string.energy_default, R.string.energy_save, R.string.energy_activate)[value])
     SyuFactoryControl.CAMERA_MODE -> stringResource(listOf(R.string.vehicle_camera_wide, R.string.vehicle_camera_standard, R.string.vehicle_camera_down)[value])
     SyuFactoryControl.AMBIENT_PALETTE -> stringResource(if (value == 0) R.string.energy_recommended else R.string.energy_theme)

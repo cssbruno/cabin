@@ -62,6 +62,67 @@ class TeyesClimateBinderIntegrationTest {
         TeyesVehicleDataPreferences.get(context).select(TeyesVehicleDataLayout.LEGACY)
     }
 
+    @Test fun `Honda panel writes require feedback and use the live vendor module`() {
+        emit(1000, 0x40141)
+        assertTrue(context.module.registrations.containsAll(listOf(109, 110, 111, 69, 70, 71, 72)))
+        context.module.commands.clear()
+        controller.setFactoryControl(SyuFactoryControl.HONDA_PANEL_CONFIG, 2)
+        drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(111, 0)
+        controller.setFactoryControl(SyuFactoryControl.HONDA_PANEL_CONFIG, 2)
+        drain()
+        assertEquals(listOf(106 to listOf(14, 2)), context.module.commands)
+        assertEquals(0, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.HONDA_PANEL_CONFIG])
+        emit(111, 2)
+        assertEquals(2, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.HONDA_PANEL_CONFIG])
+        controller.suspendUpdates(); drain()
+        controller.setFactoryControl(SyuFactoryControl.HONDA_PANEL_CONFIG, 1); drain()
+        assertEquals(1, context.module.commands.size)
+    }
+
+    @Test fun `quiet readings refresh without republishing cached motion values`() {
+        context.module.registrationHistory.clear()
+        shadowOf(worker.looper).idleFor(16, java.util.concurrent.TimeUnit.SECONDS)
+        assertTrue(context.module.registrationHistory.containsAll(listOf(1000, 0, 1, 11, 21)))
+        assertFalse(context.module.registrationHistory.any { it in setOf(89, 90, 149, 151) })
+        assertTrue(context.module.commands.isEmpty())
+    }
+
+    @Test fun `integrated RZC units use Cabin direct FYT connection and returned values`() {
+        controller.suspendUpdates(); drain()
+        context.toolkitUnavailable = true
+        controller.resumeUpdates(); drain()
+        shadowOf(worker.looper).idleFor(5, java.util.concurrent.TimeUnit.SECONDS); drain()
+        emit(1000, 0x10012a)
+        assertTrue(context.actions.contains("com.syu.ms.canbus"))
+        assertTrue(context.module.registrations.containsAll(listOf(77, 78, 87)))
+        context.module.commands.clear()
+        controller.setFactoryControl(SyuFactoryControl.HONDA_DISTANCE_UNITS, 1); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(77, 0)
+        controller.setFactoryControl(SyuFactoryControl.HONDA_DISTANCE_UNITS, 1); drain()
+        assertEquals(listOf(105 to listOf(21, 1)), context.module.commands)
+        assertEquals(0, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.HONDA_DISTANCE_UNITS])
+        emit(77, 1)
+        assertEquals(1, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.HONDA_DISTANCE_UNITS])
+        controller.suspendUpdates(); drain()
+        controller.setFactoryControl(SyuFactoryControl.HONDA_DISTANCE_UNITS, 0); drain()
+        assertEquals(1, context.module.commands.size)
+    }
+
+    @Test fun `sleep clears vehicle data and resume requests a new connection`() {
+        emit(1000, 1048874)
+        emit(1, 1)
+        assertTrue(controller.state.value.connected)
+        controller.suspendUpdates(); drain()
+        assertFalse(controller.state.value.connected)
+        assertTrue(controller.state.value.availableCodes.isEmpty())
+        controller.resumeUpdates(); drain()
+        assertTrue(controller.state.value.connected)
+        assertFalse(controller.state.value.frontLeftDoorOpen)
+    }
+
     @Test
     fun `reference Binder fields normalize and commands need actual fresh feedback`() {
         assertTrue(context.module.registrations.containsAll(listOf(1000, 0, 1, 2, 3, 4, 5, 11, 18, 19, 21, 179, 180, 181)))
@@ -365,6 +426,20 @@ class TeyesClimateBinderIntegrationTest {
 
     private fun drain() = shadowOf(worker.looper).idle()
 
+    @Test fun `direct CAN service receives data when toolkit binding is unavailable`() {
+        controller.suspendUpdates(); drain()
+        context.toolkitUnavailable = true
+        controller.resumeUpdates(); drain()
+        shadowOf(worker.looper).idleFor(5, java.util.concurrent.TimeUnit.SECONDS)
+        drain()
+        assertTrue(context.actions.contains("com.syu.ms.canbus"))
+        emit(1000, 1048874)
+        emit(1, 1)
+        assertTrue(controller.state.value.connected)
+        assertTrue(controller.state.value.frontLeftDoorOpen)
+        assertTrue(context.module.commands.isEmpty())
+    }
+
     private fun emit(
         code: Int,
         value: Int,
@@ -379,20 +454,25 @@ class TeyesClimateBinderIntegrationTest {
         value: Int,
     ) {
         val parcel = Parcel.obtain()
+        val reply = Parcel.obtain()
         try {
             parcel.writeInterfaceToken("com.syu.ipc.IModuleCallback")
             parcel.writeInt(code)
             parcel.writeIntArray(intArrayOf(value))
             parcel.writeFloatArray(null)
             parcel.writeStringArray(null)
-            assertTrue(callback.transact(1, parcel, null, IBinder.FLAG_ONEWAY))
+            assertTrue(callback.transact(1, parcel, reply, 0))
+            reply.readException()
         } finally {
             parcel.recycle()
+            reply.recycle()
         }
     }
 
     private class ToolkitContext(base: Context) : ContextWrapper(base) {
         val module = Module()
+        var toolkitUnavailable = false
+        val actions = mutableListOf<String?>()
         private val toolkit =
             object : Binder() {
                 override fun onTransact(
@@ -417,7 +497,9 @@ class TeyesClimateBinderIntegrationTest {
             conn: ServiceConnection,
             flags: Int,
         ): Boolean {
-            conn.onServiceConnected(ComponentName("com.syu.ms", "app.ToolkitService"), toolkit)
+            actions += service.action
+            if (service.action == "com.syu.ms.toolkit" && toolkitUnavailable) return false
+            conn.onServiceConnected(requireNotNull(service.component), if (service.action == "com.syu.ms.canbus") module else toolkit)
             return true
         }
 
@@ -425,8 +507,10 @@ class TeyesClimateBinderIntegrationTest {
     }
 
     private class Module : Binder() {
+        init { attachInterface(null, "com.syu.ipc.IRemoteModule") }
         var callback: IBinder? = null
         val registrations = mutableSetOf<Int>()
+        val registrationHistory = mutableListOf<Int>()
         val commands = mutableListOf<Pair<Int, List<Int>>>()
 
         override fun onTransact(
@@ -435,6 +519,8 @@ class TeyesClimateBinderIntegrationTest {
             reply: Parcel?,
             flags: Int,
         ): Boolean {
+            assertEquals(0, flags)
+            requireNotNull(reply)
             data.enforceInterface("com.syu.ipc.IRemoteModule")
             when (code) {
                 1 -> {
@@ -444,7 +530,9 @@ class TeyesClimateBinderIntegrationTest {
                 }
                 3 -> {
                     callback = data.readStrongBinder()
-                    registrations += data.readInt()
+                    val field = data.readInt()
+                    registrations += field
+                    registrationHistory += field
                     assertEquals(1, data.readInt())
                 }
                 4 -> {
@@ -453,6 +541,7 @@ class TeyesClimateBinderIntegrationTest {
                 }
                 else -> return false
             }
+            reply.writeNoException()
             return true
         }
     }

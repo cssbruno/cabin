@@ -126,6 +126,8 @@ class TeyesClimateController(
     private val worker = HandlerThread("TeyesTelemetry").apply { start() }
     private val handler = Handler(worker.looper)
     private val started = AtomicBoolean(false)
+    private val suspended = AtomicBoolean(false)
+    private var lastCachedRefresh = 0L
     private val closed = AtomicBoolean(false)
     private val connectionEpoch = AtomicLong(0)
     private val samples = TeyesTelemetryFreshness()
@@ -134,6 +136,7 @@ class TeyesClimateController(
     private val mutableState = MutableStateFlow(TeyesClimateState(controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_disconnected)))
     val state: StateFlow<TeyesClimateState> = mutableState.asStateFlow()
     private var moduleBinder: IBinder? = null
+    private var useDirectCanService = false
     private var connection: ServiceConnection? = null
     private var callback: IBinder? = null
     private var deathRecipient: IBinder.DeathRecipient? = null
@@ -144,7 +147,7 @@ class TeyesClimateController(
     private val freshnessTick =
         object : Runnable {
             override fun run() {
-                if (closed.get()) return
+                if (closed.get() || suspended.get()) return
                 if (activeLayout != dataPreferences.layout.value) {
                     activeLayout = dataPreferences.layout.value
                     // Rebind with a new callback owner: queued samples from the old dialect cannot leak across.
@@ -152,6 +155,18 @@ class TeyesClimateController(
                 }
                 if (connectedAt?.let { SystemClock.elapsedRealtime() - it >= 60_000L } == true) reconnectPolicy.reset()
                 publishState()
+                val now = SystemClock.elapsedRealtime()
+                if (moduleBinder != null && now - lastCachedRefresh >= 15_000L) {
+                    lastCachedRefresh = now
+                    try {
+                        val remote = moduleBinder!!
+                        val listener = callback!!
+                        // Refresh quiet door/climate/settings values, never cached speed/RPM.
+                        registeredCodes.toList().filter { it !in setOf(89, 90, 149, 151) }.forEach {
+                            SyuBinderTransport.register(remote, listener, it)
+                        }
+                    } catch (_: Exception) { disconnectAndRetry() }
+                }
                 handler.postDelayed(this, 1_000L)
             }
         }
@@ -179,19 +194,21 @@ class TeyesClimateController(
                 if (data.dataAvail() > 4096 || data.dataAvail() < 8) return false
                 val sample = try {
                     val updateCode = data.readInt()
-                    if (updateCode !in registeredCodes) return true
+                    if (updateCode !in registeredCodes) { reply?.writeNoException(); return true }
                     val count = data.readInt()
+                    if (count == -1 || count == 0) { reply?.writeNoException(); return true }
                     if (count !in 1..16 || count > data.dataAvail() / 4) return false
                     updateCode to data.readInt()
                 } catch (_: RuntimeException) {
                     return false
                 }
-                if (closed.get()) return true
+                if (closed.get()) { reply?.writeNoException(); return true }
                 handler.post {
                     if (!closed.get() && connection === owner && moduleBinder != null) {
                         update(sample.first, sample.second)
                     }
                 }
+                reply?.writeNoException()
                 return true
             }
         }
@@ -206,12 +223,22 @@ class TeyesClimateController(
                 handler.post {
                     if (closed.get() || connection !== owner) return@post
                     handler.removeCallbacks(bindTimeout)
-                    val module = getCanbusModule(service)
+                    val module = try {
+                        if (useDirectCanService) {
+                            service.takeIf { it.interfaceDescriptor == MODULE_DESCRIPTOR }
+                        } else getCanbusModule(service)
+                    } catch (error: Exception) {
+                        android.util.Log.w("CabinCAN", "CAN service interface unavailable", error)
+                        null
+                    }
                     if (module == null) {
+                        com.cabin.reports.DebugJournal.record("CAN", "module_unavailable", name.flattenToShortString())
+                        android.util.Log.w("CabinCAN", "CAN module unavailable through ${name.flattenToShortString()}; trying alternate service")
                         disconnectAndRetry()
                         return@post
                     }
                     moduleBinder = module
+                    com.cabin.reports.DebugJournal.record("CAN", "connected", name.flattenToShortString())
                     connectedAt = SystemClock.elapsedRealtime()
                     callback = createCallback(owner)
                     val death =
@@ -278,22 +305,44 @@ class TeyesClimateController(
         }
     }
 
+    fun suspendUpdates() {
+        if (closed.get() || !suspended.compareAndSet(false, true)) return
+        handler.post {
+            handler.removeCallbacks(retry); handler.removeCallbacks(freshnessTick)
+            clearConnection()
+        }
+    }
+
+    fun resumeUpdates() {
+        if (closed.get() || !suspended.compareAndSet(true, false)) return
+        handler.post {
+            if (!closed.get() && !suspended.get()) {
+                reconnectPolicy.reset(); bind()
+                handler.removeCallbacks(freshnessTick); handler.post(freshnessTick)
+            }
+        }
+    }
+
     private fun bind() {
-        if (closed.get() || connection != null) return
+        if (suspended.get() || closed.get() || connection != null) return
         val nextConnection = createConnection()
         connection = nextConnection
         mutableState.value = TeyesClimateState(health = TeyesTelemetryHealth.CONNECTING, controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_waiting_profile))
         val intent =
-            fytToolkitIntent(appContext)
+            if (useDirectCanService) fytCanbusIntent(appContext) else fytToolkitIntent(appContext)
+        com.cabin.reports.DebugJournal.record("CAN", "bind", intent.component.toString())
         val accepted =
             try {
                 appContext.bindService(intent, nextConnection, Context.BIND_AUTO_CREATE)
-            } catch (_: Exception) {
+            } catch (error: Exception) {
+                android.util.Log.w("CabinCAN", "Cannot bind ${intent.component}", error)
+                com.cabin.reports.DebugJournal.record("CAN", "bind_failed", error.toString())
                 false
             }
         if (accepted) {
             handler.postDelayed(bindTimeout, 10_000L)
         } else {
+            com.cabin.reports.DebugJournal.record("CAN", "bind_rejected", intent.component.toString())
             disconnectAndRetry()
         }
     }
@@ -443,6 +492,7 @@ class TeyesClimateController(
         code: Int,
         value: Int,
     ) {
+        com.cabin.reports.DebugJournal.record("CAN", "callback", "field=$code; value=$value")
         val now = SystemClock.elapsedRealtime()
         if (code == 1000 && lastProfile != null && lastProfile != 0 && lastProfile != value) {
             // New callback ownership also rejects old-profile updates already queued on the worker.
@@ -579,26 +629,12 @@ class TeyesClimateController(
 
     private fun isAlternateProfile(): Boolean = mutableState.value.profileId == PROFILE_2016_CIVIC_ALT
 
-    private fun getCanbusModule(toolkit: IBinder): IBinder? {
-        val data = Parcel.obtain()
-        val reply = Parcel.obtain()
-        return try {
-            data.writeInterfaceToken(TOOLKIT_DESCRIPTOR)
-            data.writeInt(MODULE_CANBUS)
-            if (!toolkit.transact(1, data, reply, 0)) return null
-            reply.readException()
-            reply.readStrongBinder()
-        } catch (_: Exception) {
-            null
-        } finally {
-            reply.recycle()
-            data.recycle()
-        }
-    }
+    private fun getCanbusModule(toolkit: IBinder): IBinder? =
+        try { SyuBinderTransport.getModule(toolkit, MODULE_CANBUS) } catch (_: Exception) { null }
 
     private fun register(updateCode: Int) {
         if (!registeredCodes.add(updateCode)) return
-        transactOneWay(3) { data ->
+        transactModule(3) { data ->
             data.writeStrongBinder(callback)
             data.writeInt(updateCode)
             data.writeInt(1)
@@ -609,7 +645,7 @@ class TeyesClimateController(
         commandCode: Int,
         ints: IntArray,
     ) {
-        transactOneWay(1) { data ->
+        transactModule(1) { data ->
             data.writeInt(commandCode)
             data.writeIntArray(ints)
             data.writeFloatArray(null)
@@ -617,22 +653,15 @@ class TeyesClimateController(
         }
     }
 
-    private fun transactOneWay(
+    private fun transactModule(
         code: Int,
         body: (Parcel) -> Unit,
     ) {
         val remote = moduleBinder ?: return
-        val data = Parcel.obtain()
         try {
-            data.writeInterfaceToken(MODULE_DESCRIPTOR)
-            body(data)
-            if (!remote.transact(code, data, null, IBinder.FLAG_ONEWAY)) disconnectAndRetry()
-        } catch (_: RemoteException) {
+            SyuBinderTransport.transact(remote, code, body, {})
+        } catch (_: Exception) {
             disconnectAndRetry()
-        } catch (_: SecurityException) {
-            disconnectAndRetry()
-        } finally {
-            data.recycle()
         }
     }
 
@@ -649,6 +678,9 @@ class TeyesClimateController(
     }
 
     private fun disconnectAndRetry() {
+        // Some FYT builds expose the CAN module directly even when toolkit lookup fails.
+        // Keep a working route on transient disconnect; alternate only failed setup attempts.
+        if (moduleBinder == null) useDirectCanService = !useDirectCanService
         clearConnection()
         if (closed.get()) return
         handler.removeCallbacks(retry)
@@ -670,18 +702,10 @@ class TeyesClimateController(
         // Use the captured binder directly: failed cleanup must not recursively start another retry.
         if (oldModule != null && oldCallback != null && oldModule.isBinderAlive) {
             for (updateCode in registeredCodes.toList()) {
-                val data = Parcel.obtain()
                 try {
-                    data.writeInterfaceToken(MODULE_DESCRIPTOR)
-                    data.writeStrongBinder(oldCallback)
-                    data.writeInt(updateCode)
-                    if (!oldModule.transact(4, data, null, IBinder.FLAG_ONEWAY)) break
-                } catch (_: RemoteException) {
+                    SyuBinderTransport.unregister(oldModule, oldCallback, updateCode)
+                } catch (_: Exception) {
                     break
-                } catch (_: SecurityException) {
-                    break
-                } finally {
-                    data.recycle()
                 }
             }
         }

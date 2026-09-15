@@ -1,0 +1,23 @@
+<resources>
+    <string name="steering_back">Zurück</string>
+    <string name="steering_none">Keine Aktion</string>
+    <string name="steering_scope">Wähle eine Aktion und drücke eine Taste. Kurzes und langes Drücken können unterschiedliche Aktionen auslösen. Belegungen gelten, wenn Cabin den Fokus hat und Android die Tasten an Cabin weitergibt. Vom Fahrzeug verarbeitete Tasten erscheinen möglicherweise nicht.</string>
+    <string name="steering_app_unavailable">Die zugewiesene App ist nicht verfügbar. Wähle eine andere in den Tasteneinstellungen.</string>
+    <string name="steering_add">Taste zuweisen</string>
+    <string name="steering_change">Aktion ändern</string>
+    <string name="steering_remove">Belegung entfernen</string>
+    <string name="steering_choose_action">Tastenaktion wählen</string>
+    <string name="steering_open_app">App öffnen</string>
+    <string name="steering_no_apps">Keine startbaren Apps gefunden.</string>
+    <string name="steering_backup_hint">Änderungen werden automatisch gespeichert. Sicherung und Wiederherstellung enthalten beide Druckarten und App-Zuweisungen.</string>
+    <string name="steering_reset">Tastenbelegungen zurücksetzen</string>
+    <string name="steering_reset_detail">Alle Belegungen für kurzes und langes Drücken in Cabin entfernen? Die Tasten kehren zum normalen Verhalten zurück. Werkseitig gelernte Belegungen bleiben erhalten.</string>
+    <string name="update_error_signature">Dieses Update verwendet einen anderen Signaturschlüssel als die installierte Version. Installiere ein Update mit demselben Schlüssel. Erneutes Herunterladen behebt dies nicht.</string>
+    <string name="update_error_apk">Die heruntergeladene APK passt nicht zu diesem Cabin-Update. Suche erneut nach Updates.</string>
+    <string name="update_error_android">Dieses Update benötigt eine neuere Android-Version.</string>
+    <string name="update_error_integrity">Der Download ist unvollständig oder stimmt nicht mit der veröffentlichten Prüfsumme überein. Suche nach Updates und lade erneut herunter.</string>
+    <string name="update_error_storage">Update konnte nicht gespeichert werden. Prüfe den freien Speicher und versuche es erneut.</string>
+    <string name="update_error_server">GitHub konnte das Update nicht bereitstellen. Suche nach Updates und versuche es später erneut.</string>
+    <string name="update_error_network">GitHub ist nicht erreichbar. Prüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="update_error_tls">Sichere Verbindung konnte nicht hergestellt werden. Prüfe Datum und Uhrzeit des Geräts und versuche es erneut.</string>
+</resources>

@@ -14,4 +14,12 @@
     <string name="update_download">Baixar</string>
     <string name="update_install">Instalar</string>
     <string name="update_cancel">Cancelar</string>
+    <string name="update_error_signature">Esta atualização usa uma chave de assinatura diferente da versão instalada do Cabin. Instale uma atualização assinada com a mesma chave. Baixar novamente não resolve.</string>
+    <string name="update_error_apk">O APK baixado não corresponde a esta atualização do Cabin. Verifique as atualizações novamente.</string>
+    <string name="update_error_android">Esta atualização exige uma versão mais recente do Android.</string>
+    <string name="update_error_integrity">O download está incompleto ou não corresponde à verificação de integridade publicada. Verifique as atualizações e baixe novamente.</string>
+    <string name="update_error_storage">Não foi possível salvar a atualização. Verifique o espaço disponível e tente novamente.</string>
+    <string name="update_error_server">O GitHub não forneceu a atualização. Verifique as atualizações e tente novamente mais tarde.</string>
+    <string name="update_error_network">Não foi possível acessar o GitHub. Verifique sua conexão e tente novamente.</string>
+    <string name="update_error_tls">Não foi possível estabelecer uma conexão segura. Verifique a data e a hora do dispositivo e tente novamente.</string>
 </resources>

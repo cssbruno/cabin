@@ -46,11 +46,16 @@ internal fun CarSettingsScreen(
                         enabled = !moving && current != null && actions.onFactoryControl != null,
                         onParkedAction = guarded,
                         valueLabel = { value ->
-                            if (control.maximum == 1 && control != SyuFactoryControl.AMBIENT_PALETTE)
+                            if (control.maximum == 1 && control !in setOf(SyuFactoryControl.AMBIENT_PALETTE, SyuFactoryControl.HONDA_DISTANCE_UNITS))
                                 stringResource(if (value == 1) R.string.climate_state_on else R.string.interface_state_off)
                             else factoryValueLabel(control, value)
                         },
                         onSelect = { value -> actions.onFactoryControl?.invoke(control, value) })
+                }
+            }
+            if (supported.any { it.group == SyuFactoryGroup.HONDA_PANEL }) {
+                SettingsDisclosure(stringResource(R.string.honda_panel_title), stringResource(R.string.honda_panel_detail)) {
+                    factoryGroup(SyuFactoryGroup.HONDA_PANEL)
                 }
             }
             SettingsDisclosure(stringResource(R.string.car_settings_lights), stringResource(R.string.car_settings_lights_detail)) {
@@ -98,7 +103,7 @@ internal fun CarSettingsScreen(
                         onParkedAction = guarded, valueLabel = { (it - 9).toString() },
                         onSelect = { actions.onFactoryAmplifier?.invoke(setting, it) })
                 } else UnsupportedCarSettings()
-                SteeringSettingsPanel()
+                SteeringSettingsPanel(moving, onParkedAction)
             }
             SettingsDisclosure(stringResource(R.string.car_settings_my_car), stringResource(R.string.car_settings_my_car_detail)) {
                 VehicleAppearancePanel(profile)

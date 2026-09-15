@@ -136,6 +136,11 @@ class CabinProjectionService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (com.cabin.platform.JoyingCarPlay.isAvailable(this)) {
+            setShouldRunInBackground(false)
+            stopSelfResult(startId)
+            return START_NOT_STICKY
+        }
         if (stopping) return START_NOT_STICKY
         // Always request the sensitive types when their runtime permissions exist. On a
         // sticky restart Android may reject while-in-use types; promoteToForeground then
@@ -591,6 +596,7 @@ class CabinProjectionService : Service() {
         private var activeActivityManager: CabinManager? = null
 
         fun start(context: Context) {
+            if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) return
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, CabinProjectionService::class.java).setAction(ACTION_CONNECT),
@@ -599,6 +605,12 @@ class CabinProjectionService : Service() {
 
         /** Only user-facing Connect actions may resume an explicitly disconnected phone. */
         fun startPhoneConnection(context: Context) {
+            if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) {
+                if (!com.cabin.platform.JoyingCarPlay.open(context)) {
+                    throw android.content.ActivityNotFoundException("Car Link 2.0 is unavailable")
+                }
+                return
+            }
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, CabinProjectionService::class.java).setAction(ACTION_CONNECT_PHONE),

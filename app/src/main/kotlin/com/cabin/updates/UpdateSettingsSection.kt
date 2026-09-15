@@ -22,7 +22,7 @@ internal fun UpdateSettingsSection() {
     val status by updater.state.collectAsStateWithLifecycle()
     var automatic by remember { mutableStateOf(updater.automatic) }
     var action by remember { mutableStateOf<Job?>(null) }
-    var installFailed by remember { mutableStateOf(false) }
+    var installError by remember { mutableStateOf<Int?>(null) }
     var permissionNeeded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val busy = status.phase in setOf(UpdatePhase.CHECKING, UpdatePhase.DOWNLOADING) || action?.isActive == true
@@ -43,23 +43,23 @@ internal fun UpdateSettingsSection() {
                 UpdatePhase.READY -> R.string.update_ready
                 UpdatePhase.FAILED -> R.string.update_failed
             }
-            Text(stringResource(label))
+            Text(stringResource(status.errorRes ?: label))
             status.release?.let { Text(it.versionName) }
             if (status.phase == UpdatePhase.DOWNLOADING) {
                 LinearProgressIndicator(progress = { status.progress / 100f }, modifier = Modifier.fillMaxWidth())
                 Text("${status.progress}%")
             }
-            if (installFailed) Text(stringResource(R.string.update_install_failed))
+            installError?.let { Text(stringResource(it)) }
             if (permissionNeeded) Text(stringResource(R.string.update_permission))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(enabled = !busy, onClick = { installFailed = false; action = scope.launch { updater.check() } }) {
+                OutlinedButton(enabled = !busy, onClick = { installError = null; action = scope.launch { updater.check() } }) {
                     Text(stringResource(R.string.update_check))
                 }
                 if (status.release != null && status.phase in setOf(UpdatePhase.AVAILABLE, UpdatePhase.FAILED)) {
                     Button(enabled = !busy, onClick = { action = scope.launch { updater.download() } }) { Text(stringResource(R.string.update_download)) }
                 }
                 if (status.phase == UpdatePhase.READY) Button(enabled = !busy, onClick = {
-                    installFailed = false
+                    installError = null
                     action = scope.launch {
                         try {
                             if (!context.packageManager.canRequestPackageInstalls()) {
@@ -70,7 +70,10 @@ internal fun UpdateSettingsSection() {
                                 context.startActivity(updater.installIntent())
                             }
                         } catch (e: CancellationException) { throw e }
-                        catch (_: Exception) { installFailed = true }
+                        catch (e: Exception) {
+                            android.util.Log.w("CabinUpdater", "Update installation failed", e)
+                            installError = if (e is UpdateException) e.errorRes else R.string.update_install_failed
+                        }
                     }
                 }) { Text(stringResource(R.string.update_install)) }
                 if (busy && action?.isActive == true) TextButton({ action?.cancel() }) { Text(stringResource(R.string.update_cancel)) }

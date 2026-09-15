@@ -1,0 +1,15 @@
+<resources>
+    <string name="steering_back">Back</string>
+    <string name="steering_none">Do nothing</string>
+    <string name="steering_scope">Choose an action, then press a button. Short and long presses can do different things. Mappings work while Cabin has focus, for buttons Android delivers to Cabin. Buttons handled by the car may not appear here.</string>
+    <string name="steering_app_unavailable">The mapped app is unavailable. Choose another app in button settings.</string>
+    <string name="steering_add">Assign a button</string>
+    <string name="steering_change">Change action</string>
+    <string name="steering_remove">Remove mapping</string>
+    <string name="steering_choose_action">Choose button action</string>
+    <string name="steering_open_app">Open an app</string>
+    <string name="steering_no_apps">No launchable apps found.</string>
+    <string name="steering_backup_hint">Changes save automatically. Settings backup and restore includes both press types and app mappings.</string>
+    <string name="steering_reset">Reset button mappings</string>
+    <string name="steering_reset_detail">Remove all short-press and long-press mappings in Cabin? Buttons return to their normal behavior. Factory steering learning is unchanged.</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="honda_alarm_volume">Alarmlautstärke</string>
+    <string name="honda_eco_backlight">Eco-Hintergrundbeleuchtung</string>
+    <string name="honda_high">Hoch</string>
+    <string name="honda_idle_stop_tips">Start-Stopp-Hinweise</string>
+    <string name="honda_ignition_off">Beim Ausschalten der Zündung</string>
+    <string name="honda_low">Niedrig</string>
+    <string name="honda_manual">Manuell</string>
+    <string name="honda_medium">Mittel</string>
+    <string name="honda_messages">Nachrichtenerinnerungen</string>
+    <string name="honda_outside_temp">Außentemperaturkorrektur</string>
+    <string name="honda_panel_config">Konfiguration des Kombiinstruments</string>
+    <string name="honda_panel_detail">Vom verbundenen Fahrzeug gemeldete Einstellungen</string>
+    <string name="honda_panel_title">Honda-Kombiinstrument</string>
+    <string name="honda_panel_type">Typ %1$d</string>
+    <string name="honda_refuel">Beim Tanken</string>
+    <string name="honda_reverse_tone">Rückwärtsgangton</string>
+    <string name="honda_speed_tips">Geschwindigkeitshinweise</string>
+    <string name="honda_traffic_signs">Verkehrszeichenanzeige</string>
+    <string name="honda_trip_a_reset">Rücksetzbedingung für Tageskilometerzähler A</string>
+    <string name="honda_trip_b_reset">Rücksetzbedingung für Tageskilometerzähler B</string>
+    <string name="honda_turn_by_turn">Navigationshinweise</string>
+    <string name="honda_warning_message">Warnmeldungen</string>
+    <string name="honda_distance_units">Geschwindigkeits- und Entfernungseinheiten</string>
+    <string name="honda_tachometer_display">Drehzahlmesser anzeigen</string>
+    <string name="honda_tachometer_setting">Drehzahlmesser-Einstellung (Herstelleroption)</string>
+</resources>

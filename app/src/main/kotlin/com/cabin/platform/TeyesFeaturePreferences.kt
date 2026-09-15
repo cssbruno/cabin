@@ -12,7 +12,7 @@ data class TeyesDriverProfile(
     val slot: Int = 0,
     val name: String = "Driver 1",
     val preferredPhone: String = "",
-    val appearance: TeyesAppearance = TeyesAppearance.SYSTEM,
+    val appearance: TeyesAppearance = TeyesAppearance.NIGHT,
     val nightBrightness: Float = 0.35f,
     val mediaGain: Float = 1f,
     val navigationGain: Float = 1f,
@@ -59,7 +59,7 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
             preferredPhone = values[prefix + "phone"] as? String ?: "",
             appearance =
                 TeyesAppearance.entries.firstOrNull { it.name == values[prefix + "appearance"] }
-                    ?: TeyesAppearance.SYSTEM,
+                    ?: TeyesAppearance.NIGHT,
             nightBrightness = values[prefix + "brightness"] as? Float ?: 0.35f,
             mediaGain = values[prefix + "media"] as? Float ?: 1f,
             navigationGain = values[prefix + "nav"] as? Float ?: 1f,
@@ -99,9 +99,43 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
     ) {
         require(TeyesKeyRouter.isMappable(keyCode))
         val key = "${if (longPress) "longKey" else "key"}.$keyCode"
-        prefs.edit { if (action == null) remove(key) else putString(key, action.name) }
+        prefs.edit {
+            remove("${if (longPress) "longKeyApp" else "keyApp"}.$keyCode")
+            if (action == null) remove(key) else putString(key, action.name)
+        }
         mutableRevision.value++
     }
+
+    fun keyApp(keyCode: Int, longPress: Boolean = false): String? =
+        (prefs.all["${if (longPress) "longKeyApp" else "keyApp"}.$keyCode"] as? String)
+            ?.takeIf { TeyesKeyRouter.isMappable(keyCode) && TeyesConfigurationBackup.validComponent(it) }
+
+    fun mappedKeyApps(longPress: Boolean = false): Map<Int, String> {
+        val prefix = if (longPress) "longKeyApp." else "keyApp."
+        return prefs.all.keys.filter { it.startsWith(prefix) }.mapNotNull {
+            val code = it.removePrefix(prefix).toIntOrNull() ?: return@mapNotNull null
+            keyApp(code, longPress)?.let { component -> code to component }
+        }.toMap()
+    }
+
+    @Synchronized
+    fun mapKeyApp(keyCode: Int, component: String, longPress: Boolean = false) {
+        require(TeyesKeyRouter.isMappable(keyCode) && TeyesConfigurationBackup.validComponent(component))
+        prefs.edit {
+            remove("${if (longPress) "longKey" else "key"}.$keyCode")
+            putString("${if (longPress) "longKeyApp" else "keyApp"}.$keyCode", component)
+        }
+        mutableRevision.value++
+    }
+
+    @Synchronized
+    fun resetKeyMappings() {
+        prefs.edit { prefs.all.keys.filter(::isKeyPreference).forEach { remove(it) } }
+        mutableRevision.value++
+    }
+
+    private fun isKeyPreference(key: String) =
+        listOf("key.", "longKey.", "keyApp.", "longKeyApp.").any(key::startsWith)
 
     fun shortcut(kind: TeyesShortcut): String? =
         (prefs.all["shortcut.${kind.name}"] as? String)?.takeIf(TeyesConfigurationBackup::validComponent)
@@ -122,6 +156,8 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
             profiles = (0..2).map(::readProfile),
             keys = mappedKeys(),
             longKeys = mappedKeys(longPress = true),
+            keyApps = mappedKeyApps(),
+            longKeyApps = mappedKeyApps(true),
             shortcuts = TeyesShortcut.entries.mapNotNull { kind -> shortcut(kind)?.let { kind to it } }.toMap(),
             projection = ProjectionPreferences.getInstance(appContext).state.value,
             measurementUnit = MeasurementPreferences.get(appContext).unit.value,
@@ -132,10 +168,12 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
     fun replaceConfiguration(snapshot: TeyesConfigurationSnapshot): Boolean {
         TeyesConfigurationBackup.validate(snapshot)
         val editor = prefs.edit()
-        prefs.all.keys.filter { it.startsWith("driver.") || it.startsWith("key.") || it.startsWith("longKey.") || it.startsWith("shortcut.") }.forEach(editor::remove)
+        prefs.all.keys.filter { it.startsWith("driver.") || isKeyPreference(it) || it.startsWith("shortcut.") }.forEach(editor::remove)
         snapshot.profiles.forEach { editor.putProfile(it) }
         snapshot.keys.forEach { (key, action) -> editor.putString("key.$key", action.name) }
         snapshot.longKeys.forEach { (key, action) -> editor.putString("longKey.$key", action.name) }
+        snapshot.keyApps.forEach { (key, component) -> editor.putString("keyApp.$key", component) }
+        snapshot.longKeyApps.forEach { (key, component) -> editor.putString("longKeyApp.$key", component) }
         snapshot.shortcuts.forEach { (kind, component) -> editor.putString("shortcut.${kind.name}", component) }
         // commit is used by the IO caller so success means persistence completed.
         val profilesPersisted = editor.commit()

@@ -1,0 +1,23 @@
+<resources>
+    <string name="steering_back">Indietro</string>
+    <string name="steering_none">Nessuna azione</string>
+    <string name="steering_scope">Scegli un’azione e premi un tasto. Pressioni brevi e lunghe possono avere azioni diverse. Le assegnazioni funzionano quando Cabin ha il focus e Android gli invia i tasti. Quelli gestiti dall’auto potrebbero non apparire.</string>
+    <string name="steering_app_unavailable">L’app assegnata non è disponibile. Scegline un’altra nelle impostazioni dei tasti.</string>
+    <string name="steering_add">Assegna un tasto</string>
+    <string name="steering_change">Cambia azione</string>
+    <string name="steering_remove">Rimuovi assegnazione</string>
+    <string name="steering_choose_action">Scegli azione del tasto</string>
+    <string name="steering_open_app">Apri un’app</string>
+    <string name="steering_no_apps">Nessuna app avviabile trovata.</string>
+    <string name="steering_backup_hint">Le modifiche si salvano automaticamente. Backup e ripristino includono entrambi i tipi di pressione e le app assegnate.</string>
+    <string name="steering_reset">Reimposta assegnazioni</string>
+    <string name="steering_reset_detail">Rimuovere tutte le assegnazioni brevi e lunghe di Cabin? I tasti tornano al comportamento normale. L’apprendimento di fabbrica resta invariato.</string>
+    <string name="update_error_signature">Questo aggiornamento usa una chiave di firma diversa dalla versione installata. Installa un aggiornamento firmato con la stessa chiave. Scaricarlo di nuovo non risolve il problema.</string>
+    <string name="update_error_apk">L’APK scaricato non corrisponde a questo aggiornamento di Cabin. Cerca nuovamente gli aggiornamenti.</string>
+    <string name="update_error_android">Questo aggiornamento richiede una versione più recente di Android.</string>
+    <string name="update_error_integrity">Il download è incompleto o non corrisponde alla somma di controllo pubblicata. Cerca gli aggiornamenti e scarica di nuovo.</string>
+    <string name="update_error_storage">Impossibile salvare l’aggiornamento. Controlla lo spazio disponibile e riprova.</string>
+    <string name="update_error_server">GitHub non ha potuto fornire l’aggiornamento. Cerca gli aggiornamenti e riprova più tardi.</string>
+    <string name="update_error_network">Impossibile raggiungere GitHub. Controlla la connessione internet e riprova.</string>
+    <string name="update_error_tls">Impossibile stabilire una connessione sicura. Controlla data e ora del dispositivo, poi riprova.</string>
+</resources>

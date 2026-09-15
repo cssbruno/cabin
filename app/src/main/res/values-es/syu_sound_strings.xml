@@ -1,0 +1,33 @@
+<resources>
+    <string name="syu_sound_title">Sonido</string>
+    <string name="syu_sound_close">Cerrar ajustes de sonido</string>
+    <string name="syu_sound_connecting">Conectando con los ajustes de sonido…</string>
+    <string name="syu_sound_unsupported">Usa el ecualizador de fábrica para este sistema de sonido.</string>
+    <string name="syu_sound_waiting">Esperando los ajustes de sonido…</string>
+    <string name="syu_sound_parked">Estaciona para ajustar el sonido.</string>
+    <string name="syu_sound_pending">Aplicando…</string>
+    <string name="syu_sound_factory">Ecualizador de fábrica</string>
+    <string name="syu_sound_presets">Ecualizador</string>
+    <string name="syu_sound_advanced">Avanzado</string>
+    <string name="syu_sound_balance">Balance</string>
+    <string name="syu_sound_fader">Balance delantero/trasero</string>
+    <string name="syu_sound_loudness">Sonoridad</string>
+    <string name="syu_sound_band">Banda %1$d</string>
+    <string name="syu_sound_failed">No se pudo confirmar el cambio. Inténtalo de nuevo.</string>
+    <string name="syu_sound_preset_number">Preajuste %1$d</string>
+    <string name="syu_sound_subwoofer">Nivel del subwoofer</string>
+    <string name="syu_diag_title">Diagnóstico de hardware</string>
+    <string name="syu_diag_unknown">Desconocido</string>
+    <string name="syu_diag_connected">Conectado</string>
+    <string name="syu_diag_disconnected">Desconectado</string>
+    <string name="syu_diag_service">Servicio SYU: %1$s</string>
+    <string name="syu_diag_profile">Perfil DSP informado: %1$s</string>
+    <string name="syu_diag_device">Dispositivo: %1$s %2$s</string>
+    <string name="syu_diag_unmapped">Sin mapear en Cabin</string>
+    <string name="syu_diag_received">Lectura reciente recibida</string>
+    <string name="syu_diag_missing">Sin lectura reciente</string>
+    <string name="syu_diag_bands">Bandas EQ con lecturas recientes: %1$d</string>
+    <string name="syu_diag_note">Las lecturas confirman valores informados, no cambios en el hardware. SYU informa el perfil; no se verifica el chip físico.</string>
+    <string name="syu_diag_copy">Copiar informe</string>
+    <string name="syu_diag_copied">Copiado</string>
+</resources>

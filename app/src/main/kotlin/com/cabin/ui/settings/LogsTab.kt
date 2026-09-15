@@ -203,6 +203,7 @@ internal fun LogsTabContent(
                     .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
+            com.cabin.telemetry.ReportingSettings()
             LoggingControlCard(
                 title = stringResource(R.string.logs_logging),
                 icon = Icons.AutoMirrored.Filled.Article,

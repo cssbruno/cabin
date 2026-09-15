@@ -1,0 +1,18 @@
+<resources>
+    <string name="vehicle_key_launcher">Home</string>
+    <string name="vehicle_radio">Radio</string>
+    <string name="vehicle_close">Chiudi</string>
+    <string name="vehicle_radio_note">La sintonia usa il servizio radio installato. Apri la radio di fabbrica per attivare l’audio.</string>
+    <string name="vehicle_radio_waiting">In attesa dei dati della stazione…</string>
+    <string name="vehicle_seek_down">Cerca indietro</string>
+    <string name="vehicle_seek_up">Cerca avanti</string>
+    <string name="vehicle_presets">Preferiti</string>
+    <string name="vehicle_save_preset">Salva</string>
+    <string name="vehicle_factory_radio">Apri radio di fabbrica</string>
+    <string name="vehicle_replace_preset">Sostituire il preferito %1$d con la stazione attuale?</string>
+    <string name="vehicle_compat_profile">Profilo del veicolo: %1$s</string>
+    <string name="vehicle_compat_counts">Porte: %1$d/6 · Comandi clima: %2$d · Impostazioni veicolo: %3$d · Pneumatici: %4$d/4</string>
+    <string name="vehicle_compat_battery">Batteria: %1$s</string>
+    <string name="vehicle_compat_fields">ID dei campi recenti: %1$s</string>
+    <string name="vehicle_compat_note">I numeri mostrano letture e comandi verificati attuali. I dati mancanti di carburante, temperatura o batteria restano indisponibili, mai zero.</string>
+</resources>

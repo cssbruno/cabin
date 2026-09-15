@@ -1,0 +1,33 @@
+<resources>
+    <string name="syu_sound_title">Klang</string>
+    <string name="syu_sound_close">Klangeinstellungen schließen</string>
+    <string name="syu_sound_connecting">Verbindung zu den Klangeinstellungen…</string>
+    <string name="syu_sound_unsupported">Verwende für dieses Soundsystem den werkseitigen Equalizer.</string>
+    <string name="syu_sound_waiting">Warten auf Klangeinstellungen…</string>
+    <string name="syu_sound_parked">Zum Einstellen des Klangs parken.</string>
+    <string name="syu_sound_pending">Wird angewendet…</string>
+    <string name="syu_sound_factory">Werkseitiger Equalizer</string>
+    <string name="syu_sound_presets">Equalizer</string>
+    <string name="syu_sound_advanced">Erweitert</string>
+    <string name="syu_sound_balance">Balance</string>
+    <string name="syu_sound_fader">Balance vorne/hinten</string>
+    <string name="syu_sound_loudness">Loudness</string>
+    <string name="syu_sound_band">Band %1$d</string>
+    <string name="syu_sound_failed">Die Änderung konnte nicht bestätigt werden. Erneut versuchen.</string>
+    <string name="syu_sound_preset_number">Voreinstellung %1$d</string>
+    <string name="syu_sound_subwoofer">Subwoofer-Pegel</string>
+    <string name="syu_diag_title">Hardwarediagnose</string>
+    <string name="syu_diag_unknown">Unbekannt</string>
+    <string name="syu_diag_connected">Verbunden</string>
+    <string name="syu_diag_disconnected">Getrennt</string>
+    <string name="syu_diag_service">SYU-Dienst: %1$s</string>
+    <string name="syu_diag_profile">Gemeldetes DSP-Profil: %1$s</string>
+    <string name="syu_diag_device">Gerät: %1$s %2$s</string>
+    <string name="syu_diag_unmapped">In Cabin nicht zugeordnet</string>
+    <string name="syu_diag_received">Aktueller Wert empfangen</string>
+    <string name="syu_diag_missing">Kein aktueller Wert</string>
+    <string name="syu_diag_bands">EQ-Bänder mit aktuellen Werten: %1$d</string>
+    <string name="syu_diag_note">Die Werte bestätigen gemeldete Einstellungen, keine Hardwareänderungen. Das Profil wird von SYU gemeldet; der Chip wird nicht physisch geprüft.</string>
+    <string name="syu_diag_copy">Bericht kopieren</string>
+    <string name="syu_diag_copied">Kopiert</string>
+</resources>

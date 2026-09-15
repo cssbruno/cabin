@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="joying_title">Joying CarPlay · Sperimentale</string>
+    <string name="joying_retry">Riprova</string>
+    <string name="joying_home">Home</string>
+    <string name="joying_takeover">Usa Cabin per CarPlay</string>
+    <string name="joying_wireless">Attiva connessione wireless</string>
+    <string name="joying_phone">Connetti telefono</string>
+    <string name="joying_siri">Siri</string>
+    <string name="joying_restore">Ripristina servizio originale</string>
+    <string name="joying_search">Cerca</string>
+    <string name="joying_close">Chiudi</string>
+    <string name="joying_connect">Connetti</string>
+    <string name="joying_pair">Abbina</string>
+    <string name="joying_picker_title">Connetti un iPhone</string>
+    <string name="joying_picker_hint">Scegli un telefono abbinato o cercane uno nuovo.</string>
+    <string name="joying_disconnect">Disconnetti</string>
+    <string name="joying_background">Connessione Joying attiva</string>
+    <string name="joying_recovering">Riconnessione a CarPlay… (%1$d/%2$d)</string>
+    <string name="joying_recovery_exhausted">Impossibile riconnettersi a CarPlay. Tocca Riprova.</string>
+</resources>

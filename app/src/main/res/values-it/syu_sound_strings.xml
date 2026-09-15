@@ -1,0 +1,33 @@
+<resources>
+    <string name="syu_sound_title">Audio</string>
+    <string name="syu_sound_close">Chiudi impostazioni audio</string>
+    <string name="syu_sound_connecting">Connessione alle impostazioni audio…</string>
+    <string name="syu_sound_unsupported">Usa l’equalizzatore di fabbrica per questo sistema audio.</string>
+    <string name="syu_sound_waiting">In attesa delle impostazioni audio…</string>
+    <string name="syu_sound_parked">Parcheggia per regolare l’audio.</string>
+    <string name="syu_sound_pending">Applicazione…</string>
+    <string name="syu_sound_factory">Equalizzatore di fabbrica</string>
+    <string name="syu_sound_presets">Equalizzatore</string>
+    <string name="syu_sound_advanced">Avanzate</string>
+    <string name="syu_sound_balance">Bilanciamento</string>
+    <string name="syu_sound_fader">Bilanciamento anteriore/posteriore</string>
+    <string name="syu_sound_loudness">Loudness</string>
+    <string name="syu_sound_band">Banda %1$d</string>
+    <string name="syu_sound_failed">Impossibile confermare la modifica. Riprova.</string>
+    <string name="syu_sound_preset_number">Preset %1$d</string>
+    <string name="syu_sound_subwoofer">Livello subwoofer</string>
+    <string name="syu_diag_title">Diagnostica hardware</string>
+    <string name="syu_diag_unknown">Sconosciuto</string>
+    <string name="syu_diag_connected">Connesso</string>
+    <string name="syu_diag_disconnected">Disconnesso</string>
+    <string name="syu_diag_service">Servizio SYU: %1$s</string>
+    <string name="syu_diag_profile">Profilo DSP segnalato: %1$s</string>
+    <string name="syu_diag_device">Dispositivo: %1$s %2$s</string>
+    <string name="syu_diag_unmapped">Non mappato in Cabin</string>
+    <string name="syu_diag_received">Lettura recente ricevuta</string>
+    <string name="syu_diag_missing">Nessuna lettura recente</string>
+    <string name="syu_diag_bands">Bande EQ con letture recenti: %1$d</string>
+    <string name="syu_diag_note">Le letture confermano i valori segnalati, non le modifiche hardware. Il profilo viene segnalato da SYU, senza verifica fisica del chip.</string>
+    <string name="syu_diag_copy">Copia rapporto</string>
+    <string name="syu_diag_copied">Copiato</string>
+</resources>

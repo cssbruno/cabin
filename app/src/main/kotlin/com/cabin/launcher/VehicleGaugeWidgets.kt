@@ -19,10 +19,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cabin.R
 import com.cabin.platform.*
 import java.util.Locale
-import kotlin.math.roundToInt
 
 enum class VehicleGauge(val label: Int) {
-    SPEED(R.string.vehicle_speed), RPM(R.string.vehicle_engine_speed), OIL(R.string.vehicle_oil_life),
+    RPM(R.string.vehicle_engine_speed), OIL(R.string.vehicle_oil_life),
     SERVICE(R.string.vehicle_oil_service),
 }
 
@@ -39,14 +38,12 @@ internal fun vehicleGaugeReading(gauge: VehicleGauge, vehicle: TeyesClimateState
         return GaugeReading(formatted.substringBeforeLast(' '), formatted.substringAfterLast(' '), available = true)
     }
     val number = when (gauge) {
-        VehicleGauge.SPEED -> vehicle.speedKph?.takeIf { 89 in vehicle.availableCodes && it in 0..400 }
         VehicleGauge.RPM -> vehicle.engineRpm?.takeIf { 90 in vehicle.availableCodes && it in 0..10_000 }
         VehicleGauge.OIL -> vehicle.oilLifePercent?.takeIf { 137 in vehicle.availableCodes && it in 0..100 }
         VehicleGauge.SERVICE -> null
     } ?: return GaugeReading()
-    val value = if (gauge == VehicleGauge.SPEED) MeasurementFormatter.speedValue(number.toDouble(), units, locale).roundToInt() else number
+    val value = number
     val unit = when (gauge) {
-        VehicleGauge.SPEED -> MeasurementFormatter.speedLabel(units, locale)
         VehicleGauge.RPM -> "RPM"; VehicleGauge.OIL -> "%"; VehicleGauge.SERVICE -> ""
     }
     return GaugeReading(value.toString(), unit, available = true)
@@ -86,7 +83,7 @@ fun VehicleWidgetsPage(preferences: LauncherPreferences, vehicle: TeyesClimateSt
                     val label = stringResource(gauge.label)
                     Card(Modifier.weight(1f).fillMaxHeight().semantics { contentDescription = label }) {
                         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-                            if (gauge != VehicleGauge.SPEED && gauge != VehicleGauge.RPM) {
+                            if (gauge != VehicleGauge.RPM) {
                                 Text(stringResource(gauge.label), style = MaterialTheme.typography.titleMedium)
                             }
                             Text(reading.value, style = MaterialTheme.typography.displaySmall, maxLines = 1)

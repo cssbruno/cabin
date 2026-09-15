@@ -1,0 +1,18 @@
+<resources>
+    <string name="vehicle_key_launcher">Startseite</string>
+    <string name="vehicle_radio">Radio</string>
+    <string name="vehicle_close">Schließen</string>
+    <string name="vehicle_radio_note">Die Abstimmung verwendet den installierten Radiodienst. Für Radioton die werkseitige Radio-App öffnen.</string>
+    <string name="vehicle_radio_waiting">Warten auf Senderdaten…</string>
+    <string name="vehicle_seek_down">Abwärts suchen</string>
+    <string name="vehicle_seek_up">Aufwärts suchen</string>
+    <string name="vehicle_presets">Favoriten</string>
+    <string name="vehicle_save_preset">Speichern</string>
+    <string name="vehicle_factory_radio">Werkseitiges Radio öffnen</string>
+    <string name="vehicle_replace_preset">Favorit %1$d durch den aktuellen Sender ersetzen?</string>
+    <string name="vehicle_compat_profile">Fahrzeugprofil: %1$s</string>
+    <string name="vehicle_compat_counts">Türen: %1$d/6 · Klimabedienung: %2$d · Fahrzeugeinstellungen: %3$d · Reifen: %4$d/4</string>
+    <string name="vehicle_compat_battery">Batterie: %1$s</string>
+    <string name="vehicle_compat_fields">Aktuelle Feld-IDs: %1$s</string>
+    <string name="vehicle_compat_note">Die Zahlen zeigen aktuell bestätigte Werte und Bedienelemente. Fehlende Kraftstoff-, Temperatur- oder Batteriedaten werden nie als null angezeigt.</string>
+</resources>

@@ -20,6 +20,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.cabin.R
 import com.cabin.navigation.NavigationState
+import com.cabin.platform.SyuAudioSourceMonitor
+import com.cabin.platform.SyuAudioSourceState
+import com.cabin.platform.SyuSoundController
+import com.cabin.platform.SyuSoundConnection
+import com.cabin.ui.SyuSoundScreen
+import com.cabin.platform.TeyesFeaturePreferences
+import com.cabin.platform.TeyesShortcut
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import com.cabin.platform.TeyesAppShortcuts
 import com.cabin.platform.TeyesLaunchableApp
 import kotlinx.coroutines.Dispatchers
@@ -59,10 +68,52 @@ internal fun RouteOverviewWidget(nav: NavigationState, streaming: Boolean, now: 
 }
 
 @Composable
-internal fun AudioControlWidget() {
+internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> Unit) -> Unit = { it() }) {
     val context = LocalContext.current
     val audio = remember(context) { context.getSystemService(Context.AUDIO_SERVICE) as AudioManager }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    var source by remember { mutableStateOf(SyuAudioSourceState()) }
+    val preferences = remember(context) { TeyesFeaturePreferences.get(context) }
+    val revision by preferences.revision.collectAsStateWithLifecycle()
+    val dsp = remember(revision) { preferences.shortcut(TeyesShortcut.EQUALIZER) }
+    var dspAvailable by remember { mutableStateOf(false) }
+    var dspFailed by remember { mutableStateOf(false) }
+    var showRadio by remember { mutableStateOf(false) }
+    if (showRadio) com.cabin.ui.SyuRadioScreen(moving, onParkedAction) { showRadio = false }
+    var showSound by remember { mutableStateOf(false) }
+    var sound by remember { mutableStateOf(SyuSoundConnection()) }
+    var soundController by remember { mutableStateOf<SyuSoundController?>(null) }
+    LaunchedEffect(context, lifecycle, showSound) {
+        if (showSound) lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            val controller = SyuSoundController(context)
+            soundController = controller
+            try { controller.start(); controller.state.collect { sound = it } }
+            finally { soundController = null; controller.close(); sound = SyuSoundConnection() }
+        }
+    }
+    if (showSound) SyuSoundScreen(
+        state = sound.copy(failed = sound.failed || dspFailed), moving = moving,
+        onClose = { showSound = false },
+        onChange = { key, value ->
+            val epoch = sound.epoch
+            if (!moving) onParkedAction { soundController?.set(epoch, key, value) }
+        },
+        onFactory = if (dspAvailable) ({ onParkedAction { dspFailed = !TeyesAppShortcuts.launch(context, dsp) } }) else null,
+    )
+    LaunchedEffect(context, lifecycle, dsp) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            dspAvailable = withContext(Dispatchers.IO) { TeyesAppShortcuts.isAvailable(context, dsp) }
+        }
+    }
+    LaunchedEffect(context, lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            val monitor = SyuAudioSourceMonitor(context)
+            try { monitor.start(); monitor.state.collect { source = it } }
+            finally { monitor.close(); source = SyuAudioSourceState() }
+        }
+    }
+    val sourceName = source.sourceId?.let { context.resources.getStringArray(R.array.syu_audio_sources).getOrNull(it) }
+        ?: stringResource(if (source.connected) R.string.syu_source_waiting else R.string.syu_android_media)
     var level by remember { mutableIntStateOf(0) }
     var max by remember { mutableIntStateOf(0) }
     var muted by remember { mutableStateOf(false) }
@@ -81,9 +132,10 @@ internal fun AudioControlWidget() {
         refresh()
     }
     LaunchedEffect(audio, lifecycle) { lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) { while (true) { refresh(); delay(500) } } }
-    BoxWithConstraints(Modifier.fillMaxSize().testTag("widget-AUDIO_CONTROL")) {
+    BoxWithConstraints(Modifier.fillMaxSize().testTag("widget-AUDIO_CONTROL").semantics { stateDescription = sourceName }) {
         val narrow = maxWidth < 200.dp
         val small = maxHeight < (if (narrow) 180.dp else 140.dp)
+        val dspFits = maxHeight >= (if (narrow) 260.dp else 220.dp)
         @Composable fun Mute() {
             FilledTonalIconButton({ adjust(AudioManager.ADJUST_TOGGLE_MUTE) }, enabled = !fixed, modifier = Modifier.size(56.dp)) {
                 Icon(if (muted) Icons.Default.VolumeOff else Icons.Default.VolumeUp, stringResource(R.string.teyes_mute))
@@ -101,8 +153,19 @@ internal fun AudioControlWidget() {
             } else Row(verticalAlignment = Alignment.CenterVertically) {
                 Step(AudioManager.ADJUST_LOWER, R.string.teyes_volume_lower); Mute(); Step(AudioManager.ADJUST_RAISE, R.string.teyes_volume_higher)
             }
+            if (!small) Text(sourceName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelMedium)
             if (!small) Text(if (fixed) stringResource(R.string.teyes_volume_firmware) else "$level / $max", maxLines = 1,
                 overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelMedium)
+            if (dspFits) Row {
+                TextButton(onClick = { onParkedAction { showRadio = true } }, enabled = !moving, modifier = Modifier.heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.vehicle_radio))
+                }
+                TextButton(onClick = { onParkedAction { dspFailed = false; showSound = true } },
+                    enabled = !moving, modifier = Modifier.heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.syu_sound_title))
+                }
+            }
+            if (dspFailed && !small) Text(stringResource(R.string.launcher_action_failed), maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }

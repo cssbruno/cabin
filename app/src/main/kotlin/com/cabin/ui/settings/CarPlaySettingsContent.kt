@@ -18,6 +18,15 @@ import com.cabin.R
 
 @Composable
 internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false) {
+    if (com.cabin.ui.rememberJoyingCarPlayAvailable()) {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text("Joying native CarPlay", style = MaterialTheme.typography.headlineSmall)
+            Text("CarPlay runs inside Cabin using Joying’s native service. The CarPlay screen includes service handoff, wireless connection, paired-phone selection, and Siri. Firmware permissions are required; hardware validation is pending.")
+            Button(onClick = { com.cabin.platform.JoyingCarPlay.open(context) }) { Text("Open CarPlay in Cabin") }
+        }
+        return
+    }
     var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

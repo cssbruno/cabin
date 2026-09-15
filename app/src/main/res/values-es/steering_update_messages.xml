@@ -1,0 +1,23 @@
+<resources>
+    <string name="steering_back">Atrás</string>
+    <string name="steering_none">No hacer nada</string>
+    <string name="steering_scope">Elige una acción y pulsa un botón. Las pulsaciones cortas y largas pueden tener acciones distintas. Las asignaciones funcionan cuando Cabin tiene el foco y Android le entrega los botones. Los botones gestionados por el coche pueden no aparecer.</string>
+    <string name="steering_app_unavailable">La app asignada no está disponible. Elige otra en los ajustes de botones.</string>
+    <string name="steering_add">Asignar un botón</string>
+    <string name="steering_change">Cambiar acción</string>
+    <string name="steering_remove">Eliminar asignación</string>
+    <string name="steering_choose_action">Elegir acción del botón</string>
+    <string name="steering_open_app">Abrir una app</string>
+    <string name="steering_no_apps">No se encontraron apps que se puedan abrir.</string>
+    <string name="steering_backup_hint">Los cambios se guardan automáticamente. Las copias de ajustes incluyen ambos tipos de pulsación y las apps asignadas.</string>
+    <string name="steering_reset">Restablecer asignaciones</string>
+    <string name="steering_reset_detail">¿Eliminar todas las asignaciones de pulsación corta y larga de Cabin? Los botones vuelven a su comportamiento normal. El aprendizaje de fábrica no cambia.</string>
+    <string name="update_error_signature">Esta actualización usa una clave de firma distinta a la instalada. Instala una actualización firmada con la misma clave. Descargarla de nuevo no lo solucionará.</string>
+    <string name="update_error_apk">El APK descargado no corresponde a esta actualización de Cabin. Busca actualizaciones de nuevo.</string>
+    <string name="update_error_android">Esta actualización requiere una versión más reciente de Android.</string>
+    <string name="update_error_integrity">La descarga está incompleta o no coincide con la suma de verificación publicada. Busca actualizaciones y descarga de nuevo.</string>
+    <string name="update_error_storage">No se pudo guardar la actualización. Comprueba el espacio disponible y reintenta.</string>
+    <string name="update_error_server">GitHub no pudo proporcionar la actualización. Busca actualizaciones y reintenta más tarde.</string>
+    <string name="update_error_network">No se pudo conectar con GitHub. Comprueba tu conexión a internet y reintenta.</string>
+    <string name="update_error_tls">No se pudo establecer una conexión segura. Comprueba la fecha y hora del dispositivo y reintenta.</string>
+</resources>

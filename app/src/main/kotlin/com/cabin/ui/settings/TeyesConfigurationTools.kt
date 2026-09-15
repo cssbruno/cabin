@@ -133,12 +133,18 @@ fun TeyesConfigurationTools(
                         Text(stringResource(R.string.bu_phone_preview, profile.preferredPhone.ifEmpty { resources.getString(R.string.bu_adapter_default) }, enabledLabel(profile.resumeOnWake)))
                         Text(stringResource(R.string.bu_profile_more, (profile.nightBrightness * 100).toInt(), enabledLabel(profile.recoverOverlays), enabledLabel(profile.compactOnLaunch)))
                     }
-                    Text(stringResource(R.string.bu_mapping_count, snapshot.keys.size + snapshot.longKeys.size, snapshot.shortcuts.size))
+                    Text(stringResource(R.string.bu_mapping_count, snapshot.keys.size + snapshot.longKeys.size + snapshot.keyApps.size + snapshot.longKeyApps.size, snapshot.shortcuts.size))
                     snapshot.keys.toSortedMap().forEach { (code, action) ->
                         Text(stringResource(R.string.bu_mapping_preview, code, keyActionLabel(action)))
                     }
                     snapshot.longKeys.toSortedMap().forEach { (code, action) ->
                         Text(stringResource(R.string.layout_long_press) + ": " + stringResource(R.string.bu_mapping_preview, code, keyActionLabel(action)))
+                    }
+                    snapshot.keyApps.forEach { (code, component) ->
+                        Text(stringResource(R.string.bu_mapping_preview, code, component))
+                    }
+                    snapshot.longKeyApps.forEach { (code, component) ->
+                        Text(stringResource(R.string.layout_long_press) + ": " + stringResource(R.string.bu_mapping_preview, code, component))
                     }
                     snapshot.shortcuts.forEach { (kind, component) -> Text("${shortcutLabel(kind)}: ${component.substringBefore('/')}") }
                     val presentation = snapshot.projection
@@ -215,6 +221,9 @@ private fun shortcutLabel(shortcut: TeyesShortcut): String = stringResource(when
 
 @Composable
 private fun keyActionLabel(action: TeyesKeyAction): String = stringResource(when (action) {
+    TeyesKeyAction.BACK -> R.string.steering_back
+    TeyesKeyAction.NONE -> R.string.steering_none
+    TeyesKeyAction.LAUNCHER -> R.string.vehicle_key_launcher
     TeyesKeyAction.PLAY_PAUSE -> R.string.bu_action_play
     TeyesKeyAction.NEXT -> R.string.bu_action_next
     TeyesKeyAction.PREVIOUS -> R.string.bu_action_previous

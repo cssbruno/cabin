@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="honda_turn_by_turn">Navigation directions</string>
+    <string name="honda_warning_message">Warning messages</string>
+    <string name="honda_panel_config">Instrument panel configuration</string>
+    <string name="honda_reverse_tone">Reverse tone</string>
+    <string name="honda_speed_tips">Speed reminders</string>
+    <string name="honda_messages">Message reminders</string>
+    <string name="honda_idle_stop_tips">Idle-stop reminders</string>
+    <string name="honda_eco_backlight">Eco background lighting</string>
+    <string name="honda_traffic_signs">Traffic sign display</string>
+    <string name="honda_alarm_volume">Alarm volume</string>
+    <string name="honda_trip_b_reset">Trip B reset condition</string>
+    <string name="honda_trip_a_reset">Trip A reset condition</string>
+    <string name="honda_outside_temp">Outside temperature adjustment</string>
+    <string name="honda_panel_title">Honda instrument panel</string>
+    <string name="honda_panel_detail">Settings reported by the connected vehicle</string>
+    <string name="honda_panel_type">Type %1$d</string>
+    <string name="honda_low">Low</string>
+    <string name="honda_medium">Medium</string>
+    <string name="honda_high">High</string>
+    <string name="honda_refuel">When refueling</string>
+    <string name="honda_ignition_off">When ignition turns off</string>
+    <string name="honda_manual">Manual</string>
+    <string name="honda_distance_units">Speed / distance units</string>
+    <string name="honda_tachometer_display">Tachometer display</string>
+    <string name="honda_tachometer_setting">Tachometer setting (vendor option)</string>
+    <string name="honda_units_metric" translatable="false">km/h · km</string>
+    <string name="honda_units_imperial" translatable="false">mph · miles</string>
+</resources>

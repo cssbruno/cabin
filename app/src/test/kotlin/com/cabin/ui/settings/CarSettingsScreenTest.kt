@@ -30,8 +30,74 @@ import java.io.File
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class CarSettingsScreenTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
+    @Test fun `replacement service and diagnostics belong to Cabin package`() {
+        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val service = context.packageManager.getServiceInfo(
+            android.content.ComponentName(context, com.cabin.hardware.ReplacementService::class.java), 0)
+        assertEquals(context.packageName, service.packageName)
+        val cabinInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
+        assertEquals(cabinInfo.uid, service.applicationInfo.uid)
+        assertEquals("com.cabin.hardware.permission.CONNECT", service.permission)
+        val provider = context.packageManager.resolveContentProvider("${context.packageName}.reports", 0)
+        assertEquals(context.packageName, checkNotNull(provider).packageName)
+        assertEquals(false, provider.exported)
+    }
+    @Test fun `diagnostics opens inside Cabin without a standalone app`() {
+        compose.setContent { CabinTheme {
+            androidx.compose.foundation.layout.Column { VehicleDiagnosticExport(TeyesClimateState()) }
+        } }
+        compose.onNodeWithText("Diagnostics").performClick()
+        compose.runOnIdle {
+            val intent = org.robolectric.Shadows.shadowOf(org.robolectric.RuntimeEnvironment.getApplication()).nextStartedActivity
+            assertEquals(compose.activity.packageName, intent.component?.packageName)
+            assertEquals("com.cabin.hardware.LabActivity", intent.component?.className)
+            val info = compose.activity.packageManager.getActivityInfo(checkNotNull(intent.component), 0)
+            assertEquals(false, info.exported)
+        }
+    }
+    @Test fun `Honda panel selection uses parked guard and waits for vehicle feedback`() {
+        val writes = mutableListOf<Pair<SyuFactoryControl, Int>>()
+        var pending: (() -> Unit)? = null
+        val vehicle = TeyesClimateState(connected = true, profileId = 0x40141,
+            syuVehicle = SyuVehicleTelemetry(factoryControls = mapOf(SyuFactoryControl.HONDA_PANEL_CONFIG to 0)))
+        compose.setContent {
+            CabinTheme { CarSettingsScreen(vehicle, false,
+                ClimateWidgetActions(onFactoryControl = { control, value -> writes += control to value }),
+                { pending = it }, null) }
+        }
+        compose.onNodeWithText("Honda instrument panel").performScrollTo().performClick()
+        compose.onNodeWithText("Type 1").performScrollTo().performClick()
+        compose.onNodeWithText("Type 3").performClick()
+        compose.runOnIdle {
+            assertEquals(emptyList<Pair<SyuFactoryControl, Int>>(), writes)
+            checkNotNull(pending).invoke()
+            assertEquals(listOf(SyuFactoryControl.HONDA_PANEL_CONFIG to 2), writes)
+        }
+        compose.onNodeWithText("Type 1").assertIsDisplayed()
+    }
+
     private fun camera() = TeyesClimateState(connected = true, profileId = 131114,
         syuVehicle = SyuVehicleTelemetry(factoryControls = mapOf(SyuFactoryControl.CAMERA_MODE to 0)))
+
+    @Test fun `RZC units are native Cabin choices rather than an on off switch`() {
+        val writes = mutableListOf<Pair<SyuFactoryControl, Int>>()
+        var pending: (() -> Unit)? = null
+        val vehicle = TeyesClimateState(connected = true, profileId = 0x10012a,
+            syuVehicle = SyuVehicleTelemetry(factoryControls = mapOf(SyuFactoryControl.HONDA_DISTANCE_UNITS to 0)))
+        compose.setContent { CabinTheme { CarSettingsScreen(vehicle, false,
+            ClimateWidgetActions(onFactoryControl = { control, value -> writes += control to value }),
+            { pending = it }, null) } }
+        compose.onNodeWithText("Honda instrument panel").performScrollTo().performClick()
+        compose.onNodeWithText("km/h · km").performScrollTo().performClick()
+        compose.onNodeWithText("mph · miles").performClick()
+        compose.runOnIdle {
+            assertEquals(emptyList<Pair<SyuFactoryControl, Int>>(), writes)
+            checkNotNull(pending).invoke()
+            assertEquals(listOf(SyuFactoryControl.HONDA_DISTANCE_UNITS to 1), writes)
+        }
+        compose.onNodeWithText("km/h · km").assertIsDisplayed()
+        compose.onNodeWithText("Type 1").assertDoesNotExist()
+    }
 
     @Test fun `camera selection uses parked guard and waits for confirmed feedback`() {
         val writes = mutableListOf<Int>()

@@ -1,0 +1,7 @@
+<resources>
+    <string name="reporting_title">Condividi rapporti di errore</string>
+    <string name="reporting_detail">Facoltativo: invia a Sentry errori, blocchi, versioni di app e Android e fasi di connessione. Senza schermate, audio, GPS, dati del telefono o log grezzi. Disattivare cancella la coda; i rapporti già ricevuti restano in Sentry.</string>
+    <string name="reporting_unconfigured">Rapporti non disponibili in questa versione.</string>
+    <string name="reporting_test">Invia rapporto di prova</string>
+    <string name="reporting_queued">Rapporto in coda; l’invio richiede una connessione.</string>
+</resources>

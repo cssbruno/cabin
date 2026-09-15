@@ -3,109 +3,57 @@ package com.cabin.ui.components
 import android.view.MotionEvent
 import android.view.Surface
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.cabin.logging.logInfo
-import com.cabin.logging.logWarn
 
-/**
- * Compose wrapper for VideoSurfaceView. Uses HWC overlay for low-latency rendering.
- *
- * See VideoSurfaceView.kt for the underlying SurfaceHolder.Callback deferred-fire state
- * machine (pending-surface bookkeeping, idempotent teardown, re-create semantics).
- *
- * CALLER CONTRACT (load-bearing — the factory block below runs exactly once):
- *  - onSurfaceAvailable / onSurfaceDestroyed / onSurfaceSizeChanged / onTouchEvent are
- *    captured by the Callback object on first composition. There is no update={} block
- *    and no rememberUpdatedState indirection, so non-stable lambdas passed on later
- *    recompositions are SILENTLY IGNORED. Callers MUST hoist these lambdas with
- *    remember {} (or rememberUpdatedState via an outer wrapper) to avoid stale captures.
- *  - onSurfaceDestroyed is invoked from TWO sources: (a) DisposableEffect.onDispose when
- *    the composable leaves the tree, and (b) VideoSurfaceView.Callback.onSurfaceDestroyed
- *    when the underlying SurfaceHolder tears down. Both can fire for a single teardown.
- *    CabinManager.kt:1132-1145 handles this idempotently (null-checks pendingSurface /
- *    videoSurface, idempotent renderer.stop()). Do not add de-dup here — the downstream
- *    handler is the source of truth.
- */
+/** One delivery of teardown per attached surface, including Compose disposal. */
+internal class VideoSurfaceLifecycle(private val destroyed: (Surface) -> Unit) {
+    var surface: Surface? = null
+        private set
+
+    fun attach(surface: Surface) { this.surface = surface }
+    fun destroy() {
+        val previous = surface ?: return
+        surface = null
+        destroyed(previous)
+    }
+}
+
+/** Keeps callbacks fresh and makes late teardown identify the surface it actually owned. */
 @Composable
 fun VideoSurface(
     modifier: Modifier = Modifier,
     onSurfaceAvailable: (Surface, Int, Int) -> Unit,
-    onSurfaceDestroyed: () -> Unit,
-    // Optional: when null, SurfaceHolder size changes are SILENTLY DROPPED (see `?.invoke`
-    // at the callback site below). CabinManager needs size changes for surface-resize
-    // tier logic, so production wiring must always pass a non-null lambda here.
+    onSurfaceDestroyed: (Surface) -> Unit,
     onSurfaceSizeChanged: ((Int, Int) -> Unit)? = null,
-    // Optional: when null, onTouchEvent returns false and VideoSurfaceView's delegation
-    // skips super.onTouchEvent — i.e. all touches on the surface are swallowed. Pass a
-    // non-null lambda if the surface should be interactive.
     onTouchEvent: ((MotionEvent) -> Boolean)? = null,
 ) {
-    DisposableEffect(Unit) {
-        logInfo("[VIDEO_SURFACE] VideoSurface composable created", tag = "UI")
-        onDispose {
-            logWarn("[VIDEO_SURFACE] VideoSurface composable disposed", tag = "UI")
-            // DOUBLE-FIRE SITE #1: composable disposal. See class KDoc — may also fire
-            // via Callback.onSurfaceDestroyed below. Downstream is idempotent.
-            onSurfaceDestroyed()
-        }
-    }
-
+    val available by rememberUpdatedState(onSurfaceAvailable)
+    val destroyed by rememberUpdatedState(onSurfaceDestroyed)
+    val resized by rememberUpdatedState(onSurfaceSizeChanged)
+    val touched by rememberUpdatedState(onTouchEvent)
+    val lifecycle = remember { VideoSurfaceLifecycle { destroyed(it) } }
+    DisposableEffect(lifecycle) { onDispose { lifecycle.destroy() } }
     AndroidView(
-        // NOTE: fillMaxSize() is appended AFTER the caller's modifier, so any caller
-        // size constraints (e.g. MainScreen's requiredHeight surfaceModifier) apply
-        // first and fillMaxSize() fills within that bounded region. Surprising but
-        // intentional — do not reorder.
         modifier = modifier.fillMaxSize(),
+        onRelease = { view ->
+            view.callback = null
+            lifecycle.destroy()
+        },
         factory = { context ->
-            logInfo("[VIDEO_SURFACE] Creating VideoSurfaceView", tag = "UI")
             VideoSurfaceView(context).apply {
-                // STALE-LAMBDA HAZARD: this Callback closes over the lambdas captured at
-                // first composition. There is no update={} block, so later recompositions
-                // with different lambda instances have no effect. See class KDoc contract.
-                callback =
-                    object : VideoSurfaceView.Callback {
-                        override fun onSurfaceCreated(
-                            surface: Surface,
-                            width: Int,
-                            height: Int,
-                        ) {
-                            logInfo("[VIDEO_SURFACE] SurfaceView.onSurfaceCreated: ${width}x$height", tag = "UI")
-                            onSurfaceAvailable(surface, width, height)
-                        }
-
-                        override fun onSurfaceChanged(
-                            width: Int,
-                            height: Int,
-                        ) {
-                            logInfo("[VIDEO_SURFACE] SurfaceView.onSurfaceChanged: ${width}x$height", tag = "UI")
-                            // SILENT-DROP SITE: if caller passed null, size changes are
-                            // discarded. Combined with onSurfaceAvailable writing w/h, this
-                            // means a caller that wires onSurfaceAvailable but leaves
-                            // onSurfaceSizeChanged null will see width/height frozen at
-                            // creation values — a wiring footgun. See param KDoc above.
-                            onSurfaceSizeChanged?.invoke(width, height)
-                        }
-
-                        override fun onSurfaceDestroyed() {
-                            logWarn("[VIDEO_SURFACE] SurfaceView.onSurfaceDestroyed", tag = "UI")
-                            // DOUBLE-FIRE SITE #2: SurfaceHolder teardown. Pairs with the
-                            // DisposableEffect.onDispose site above; CabinManager.kt
-                            // dedupes via null-checked pendingSurface/videoSurface.
-                            onSurfaceDestroyed()
-                        }
-
-                        // Null caller -> returns false -> VideoSurfaceView's delegation
-                        // skips super.onTouchEvent, swallowing the touch. See param KDoc.
-                        override fun onTouchEvent(event: MotionEvent): Boolean = onTouchEvent?.invoke(event) ?: false
+                callback = object : VideoSurfaceView.Callback {
+                    override fun onSurfaceCreated(surface: Surface, width: Int, height: Int) {
+                        lifecycle.attach(surface)
+                        available(surface, width, height)
                     }
+                    override fun onSurfaceChanged(width: Int, height: Int) {
+                        resized?.invoke(width, height)
+                    }
+                    override fun onSurfaceDestroyed() = lifecycle.destroy()
+                    override fun onTouchEvent(event: MotionEvent): Boolean = touched?.invoke(event) ?: false
+                }
             }
         },
     )
@@ -151,8 +99,10 @@ class VideoSurfaceState {
         height = h
     }
 
-    fun onSurfaceDestroyed() {
+    fun onSurfaceDestroyed(expected: Surface): Boolean {
+        if (surface !== expected) return false
         surface = null
+        return true
     }
 
     fun onSurfaceSizeChanged(
@@ -166,4 +116,4 @@ class VideoSurfaceState {
 
 /** Remember a [VideoSurfaceState] scoped to the current composition. See [VideoSurfaceState] for wiring. */
 @Composable
-fun rememberVideoSurfaceState(): VideoSurfaceState = remember { VideoSurfaceState() }
+fun rememberVideoSurfaceState(owner: Any? = null): VideoSurfaceState = remember(owner) { VideoSurfaceState() }
