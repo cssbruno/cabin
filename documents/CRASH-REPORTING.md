@@ -16,7 +16,7 @@
 Java/Kotlin crashes, current ANRs and native crashes are enabled after consent.
 Handled exceptions passed through Cabin's Logger, updater check/download failures,
 and Joying control/start/decoder failures are captured. Cancellation is excluded.
-Other caught exceptions that never reach these paths are not automatically captured.
+FYT bind rejection, permission denial and module lookup failures now add fixed diagnostic events; thrown bind/module errors also reach sanitized exception reporting. Other caught exceptions that never reach these paths are not automatically captured.
 
 Sentry Logs receives TRACE/DEBUG/INFO/WARN/ERROR diagnostics from the central Logger
 and DEBUG diagnostics from DebugJournal. They contain severity and the originating

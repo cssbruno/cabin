@@ -18,4 +18,6 @@
     <string name="joying_background">Connexion Joying active</string>
     <string name="joying_recovering">Reconnexion à CarPlay… (%1$d/%2$d)</string>
     <string name="joying_recovery_exhausted">Impossible de reconnecter CarPlay. Appuyez sur Réessayer.</string>
+    <string name="joying_stock_settings">Réglages de Car Link d’origine</string>
+    <string name="joying_stock_settings_missing">Les réglages des applications sont indisponibles. Utilisez l’outil ADB Joying puis réessayez.</string>
 </resources>

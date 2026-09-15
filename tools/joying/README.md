@@ -6,6 +6,8 @@ The stock Car Link service must relinquish the abstract video socket. When the s
 
 A normal sideload may not hold `FORCE_STOP_PACKAGES`, native Binder access, `LOCAL_MAC_ADDRESS`, or tethering permissions; manifest declarations alone do not grant those permissions. No permission bypass or SELinux changes are performed. Automatic recovery is covered by local tests but still needs validation on a physical Joying unit.
 
+On a normal installation, use **Stock Car Link settings → Force stop**, return to Cabin and press **Retry**. Closing the stock screen is not sufficient when its service still holds the socket. The settings shortcut does not grant force-stop permission to Cabin.
+
 For an authorized ADB connection, the companion tool can hand off socket ownership without modifying the firmware:
 
 ```sh
@@ -13,7 +15,7 @@ python tools/joying/carplay_handoff.py --serial JOYING_SERIAL
 python tools/joying/carplay_handoff.py --serial JOYING_SERIAL --action prepare
 ```
 
-Then open Cabin's CarPlay page and press Retry. Plug the iPhone into the CarPlay USB port, or enable wireless and choose an iPhone in Cabin’s phone picker. The picker can discover phones and request pairing; Android presents the pairing consent. The session follows the projection screen's lifetime; leaving it ends Cabin's wireless resources and audio focus.
+Then open Cabin's CarPlay page and press Retry. Plug the iPhone into the CarPlay USB port, or enable wireless and choose an iPhone in Cabin’s phone picker. The picker can discover phones and request pairing; Android presents the pairing consent. The foreground service owns the session; leaving the projection screen does not end it. Use Disconnect to release Cabin’s resources.
 
 To return to the stock service:
 

@@ -31,8 +31,19 @@ internal object SyuBinderTransport {
         }
     }
 
-    fun getModule(toolkit: IBinder, module: Int): IBinder? =
-        exchange(toolkit, "com.syu.ipc.IRemoteToolkit", 1, { it.writeInt(module) }, { it.readStrongBinder() })
+    fun getModule(toolkit: IBinder, module: Int): IBinder? {
+        try {
+            // ModuleService already returns IRemoteModule; don't send it a toolkit request.
+            if (toolkit.interfaceDescriptor == MODULE_DESCRIPTOR) return toolkit
+            return exchange(toolkit, "com.syu.ipc.IRemoteToolkit", 1, { it.writeInt(module) }, { it.readStrongBinder() }).also {
+                if (it == null) com.cabin.telemetry.CabinTelemetry.record(com.cabin.telemetry.DiagnosticEvent.FYT_MODULE_UNAVAILABLE)
+            }
+        } catch (error: Exception) {
+            com.cabin.telemetry.CabinTelemetry.record(com.cabin.telemetry.DiagnosticEvent.FYT_MODULE_FAILED)
+            com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, error)
+            throw error
+        }
+    }
 
     fun register(remote: IBinder, callback: IBinder, field: Int) {
         transact(remote, 3, { it.writeStrongBinder(callback); it.writeInt(field); it.writeInt(1) }, {})

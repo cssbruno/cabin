@@ -18,6 +18,9 @@ internal object JoyingServiceHandoff {
         }
     }
 
+    fun stockSettingsIntent() = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        android.net.Uri.parse("package:com.syu.carlink"))
+
     fun prepare(context: Context) {
         check(JoyingEmbeddedSession.awaitReleased()) { "CarPlay is still shutting down; try again" }
         releaseStockClient(context)

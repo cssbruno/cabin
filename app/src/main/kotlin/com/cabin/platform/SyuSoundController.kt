@@ -148,7 +148,7 @@ internal class SyuSoundController(context: Context, private val now: () -> Long 
             override fun onNullBinding(name: ComponentName?) = lost(this)
         }
         owner = connection
-        val accepted = try { context.bindService(fytToolkitIntent(context), connection, Context.BIND_AUTO_CREATE) }
+        val accepted = try { bindFytService(context, fytModuleIntent(context, 4), connection) }
             catch (_: RuntimeException) { false }
         if (accepted) handler.postDelayed(bindTimeout, 10_000) else reconnect()
     }

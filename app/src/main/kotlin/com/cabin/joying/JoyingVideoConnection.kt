@@ -41,7 +41,7 @@ internal object JoyingVideoConnection {
         } catch (error: InterruptedException) {
             throw error
         } catch (error: Exception) {
-            throw ConnectionException(Failure.HANDOFF_BLOCKED, "Car Link is using the video connection. Joying did not allow Cabin to release it. Use the Joying ADB handoff tool, then Retry.", error)
+            throw ConnectionException(Failure.HANDOFF_BLOCKED, "Car Link is using the video connection. Joying did not allow Cabin to release it. Open Stock Car Link settings, tap Force stop, return to Cabin and Retry. If Force stop is unavailable, use the Joying ADB handoff tool.", error)
         }
         // stopService is asynchronous. Allow up to two seconds for vendor cleanup.
         repeat(10) {
@@ -56,7 +56,7 @@ internal object JoyingVideoConnection {
     }
 
     private fun failure(error: IOException) = ConnectionException(classify(error), when (classify(error)) {
-        Failure.BUSY -> "Joying’s video connection is still in use after releasing Car Link. Use the Joying ADB handoff tool, then Retry."
+        Failure.BUSY -> "Joying’s video connection is still in use after releasing Car Link. Open Stock Car Link settings, tap Force stop, return to Cabin and Retry. If Force stop is unavailable, use the Joying ADB handoff tool."
         Failure.DENIED -> "Joying firmware denied Cabin access to CarPlay video. This requires firmware-provided access; Retry cannot grant it."
         Failure.HANDOFF_BLOCKED -> "Joying did not allow the stock video connection to be released."
         Failure.OTHER -> "Joying video connection failed: ${error.message ?: error.javaClass.simpleName}"

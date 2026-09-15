@@ -71,7 +71,7 @@ internal class SyuAudioSourceMonitor(context: Context) : AutoCloseable {
             override fun onNullBinding(name: ComponentName?) = lost(this)
         }
         owner = connection
-        val accepted = try { context.bindService(fytToolkitIntent(context), connection, Context.BIND_AUTO_CREATE) } catch (_: RuntimeException) { false }
+        val accepted = try { bindFytService(context, fytModuleIntent(context, 0), connection) } catch (_: RuntimeException) { false }
         if (accepted) handler.postDelayed(timeout, 10_000) else reconnect()
     }
     private fun lost(expected: ServiceConnection) { handler.post { if (owner === expected) reconnect() } }

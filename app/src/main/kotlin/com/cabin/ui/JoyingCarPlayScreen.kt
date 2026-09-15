@@ -85,6 +85,11 @@ internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             TextButton(enabled = !preparing, onClick = {
                 sessionHandle?.disconnect()
+                try { context.startActivity(JoyingServiceHandoff.stockSettingsIntent()) }
+                catch (_: android.content.ActivityNotFoundException) { status = context.getString(R.string.joying_stock_settings_missing) }
+            }) { Text(stringResource(R.string.joying_stock_settings)) }
+            TextButton(enabled = !preparing, onClick = {
+                sessionHandle?.disconnect()
                 preparing = true
                 scope.launch {
                     val result = withContext(Dispatchers.IO) { runCatching { JoyingServiceHandoff.prepare(context) } }

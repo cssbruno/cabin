@@ -29,4 +29,23 @@ class FytToolkitServiceTest {
         info.serviceInfo.exported = false
         assertEquals(ComponentName("com.syu.ms", "app.ToolkitService"), fytToolkitIntent(context).component)
     }
+    @Test fun `uses an exported direct module when toolkit is unavailable`() {
+        val action = Intent("com.syu.ms.radio").setPackage("com.syu.ms")
+        val info = ResolveInfo().apply { serviceInfo = ServiceInfo().apply {
+            packageName = "com.syu.ms"; name = "app.ModuleService"; exported = true; enabled = true
+        } }
+        shadowOf(context.packageManager).addResolveInfoForIntent(action, info)
+        val selected = fytModuleIntent(context, 1)
+        assertEquals("com.syu.ms.radio", selected.action)
+        assertEquals(ComponentName("com.syu.ms", "app.ModuleService"), selected.component)
+    }
+
+    @Test fun `does not choose a private direct module`() {
+        val info = ResolveInfo().apply { serviceInfo = ServiceInfo().apply {
+            packageName = "com.syu.ms"; name = "private.Sound"; exported = false; enabled = true
+        } }
+        shadowOf(context.packageManager).addResolveInfoForIntent(Intent("com.syu.ms.sound").setPackage("com.syu.ms"), info)
+        assertEquals("com.syu.ms.toolkit", fytModuleIntent(context, 4).action)
+    }
+
 }

@@ -61,7 +61,7 @@ internal class JoyingFactoryBluetooth(
     }
     fun start() {
         if (!closed && !bound) bound = runCatching {
-            context.bindService(Intent("com.syu.ms.toolkit").setPackage("com.syu.ms"), connection, Context.BIND_AUTO_CREATE)
+            com.cabin.platform.bindFytService(context, com.cabin.platform.fytModuleIntent(context, 2), connection)
         }.getOrDefault(false)
     }
     /** CarLinkService.g: C_LINK_CUT is command 13, with a scalar inside the AIDL int array. */

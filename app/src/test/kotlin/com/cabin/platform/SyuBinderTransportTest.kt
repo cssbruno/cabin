@@ -20,6 +20,17 @@ class SyuBinderTransportTest {
         }
     }
 
+    @Test fun `direct module binder does not receive a toolkit transaction`() {
+        val module = object : Binder() {
+            init { attachInterface(null, SyuBinderTransport.MODULE_DESCRIPTOR) }
+            override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+                fail("Direct module must not receive a toolkit lookup")
+                return false
+            }
+        }
+        assertSame(module, SyuBinderTransport.getModule(module, 1))
+    }
+
     @Test fun `command arguments match synchronous reference stub`() {
         val module = remote { code, data, reply ->
             assertEquals(1, code)

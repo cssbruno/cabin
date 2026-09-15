@@ -24,6 +24,7 @@ import java.io.File
 
 /** Fixed vocabulary only: never send raw vendor messages or media/phone metadata. */
 enum class DiagnosticEvent {
+    FYT_BIND_REJECTED, FYT_BIND_DENIED, FYT_BIND_FAILED, FYT_MODULE_UNAVAILABLE, FYT_MODULE_FAILED,
     JOYING_START, JOYING_RETRY, JOYING_EXHAUSTED, JOYING_STOP,
     PROJECTION_DISCONNECTED, PROJECTION_CONNECTING, PROJECTION_STREAMING, TEST_REPORT,
 }
