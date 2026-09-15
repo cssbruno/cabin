@@ -23,4 +23,12 @@
     <string name="logs_close_viewer">Fechar</string>
     <string name="logs_read_failed">Não foi possível abrir este registro. Ele pode ter sido excluído ou substituído.</string>
     <string name="logs_empty_page">Nenhum registro nesta página.</string>
+    <string name="vehicle_firmware_detected">Firmware: %1$s</string>
+    <string name="vehicle_decoder_automatic">Formato dos dados selecionado automaticamente pelo firmware reconhecido.</string>
+    <string name="vehicle_decoder_unknown">Formato desconhecido</string>
+    <string name="carplay_backend_dongle">Dongle CCPA</string>
+    <string name="carplay_backend_native">Nativo Joying</string>
+    <string name="carplay_backend_open">Abrir CarPlay</string>
+    <string name="carplay_backend_switch_failed">Não foi possível trocar a conexão. Tente novamente.</string>
+    <string name="carplay_backend_none">Nenhuma conexão CarPlay detectada</string>
 </resources>

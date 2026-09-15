@@ -263,7 +263,7 @@
     <string name="vehicle_readings">Letture del veicolo · FYT</string>
     <string name="vehicle_readings_detail">Dati di sola lettura dal sottosistema FYT installato sull’autoradio.</string>
     <string name="vehicle_source">Fonte: servizio veicolo FYT / SYU</string>
-    <string name="vehicle_profile_detail">Profilo veicolo segnalato: %1$d. Identificarlo non verifica tutte le letture.</string>
+    <string name="vehicle_profile_detail">Profilo CAN: %1$d</string>
     <string name="vehicle_service_required">Servono un servizio di fabbrica compatibile e campi supportati aggiornati.</string>
     <string name="vehicle_speed">Velocità</string>
     <string name="vehicle_engine_speed">Regime motore</string>
@@ -276,11 +276,6 @@
     <string name="vehicle_voltage_unavailable">Tensione ECU · Non disponibile</string>
     <string name="vehicle_dtc_unavailable">Codici guasto (DTC) · Non disponibili</string>
     <string name="vehicle_interface_limits">Nessuna interfaccia FYT verificata per questi campi. Nessun codice ipotizzato, cancellazione guasti, codifica o scrittura sul veicolo.</string>
-    <string name="vehicle_layout">Formato dati del veicolo</string>
-    <string name="vehicle_layout_existing">Firmware esistente (velocità/RPM)</string>
-    <string name="vehicle_layout_civic">Riferimento Civic 0298</string>
-    <string name="vehicle_layout_detail">Mantieni Firmware esistente se velocità e RPM funzionano. Usa Civic 0298 solo con firmware corrispondente: legge porte e manutenzione olio. Quel formato non supporta ancora velocità/RPM o temperature. Cambia da parcheggiato e torna indietro se i dati sono errati o mancanti.</string>
-    <string name="vehicle_layout_readonly">Cambia solo la decodifica in lettura di Cabin, non le impostazioni CAN di fabbrica o i comandi del clima. Le letture si aggiornano dopo il cambio.</string>
     <string name="vehicle_status_connecting">Connessione al servizio veicolo FYT…</string>
     <string name="vehicle_status_unavailable">Servizio veicolo FYT non disponibile</string>
     <string name="vehicle_status_waiting">In attesa di letture FYT recenti</string>

@@ -13,6 +13,7 @@ internal object JoyingNativeProtocol {
     const val VIDEO_SOCKET = "/proc/mysocket"
     const val TOUCH = 202
     const val SCREEN = 210
+    const val LINK_STATE = 215
     const val MAX_FRAME = 4 * 1024 * 1024
 
     fun command(binder: IBinder, command: Int, values: IntArray = intArrayOf(), strings: List<String> = emptyList()): Int =

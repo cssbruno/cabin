@@ -34,8 +34,8 @@ class TeyesClimateBinderIntegrationTest {
     @Before
     fun setup() {
         context = ToolkitContext(ApplicationProvider.getApplicationContext())
-        TeyesVehicleDataPreferences.get(context).select(TeyesVehicleDataLayout.CIVIC_0298)
         controller = TeyesClimateController(context) {}
+        controller.firmwareDetector = { FytFirmware("2.23.0711.1001", TeyesVehicleDataLayout.CIVIC_0298) }
         worker =
             TeyesClimateController::class.java.getDeclaredField("worker").let {
                 it.isAccessible = true
@@ -59,7 +59,6 @@ class TeyesClimateBinderIntegrationTest {
         }
         worker.join(1_000)
         assertFalse("Vehicle worker must terminate after close", worker.isAlive)
-        TeyesVehicleDataPreferences.get(context).select(TeyesVehicleDataLayout.LEGACY)
     }
 
     @Test fun `Honda panel writes require feedback and use the live vendor module`() {
@@ -453,6 +452,19 @@ class TeyesClimateBinderIntegrationTest {
         emit(1, 1)
         assertTrue(controller.state.value.frontLeftDoorOpen)
         assertTrue(context.module.commands.isEmpty())
+    }
+
+    @Test fun `reported XP1 profile uses detected firmware and ignores old manual selection`() {
+        context.getSharedPreferences("teyes_vehicle_data_v1", Context.MODE_PRIVATE)
+            .edit().putString("layout", "LEGACY").commit()
+        emit(1000, 262442)
+        emit(89, 13)
+        emit(90, 1)
+        assertEquals(262442, controller.state.value.profileId)
+        assertEquals("2.23.0711.1001", controller.state.value.fytFirmwareVersion)
+        assertEquals(TeyesVehicleDataLayout.CIVIC_0298, controller.state.value.vehicleDataLayout)
+        assertNull(controller.state.value.speedKph)
+        assertNull(controller.state.value.engineRpm)
     }
 
     @Test fun `Joying empty subscription replies keep CAN connected across refreshes`() {

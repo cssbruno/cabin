@@ -263,7 +263,7 @@
     <string name="vehicle_readings">Leituras do veículo · FYT</string>
     <string name="vehicle_readings_detail">Dados somente para leitura do subsistema FYT instalado na central.</string>
     <string name="vehicle_source">Fonte: serviço do veículo FYT / SYU</string>
-    <string name="vehicle_profile_detail">Perfil informado pelo veículo: %1$d. Identificar o perfil não confirma todas as leituras.</string>
+    <string name="vehicle_profile_detail">Perfil CAN: %1$d</string>
     <string name="vehicle_service_required">É necessário um serviço de fábrica compatível e campos suportados com dados atuais.</string>
     <string name="vehicle_speed">Velocidade</string>
     <string name="vehicle_engine_speed">Rotação do motor</string>
@@ -276,11 +276,6 @@
     <string name="vehicle_voltage_unavailable">Tensão da ECU · Indisponível</string>
     <string name="vehicle_dtc_unavailable">Códigos de falha (DTC) · Indisponíveis</string>
     <string name="vehicle_interface_limits">Estes campos não têm uma interface FYT verificada aqui. Nenhum código adicional é presumido e não há apagamento de falhas, codificação ou gravação no veículo.</string>
-    <string name="vehicle_layout">Formato dos dados do veículo</string>
-    <string name="vehicle_layout_existing">Firmware existente (velocidade/RPM)</string>
-    <string name="vehicle_layout_civic">Referência Civic 0298</string>
-    <string name="vehicle_layout_detail">Mantenha Firmware existente se velocidade e RPM já funcionam. Use Referência Civic 0298 apenas com firmware correspondente; ela lê portas e troca de óleo. Velocidade/RPM e temperaturas ainda não são suportadas nesse formato. Altere com o carro estacionado; reverta se as leituras estiverem erradas ou ausentes.</string>
-    <string name="vehicle_layout_readonly">Isso altera apenas a leitura dos dados pelo Cabin, sem mudar configurações CAN de fábrica ou comandos do ar-condicionado. As leituras são atualizadas após a troca.</string>
     <string name="vehicle_status_connecting">Conectando ao serviço do veículo FYT…</string>
     <string name="vehicle_status_unavailable">Serviço do veículo FYT indisponível</string>
     <string name="vehicle_status_waiting">Aguardando leituras FYT atuais</string>

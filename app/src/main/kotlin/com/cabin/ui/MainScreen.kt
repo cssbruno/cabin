@@ -141,8 +141,13 @@ fun MainScreen(
     onRefreshClimate: (() -> Unit)? = null,
     onResetConnection: (() -> Unit)? = null,
 ) {
-    if (rememberJoyingCarPlayAvailable()) {
-        JoyingCarPlayScreen(onOpenLauncher ?: onOpenDashboard)
+    val backends = rememberCarPlayBackends()
+    if (backends.available.size > 1 && backends.selected == null) {
+        CarPlayBackendPicker(cabinManager, backends)
+        return
+    }
+    if (backends.selected == com.cabin.platform.CarPlayBackend.JOYING) {
+        JoyingCarPlayScreen(onOpenLauncher ?: onOpenDashboard, onNavigateToSettings)
         return
     }
     val scope = rememberCoroutineScope()

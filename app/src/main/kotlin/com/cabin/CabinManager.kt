@@ -1095,7 +1095,7 @@ class CabinManager(
 
     /** Internal start path. Unlike [start], this never resurrects a user-stopped session. */
     private suspend fun startIfDesired() {
-        if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) return
+        if (!com.cabin.platform.CarPlayBackendSelection.allowsDongle(context)) return
         withContext(Dispatchers.IO) {
             lifecycleMutex.lock()
             try {

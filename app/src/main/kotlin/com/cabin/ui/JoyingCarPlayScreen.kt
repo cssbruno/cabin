@@ -27,15 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import com.cabin.platform.JoyingCarPlay
 
 @Composable
-internal fun rememberJoyingCarPlayAvailable(): Boolean {
-    val context = LocalContext.current
-    var available by remember(context) { mutableStateOf(JoyingCarPlay.isAvailable(context)) }
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { available = JoyingCarPlay.isAvailable(context) }
-    return available
-}
-
-@Composable
-internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null) {
+internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null, onOpenSettings: (() -> Unit)? = null) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var sessionHandle by remember { mutableStateOf<JoyingCarPlayService?>(null) }
@@ -78,6 +70,7 @@ internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null) {
     Column(Modifier.fillMaxSize().testTag("joying-embedded-carplay")) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.joying_title), Modifier.weight(1f))
+            if (onOpenSettings != null) TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.label_connection)) }
             TextButton(onClick = { retry() }) { Text(stringResource(R.string.joying_retry)) }
             TextButton(onClick = { com.cabin.reports.LiveDebugMenu.show(context) }) { Text("Live debug") }
             if (onOpenLauncher != null) TextButton(onClick = onOpenLauncher) { Text(stringResource(R.string.joying_home)) }

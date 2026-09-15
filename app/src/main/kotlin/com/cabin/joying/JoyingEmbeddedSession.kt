@@ -60,6 +60,7 @@ internal class JoyingEmbeddedSession(
     private val controls = Executors.newSingleThreadExecutor()
     private var ownsSession = false
     private var listenerRegistered = false
+    private var lastLinkState: Int? = null // Owned by controls executor.
     private val death = IBinder.DeathRecipient { fail("Joying native service stopped.") }
     private val audio = JoyingAudioFocus(context) { play -> dispatch { command(216, intArrayOf(if (play) 1 else 0)) } }
     private val wireless = JoyingWireless(context, ::dispatch, ::command,
@@ -118,10 +119,26 @@ internal class JoyingEmbeddedSession(
             }
             is JoyingNativeListener.Event.State -> when (event.id) {
                 107 -> audio.updateCall(event.value)
-                100 -> { if (event.value == 0) { audio.reset(); factoryBluetooth.restoreHandsFree(); onStatus("Connect your iPhone to Joying’s CarPlay USB port, or choose a paired phone.") } }
+                100 -> updateLinkState(event.value)
             }
             JoyingNativeListener.Event.ShowUi -> command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
             is JoyingNativeListener.Event.Message -> Unit
+        }
+    }
+
+    private fun updateLinkState(value: Int) {
+        com.cabin.reports.DebugJournal.record("CarPlay", "link_state", "state=$value")
+        val changed = lastLinkState != value
+        lastLinkState = value
+        if (value == 0) {
+            audio.reset()
+            factoryBluetooth.restoreHandsFree()
+            onStatus("Waiting for iPhone…")
+        } else if (changed && value in 1..4) {
+            // Stock f.d publishes link changes and the CarplayView requests video
+            // when it becomes visible. The startup request can precede phone readiness.
+            command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
+            onStatus("Waiting for CarPlay video…")
         }
     }
 
@@ -129,10 +146,7 @@ internal class JoyingEmbeddedSession(
         com.cabin.reports.DebugJournal.record("CarPlay", "starting", "Connecting to Joying native service")
         workers.execute {
             try {
-                val remote = Class.forName("android.os.ServiceManager")
-                    .getMethod("getService", String::class.java)
-                    .invoke(null, JoyingNativeProtocol.SERVICE) as? IBinder
-                    ?: error("Joying CarplayServer is unavailable. The firmware service must be running.")
+                val remote = JoyingServiceHandoff.nativeService()
                 check(sessionGate.tryAcquire(5, TimeUnit.SECONDS)) { "Previous CarPlay session is still shutting down" }
                 synchronized(this) {
                     ownsSession = true
@@ -166,27 +180,34 @@ internal class JoyingEmbeddedSession(
                         // Screen geometry + physical reference width and stock FPS marker (c.m).
                         command(218, display.nativeValues())
                         command(223, intArrayOf(1)) // Wired auto-connect.
-                        command(219) // Query native phone state; emits listener state.
+                        command(219) // Stock native startup request (c.m).
                         command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
+                        updateLinkState(JoyingNativeProtocol.command(remote, JoyingNativeProtocol.LINK_STATE))
                     }
                 }.get()
                 if (closed.get()) return@execute
                 onSize(videoWidth, videoHeight)
-                onStatus("Waiting for CarPlay video from Joying…")
                 workers.execute(::decode)
                 while (!closed.get()) {
                     val accepted = server!!.accept()
                     com.cabin.reports.DebugJournal.record("CarPlay", "video_connected", "Native video stream accepted")
+                    onStatus("Waiting for first video frame…")
                     synchronized(this) {
                         if (closed.get()) { accepted.close(); return@execute }
                         socket = accepted
                     }
                     // A new socket is a new H.264 stream; discard old reference pictures.
                     frames.put(ByteArray(0))
+                    var firstFrame = true
                     try {
                         accepted.inputStream.buffered().use { input ->
                             while (!closed.get()) {
                                 val frame = JoyingNativeProtocol.readFrame(input) ?: break
+                                if (firstFrame) {
+                                    firstFrame = false
+                                    com.cabin.reports.DebugJournal.record("CarPlay", "first_frame_received", "bytes=${frame.size}")
+                                    onStatus("Starting video…")
+                                }
                                 frames.put(frame)
                             }
                         }

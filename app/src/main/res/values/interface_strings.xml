@@ -263,7 +263,7 @@
     <string name="vehicle_readings">Vehicle readings · FYT</string>
     <string name="vehicle_readings_detail">Read-only data from the head unit\'s installed FYT vehicle subsystem.</string>
     <string name="vehicle_source">Source: FYT / SYU vehicle service</string>
-    <string name="vehicle_profile_detail">Reported vehicle profile: %1$d. Profile identification alone does not verify every reading.</string>
+    <string name="vehicle_profile_detail">CAN profile: %1$d</string>
     <string name="vehicle_service_required">A compatible factory vehicle service and fresh supported fields are required.</string>
     <string name="vehicle_speed">Speed</string>
     <string name="vehicle_engine_speed">Engine speed</string>
@@ -276,11 +276,6 @@
     <string name="vehicle_voltage_unavailable">ECU voltage · Unavailable</string>
     <string name="vehicle_dtc_unavailable">Fault codes (DTC) · Unavailable</string>
     <string name="vehicle_interface_limits">These fields have no verified FYT interface here. No extra codes are guessed, and no fault clearing, coding or vehicle writes are offered.</string>
-    <string name="vehicle_layout">Vehicle data layout</string>
-    <string name="vehicle_layout_existing">Existing firmware (speed/RPM)</string>
-    <string name="vehicle_layout_civic">Civic 0298 reference</string>
-    <string name="vehicle_layout_detail">Keep Existing firmware if speed and RPM already work. Use Civic 0298 reference only for matching firmware; it reads the reference door and oil-service fields. Speed/RPM and temperatures are not yet supported in that layout. Change while parked; switch back if readings are wrong or missing.</string>
-    <string name="vehicle_layout_readonly">This changes Cabin\'s read-only decoding, not factory CAN settings or A/C commands. Readings refresh after switching.</string>
     <string name="vehicle_status_connecting">Connecting to FYT vehicle service…</string>
     <string name="vehicle_status_unavailable">FYT vehicle service unavailable</string>
     <string name="vehicle_status_waiting">Waiting for fresh FYT readings</string>

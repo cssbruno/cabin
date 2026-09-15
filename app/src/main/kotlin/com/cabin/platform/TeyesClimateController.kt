@@ -33,7 +33,9 @@ data class TeyesClimateState(
     val fanControlsAvailable: Boolean = false,
     val controlUnavailableReason: String? = null,
     val profileId: Int = 0,
-    val vehicleDataLayout: TeyesVehicleDataLayout = TeyesVehicleDataLayout.LEGACY,
+    val vehicleDataLayout: TeyesVehicleDataLayout = TeyesVehicleDataLayout.UNKNOWN,
+    val fytFirmwareVersion: String = "",
+    val fytFirmwareSha256: String = "",
     val power: Boolean = false,
     val ac: Boolean = false,
     val auto: Boolean = false,
@@ -121,8 +123,9 @@ class TeyesClimateController(
     private val airRegistry by lazy(LazyThreadSafetyMode.NONE) { SyuAirRegistry.load(appContext) }
     private val registeredCodes = java.util.concurrent.ConcurrentHashMap.newKeySet<Int>()
     private var airProfile: SyuAirProfile? = null
-    private val dataPreferences = TeyesVehicleDataPreferences.get(appContext)
-    private var activeLayout = dataPreferences.layout.value
+    internal var firmwareDetector: () -> FytFirmware = { detectFytFirmware(appContext) }
+    private var firmware = FytFirmware("", TeyesVehicleDataLayout.UNKNOWN)
+    private var activeLayout = TeyesVehicleDataLayout.UNKNOWN
     private val worker = HandlerThread("TeyesTelemetry").apply { start() }
     private val handler = Handler(worker.looper)
     private val started = AtomicBoolean(false)
@@ -149,11 +152,6 @@ class TeyesClimateController(
         object : Runnable {
             override fun run() {
                 if (closed.get() || suspended.get()) return
-                if (activeLayout != dataPreferences.layout.value) {
-                    activeLayout = dataPreferences.layout.value
-                    // Rebind with a new callback owner: queued samples from the old dialect cannot leak across.
-                    disconnectAndRetry()
-                }
                 if (connectedAt?.let { SystemClock.elapsedRealtime() - it >= 60_000L } == true) reconnectPolicy.reset()
                 publishState()
                 val now = SystemClock.elapsedRealtime()
@@ -327,6 +325,8 @@ class TeyesClimateController(
 
     private fun bind() {
         if (suspended.get() || closed.get() || connection != null) return
+        firmware = firmwareDetector()
+        activeLayout = firmware.layout
         val nextConnection = createConnection()
         connection = nextConnection
         mutableState.value = TeyesClimateState(health = TeyesTelemetryHealth.CONNECTING, controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_waiting_profile))
@@ -355,7 +355,7 @@ class TeyesClimateController(
         val expectedEpoch = connectionEpoch.get()
         val frame = SyuFactoryProtocol.frame(expectedProfile, control, value) ?: return
         handler.post {
-            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            if (closed.get() || expectedEpoch != connectionEpoch.get()) return@post
             publishState()
             val current = mutableState.value
             if (moduleBinder == null || current.profileId != expectedProfile ||
@@ -369,7 +369,7 @@ class TeyesClimateController(
         val expectedEpoch = connectionEpoch.get()
         val expectedProfile = mutableState.value.profileId
         handler.post {
-            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            if (closed.get() || expectedEpoch != connectionEpoch.get()) return@post
             publishState()
             val current = mutableState.value
             if (moduleBinder == null || current.profileId != expectedProfile ||
@@ -383,8 +383,7 @@ class TeyesClimateController(
         val expectedProfile = mutableState.value.profileId
         val expectedEpoch = connectionEpoch.get()
         handler.post {
-            if (closed.get() || expectedEpoch != connectionEpoch.get() ||
-                activeLayout != dataPreferences.layout.value) return@post
+            if (closed.get() || expectedEpoch != connectionEpoch.get()) return@post
             publishState()
             val current = mutableState.value
             if (moduleBinder == null || current.profileId != expectedProfile ||
@@ -398,7 +397,7 @@ class TeyesClimateController(
         val expectedProfile = mutableState.value.syuAir?.profileId ?: return
         val expectedEpoch = connectionEpoch.get()
         handler.post {
-            if (closed.get() || expectedEpoch != connectionEpoch.get() || activeLayout != dataPreferences.layout.value) return@post
+            if (closed.get() || expectedEpoch != connectionEpoch.get()) return@post
             publishState()
             val current = mutableState.value.syuAir ?: return@post
             if (moduleBinder == null || current.profileId != expectedProfile || !current.canSend(action)) return@post
@@ -437,7 +436,7 @@ class TeyesClimateController(
         val expectedProfile = mutableState.value.profileId
         val expectedEpoch = connectionEpoch.get()
         handler.post {
-            if (closed.get() || activeLayout != dataPreferences.layout.value) return@post
+            if (closed.get()) return@post
             publishState()
             val state = mutableState.value
             if (connectionEpoch.get() != expectedEpoch || state.profileId != expectedProfile || !TeyesClimateControlPolicy.canAdjustTemperature(state, zone, increase)) return@post
@@ -455,7 +454,7 @@ class TeyesClimateController(
         val expectedProfile = mutableState.value.profileId
         val expectedEpoch = connectionEpoch.get()
         handler.post {
-            if (closed.get() || activeLayout != dataPreferences.layout.value || connectionEpoch.get() != expectedEpoch) return@post
+            if (closed.get() || connectionEpoch.get() != expectedEpoch) return@post
             publishState()
             if (mutableState.value.profileId != expectedProfile || !TeyesClimateControlPolicy.canToggle(mutableState.value, control)) return@post
             command(107, intArrayOf(control.key, 1))
@@ -576,6 +575,8 @@ class TeyesClimateController(
                     },
                 profileId = profile,
                 vehicleDataLayout = activeLayout,
+                fytFirmwareVersion = firmware.version,
+                fytFirmwareSha256 = firmware.sha256,
                 power = values[32] == 1,
                 ac = values[if (alternate) 30 else 24] == 1,
                 auto = values[20] == 1,
@@ -619,8 +620,6 @@ class TeyesClimateController(
         val expectedEpoch = connectionEpoch.get()
         handler.post {
             if (closed.get() || connectionEpoch.get() != expectedEpoch) return@post
-            // Do not issue a command during the preference-change/rebind window.
-            if (activeLayout != dataPreferences.layout.value) return@post
             publishState()
             if (mutableState.value.profileId != expectedProfile) return@post
             // The legacy fallback did not identify its supported numeric profile.

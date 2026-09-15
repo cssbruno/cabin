@@ -23,4 +23,12 @@
     <string name="logs_close_viewer">Fermer</string>
     <string name="logs_read_failed">Impossible d’ouvrir ce journal. Il a peut-être été supprimé ou remplacé.</string>
     <string name="logs_empty_page">Aucune entrée sur cette page.</string>
+    <string name="vehicle_firmware_detected">Firmware : %1$s</string>
+    <string name="vehicle_decoder_automatic">Format sélectionné automatiquement selon le firmware reconnu.</string>
+    <string name="vehicle_decoder_unknown">Format inconnu</string>
+    <string name="carplay_backend_dongle">Dongle CCPA</string>
+    <string name="carplay_backend_native">Joying natif</string>
+    <string name="carplay_backend_open">Ouvrir CarPlay</string>
+    <string name="carplay_backend_switch_failed">Impossible de changer de connexion. Réessayez.</string>
+    <string name="carplay_backend_none">Aucune connexion CarPlay détectée</string>
 </resources>

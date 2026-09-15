@@ -31,7 +31,6 @@ import com.cabin.platform.MeasurementUnit
 import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesTelemetryHealth
 import com.cabin.platform.TeyesVehicleDataLayout
-import com.cabin.platform.TeyesVehicleDataPreferences
 import com.cabin.ui.theme.CabinTheme
 import org.junit.Before
 import org.junit.Rule
@@ -61,11 +60,11 @@ class TeyesVehicleSettingsUiTest {
                 }
             }
         }
-        compose.onNodeWithText("Source: FYT / SYU vehicle service").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Source: FYT / SYU vehicle service").assertDoesNotExist()
         listOf("45 km/h", "850 RPM", "78 %").forEach { value ->
             compose.onNodeWithText(value).performScrollTo().assertIsDisplayed()
         }
-        assertUnsupportedFieldsAvailableToRead()
+        assertUnsupportedFieldsHidden()
         assertNoExternalAdapterControls()
     }
 
@@ -89,14 +88,12 @@ class TeyesVehicleSettingsUiTest {
         compose.onNodeWithText("Waiting for fresh FYT readings").performScrollTo().assertIsDisplayed()
         listOf("45 km/h", "850 RPM", "78 %").forEach { value -> compose.onNodeWithText(value).assertDoesNotExist() }
         compose.onAllNodesWithText("—").assertCountEquals(4)
-        assertUnsupportedFieldsAvailableToRead()
+        assertUnsupportedFieldsHidden()
         assertNoExternalAdapterControls()
     }
 
     @Test
     fun `Civic maintenance distance is not displayed as oil life percent`() {
-        val preferences = TeyesVehicleDataPreferences.get(compose.activity)
-        preferences.select(TeyesVehicleDataLayout.LEGACY)
         compose.setContent {
             CabinTheme {
                 Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -116,16 +113,15 @@ class TeyesVehicleSettingsUiTest {
             compose.onNodeWithText(it).performScrollTo().assertIsDisplayed()
         }
         compose.onNodeWithText("78 %").assertDoesNotExist()
-        compose.onNodeWithText("Existing firmware (speed/RPM)").performScrollTo().assertIsSelected()
-        compose.onNodeWithText("Civic 0298 reference").performScrollTo().performClick().assertIsSelected()
-        compose.runOnIdle { preferences.select(TeyesVehicleDataLayout.LEGACY) }
-        assertUnsupportedFieldsAvailableToRead()
-        assertNoExternalAdapterControls(hasLayoutSelector = true)
+        compose.onNodeWithText("Existing firmware (speed/RPM)").assertDoesNotExist()
+        compose.onNodeWithText("Civic 0298 reference").assertDoesNotExist()
+        assertUnsupportedFieldsHidden()
+        assertNoExternalAdapterControls()
     }
 
-    private fun assertUnsupportedFieldsAvailableToRead() {
+    private fun assertUnsupportedFieldsHidden() {
         listOf("Coolant temperature · Unavailable", "ECU voltage · Unavailable", "Fault codes (DTC) · Unavailable").forEach { label ->
-            compose.onNodeWithText(label).performScrollTo().assertIsDisplayed()
+            compose.onNodeWithText(label).assertDoesNotExist()
         }
     }
 

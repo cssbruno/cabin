@@ -18,15 +18,24 @@ import com.cabin.R
 
 @Composable
 internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false) {
-    if (com.cabin.ui.rememberJoyingCarPlayAvailable()) {
-        val context = androidx.compose.ui.platform.LocalContext.current
-        Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text("Joying native CarPlay", style = MaterialTheme.typography.headlineSmall)
-            Text("CarPlay runs inside Cabin using Joying’s native service. The CarPlay screen includes service handoff, wireless connection, paired-phone selection, and Siri. Firmware permissions are required; hardware validation is pending.")
-            Button(onClick = { com.cabin.platform.JoyingCarPlay.open(context) }) { Text("Open CarPlay in Cabin") }
+    val backends = com.cabin.ui.rememberCarPlayBackends()
+    Column(Modifier.fillMaxSize()) {
+        if (backends.available.isEmpty()) {
+            Text(stringResource(R.string.carplay_backend_none), Modifier.padding(24.dp))
+            return@Column
         }
-        return
+        if (backends.available.size > 1) com.cabin.ui.CarPlayBackendPicker(manager, backends)
+        else if (backends.selected == com.cabin.platform.CarPlayBackend.DONGLE)
+            Text(stringResource(R.string.carplay_backend_dongle), Modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+        if (backends.available.size > 1 && backends.selected == null) return@Column
+        if (backends.selected == com.cabin.platform.CarPlayBackend.JOYING) {
+            NativeCarPlaySettings()
+        } else DongleCarPlaySettings(manager, initialConnection)
     }
+}
+
+@Composable
+private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean) {
     var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -39,5 +48,28 @@ internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Bo
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             ProjectionPreferencesSection(showMeasurements = false)
         } else Box(Modifier.weight(1f)) { PhonesTabContent(manager) }
+    }
+}
+
+@Composable
+private fun NativeCarPlaySettings() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var error by remember { mutableStateOf<String?>(null) }
+    Column(
+        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp).testTag("native-carplay-settings"),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Text(stringResource(R.string.carplay_backend_native), style = MaterialTheme.typography.headlineSmall)
+        Button(onClick = { com.cabin.platform.JoyingCarPlay.open(context) }) {
+            Text(stringResource(R.string.carplay_backend_open))
+        }
+        OutlinedButton(onClick = {
+            try {
+                context.startActivity(com.cabin.joying.JoyingServiceHandoff.stockSettingsIntent())
+            } catch (_: android.content.ActivityNotFoundException) {
+                error = context.getString(R.string.joying_stock_settings_missing)
+            }
+        }) { Text(stringResource(R.string.joying_stock_settings)) }
+        error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     }
 }

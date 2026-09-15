@@ -136,7 +136,7 @@ class CabinProjectionService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (com.cabin.platform.JoyingCarPlay.isAvailable(this)) {
+        if (!com.cabin.platform.CarPlayBackendSelection.allowsDongle(this)) {
             setShouldRunInBackground(false)
             stopSelfResult(startId)
             return START_NOT_STICKY
@@ -596,7 +596,7 @@ class CabinProjectionService : Service() {
         private var activeActivityManager: CabinManager? = null
 
         fun start(context: Context) {
-            if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) return
+            if (!com.cabin.platform.CarPlayBackendSelection.allowsDongle(context)) return
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, CabinProjectionService::class.java).setAction(ACTION_CONNECT),
@@ -605,7 +605,7 @@ class CabinProjectionService : Service() {
 
         /** Only user-facing Connect actions may resume an explicitly disconnected phone. */
         fun startPhoneConnection(context: Context) {
-            if (com.cabin.platform.JoyingCarPlay.isAvailable(context)) {
+            if (!com.cabin.platform.CarPlayBackendSelection.allowsDongle(context)) {
                 if (!com.cabin.platform.JoyingCarPlay.open(context)) {
                     throw android.content.ActivityNotFoundException("Car Link 2.0 is unavailable")
                 }

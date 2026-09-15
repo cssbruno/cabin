@@ -16,6 +16,19 @@ class JoyingNativeProtocolTest {
     private val payload = byteArrayOf(0, 0, 0, 1, 0x65, 7, 8)
     private fun packet() = byteArrayOf(payload.size.toByte(), 0, 0, 0) + payload
 
+    @Test fun `initial link state uses stock query with no request payload`() {
+        val binder = object : Binder() {
+            override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+                assertEquals(0xd702, code)
+                data.enforceInterface(JoyingNativeProtocol.DESCRIPTOR)
+                assertEquals(0, data.dataAvail())
+                reply!!.writeInt(4)
+                return true
+            }
+        }
+        assertEquals(4, JoyingNativeProtocol.command(binder, JoyingNativeProtocol.LINK_STATE))
+    }
+
     @Test fun `reads fragmented and consecutive length prefixed access units`() {
         val input = object : ByteArrayInputStream(packet() + packet()) {
             override fun read(data: ByteArray, offset: Int, length: Int) = super.read(data, offset, minOf(1, length))

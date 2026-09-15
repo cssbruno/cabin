@@ -1,33 +1,52 @@
 package com.cabin.joying
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [29], manifest = Config.NONE)
 class JoyingServiceHandoffTest {
-    @Test fun `manual handoff opens only the stock Car Link app settings`() {
-        val intent = JoyingServiceHandoff.stockSettingsIntent()
-        assertEquals(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, intent.action)
-        assertEquals("package:com.syu.carlink", intent.data.toString())
+    @Test fun `ordinary install never pretends stopping service releases stock socket`() {
+        val context = object : ContextWrapper(RuntimeEnvironment.getApplication() as Context) {
+            override fun checkSelfPermission(permission: String) = PackageManager.PERMISSION_DENIED
+            override fun stopService(intent: Intent): Boolean {
+                fail("Stock onDestroy keeps its socket open")
+                return true
+            }
+        }
+        assertThrows(SecurityException::class.java) { JoyingServiceHandoff.releaseStockClient(context) }
     }
 
-    @Test fun `ordinary installation requests exported service stop without force stop permission`() {
-        var stopped: ComponentName? = null
-        val context = object : ContextWrapper(ApplicationProvider.getApplicationContext<Context>()) {
-            override fun checkSelfPermission(permission: String) = PackageManager.PERMISSION_DENIED
-            override fun stopService(service: Intent): Boolean { stopped = service.component; return true }
+    @Test fun `already running daemon does not request privileged startup`() {
+        assertEquals("daemon", JoyingServiceHandoff.awaitNativeService(
+            { "daemon" }, { fail("Already running") }, { fail("No wait needed") }))
+    }
+
+    @Test fun `startup waits for asynchronous firmware service registration`() {
+        var lookups = 0
+        var starts = 0
+        var pauses = 0
+        assertEquals("daemon", JoyingServiceHandoff.awaitNativeService(
+            { if (++lookups == 4) "daemon" else null }, { starts++ }, { pauses++ }))
+        assertEquals(1, starts)
+        assertEquals(3, pauses)
+    }
+
+    @Test fun `missing daemon times out without repeated startup requests`() {
+        var starts = 0
+        var pauses = 0
+        assertThrows(IllegalStateException::class.java) {
+            JoyingServiceHandoff.awaitNativeService<String>({ null }, { starts++ }, { pauses++ })
         }
-        JoyingServiceHandoff.releaseStockClient(context)
-        assertEquals(ComponentName("com.syu.carlink", "com.syu.carlink.CarLinkService"), stopped)
+        assertEquals(1, starts)
+        assertEquals(25, pauses)
     }
 }

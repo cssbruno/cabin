@@ -5,11 +5,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,7 +23,6 @@ import com.cabin.platform.MeasurementUnit
 import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesTelemetryHealth
 import com.cabin.platform.TeyesVehicleDataLayout
-import com.cabin.platform.TeyesVehicleDataPreferences
 
 internal data class TeyesVehicleSettingsReadings(
     val speed: String = "—",
@@ -87,23 +83,14 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
     val readings = teyesVehicleSettingsReadings(vehicle, measurementUnit)
     SettingsSection(
         stringResource(R.string.vehicle_readings),
-        stringResource(R.string.vehicle_readings_detail),
     ) {
         SettingsNotice(teyesVehicleSettingsStatus(androidx.compose.ui.platform.LocalResources.current, vehicle))
-        Text(
-            stringResource(R.string.vehicle_source),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            if (vehicle.connected && vehicle.profileId != 0) {
-                stringResource(R.string.vehicle_profile_detail, vehicle.profileId)
-            } else {
-                stringResource(R.string.vehicle_service_required)
-            },
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        if (vehicle.profileId in setOf(1048874, 1114410, 196906, 262442)) {
-            CivicVehicleDataLayoutSelector()
+        if (vehicle.connected && vehicle.profileId != 0) {
+            Text(stringResource(R.string.vehicle_profile_detail, vehicle.profileId))
+        }
+        Text(stringResource(R.string.vehicle_firmware_detected, vehicle.fytFirmwareVersion.ifBlank { "—" }))
+        if (vehicle.vehicleDataLayout == TeyesVehicleDataLayout.UNKNOWN) {
+            Text(stringResource(R.string.vehicle_decoder_unknown))
         }
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -128,60 +115,5 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
                 }
             }
         }
-        Text(
-            stringResource(R.string.vehicle_readings_stale_detail),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            stringResource(R.string.vehicle_oil_service_detail),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        HorizontalDivider()
-        Text(stringResource(R.string.vehicle_not_exposed), style = MaterialTheme.typography.titleMedium)
-        Text(stringResource(R.string.vehicle_coolant_unavailable))
-        Text(stringResource(R.string.vehicle_voltage_unavailable))
-        Text(stringResource(R.string.vehicle_dtc_unavailable))
-        Text(
-            stringResource(R.string.vehicle_interface_limits),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
     }
-}
-
-@Composable
-private fun CivicVehicleDataLayoutSelector() {
-    val context = LocalContext.current
-    val preferences = remember(context) { TeyesVehicleDataPreferences.get(context) }
-    val layout by preferences.layout.collectAsStateWithLifecycle()
-    Text(stringResource(R.string.vehicle_layout), style = MaterialTheme.typography.titleMedium)
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        TeyesVehicleDataLayout.entries.forEach { option ->
-            FilterChip(
-                modifier = Modifier.heightIn(min = 56.dp),
-                selected = layout == option,
-                onClick = { preferences.select(option) },
-                label = {
-                    Text(
-                        when (option) {
-                            TeyesVehicleDataLayout.LEGACY -> stringResource(R.string.vehicle_layout_existing)
-                            TeyesVehicleDataLayout.CIVIC_0298 -> stringResource(R.string.vehicle_layout_civic)
-                        },
-                    )
-                },
-            )
-        }
-    }
-    Text(
-        stringResource(R.string.vehicle_layout_detail),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-    Text(
-        stringResource(R.string.vehicle_layout_readonly),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
 }

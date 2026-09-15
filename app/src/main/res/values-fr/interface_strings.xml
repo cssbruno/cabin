@@ -263,7 +263,7 @@
     <string name="vehicle_readings">Mesures du véhicule · FYT</string>
     <string name="vehicle_readings_detail">Données en lecture seule du sous-système FYT installé sur l’autoradio.</string>
     <string name="vehicle_source">Source : service véhicule FYT / SYU</string>
-    <string name="vehicle_profile_detail">Profil véhicule signalé : %1$d. Son identification ne valide pas toutes les mesures.</string>
+    <string name="vehicle_profile_detail">Profil CAN : %1$d</string>
     <string name="vehicle_service_required">Un service d’origine compatible et des champs pris en charge récents sont requis.</string>
     <string name="vehicle_speed">Vitesse</string>
     <string name="vehicle_engine_speed">Régime moteur</string>
@@ -276,11 +276,6 @@
     <string name="vehicle_voltage_unavailable">Tension du calculateur · Indisponible</string>
     <string name="vehicle_dtc_unavailable">Codes défaut (DTC) · Indisponibles</string>
     <string name="vehicle_interface_limits">Aucune interface FYT vérifiée pour ces champs. Aucun code supposé, effacement de défauts, codage ou écriture dans le véhicule.</string>
-    <string name="vehicle_layout">Format des données véhicule</string>
-    <string name="vehicle_layout_existing">Micrologiciel existant (vitesse/tr/min)</string>
-    <string name="vehicle_layout_civic">Référence Civic 0298</string>
-    <string name="vehicle_layout_detail">Gardez Micrologiciel existant si vitesse et régime fonctionnent. Utilisez Civic 0298 uniquement avec le micrologiciel correspondant : portes et vidange. Ce format ne prend pas encore en charge vitesse, régime ou températures. Changez à l’arrêt et revenez en arrière si les mesures sont erronées ou absentes.</string>
-    <string name="vehicle_layout_readonly">Change uniquement le décodage en lecture seule de Cabin, pas les réglages CAN d’origine ni les commandes de climatisation. Les mesures sont actualisées après le changement.</string>
     <string name="vehicle_status_connecting">Connexion au service véhicule FYT…</string>
     <string name="vehicle_status_unavailable">Service véhicule FYT indisponible</string>
     <string name="vehicle_status_waiting">En attente de mesures FYT récentes</string>

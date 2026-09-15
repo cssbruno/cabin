@@ -263,7 +263,7 @@
     <string name="vehicle_readings">Fahrzeugmesswerte · FYT</string>
     <string name="vehicle_readings_detail">Schreibgeschützte Daten aus dem installierten FYT-Fahrzeugsubsystem.</string>
     <string name="vehicle_source">Quelle: FYT-/SYU-Fahrzeugdienst</string>
-    <string name="vehicle_profile_detail">Gemeldetes Fahrzeugprofil: %1$d. Die Profilerkennung bestätigt nicht jeden Messwert.</string>
+    <string name="vehicle_profile_detail">CAN-Profil: %1$d</string>
     <string name="vehicle_service_required">Kompatibler Fahrzeugdienst und aktuelle unterstützte Datenfelder erforderlich.</string>
     <string name="vehicle_speed">Geschwindigkeit</string>
     <string name="vehicle_engine_speed">Motordrehzahl</string>
@@ -276,11 +276,6 @@
     <string name="vehicle_voltage_unavailable">ECU-Spannung · Nicht verfügbar</string>
     <string name="vehicle_dtc_unavailable">Fehlercodes (DTC) · Nicht verfügbar</string>
     <string name="vehicle_interface_limits">Keine geprüfte FYT-Schnittstelle für diese Felder. Keine geratenen Codes, Fehlerlöschung, Codierung oder Schreibzugriffe aufs Fahrzeug.</string>
-    <string name="vehicle_layout">Fahrzeugdatenformat</string>
-    <string name="vehicle_layout_existing">Vorhandene Firmware (Tempo/RPM)</string>
-    <string name="vehicle_layout_civic">Civic-0298-Referenz</string>
-    <string name="vehicle_layout_detail">Behalte Vorhandene Firmware, wenn Tempo und RPM funktionieren. Civic 0298 nur mit passender Firmware nutzen; liest Referenzfelder für Türen und Ölservice. Tempo/RPM und Temperaturen werden dort noch nicht unterstützt. Nur geparkt ändern; bei falschen oder fehlenden Werten zurückwechseln.</string>
-    <string name="vehicle_layout_readonly">Ändert nur Cabins schreibgeschützte Dekodierung, nicht die CAN-Werkseinstellungen oder Klimabefehle. Messwerte werden danach aktualisiert.</string>
     <string name="vehicle_status_connecting">Verbindung zum FYT-Fahrzeugdienst…</string>
     <string name="vehicle_status_unavailable">FYT-Fahrzeugdienst nicht verfügbar</string>
     <string name="vehicle_status_waiting">Warte auf aktuelle FYT-Messwerte</string>

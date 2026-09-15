@@ -43,7 +43,7 @@ internal object JoyingVideoConnection {
         } catch (error: Exception) {
             throw ConnectionException(Failure.HANDOFF_BLOCKED, "Car Link is using the video connection. Joying did not allow Cabin to release it. Open Stock Car Link settings, tap Force stop, return to Cabin and Retry. If Force stop is unavailable, use the Joying ADB handoff tool.", error)
         }
-        // stopService is asynchronous. Allow up to two seconds for vendor cleanup.
+        // Allow up to two seconds for the stopped process to release its descriptors.
         repeat(10) {
             pause()
             try {

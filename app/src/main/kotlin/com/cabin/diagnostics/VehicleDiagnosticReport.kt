@@ -11,6 +11,8 @@ internal fun vehicleDiagnosticReport(state: TeyesClimateState): String = JSONObj
     put("androidApi", android.os.Build.VERSION.SDK_INT)
     put("profile", state.profileId)
     put("layout", state.vehicleDataLayout.name)
+    put("fytFirmwareVersion", state.fytFirmwareVersion)
+    put("fytFirmwareSha256", state.fytFirmwareSha256)
     put("connected", state.connected)
     put("health", state.health.name)
     put("freshCanonicalFieldCount", state.availableCodes.size)

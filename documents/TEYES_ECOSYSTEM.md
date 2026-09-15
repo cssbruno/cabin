@@ -184,18 +184,13 @@ This is reference-code compatibility, not certification of TEYES firmware or a h
 Profile 262465 retains its separate command 107 path, including single-key airflow release.
 No temperature, defrost or arbitrary CAN write interface is enabled by this change.
 
-For the four 0298 Civic variants, **Settings → TEYES → Vehicle readings → Vehicle data layout**
-offers two explicit choices. This changes app decoding only, not factory CAN configuration:
-
-- **Existing firmware (speed/RPM)** is the default, preserving the user's reported working
-  raw89/90 motion interface and existing A/C fields. Unverified door/oil mappings stay unavailable.
-- **Civic 0298 reference** uses active reference fields11/21 for A/C/fan and18/19/20 for
-  airflow; existing105 controls stay gated on fresh valid A/C/fan readings. Callback0298
-  assigns0..5 to hood, front-left, front-right, rear-left, rear-right and boot. These become
-  the app's canonical36..41 door fields. Only explicit0/1 values are accepted.
-  `AcrivitySiYuSettings.java` renders181 as oil-service distance with179 selecting km/mi
-  and180 selecting positive/negative. All three fresh fields are required; a negative
-  distance means overdue.137 is a notification setting, never oil-life percentage.
+Vehicle data format is now selected from the installed `com.syu.ms` APK fingerprint.
+The fixed manual Civic selector and saved layout override are removed. The inspected
+Joying APK is recognized; an unknown APK does not enable the conflicting legacy/Civic
+gauge mappings merely because its profile ID belongs to that family. The settings screen
+shows the service version and recognition status, and vehicle diagnostic reports include
+the APK SHA-256 for identifying additional firmware. Existing per-profile SYU definitions
+remain separate from this firmware-dependent decoder.
 
 Reference149/151 motion scaling, modern temperature encoding, coolant and voltage remain
 unverified and unavailable. In the reference,89/90 are seat fields: they must NOT be

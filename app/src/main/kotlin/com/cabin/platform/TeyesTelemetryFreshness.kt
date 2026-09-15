@@ -40,6 +40,15 @@ internal object TeyesClimateControlPolicy {
         layout: TeyesVehicleDataLayout = TeyesVehicleDataLayout.LEGACY,
     ): Map<Int, Int> {
         if (!isCivic0298(profile)) return values.filterKeys { it !in 179..181 && it !in 0..5 && it != 11 && it != 18 && it != 19 }
+        if (layout == TeyesVehicleDataLayout.UNKNOWN) return values.filterKeys { it == 1000 }
+        if (layout == TeyesVehicleDataLayout.JOYING_2023) {
+            // Supplied module/canbus/v emits canonical fields directly, unlike
+            // the newer public Civic UI. Do not infer speed or temperature scaling.
+            return values.filter { (code, value) ->
+                code == 1000 || (code == 29 && value in 0..7) ||
+                    (code in setOf(20, 21, 22, 23, 24, 26, 27, 28, 30, 32, 33, 34, 36, 37, 38, 39, 40, 41, 51) && value in 0..1)
+            }
+        }
         if (layout == TeyesVehicleDataLayout.LEGACY) {
             // Preserve the user's working motion interface. Never infer this dialect from profile ID alone.
             return values.filter { (code, value) ->
