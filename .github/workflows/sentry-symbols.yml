@@ -1,0 +1,52 @@
+name: Upload saved Sentry release symbols
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Release workflow run containing the original cabin-release artifact'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: sentry-symbols-${{ inputs.run_id }}
+  cancel-in-progress: false
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download original release artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_RUN_ID: ${{ inputs.run_id }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_RUN_ID" =~ ^[0-9]+$ ]]
+          gh run download "$RELEASE_RUN_ID" --name cabin-release --dir symbols
+          test -s symbols/app/build/outputs/mapping/release/mapping.txt
+          test -s symbols/sentry-mapping-uuid.txt
+      - name: Upload original release symbols to Sentry
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: eu-virtual
+          SENTRY_PROJECT: cabin
+        run: |
+          set -euo pipefail
+          test -n "$SENTRY_AUTH_TOKEN"
+          curl --fail --location --retry 3 https://github.com/getsentry/sentry-cli/releases/download/2.58.4/sentry-cli-Linux-x86_64 -o "$RUNNER_TEMP/sentry-cli"
+          echo 'a4932b4315b192b3d037678a16eb2a5a8731609f671fc4008e643b85c3c74cb6  '"$RUNNER_TEMP/sentry-cli" | sha256sum --check
+          chmod +x "$RUNNER_TEMP/sentry-cli"
+          mapping_uuid="$(cat symbols/sentry-mapping-uuid.txt)"
+          [[ "$mapping_uuid" =~ ^[a-fA-F0-9-]{36}$ ]]
+          "$RUNNER_TEMP/sentry-cli" upload-proguard --require-one --uuid "$mapping_uuid" symbols/app/build/outputs/mapping/release/mapping.txt
+          echo 'Original release mapping uploaded successfully.' >> "$GITHUB_STEP_SUMMARY"
+          native_symbols=symbols/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
+          if [[ -s "$native_symbols" ]]; then
+            "$RUNNER_TEMP/sentry-cli" debug-files upload --wait "$native_symbols"
+            echo 'Native release symbols uploaded and processed.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'This older release artifact has no native symbols.' >> "$GITHUB_STEP_SUMMARY"
+          fi
