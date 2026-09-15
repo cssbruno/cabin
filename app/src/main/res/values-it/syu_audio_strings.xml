@@ -4,7 +4,7 @@
     <string-array name="syu_audio_sources">
         <item>Nessuna sorgente audio</item>
         <item>Radio</item>
-        <item>Telefonata</item>
+        <item>Chiamata telefonica</item>
         <item>Audio Bluetooth</item>
         <item>DVD</item>
         <item>AUX</item>
@@ -13,9 +13,9 @@
         <item>Lettore musicale</item>
         <item>Lettore video</item>
         <item>App Android</item>
-        <item>Radio dell’auto</item>
-        <item>Telefono dell’auto</item>
-        <item>USB dell’auto</item>
+        <item>Radio del veicolo</item>
+        <item>Telefono del veicolo</item>
+        <item>USB del veicolo</item>
         <item>DVR</item>
     </string-array>
 </resources>

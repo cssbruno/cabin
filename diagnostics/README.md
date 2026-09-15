@@ -4,7 +4,7 @@ Internal Cabin diagnostics library with **live vendor CAN reception**, simulatio
 
 Open **Cabin → Car Settings → My car → Diagnostics** to subscribe to the installed vehicle service's CAN module 7. The receiver tries the toolkit and direct CAN service routes, requests cached and changed integer fields, reports the vendor profile and callback count, reconnects after failures, and releases subscriptions when the screen closes. **Save live CAN report** exports the current diagnosis. This receive path sends no vehicle commands and does not open the MCU serial device. Initial/cached vendor callbacks are not proof of fresh vehicle traffic; use a physical door or climate change to check that the count and fields update. The landing screen starts this live receiver automatically and never substitutes simulated values. **Offline test bench (simulated data)** and saved-capture examples are explicit development tools.
 
-Version **0.6** adds typed module Binder calls with one-way callbacks, driver-1 radio command previews, and all 36 C7604 EQ coefficient/register paths. See [0.6 module implementation](../documents/research/JOYING-MODULE-RUNTIME.md).
+Version **0.6** adds typed module Binder calls with one-way callbacks, driver-1 radio command previews, and all 36 C7604 EQ coefficient/register paths. See [module implementation](src/main/java/com/cabin/hardware/replacement/ModuleToolkitBridge.java).
 
 Version **0.5** adds an independent native serial/I²C library, receive runtime, reference Honda CAN decoding, power-sequence observation, C7604 packet writing, and a signature-protected diagnostics service. Open **Open replacement bench → Run built-in example** to inspect synthetic packet replay and save a JSON report. Raw serial device access remains a library integration point; the new live CAN screen receives through the installed vendor service.
 
@@ -73,7 +73,7 @@ This copies firmware binaries only, not application data or device-node contents
 
 ## Radio feedback development (0.7)
 
-Capture replay now optionally decodes reference driver-1 radio band/current-frequency feedback, with expiring callbacks and historical diagnostics. See [radio feedback contract and validation](../documents/research/JOYING-RADIO-FEEDBACK.md). Historical standalone diagnostic APKs have been removed from local artifacts; the current implementation ships inside Cabin.
+Capture replay now optionally decodes reference driver-1 radio band/current-frequency feedback, with expiring callbacks and historical diagnostics. See [radio feedback decoder](src/main/java/com/cabin/hardware/replacement/RadioFeedbackDecoder.java). Historical standalone diagnostic APKs have been removed from local artifacts; the current implementation ships inside Cabin.
 
 ## Debug reports and head-unit export compatibility
 

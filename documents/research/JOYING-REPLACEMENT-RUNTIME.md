@@ -1,12 +1,12 @@
 # Joying replacement runtime — Hardware Lab 0.5
 
-**Superseded details:** [Hardware Lab 0.6](JOYING-MODULE-RUNTIME.md) replaces the replacement service Binder bridge, adds radio command previews and C7604 EQ calculation. The descriptions below preserve the 0.5 baseline; consult 0.6 for current callback/readback behavior.
+**Superseded details:** [current module implementation](../../diagnostics/src/main/java/com/cabin/hardware/replacement/ModuleToolkitBridge.java) replaces the replacement service Binder bridge, adds radio command previews and C7604 EQ calculation. The descriptions below preserve the 0.5 baseline; consult 0.6 for current callback/readback behavior.
 
 The independent implementation now builds as an Android APK, with its own serial/I²C JNI library. It is a **development bench, not a complete drop-in replacement for SYU**. The app starts with no device nodes open. Cabin's production integrations still bind the installed vendor service.
 
 ## Try it
 
-1. Open Cabin Hardware Lab → **Open replacement bench**.
+1. Open Cabin → Car Settings → My car → Diagnostics → **Open replacement bench**.
 2. Select **Run built-in example** to replay synthetic door/climate/sleep packets.
 3. Inspect packet counts, historical decoded fields, and the observed power sequence.
 4. **Save report** exports JSON through Android's file picker.
@@ -31,7 +31,7 @@ The example is explicitly synthetic, not a captured vehicle trace. Playback curr
 
 ### CAN evidence and fields
 
-Evidence is the local APK pinned in [Joying replacement audit](JOYING-REPLACEMENT-AUDIT.md), SHA-256 `4b428302e29c9e2503ccf7844a127f5bed59450736317629aa42b5eb35a9b577`. `f0/wp.V` selects `module/canbus/v` for low profile word `0x12a`; `v.M2` implements the receive branches. The implementation deliberately accepts only full profile `0x10012a` to avoid applying variant-specific logic to other vehicles.
+Evidence is the local APK pinned in Joying replacement audit (historical external audit), SHA-256 `4b428302e29c9e2503ccf7844a127f5bed59450736317629aa42b5eb35a9b577`. `f0/wp.V` selects `module/canbus/v` for low profile word `0x12a`; `v.M2` implements the receive branches. The implementation deliberately accepts only full profile `0x10012a` to avoid applying variant-specific logic to other vehicles.
 
 Input to `HondaCanDecoder` starts immediately after the outer `E3`. Its byte 0 selects the CAN branch; byte 1 is not interpreted as a verified inner length/checksum. Outer MCU checksum validation precedes dispatch.
 

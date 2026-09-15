@@ -16,8 +16,8 @@ android {
         applicationId = ownerApplicationId
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1006
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.0-alpha.5"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1010
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.0-alpha.10"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
         require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
