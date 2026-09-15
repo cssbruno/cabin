@@ -105,6 +105,7 @@ internal fun LogsTabContent(
     val filesStore = remember(fileLogManager) { fileLogManager?.let(::LogFilesStore) }
     var filesSnapshot by remember(fileLogManager) { mutableStateOf(LogFilesSnapshot()) }
     val logFiles = filesSnapshot.files
+    var viewingFile by remember { mutableStateOf<File?>(null) }
     var showDeleteDialog by remember { mutableStateOf<LogFileSnapshot?>(null) }
     var showLogLevelDialog by remember { mutableStateOf(false) }
     var showDebugWarningDialog by remember { mutableStateOf(false) }
@@ -182,6 +183,10 @@ internal fun LogsTabContent(
             )
         }
         return
+    }
+
+    viewingFile?.let { file ->
+        LogFileViewer(file, filesStore, onClose = { viewingFile = null })
     }
 
     // Responsive max width - 75% of container width, clamped between 400dp and 1200dp
@@ -347,6 +352,7 @@ internal fun LogsTabContent(
                                 file = file,
                                 dateFormat = dateFormat,
                                 isExportEnabled = !isExporting,
+                                onView = { viewingFile = file.file },
                                 onDelete = { showDeleteDialog = file },
                                 onExport = {
                                     if (isExporting) return@LogFileItem
@@ -869,12 +875,14 @@ private fun LogFileItem(
     file: LogFileSnapshot,
     dateFormat: SimpleDateFormat,
     isExportEnabled: Boolean = true,
+    onView: () -> Unit,
     onDelete: () -> Unit,
     onExport: () -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     Surface(
+        onClick = onView,
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         color = colorScheme.surfaceContainerHighest,
@@ -915,6 +923,7 @@ private fun LogFileItem(
                 )
             }
 
+            TextButton(onClick = onView) { Text(stringResource(R.string.logs_view)) }
             IconButton(
                 onClick = onExport,
                 enabled = isExportEnabled,

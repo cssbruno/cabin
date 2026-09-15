@@ -16,4 +16,11 @@
     <string name="climate_temperature_decrease">Baisser la température : %1$s</string>
     <string name="climate_temperature_unavailable">Réglage de température indisponible</string>
     <string name="climate_power">Marche/arrêt</string>
+    <string name="logs_view">Voir</string>
+    <string name="logs_previous">Précédente</string>
+    <string name="logs_refresh">Actualiser</string>
+    <string name="logs_next">Suivante</string>
+    <string name="logs_close_viewer">Fermer</string>
+    <string name="logs_read_failed">Impossible d’ouvrir ce journal. Il a peut-être été supprimé ou remplacé.</string>
+    <string name="logs_empty_page">Aucune entrée sur cette page.</string>
 </resources>

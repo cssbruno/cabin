@@ -102,7 +102,10 @@ internal class GitHubUpdater private constructor(private val context: Context) {
 
     @Suppress("DEPRECATION")
     private fun validateApk(file: File, release: UpdateRelease) {
-        val flags = if (Build.VERSION.SDK_INT >= 28) PackageManager.GET_SIGNING_CERTIFICATES else PackageManager.GET_SIGNATURES
+        // Some head-unit firmware only populates the legacy field. Request both,
+        // but prefer SigningInfo so verified key rotation remains available.
+        val flags = PackageManager.GET_SIGNATURES or
+            (if (Build.VERSION.SDK_INT >= 28) PackageManager.GET_SIGNING_CERTIFICATES else 0)
         val current = context.packageManager.getPackageInfo(context.packageName, flags)
         val candidate = context.packageManager.getPackageArchiveInfo(file.absolutePath, flags) ?: throw UpdateException(R.string.update_error_apk)
         validateUpdatePackage(current, candidate, release, context.packageName, Build.VERSION.SDK_INT)
@@ -169,9 +172,30 @@ internal fun validateUpdatePackage(
     requireUpdate(PackageInfoCompat.getLongVersionCode(candidate) == release.versionCode && release.versionCode > PackageInfoCompat.getLongVersionCode(current), R.string.update_error_apk)
     requireUpdate(candidate.versionName == release.versionName, R.string.update_error_apk)
     requireUpdate(candidate.applicationInfo?.minSdkVersion?.let { it <= sdk } == true, R.string.update_error_android)
-    fun certificates(info: android.content.pm.PackageInfo): Set<String> =
-        (if (sdk >= 28) info.signingInfo?.apkContentsSigners else info.signatures)
-            ?.map { MessageDigest.getInstance("SHA-256").digest(it.toByteArray()).hex() }?.toSet().orEmpty()
-    val trusted = certificates(current)
-    requireUpdate(trusted.isNotEmpty() && certificates(candidate) == trusted, R.string.update_error_signature)
+    requireUpdate(updateSignaturesCompatible(current, candidate, sdk), R.string.update_error_signature)
+}
+
+@Suppress("DEPRECATION")
+internal fun updateSignaturesCompatible(
+    current: android.content.pm.PackageInfo,
+    candidate: android.content.pm.PackageInfo,
+    sdk: Int,
+): Boolean {
+    fun signers(info: android.content.pm.PackageInfo): Set<android.content.pm.Signature> {
+        val modern = if (sdk >= 28) info.signingInfo else null
+        // Fall back only when SigningInfo is absent, never when it reports no signers.
+        return (if (modern != null) modern.apkContentsSigners else info.signatures)
+            ?.toSet().orEmpty()
+    }
+    val installed = signers(current)
+    val incoming = signers(candidate)
+    if (installed.isEmpty() || incoming.isEmpty()) return false
+    if (installed == incoming) return true
+    if (sdk < 28 || installed.size != 1 || incoming.size != 1) return false
+    val candidateSigning = candidate.signingInfo ?: return false
+    if (candidateSigning.hasMultipleSigners()) return false
+    // Only trust forward rotation: the incoming APK must prove that the currently
+    // installed signer belongs to its lineage, verified by Android's APK parser.
+    // The Android installer still makes the final decision about rotation capabilities.
+    return candidateSigning.signingCertificateHistory?.contains(installed.single()) == true
 }

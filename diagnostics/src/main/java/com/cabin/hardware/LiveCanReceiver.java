@@ -160,7 +160,10 @@ final class LiveCanReceiver implements AutoCloseable {
         try {
             data.writeInterfaceToken(ToolkitBridge.MODULE); data.writeStrongBinder(callback); data.writeInt(field);
             if (add) data.writeInt(1); // Include the vendor's cached value on registration.
-            if (!module.transact(add ? 3 : 4, data, reply, 0) || reply.dataAvail() < 4) throw new RemoteException("CAN subscription failed for field " + field);
+            if (!module.transact(add ? 3 : 4, data, reply, 0)) throw new RemoteException("CAN subscription failed for field " + field);
+            // Joying void module methods write no reply; legacy FYT writes an exception header.
+            if (reply.dataSize() == 0) return;
+            if (reply.dataAvail() < 4 || reply.dataSize() > 65536) throw new RemoteException("Invalid CAN subscription reply");
             reply.readException();
         } finally { data.recycle(); reply.recycle(); }
     }

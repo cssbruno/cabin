@@ -16,4 +16,11 @@
     <string name="climate_temperature_decrease">Decrease %1$s temperature</string>
     <string name="climate_temperature_unavailable">Temperature adjustment unavailable</string>
     <string name="climate_power">Power</string>
+    <string name="logs_view">View</string>
+    <string name="logs_previous">Previous</string>
+    <string name="logs_refresh">Refresh</string>
+    <string name="logs_next">Next</string>
+    <string name="logs_close_viewer">Close</string>
+    <string name="logs_read_failed">Could not open this log. It may have been deleted or replaced.</string>
+    <string name="logs_empty_page">No log entries on this page.</string>
 </resources>

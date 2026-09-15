@@ -455,11 +455,27 @@ class TeyesClimateBinderIntegrationTest {
         assertTrue(context.module.commands.isEmpty())
     }
 
+    @Test fun `Joying empty subscription replies keep CAN connected across refreshes`() {
+        controller.suspendUpdates(); drain()
+        context.module.emptyVoidReplies = true
+        context.actions.clear()
+        controller.resumeUpdates(); drain()
+        assertTrue(controller.state.value.connected)
+        emit(1000, 1048874)
+        emit(1, 1)
+        assertTrue(controller.state.value.frontLeftDoorOpen)
+        shadowOf(worker.looper).idleFor(35, java.util.concurrent.TimeUnit.SECONDS)
+        drain()
+        assertTrue(controller.state.value.connected)
+        assertEquals(1, context.actions.size)
+        assertTrue(context.module.commands.isEmpty())
+    }
+
     private fun emit(
         code: Int,
         value: Int,
     ) {
-        send(requireNotNull(context.module.callback), code, value)
+        send(requireNotNull(context.module.callback), code, value, oneWay = context.module.emptyVoidReplies)
         drain()
     }
 
@@ -467,20 +483,21 @@ class TeyesClimateBinderIntegrationTest {
         callback: IBinder,
         code: Int,
         value: Int,
+        oneWay: Boolean = false,
     ) {
         val parcel = Parcel.obtain()
-        val reply = Parcel.obtain()
+        val reply = if (oneWay) null else Parcel.obtain()
         try {
             parcel.writeInterfaceToken("com.syu.ipc.IModuleCallback")
             parcel.writeInt(code)
             parcel.writeIntArray(intArrayOf(value))
             parcel.writeFloatArray(null)
             parcel.writeStringArray(null)
-            assertTrue(callback.transact(1, parcel, reply, 0))
-            reply.readException()
+            assertTrue(callback.transact(1, parcel, reply, if (oneWay) IBinder.FLAG_ONEWAY else 0))
+            reply?.readException()
         } finally {
             parcel.recycle()
-            reply.recycle()
+            reply?.recycle()
         }
     }
 
@@ -527,6 +544,7 @@ class TeyesClimateBinderIntegrationTest {
         init { attachInterface(null, "com.syu.ipc.IRemoteModule") }
         var callback: IBinder? = null
         var rejectRegistration = false
+        var emptyVoidReplies = false
         val registrations = mutableSetOf<Int>()
         val registrationHistory = mutableListOf<Int>()
         val commands = mutableListOf<Pair<Int, List<Int>>>()
@@ -560,7 +578,7 @@ class TeyesClimateBinderIntegrationTest {
                 }
                 else -> return false
             }
-            reply.writeNoException()
+            if (!emptyVoidReplies) reply.writeNoException()
             return true
         }
     }

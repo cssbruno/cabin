@@ -46,6 +46,14 @@ public class LiveCanReceiverTest {
         await(() -> context.module.subscriptions.isEmpty());
         assertEquals(1, context.unbinds);
     }
+    @Test public void receivesJoyingDataWithEmptySubscriptionReplies() throws Exception {
+        context.module.emptyVoidReplies = true;
+        receiver.start(); receiving();
+        assertEquals(1, context.actions.size());
+        assertEquals(0, context.module.commands);
+        receiver.close(); thread.join(1000);
+        await(() -> context.module.subscriptions.isEmpty());
+    }
     @Test public void fallsBackToDirectServiceWhenToolkitUnavailable() throws Exception {
         context.rejectToolkit = true;
         receiver.start(); drain();
@@ -146,6 +154,7 @@ public class LiveCanReceiverTest {
         @Override public void unbindService(ServiceConnection connection) { unbinds++; }
     }
     private static class Module extends Binder {
+        boolean emptyVoidReplies;
         final Set<Integer> subscriptions = java.util.concurrent.ConcurrentHashMap.newKeySet();
         volatile IBinder callback;
         int commands;
@@ -167,7 +176,7 @@ public class LiveCanReceiverTest {
                 if (field == 1000) emit(field,1048874);
                 if (field == 1) emit(field,0);
             } else { assertEquals(4,code); subscriptions.remove(field); }
-            reply.writeNoException(); return true;
+            if (!emptyVoidReplies) reply.writeNoException(); return true;
         }
         void emit(int field, int value) throws RemoteException { send(callback,field,value); }
         static void send(IBinder callback, int field, int value) throws RemoteException {

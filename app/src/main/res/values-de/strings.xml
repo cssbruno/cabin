@@ -16,4 +16,11 @@
     <string name="climate_temperature_decrease">Temperatur senken: %1$s</string>
     <string name="climate_temperature_unavailable">Temperatureinstellung nicht verfügbar</string>
     <string name="climate_power">Ein/Aus</string>
+    <string name="logs_view">Ansehen</string>
+    <string name="logs_previous">Zurück</string>
+    <string name="logs_refresh">Aktualisieren</string>
+    <string name="logs_next">Weiter</string>
+    <string name="logs_close_viewer">Schließen</string>
+    <string name="logs_read_failed">Dieses Protokoll konnte nicht geöffnet werden. Es wurde möglicherweise gelöscht oder ersetzt.</string>
+    <string name="logs_empty_page">Keine Protokolleinträge auf dieser Seite.</string>
 </resources>
