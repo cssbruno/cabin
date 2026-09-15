@@ -13,7 +13,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [29], manifest = Config.NONE)
 class JoyingCarPlayServiceTest {
-    class Runtime(val status: (String) -> Unit, val failed: () -> Unit) : JoyingSessionRuntime {
+    class Runtime(val status: (String) -> Unit, val notifyFailed: (Boolean) -> Unit) : JoyingSessionRuntime {
+        fun failed(retryable: Boolean = true) = notifyFailed(retryable)
         var starts = 0
         var closes = 0
         var attached: Surface? = null
@@ -31,7 +32,7 @@ class JoyingCarPlayServiceTest {
         val runtimes = mutableListOf<Runtime>()
         var exhaustionReports = 0
         override fun reportRecoveryExhausted() { exhaustionReports++ }
-        override fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: () -> Unit): JoyingSessionRuntime =
+        override fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: (Boolean) -> Unit): JoyingSessionRuntime =
             Runtime(status, failed).also(runtimes::add)
     }
     private fun advance(seconds: Long) = org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
@@ -59,6 +60,22 @@ class JoyingCarPlayServiceTest {
         service.runtimes.last().failed()
         advance(2)
         assertEquals(6, service.runtimes.size)
+        controller.destroy()
+    }
+
+    @Test fun `permanent socket failure preserves guidance until manual retry`() {
+        val controller = Robolectric.buildService(TestService::class.java).create()
+        val service = controller.get()
+        service.onStartCommand(Intent(), 0, 1)
+        val runtime = service.runtimes.single()
+        runtime.status("Video socket is busy; release stock Car Link")
+        runtime.failed(false)
+        advance(60)
+        assertEquals(1, service.runtimes.size)
+        assertEquals("Video socket is busy; release stock Car Link", service.state.value.status)
+        assertEquals(0, service.exhaustionReports)
+        service.restart()
+        assertEquals(2, service.runtimes.size)
         controller.destroy()
     }
 

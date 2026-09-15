@@ -28,6 +28,8 @@ class JoyingVideoConnectionTest {
             JoyingVideoConnection.open({ throw denied }, { fail("Must not stop service") }, { fail("Must not retry") })
         }
         assertSame(denied, error.cause)
+        assertEquals(JoyingVideoConnection.Failure.DENIED, (error as JoyingVideoConnection.ConnectionException).reason)
+        assertFalse(error.retryable)
         assertTrue(error.message!!.contains("firmware denied"))
     }
 
@@ -37,6 +39,8 @@ class JoyingVideoConnectionTest {
         val error = assertThrows(IllegalStateException::class.java) {
             JoyingVideoConnection.open({ binds++; throw IOException("Address already in use") }, { releases++ }, {})
         }
+        assertEquals(JoyingVideoConnection.Failure.BUSY, (error as JoyingVideoConnection.ConnectionException).reason)
+        assertFalse(error.retryable)
         assertEquals(11, binds)
         assertEquals(1, releases)
         assertTrue(error.message!!.contains("still in use"))
@@ -47,6 +51,23 @@ class JoyingVideoConnectionTest {
             JoyingVideoConnection.open({ throw IOException("Too many open files") }, { fail("Must not stop service") }, {})
         }
         assertTrue(error.message!!.contains("Too many open files"))
+        assertTrue((error as JoyingVideoConnection.ConnectionException).retryable)
+    }
+
+    @Test fun `blocked handoff is permanent and preserves its cause`() {
+        val denied = SecurityException("private vendor text")
+        val error = assertThrows(JoyingVideoConnection.ConnectionException::class.java) {
+            JoyingVideoConnection.open({ throw IOException("EADDRINUSE") }, { throw denied }, {})
+        }
+        assertEquals(JoyingVideoConnection.Failure.HANDOFF_BLOCKED, error.reason)
+        assertFalse(error.retryable)
+        assertSame(denied, error.cause)
+    }
+
+    @Test fun `interrupted handoff remains cancellation`() {
+        assertThrows(InterruptedException::class.java) {
+            JoyingVideoConnection.open({ throw IOException("EADDRINUSE") }, { throw InterruptedException() }, {})
+        }
     }
 
     @Test fun `cancelled retry does not bind again`() {

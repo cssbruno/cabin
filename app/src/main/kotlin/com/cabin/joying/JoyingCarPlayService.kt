@@ -69,11 +69,16 @@ internal open class JoyingCarPlayService : Service() {
         session = createSession(
             { message -> mutable.update { if (generation == current) it.copy(status = message) else it } },
             { width, height -> mutable.update { if (generation == current && height > 0) it.copy(ratio = width.toFloat() / height) else it } },
-            { recovery.post { scheduleRecovery(current) } },
+            { retryable -> recovery.post { scheduleRecovery(current, retryable) } },
         ).also { next -> surface?.let(next::attach); next.start() }
     }
-    private fun scheduleRecovery(failedGeneration: Int) {
+    private fun scheduleRecovery(failedGeneration: Int, retryable: Boolean) {
         if (generation != failedGeneration || recoveryPending) return
+        if (!retryable) {
+            // Keep the actionable bind/handoff error supplied by the failed session.
+            recoveryPending = true
+            return
+        }
         if (retries >= 3) {
             recoveryPending = true
             reportRecoveryExhausted()
@@ -93,7 +98,7 @@ internal open class JoyingCarPlayService : Service() {
         CabinTelemetry.record(DiagnosticEvent.JOYING_EXHAUSTED, report = true)
     }
 
-    protected open fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: () -> Unit): JoyingSessionRuntime =
+    protected open fun createSession(status: (String) -> Unit, size: (Int, Int) -> Unit, failed: (Boolean) -> Unit): JoyingSessionRuntime =
         JoyingEmbeddedSession(applicationContext, resources.displayMetrics.widthPixels,
             resources.displayMetrics.heightPixels, status, size, failed)
 

@@ -20,16 +20,16 @@ internal class JoyingEmbeddedSession(
     height: Int,
     private val onStatus: (String) -> Unit,
     private val onSize: (Int, Int) -> Unit,
-    private val onFailure: () -> Unit,
+    private val onFailure: (Boolean) -> Unit,
 ) : JoyingSessionRuntime {
     private val closed = AtomicBoolean(false)
     private val failureReported = AtomicBoolean(false)
 
-    private fun fail(message: String) {
+    private fun fail(message: String, retryable: Boolean = true) {
         if (closed.get() || !failureReported.compareAndSet(false, true)) return
         onStatus(message)
         close()
-        onFailure()
+        onFailure(retryable)
     }
     private val videoLock = Any()
     private var outputSurface: Surface? = null
@@ -202,7 +202,7 @@ internal class JoyingEmbeddedSession(
                 if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
                 android.util.Log.e("JoyingCarPlay", "Native CarPlay connection failed", e)
                 com.cabin.reports.DebugJournal.record("CarPlay", "connection_failed", "$e; cause=${e.cause}")
-                fail(e.message ?: "Joying connection failed")
+                fail(e.message ?: "Joying connection failed", (e as? JoyingVideoConnection.ConnectionException)?.retryable ?: true)
             } finally {
                 close()
             }

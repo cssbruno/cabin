@@ -126,7 +126,7 @@ object CabinTelemetry {
     // Rate-limit before inspecting the stack. No raw message or vendor tag crosses this boundary.
     private val logBudget = TelemetryBudget(120)
     private val errorBudget = TelemetryBudget(10)
-    fun log(level: Logger.Level, throwable: Throwable?) {
+    fun log(logLevel: Logger.Level, throwable: Throwable?) {
         if (!active) return
         try {
             val sendLog = logBudget.take(android.os.SystemClock.elapsedRealtime())
@@ -142,7 +142,7 @@ object CabinTelemetry {
                 }
                 val site = frame?.let { "${it.className}.${it.methodName}:${it.lineNumber}" } ?: "unknown"
                 val body = "Cabin log $site"
-                val severity = when (level) {
+                val severity = when (logLevel) {
                     Logger.Level.VERBOSE -> SentryLogLevel.TRACE
                     Logger.Level.DEBUG -> SentryLogLevel.DEBUG
                     Logger.Level.INFO -> SentryLogLevel.INFO
@@ -150,9 +150,21 @@ object CabinTelemetry {
                     Logger.Level.ERROR -> SentryLogLevel.ERROR
                 }
                 Sentry.logger().log(severity, body)
-                Sentry.addBreadcrumb(Breadcrumb().apply { category = "cabin.log"; message = body })
+                Sentry.addBreadcrumb(Breadcrumb().apply {
+                    category = "cabin.log"; message = body
+                    this.level = when (logLevel) {
+                        Logger.Level.VERBOSE, Logger.Level.DEBUG -> SentryLevel.DEBUG
+                        Logger.Level.INFO -> SentryLevel.INFO
+                        Logger.Level.WARN -> SentryLevel.WARNING
+                        Logger.Level.ERROR -> SentryLevel.ERROR
+                    }
+                })
             }
-            if (sendError) Sentry.captureException(throwable)
+            if (sendError) Sentry.captureException(throwable) { scope ->
+                (throwable as? com.cabin.joying.JoyingVideoConnection.ConnectionException)?.let {
+                    scope.setTag("joying_video_failure", it.reason.name)
+                }
+            }
         } catch (_: RuntimeException) {
             // Never recurse into Logger or break application work when reporting fails.
         }
@@ -169,7 +181,7 @@ object CabinTelemetry {
 
     internal fun cleanBreadcrumb(crumb: Breadcrumb): Breadcrumb? {
         if (crumb.category == "cabin.log" && safeLog.matches(crumb.message.orEmpty())) {
-            return Breadcrumb(crumb.timestamp).apply { category = "cabin.log"; message = crumb.message }
+            return Breadcrumb(crumb.timestamp).apply { category = "cabin.log"; message = crumb.message; level = crumb.level }
         }
         if (crumb.category != CATEGORY || DiagnosticEvent.entries.none { it.name == crumb.message }) return null
         return Breadcrumb(crumb.timestamp).apply { category = CATEGORY; message = crumb.message }
@@ -202,6 +214,9 @@ object CabinTelemetry {
             images = images.orEmpty() + listOf(DebugImage().apply { type = "proguard"; uuid = mappingId })
         }
         setTag("android_api", Build.VERSION.SDK_INT.toString())
+        source.getTag("joying_video_failure")?.takeIf { value ->
+            com.cabin.joying.JoyingVideoConnection.Failure.entries.any { it.name == value }
+        }?.let { setTag("joying_video_failure", it) }
         message = Message().apply {
             formatted = source.message?.formatted?.takeIf { name -> DiagnosticEvent.entries.any { it.name == name } }
                 ?: "Cabin application error"

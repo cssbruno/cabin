@@ -126,6 +126,20 @@ class CabinTelemetryTest {
         }
     }
 
+    @Test fun `safe socket reason and breadcrumb severity survive privacy filtering`() {
+        val event = SentryEvent().apply {
+            setTag("joying_video_failure", "BUSY")
+            breadcrumbs = listOf(Breadcrumb().apply {
+                category = "cabin.log"; message = "Cabin log com.cabin.joying.Session.start:42"; level = io.sentry.SentryLevel.ERROR
+            })
+        }
+        val clean = CabinTelemetry.sanitize(event)
+        assertEquals("BUSY", clean.getTag("joying_video_failure"))
+        assertEquals(io.sentry.SentryLevel.ERROR, clean.breadcrumbs!!.single().level)
+        event.setTag("joying_video_failure", "private vendor text")
+        assertNull(CabinTelemetry.sanitize(event).getTag("joying_video_failure"))
+    }
+
     @Test fun `log budget bounds bursts and resets on monotonic window boundary`() {
         val budget = TelemetryBudget(2)
         assertTrue(budget.take(10)); assertTrue(budget.take(11)); assertFalse(budget.take(12))
