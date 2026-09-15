@@ -440,6 +440,21 @@ class TeyesClimateBinderIntegrationTest {
         assertTrue(context.module.commands.isEmpty())
     }
 
+    @Test fun `failed toolkit subscriptions fall back to direct CAN service`() {
+        controller.suspendUpdates(); drain()
+        context.failToolkitRegistration = true
+        context.actions.clear()
+        controller.resumeUpdates(); drain()
+        shadowOf(worker.looper).idleFor(5, java.util.concurrent.TimeUnit.SECONDS)
+        drain()
+        assertTrue(context.actions.contains("com.syu.ms.canbus"))
+        assertTrue(controller.state.value.connected)
+        emit(1000, 1048874)
+        emit(1, 1)
+        assertTrue(controller.state.value.frontLeftDoorOpen)
+        assertTrue(context.module.commands.isEmpty())
+    }
+
     private fun emit(
         code: Int,
         value: Int,
@@ -472,6 +487,7 @@ class TeyesClimateBinderIntegrationTest {
     private class ToolkitContext(base: Context) : ContextWrapper(base) {
         val module = Module()
         var toolkitUnavailable = false
+        var failToolkitRegistration = false
         val actions = mutableListOf<String?>()
         private val toolkit =
             object : Binder() {
@@ -498,6 +514,7 @@ class TeyesClimateBinderIntegrationTest {
             flags: Int,
         ): Boolean {
             actions += service.action
+            module.rejectRegistration = failToolkitRegistration && service.action == "com.syu.ms.toolkit"
             if (service.action == "com.syu.ms.toolkit" && toolkitUnavailable) return false
             conn.onServiceConnected(requireNotNull(service.component), if (service.action == "com.syu.ms.canbus") module else toolkit)
             return true
@@ -509,6 +526,7 @@ class TeyesClimateBinderIntegrationTest {
     private class Module : Binder() {
         init { attachInterface(null, "com.syu.ipc.IRemoteModule") }
         var callback: IBinder? = null
+        var rejectRegistration = false
         val registrations = mutableSetOf<Int>()
         val registrationHistory = mutableListOf<Int>()
         val commands = mutableListOf<Pair<Int, List<Int>>>()
@@ -529,6 +547,7 @@ class TeyesClimateBinderIntegrationTest {
                     data.createStringArray()
                 }
                 3 -> {
+                    if (rejectRegistration) { reply.writeException(android.os.RemoteException("Subscription rejected")); return true }
                     callback = data.readStrongBinder()
                     val field = data.readInt()
                     registrations += field

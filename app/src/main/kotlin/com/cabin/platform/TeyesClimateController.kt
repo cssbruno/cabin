@@ -137,6 +137,7 @@ class TeyesClimateController(
     val state: StateFlow<TeyesClimateState> = mutableState.asStateFlow()
     private var moduleBinder: IBinder? = null
     private var useDirectCanService = false
+    private var subscriptionsReady = false
     private var connection: ServiceConnection? = null
     private var callback: IBinder? = null
     private var deathRecipient: IBinder.DeathRecipient? = null
@@ -254,6 +255,7 @@ class TeyesClimateController(
                     }
                     popupPolicy.reset(SystemClock.elapsedRealtime())
                     UPDATE_CODES.forEach { if (moduleBinder != null) register(it) }
+                    subscriptionsReady = moduleBinder != null
                     publishState()
                 }
             }
@@ -329,11 +331,11 @@ class TeyesClimateController(
         connection = nextConnection
         mutableState.value = TeyesClimateState(health = TeyesTelemetryHealth.CONNECTING, controlUnavailableReason = appContext.localizedString(com.cabin.R.string.vehicle_status_waiting_profile))
         val intent =
-            if (useDirectCanService) fytCanbusIntent(appContext) else fytToolkitIntent(appContext)
+            if (useDirectCanService) fytCanbusIntent(appContext) else fytModuleIntent(appContext, MODULE_CANBUS)
         com.cabin.reports.DebugJournal.record("CAN", "bind", intent.component.toString())
         val accepted =
             try {
-                appContext.bindService(intent, nextConnection, Context.BIND_AUTO_CREATE)
+                bindFytService(appContext, intent, nextConnection)
             } catch (error: Exception) {
                 android.util.Log.w("CabinCAN", "Cannot bind ${intent.component}", error)
                 com.cabin.reports.DebugJournal.record("CAN", "bind_failed", error.toString())
@@ -660,7 +662,9 @@ class TeyesClimateController(
         val remote = moduleBinder ?: return
         try {
             SyuBinderTransport.transact(remote, code, body, {})
-        } catch (_: Exception) {
+        } catch (error: Exception) {
+            com.cabin.telemetry.CabinTelemetry.record(com.cabin.telemetry.DiagnosticEvent.FYT_MODULE_FAILED)
+            com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, error)
             disconnectAndRetry()
         }
     }
@@ -680,7 +684,7 @@ class TeyesClimateController(
     private fun disconnectAndRetry() {
         // Some FYT builds expose the CAN module directly even when toolkit lookup fails.
         // Keep a working route on transient disconnect; alternate only failed setup attempts.
-        if (moduleBinder == null) useDirectCanService = !useDirectCanService
+        if (moduleBinder == null || !subscriptionsReady) useDirectCanService = !useDirectCanService
         clearConnection()
         if (closed.get()) return
         handler.removeCallbacks(retry)
@@ -688,6 +692,7 @@ class TeyesClimateController(
     }
 
     private fun clearConnection() {
+        subscriptionsReady = false
         connectionEpoch.incrementAndGet()
         handler.removeCallbacks(bindTimeout)
         val oldModule = moduleBinder
