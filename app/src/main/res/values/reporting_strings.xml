@@ -1,6 +1,6 @@
 <resources>
     <string name="reporting_title">Share crash reports</string>
-    <string name="reporting_detail">Optional: send crashes, app freezes, app version, Android version and connection-stage events to Sentry. No screenshots, audio, GPS, phone details or raw logs. Turning this off clears queued reports; reports already received remain in Sentry.</string>
+    <string name="reporting_detail">Optional: send Java and native crashes, app freezes, app and Android versions, connection events and diagnostic logs (severity and code location) to Sentry. Raw log messages, screenshots, audio, GPS and phone details are excluded. Turning this off clears queued reports; reports already received remain in Sentry.</string>
     <string name="reporting_unconfigured">Reporting is unavailable in this build.</string>
     <string name="reporting_test">Send test report</string>
     <string name="reporting_queued">Test report queued; delivery requires a connection.</string>

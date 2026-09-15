@@ -67,6 +67,59 @@ class CabinTelemetryTest {
         }
     }
 
+    @Test fun `log sanitizer rejects arbitrary bodies and strips SDK attributes`() {
+        val log = io.sentry.SentryLogEvent(SentryId(), 1.0, "Cabin log com.cabin.joying.Session.start:42", io.sentry.SentryLogLevel.DEBUG)
+        log.setAttribute("user.email", io.sentry.SentryLogEventAttributeValue("string", "private@example.com"))
+        val clean = CabinTelemetry.cleanLog(log)!!
+        assertEquals(log.body, clean.body)
+        assertEquals(io.sentry.SentryLogLevel.DEBUG, clean.level)
+        assertEquals(setOf("sentry.release", "sentry.environment"), clean.attributes!!.keys)
+        log.body = "Phone connected private@example.com"
+        assertNull(CabinTelemetry.cleanLog(log))
+    }
+
+    @Test fun `native addresses build IDs and crashed threads survive without private fields`() {
+        val nativeFrame = SentryStackFrame().apply { instructionAddr = "0x1234"; imageAddr = "0x1000"; vars = mapOf("secret" to "value") }
+        val event = SentryEvent().apply {
+            platform = "native"
+            debugMeta = DebugMeta().apply { images = listOf(DebugImage().apply {
+                type = "elf"; debugId = "abcd"; codeFile = "/private/path/libcabin_io.so"; imageAddr = "0x1000"
+            }) }
+            threads = listOf(SentryThread().apply { id = 2; isCrashed = true; name = "private"; stacktrace = SentryStackTrace(listOf(nativeFrame)) })
+            exceptions = listOf(SentryException().apply { mechanism = Mechanism().apply { type = "ANR"; isHandled = false } })
+        }
+        val clean = CabinTelemetry.sanitize(event)
+        assertEquals("native", clean.platform)
+        assertEquals("abcd", clean.debugMeta!!.images!!.first().debugId)
+        assertEquals("libcabin_io.so", clean.debugMeta!!.images!!.first().codeFile)
+        val thread = clean.threads!!.single()
+        assertTrue(thread.isCrashed!!)
+        assertNull(thread.name)
+        assertEquals("0x1234", thread.stacktrace!!.frames!!.single().instructionAddr)
+        assertNull(thread.stacktrace!!.frames!!.single().vars)
+        assertEquals("ANR", clean.exceptions!!.single().mechanism!!.type)
+    }
+
+    @Test fun `cached crashes retain their original release and mapping`() {
+        val event = SentryEvent().apply {
+            release = "zeno.carlink@0.1+2000131"
+            environment = "production"
+            debugMeta = DebugMeta().apply { images = listOf(DebugImage().apply {
+                type = "proguard"; uuid = "decc9a24-92cd-4274-8acf-7da0de64b6bc"
+            }) }
+        }
+        val clean = CabinTelemetry.sanitize(event)
+        assertEquals(event.release, clean.release)
+        assertEquals("production", clean.environment)
+        assertEquals("decc9a24-92cd-4274-8acf-7da0de64b6bc", clean.debugMeta!!.images!!.single().uuid)
+    }
+
+    @Test fun `log budget bounds bursts and resets on monotonic window boundary`() {
+        val budget = TelemetryBudget(2)
+        assertTrue(budget.take(10)); assertTrue(budget.take(11)); assertFalse(budget.take(12))
+        assertFalse(budget.take(60_009)); assertTrue(budget.take(60_010))
+    }
+
     @Test fun `reporting defaults off and disabling removes queued reports`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         context.getSharedPreferences(CabinTelemetry.PREFERENCES, Context.MODE_PRIVATE).edit().clear().commit()

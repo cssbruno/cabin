@@ -1,6 +1,6 @@
 <resources>
     <string name="reporting_title">Partager les rapports d’erreurs</string>
-    <string name="reporting_detail">Facultatif : envoyer à Sentry les erreurs, blocages, versions de l’application et d’Android et étapes de connexion. Sans captures, audio, GPS, données du téléphone ni journaux bruts. Désactiver efface la file ; les rapports déjà reçus restent dans Sentry.</string>
+    <string name="reporting_detail">Facultatif : envoyer à Sentry les plantages Java et natifs, blocages, versions de l’application et Android, événements de connexion et journaux de diagnostic (gravité et emplacement dans le code). Les messages bruts, captures, sons, GPS et données du téléphone sont exclus. Désactiver vide la file ; les rapports reçus restent dans Sentry.</string>
     <string name="reporting_unconfigured">Rapports indisponibles dans cette version.</string>
     <string name="reporting_test">Envoyer un rapport de test</string>
     <string name="reporting_queued">Rapport en attente ; l’envoi nécessite une connexion.</string>

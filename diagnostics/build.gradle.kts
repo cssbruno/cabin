@@ -12,6 +12,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildTypes { release { ndk { debugSymbolLevel = "FULL" } } }
     testOptions { unitTests.isIncludeAndroidResources = true }
     externalNativeBuild { cmake { path = file("src/main/cpp/CMakeLists.txt"); version = "3.22.1" } }
 }

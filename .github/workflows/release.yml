@@ -51,6 +51,7 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          test -n "$CABIN_SENTRY_DSN"
           test -n "$KEYSTORE_BASE64"
           test -n "$CABIN_KEYSTORE_PASSWORD"
           export CABIN_KEYSTORE_PATH="$RUNNER_TEMP/cabin-release.jks"
@@ -90,8 +91,26 @@ jobs:
             update.json
             app/build/outputs/mapping/release/mapping.txt
             sentry-mapping-uuid.txt
+            app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
             cabin-oem-integration.zip
             cabin-oem-integration.zip.sha256
+      - name: Upload Sentry symbols
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: eu-virtual
+          SENTRY_PROJECT: cabin
+        run: |
+          set -euo pipefail
+          if [[ -z "$SENTRY_AUTH_TOKEN" ]]; then
+            echo '::error::Add the SENTRY_AUTH_TOKEN repository secret to upload release symbols.'
+            exit 1
+          fi
+          curl --fail --location --retry 3 https://github.com/getsentry/sentry-cli/releases/download/2.58.4/sentry-cli-Linux-x86_64 -o "$RUNNER_TEMP/sentry-cli"
+          echo 'a4932b4315b192b3d037678a16eb2a5a8731609f671fc4008e643b85c3c74cb6  '"$RUNNER_TEMP/sentry-cli" | sha256sum --check
+          chmod +x "$RUNNER_TEMP/sentry-cli"
+          "$RUNNER_TEMP/sentry-cli" upload-proguard --require-one --uuid "$(cat sentry-mapping-uuid.txt)" app/build/outputs/mapping/release/mapping.txt
+          test -s app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
+          "$RUNNER_TEMP/sentry-cli" debug-files upload --wait app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}

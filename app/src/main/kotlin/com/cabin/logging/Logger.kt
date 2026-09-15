@@ -274,6 +274,7 @@ object Logger {
         message: String,
         throwable: Throwable? = null,
     ) {
+        com.cabin.telemetry.CabinTelemetry.log(level, throwable)
         // Emit to system logcat only in debug builds (adb logcat capture during development).
         // Release builds route exclusively through listeners (app file logging) to avoid
         // per-packet Log.d() overhead on constrained hardware (GM AAOS Intel Atom).

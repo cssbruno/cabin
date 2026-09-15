@@ -59,6 +59,7 @@ android {
 
     buildTypes {
         release {
+            ndk { debugSymbolLevel = "FULL" }
             signingConfig = signingConfigs.findByName("cabinRelease")
             isMinifyEnabled = true
             proguardFiles(
@@ -126,6 +127,7 @@ detekt {
 dependencies {
     implementation(project(":diagnostics"))
     implementation("io.sentry:sentry-android-core:8.56.0")
+    implementation("io.sentry:sentry-android-ndk:8.56.0")
     // Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 

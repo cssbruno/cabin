@@ -90,7 +90,7 @@ internal class JoyingEmbeddedSession(
     private fun dispatch(work: () -> Unit) {
         if (closed.get()) return
         runCatching { controls.execute {
-            if (!closed.get()) try { work() } catch (e: Exception) { onStatus(e.cause?.message ?: e.message ?: "Joying control failed") }
+            if (!closed.get()) try { work() } catch (e: Exception) { com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e); onStatus(e.cause?.message ?: e.message ?: "Joying control failed") }
         } }
     }
     private fun command(code: Int, ints: IntArray = intArrayOf(), strings: List<String> = emptyList()) {
@@ -199,6 +199,7 @@ internal class JoyingEmbeddedSession(
                     if (!closed.get()) onStatus("Waiting for Joying video to reconnect…")
                 }
             } catch (e: Exception) {
+                if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
                 android.util.Log.e("JoyingCarPlay", "Native CarPlay connection failed", e)
                 com.cabin.reports.DebugJournal.record("CarPlay", "connection_failed", "$e; cause=${e.cause}")
                 fail(e.message ?: "Joying connection failed")
@@ -264,6 +265,7 @@ internal class JoyingEmbeddedSession(
                 }
             }
         } catch (e: Exception) {
+            if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
             fail(e.message ?: "Joying video decoder failed")
         } finally {
             synchronized(videoLock) {

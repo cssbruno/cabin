@@ -58,6 +58,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
             }
         } catch (e: CancellationException) { mutable.value = old; throw e }
         catch (e: Exception) {
+            com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.WARN, e)
             Log.w("CabinUpdater", "Update check failed", e)
             mutable.value = old.copy(phase = UpdatePhase.FAILED, errorRes = updateErrorResource(e))
         }
@@ -92,6 +93,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
             mutable.value = UpdateStatus(UpdatePhase.READY, release, 100)
         } catch (e: CancellationException) { mutable.value = UpdateStatus(UpdatePhase.AVAILABLE, release); throw e }
         catch (e: Exception) {
+            com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.WARN, e)
             Log.w("CabinUpdater", "Update download or validation failed", e)
             mutable.value = UpdateStatus(UpdatePhase.FAILED, release, errorRes = updateErrorResource(e))
         }

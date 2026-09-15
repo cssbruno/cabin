@@ -1,64 +1,78 @@
-# Optional Sentry reporting
-
-## Why
-
-Cabin already has local health reports. Optional remote crash and recovery reports
-make problems from a later head-unit test visible without copying raw logs.
-Sentry helps diagnose software failures; it does not establish camera, radar, MCU
-or CAN compatibility.
+# Sentry reporting
 
 ## Configuration
 
-- SDK: `io.sentry:sentry-android-core:8.56.0`, pinned from Maven Central.
-- Provide `CABIN_SENTRY_DSN` when building. For GitHub releases, add the repository
-  secret of the same name. This is the project ingestion URL, not an auth token.
-- Reporting defaults off. Enable **Settings → Logs → Share crash reports** on the
-  device. A build without a DSN shows reporting as unavailable.
-- Tap **Send test report** and verify `TEST_REPORT` in the configured Sentry project.
-  “Queued” is not confirmation of server receipt. No live ingestion test has been
-  performed without the user's project DSN.
-- Existing local report export continues to work without Sentry.
+- Android core and NDK SDKs are pinned to `8.56.0`.
+- Build with `CABIN_SENTRY_DSN`; GitHub Actions already has that repository secret.
+- Sentry organization: `eu-virtual`; project: `cabin`.
+- Add an organization upload token as the GitHub Actions secret `SENTRY_AUTH_TOKEN`.
+  Never put it in an APK or commit it. `sentry.properties`, `.sentryclirc` and `.env`
+  files are ignored. The DSN is an ingestion address embedded in the APK.
+- Reporting defaults off. Enable **Settings → Logs → Share crash reports** and tap
+  **Send test report**. “Queued” means accepted by the SDK, not delivered.
+
+## Coverage
+
+Java/Kotlin crashes, current ANRs and native crashes are enabled after consent.
+Handled exceptions passed through Cabin's Logger, updater check/download failures,
+and Joying control/start/decoder failures are captured. Cancellation is excluded.
+Other caught exceptions that never reach these paths are not automatically captured.
+
+Sentry Logs receives TRACE/DEBUG/INFO/WARN/ERROR diagnostics from the central Logger
+and DEBUG diagnostics from DebugJournal. They contain severity and the originating
+code location, **not the original free-form message or variable values**. This works
+independently of local file-log filters. At most 120 logs and 10 handled exceptions
+are accepted per minute; automatic crash capture has a separate SDK path. Hot loops
+can consume the log budget. Code compiled out by `logDebugOnly` is unavailable in
+release builds. Release call sites can be obfuscated; retain the R8 mapping.
+
+Fixed projection/Joying events and the latest 40 diagnostic breadcrumbs provide
+context. The test button also emits a `Cabin event TEST_REPORT` log. SDK internal
+DEBUG output goes to local logcat only in debug builds, not to remote raw logs.
 
 ## Data boundary
 
-Events are rebuilt from an allowlist before sending: app release, build environment,
-Android API level, exception class/module, stack frame class/function/source filename
-and line number, handled status, and fixed connection-event breadcrumbs. Exception
-messages, arbitrary event messages, requests, users, extra data, device contexts,
-stack variables and absolute source paths are omitted.
+Events are rebuilt before sending. They retain release/environment, Android API,
+exception classes, handled/crash mechanism, stack source locations, native addresses,
+build IDs and crashed-thread IDs. Cached crashes retain their original release and
+mapping ID after an app update. Arbitrary messages, exception text, user/request
+fields, custom context, thread names, stack variables and absolute source paths are
+removed. Log attributes are replaced with the build release and environment. Raw attachments have a zero-byte
+limit and are cleared in the event callback.
 
-Automatic breadcrumbs, screenshots, view hierarchies, raw ANR dumps, historical ANR
-collection, native crash collection, session tracking, performance tracing, logs,
-metrics and scope persistence are disabled. The core artifact does not include the
-Replay or NDK integrations. No audio, GPS, phone identity, SSID, media metadata or
-raw CAN payloads are attached. Like any remote HTTPS service, the ingestion service
-can observe the connection's IP address.
+Automatic device/network breadcrumbs, screenshots, view hierarchies, raw ANR and
+tombstone attachments, historical ANRs/tombstones, session tracking, tracing, metrics
+and Java scope persistence are disabled. Native scope sync carries sanitized
+breadcrumbs. No Replay dependency is added. No audio, GPS, phone identity, SSID,
+media metadata or raw CAN payload is intentionally collected. The HTTPS ingestion
+service can observe the connection IP address.
 
-The SDK handles Java/Kotlin crashes and current ANR detection. Typed breadcrumbs
-cover projection states and Joying starts/retries/stops. Exhausted Joying recovery
-sends a warning; ordinary transitions remain breadcrumbs attached to later events.
+At most 20 envelopes are cached in app-private no-backup storage. Logs use the SDK's
+bounded batch processor. Disabling closes Sentry and deletes its cache; already
+transmitted or in-flight reports cannot be recalled. Consent is excluded from backups.
 
-At most 20 envelopes and 40 breadcrumbs are configured. SDK network I/O uses its
-workers. Queued reports live in app-private no-backup storage. Reporting consent is
-excluded from Android backup/device transfer. Disabling closes the SDK and deletes
-its local cache; already transmitted or in-flight reports cannot be recalled.
+## Release symbols
 
-## Release stack traces
+The release workflow generates and embeds `CABIN_SENTRY_MAPPING_UUID`. It retains
+that UUID, the R8 mapping and the native debug-symbol ZIP in the CI artifact. The
+pinned, checksum-verified Sentry CLI `2.58.4` uploads the mapping using that exact UUID
+and uploads native symbols with server-processing checks before publishing.
+This CLI version supports the explicit `--uuid` option used by the build.
+A missing upload token or a failed upload blocks release publication.
 
-The release workflow generates `CABIN_SENTRY_MAPPING_UUID`, embeds it in events,
-and preserves `sentry-mapping-uuid.txt` and the matching R8 `mapping.txt` in the
-`cabin-release` CI artifact. Retain these together. Upload the mapping with that UUID
-to the Sentry project using an authorized Sentry account/tool before expecting
-readable production stack traces. Mapping upload is not automated yet; no account,
-project slug or upload token has been supplied. Never put an upload auth token in
-an APK. Debug builds are unobfuscated.
+The diagnostics native library is built with FULL symbol metadata. Sentry's own
+prebuilt native libraries may contain fewer symbols. Full source-level resolution
+of third-party or OEM binaries requires symbols from their vendors.
 
-## Validation
+## Verification status
 
-Automated tests exercise removal of seeded private fields, preservation of stack
-locations, rejection of unknown breadcrumbs, fixed event names, default-off
-preferences, and deletion of queued files on disable. Device-side ingestion and
-ANR/crash testing remain to be performed on a DSN-configured build.
+On 2026-09-15 the supplied DSN accepted a synthetic `TEST_REPORT` with HTTP 200:
+`fb9d4da9e65d4f9a8808cc19441b5fb8`, environment `integration-check`.
+This verifies the ingestion endpoint, not device delivery or dashboard visibility.
 
-References: [Android SDK](https://docs.sentry.io/platforms/android/),
-[pinned SDK source](https://repo.maven.apache.org/maven2/io/sentry/sentry-android-core/8.56.0/sentry-android-core-8.56.0-sources.jar).
+Tests cover private-field removal, native metadata preservation, log filtering,
+rate limits, consent and cache deletion. A device test must still verify a Java
+crash, an ANR and a native crash after restarting the app, plus logs and resolved
+stack traces in the Sentry dashboard. No physical head-unit validation is claimed.
+
+Reference: [pinned SDK source](https://repo.maven.apache.org/maven2/io/sentry/sentry-android-core/8.56.0/sentry-android-core-8.56.0-sources.jar).

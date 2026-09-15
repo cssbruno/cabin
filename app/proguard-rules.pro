@@ -140,3 +140,10 @@
 # The Kotlin Compose compiler plugin keeps @Composable functions.
 # AGP keeps all manifest-declared components (Activity, Service, Receiver).
 # No additional rules needed for these.
+
+# Diagnostic call sites remain identifiable in release log bodies. R8 may still
+# rename application classes/methods; retain the matching mapping artifact.
+-keeppackagenames com.cabin.**
+-keep,allowshrinking class com.cabin.logging.** { *; }
+-keep,allowshrinking class com.cabin.telemetry.** { *; }
+-keep,allowshrinking class com.cabin.reports.DebugJournal { *; }
