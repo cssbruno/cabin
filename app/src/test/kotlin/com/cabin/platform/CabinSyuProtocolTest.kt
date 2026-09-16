@@ -16,6 +16,44 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [29], manifest = Config.NONE)
 class CabinSyuProtocolTest {
+    @Test fun `XBS CRV media uses typed track arrays and rejects broken vendor repeat command`() {
+        val decoder = registry().profile(188).syuClient.display as CabinSyuDecoder
+        val raw = mapOf(1 to 1, 2 to -128, 3 to 2, 6 to 50)
+        val payloads = mapOf(4 to FytRawSample(integers = listOf(123, 45)), 5 to FytRawSample(integers = listOf(12, 345)))
+        val rows = decoder.readPayloads(raw, payloads).associateBy { it.viewId }
+        assertEquals("iPod", rows[2]?.text)
+        assertEquals("02:03:45", rows[4]?.text)
+        assertEquals("12 / 345", rows[5]?.text)
+        assertEquals("Repeat folder", rows[3]?.text)
+        assertEquals(1 to listOf(4), decoder.command(1, 4, raw))
+        assertEquals(1 to listOf(11), decoder.command(1, 11, raw))
+        assertNull(decoder.command(1, 10, raw))
+        assertNull(decoder.command(1, 1, emptyMap()))
+        assertTrue(decoder.readPayloads(emptyMap(), mapOf(4 to FytRawSample(integers = listOf(10, 60)),
+            5 to FytRawSample(integers = listOf(10)))).isEmpty())
+        assertTrue(decoder.read(mapOf(4 to 123, 5 to 12)).isEmpty())
+        assertFalse(decoder.hasHondaTrip)
+    }
+
+    @Test fun `Elysion factory display preserves typed text and selection with independent trip data`() {
+        for (profile in listOf(197051, 7078331)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            val raw = mapOf(30 to 2, 32 to 1, 40 to 1, 42 to 4, 44 to 3, 45 to 2, 46 to 20, 1 to 80, 7 to 2)
+            val rows = decoder.readPayloads(raw, mapOf(33 to FytRawSample(strings = listOf("FM1")),
+                34 to FytRawSample(strings = listOf("Station")), 35 to FytRawSample(strings = listOf("")))).associateBy { it.viewId }
+            assertEquals("FM1", rows[33]?.text)
+            assertEquals("▶ Station", rows[34]?.text)
+            assertEquals(setOf(30, 32, 34), rows[34]?.fields)
+            assertFalse(35 in rows)
+            assertEquals("Shuffle all", rows[42]?.text)
+            assertEquals("3/5", rows[44]?.text)
+            assertEquals("8.0 L/100 km", rows[1]?.text)
+            assertTrue(decoder.hasHondaTrip)
+            assertNull(decoder.command(46, 30, raw))
+            assertTrue(decoder.read(mapOf(40 to 4, 42 to 7, 44 to 7, 45 to 7, 46 to 256)).isEmpty())
+        }
+    }
+
     @Test fun `Early Honda trip packets use verified unit fields and protocol specific refresh`() {
         val wc = setOf(64, 65, 166, 196774, 192, 65728, 297, 65833)
         val profiles = wc + setOf(19, 117, 65653, 131189, 196725, 141, 203, 196811, 262347, 370, 65906, 131442)

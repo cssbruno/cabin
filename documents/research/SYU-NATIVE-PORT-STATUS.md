@@ -425,3 +425,26 @@ Local validation of the 49-profile batch: `/tmp/cabin-honda-local-final.log`,
 zero failures/errors. `assembleRelease` completed. APK SHA-256
 `ae0fec583e4fa9945a04994b24ff91045a156ad9186fed30496a610c1ec6ecd4`;
 5,630 class definitions; no runtime reference-reader/interpreter definitions.
+
+### Factory media continuation after v0.1.6
+
+`CabinHondaFactoryMedia` adds three exact profiles: XBS CR-V 188 and WC Elysion
+197051/7078331. CR-V time and track counts are two-integer callback payloads,
+not scalar values. Native rows show source, state, playback mode, elapsed time,
+track counts and progress, with verified play/pause/seek/folder/shuffle commands.
+The vendor service sends key release itself.
+
+Elysion exposes its four factory display strings and selection state, CD/USB
+playback modes, stereo/scan/Bluetooth indicators, phone signal/battery bars and
+factory volume. Its trip packet matches the verified Honda layout. These display
+rows do not switch the Android audio source merely because settings are opened.
+
+The CR-V repeat-cycle operation is deliberately unavailable: `f0/y5.cmd(1,[10])`
+increments a counter to four before indexing a four-element array. This was
+confirmed directly in y5.smali, not inferred from decompiled Java. Exposing that
+operation would crash the vendor service on the fourth call. A separate working
+wire transport for replacing this vendor operation has not been verified.
+
+Reference: `CrvXBSActi`, `Act_WC_CarCD_AoDeSai`, callbacks 0188/0443, service y5/bk.
+Local protocol regression tests passed in `/tmp/cabin-honda-media-after-016.log`.
+This continuation is not included in tag v0.1.6.
