@@ -2,8 +2,8 @@ package com.cabin.joying
 
 /** Stock f.a.b clamps by orientation and rounds both dimensions down to multiples of eight. */
 internal data class JoyingDisplayConfiguration(val width: Int, val height: Int) {
-    fun nativeValues(): IntArray = intArrayOf(0, 0, width, height, width, height,
-        221, (221f * height / width + 0.5f).toInt(), 0, 0x53667073, 30)
+    fun nativeValues(fps: Int = 30): IntArray = intArrayOf(0, 0, width, height, width, height,
+        221, (221f * height / width + 0.5f).toInt(), 0, 0x53667073, fps)
 
     companion object {
         fun fromDisplay(width: Int, height: Int): JoyingDisplayConfiguration {

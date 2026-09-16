@@ -16,13 +16,13 @@ class CarPlayBackendsTest {
             assertEquals(it, resolveCarPlayBackends(true, true, it).selected)
         }
     }
-    @Test fun `unplugged dongle cannot remain selected over available native source`() {
-        assertEquals(CarPlayBackend.JOYING, resolveCarPlayBackends(true, false, CarPlayBackend.DONGLE).selected)
-        assertEquals(CarPlayBackend.DONGLE, resolveCarPlayBackends(false, true, CarPlayBackend.JOYING).selected)
+    @Test fun `explicit choice survives temporary USB removal and hardware changes`() {
+        assertEquals(CarPlayBackend.DONGLE, resolveCarPlayBackends(true, false, CarPlayBackend.DONGLE).selected)
+        assertEquals(CarPlayBackend.JOYING, resolveCarPlayBackends(false, true, CarPlayBackend.JOYING).selected)
     }
     @Test fun `no hardware offers no phantom source`() {
         val none = resolveCarPlayBackends(false, false, CarPlayBackend.JOYING)
         assertTrue(none.available.isEmpty())
-        assertNull(none.selected)
+        assertEquals(CarPlayBackend.JOYING, none.selected)
     }
 }

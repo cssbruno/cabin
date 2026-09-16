@@ -29,6 +29,8 @@ class JoyingCarPlayServiceTest {
         override fun siri() = Unit
     }
     internal class TestService : JoyingCarPlayService() {
+        var selected = true
+        override fun backendSelected() = selected
         val runtimes = mutableListOf<Runtime>()
         var exhaustionReports = 0
         override fun reportRecoveryExhausted() { exhaustionReports++ }
@@ -37,6 +39,23 @@ class JoyingCarPlayServiceTest {
     }
     private fun advance(seconds: Long) = org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
         .idleFor(java.time.Duration.ofSeconds(seconds))
+
+    @Test fun `switching to dongle cancels scheduled native recovery and rejects stale starts`() {
+        val controller = Robolectric.buildService(TestService::class.java).create()
+        val service = controller.get()
+        service.onStartCommand(Intent(), 0, 1)
+        service.runtimes.single().failed()
+        advance(0)
+        service.selected = false
+        advance(60)
+        assertEquals(1, service.runtimes.size)
+        assertFalse(service.state.value.running)
+        assertEquals(1, service.runtimes.single().closes)
+        service.onStartCommand(Intent().setAction(JoyingCarPlayService.RETRY), 0, 2)
+        service.onStartCommand(null, 0, 3)
+        assertEquals(1, service.runtimes.size)
+        controller.destroy()
+    }
 
     @Test fun `settings binding does not start projection and disconnect clears running state`() {
         val controller = Robolectric.buildService(TestService::class.java).create()
@@ -107,11 +126,11 @@ class JoyingCarPlayServiceTest {
         controller.destroy()
     }
 
-    @Test fun `system restart restores a session and explicit stop is not sticky`() {
+    @Test fun `system restart cannot resurrect native projection without an explicit start`() {
         val controller = Robolectric.buildService(TestService::class.java).create()
         val service = controller.get()
-        assertEquals(android.app.Service.START_STICKY, service.onStartCommand(null, 0, 1))
-        assertEquals(1, service.runtimes.size)
+        assertEquals(android.app.Service.START_NOT_STICKY, service.onStartCommand(null, 0, 1))
+        assertTrue(service.runtimes.isEmpty())
         assertEquals(android.app.Service.START_NOT_STICKY,
             service.onStartCommand(Intent().setAction(JoyingCarPlayService.STOP), 0, 2))
         controller.destroy()

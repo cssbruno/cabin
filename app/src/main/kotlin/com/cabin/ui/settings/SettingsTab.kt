@@ -26,6 +26,7 @@ enum class SettingsTab(
 ) {
     // Order determines tab display order in the navigation rail.
     PHONES(com.cabin.R.string.launcher_page_carplay, Icons.Default.PhoneAndroid),
+    CCPA(com.cabin.R.string.carplay_ccpa_settings, Icons.Default.Settings),
     CONTROL(com.cabin.R.string.settings_tab_launcher, Icons.Default.Settings),
     CAR(com.cabin.R.string.car_settings_title, Icons.Default.DirectionsCar),
     TEYES(com.cabin.R.string.settings_tab_teyes, Icons.Default.Settings),

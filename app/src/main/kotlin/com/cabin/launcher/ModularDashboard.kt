@@ -174,7 +174,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
         glance = !glance
     }, onClimate = { onVehicle() }, onCamera = storedLayout.tiles.firstOrNull { it.module == DashboardModule.CAMERA_MODE }?.let { camera ->
         { glance = false; page = camera.page; compactIndex = storedLayout.tiles.filter { it.page == camera.page }.indexOf(camera) }
-    }, onDismiss = { quick = false })
+    }, onDismiss = { quick = false }, moving = moving, onParkedAction = onParkedAction)
     if (presets && !moving) AlertDialog(onDismissRequest = { presets = false },
         title = { Text(stringResource(R.string.layout_presets)) },
         text = { Column {

@@ -21,6 +21,14 @@ internal object JoyingNativeProtocol {
             strings.forEach(request::writeString)
         }
 
+    // c.m.b: command 213 has strings FIRST, followed by the logo dimensions.
+    fun logo(binder: IBinder, path: String) = transact(binder, (213 shl 8) or 2) {
+        it.writeString(null)
+        it.writeString(path)
+        it.writeInt(180)
+        it.writeInt(180)
+    }
+
     fun bluetoothState(binder: IBinder, state: String) = transact(binder, (229 shl 8) or 2) {
         it.writeInt(1)
         android.os.PersistableBundle().apply { putString("_btcmd", state) }.writeToParcel(it, 0)

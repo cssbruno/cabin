@@ -90,6 +90,24 @@ internal class SyuSoundController(context: Context, private val now: () -> Long 
         }
     }
 
+    fun adjustVolume(expectedEpoch: Long, action: Int) {
+        if (closed.get()) return
+        handler.post {
+            val current = mutable.value
+            if (closed.get() || !current.connected || current.epoch != expectedEpoch) return@post
+            val command = SyuSoundProtocol.volumeCommand(current.moduleId, current.samples, action) ?: return@post
+            val remote = module ?: return@post
+            try {
+                SyuBinderTransport.transact(remote, 1, {
+                    it.writeInt(command.code)
+                    it.writeIntArray(command.ints)
+                    it.writeFloatArray(null)
+                    it.writeStringArray(null)
+                }, {})
+            } catch (_: Exception) { reconnect(failed = true) }
+        }
+    }
+
     private fun flushEdits() {
         val remote = module ?: return
         try {

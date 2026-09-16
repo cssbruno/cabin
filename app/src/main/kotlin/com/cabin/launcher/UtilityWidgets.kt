@@ -83,8 +83,8 @@ internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> 
     var showSound by remember { mutableStateOf(false) }
     var sound by remember { mutableStateOf(SyuSoundConnection()) }
     var soundController by remember { mutableStateOf<SyuSoundController?>(null) }
-    LaunchedEffect(context, lifecycle, showSound) {
-        if (showSound) lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+    LaunchedEffect(context, lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             val controller = SyuSoundController(context)
             soundController = controller
             try { controller.start(); controller.state.collect { sound = it } }
@@ -126,7 +126,20 @@ internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> 
             fixed = audio.isVolumeFixed
         } catch (_: RuntimeException) { fixed = true }
     }
+    val firmwareVolume = sound.connected && com.cabin.platform.SyuSoundProtocol.volumeCommand(sound.moduleId, sound.samples, -1) != null
+    val firmwareMute = firmwareVolume && sound.samples[3]?.singleOrNull() in 0..1
+    val displayedMuted = if (firmwareVolume) sound.samples[3]?.singleOrNull() == 1 else muted
     fun adjust(direction: Int) {
+        if (firmwareVolume) {
+            val action = when (direction) {
+                AudioManager.ADJUST_RAISE -> -1
+                AudioManager.ADJUST_LOWER -> -2
+                AudioManager.ADJUST_TOGGLE_MUTE -> -5
+                else -> return
+            }
+            soundController?.adjustVolume(sound.epoch, action)
+            return
+        }
         try { if (!audio.isVolumeFixed) audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, direction, 0) }
         catch (_: RuntimeException) { fixed = true }
         refresh()
@@ -137,12 +150,12 @@ internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> 
         val small = maxHeight < (if (narrow) 180.dp else 140.dp)
         val dspFits = maxHeight >= (if (narrow) 260.dp else 220.dp)
         @Composable fun Mute() {
-            FilledTonalIconButton({ adjust(AudioManager.ADJUST_TOGGLE_MUTE) }, enabled = !fixed, modifier = Modifier.size(56.dp)) {
-                Icon(if (muted) Icons.Default.VolumeOff else Icons.Default.VolumeUp, stringResource(R.string.teyes_mute))
+            FilledTonalIconButton({ adjust(AudioManager.ADJUST_TOGGLE_MUTE) }, enabled = if (firmwareVolume) firmwareMute else !fixed, modifier = Modifier.size(56.dp)) {
+                Icon(if (displayedMuted) Icons.Default.VolumeOff else Icons.Default.VolumeUp, stringResource(R.string.teyes_mute))
             }
         }
         @Composable fun Step(direction: Int, label: Int) {
-            IconButton({ adjust(direction) }, enabled = !fixed && (if (direction < 0) level > 0 else level < max), modifier = Modifier.size(56.dp)) {
+            IconButton({ adjust(direction) }, enabled = if (firmwareVolume) direction > 0 || sound.samples[2]?.singleOrNull() != 0 else !fixed && (if (direction < 0) level > 0 else level < max), modifier = Modifier.size(56.dp)) {
                 Icon(if (direction < 0) Icons.Default.Remove else Icons.Default.Add, stringResource(label))
             }
         }
@@ -154,7 +167,7 @@ internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> 
                 Step(AudioManager.ADJUST_LOWER, R.string.teyes_volume_lower); Mute(); Step(AudioManager.ADJUST_RAISE, R.string.teyes_volume_higher)
             }
             if (!small) Text(sourceName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelMedium)
-            if (!small) Text(if (fixed) stringResource(R.string.teyes_volume_firmware) else "$level / $max", maxLines = 1,
+            if (!small) Text(if (firmwareVolume) sound.samples[2]?.singleOrNull().toString() else if (fixed) stringResource(R.string.teyes_volume_firmware) else "$level / $max", maxLines = 1,
                 overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelMedium)
             if (dspFits) Row {
                 TextButton(onClick = { onParkedAction { showRadio = true } }, enabled = !moving, modifier = Modifier.heightIn(min = 56.dp)) {

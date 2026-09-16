@@ -124,7 +124,7 @@ fun SettingsScreen(
     onParkedAction: ((() -> Unit) -> Unit) = {},
     onOpenClimate: (() -> Unit)? = null,
 ) {
-    var selectedTab by rememberSaveable { mutableStateOf(initialTab.takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES) }
+    var selectedTab by rememberSaveable { mutableStateOf((if (initialCarPlayConnection && initialTab == SettingsTab.PHONES) SettingsTab.CCPA else initialTab).takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES) }
     val context = LocalContext.current
     val resources = androidx.compose.ui.platform.LocalResources.current
     val colorScheme = MaterialTheme.colorScheme
@@ -184,7 +184,8 @@ fun SettingsScreen(
             val content: @Composable () -> Unit = {
                 when (selectedTab) {
                     SettingsTab.CONTROL -> ControlTabContent(cabinManager, onResetCluster, onReinitForDisplayMode)
-                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager, initialConnection = initialCarPlayConnection, onReinitForDisplayMode = onReinitForDisplayMode)
+                    SettingsTab.CCPA -> com.cabin.ui.settings.DongleCarPlaySettings(cabinManager, initialCarPlayConnection, onReinitForDisplayMode)
+                    SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
                     SettingsTab.CAR -> com.cabin.ui.settings.CarSettingsScreen(vehicleState, moving, carActions, onParkedAction, onOpenClimate)
                     SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState,

@@ -34,3 +34,15 @@ All three initial values and the maximum must be supplied explicitly. Updates sa
 The bank memory and storage backend still need to be attached to the live startup/source coordinator and command endpoint. They do not yet make SOUND command 0 available to factory clients.
 
 Tests cover saturation, configured increments, preservation of mute at volume boundaries, call-policy suppression and rejection of missing state/unsupported lifecycle actions. No physical unit was accessed.
+
+## Cabin controls using the installed firmware service
+
+Cabin's audio widget and Quick Controls now use installed SOUND module 4 command 0
+for volume up (`-1`), down (`-2`) and mute toggle (`-5`). The connection subscribes
+to fields 2 and 3 for the supported sound profiles (6, 7 and 11). Commands require
+fresh volume feedback and the current connection epoch; mute also requires valid
+mute feedback. The installed service retains step sizes, maximum volume and call
+policy. Cabin displays returned levels without inventing a maximum or updating
+the level optimistically. Android media volume remains the fallback when firmware
+volume feedback is unavailable. This does not enable the replacement Binder endpoint
+described above. Hardware validation is still required.

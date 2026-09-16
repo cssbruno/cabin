@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="carplay_ccpa_settings">CCPA adapter</string>
+    <string name="carplay_settings_title">CarPlay settings</string>
+    <string name="carlink_reconnect_hint">Changes apply on the next connection. Use Retry to reconnect now.</string>
+    <string name="carlink_frame_rate">Frame rate</string>
+    <string name="carlink_wifi_band">Wireless Wi-Fi band</string>
+    <string name="carlink_auto_connect">Automatic wired connection</string>
+    <string name="carlink_microphone">Recording noise reduction</string>
+    <string name="carlink_noise_none">None</string>
+    <string name="carlink_noise_right">Right</string>
+    <string name="carlink_noise_left">Left</string>
+    <string name="carlink_microphone_error">The firmware could not apply the microphone setting. The previous setting is still selected.</string>
+    <string name="carlink_logo">Car logo</string>
+    <string name="carlink_logo_number">Car logo %1$d</string>
+    <string name="carlink_logo_default">Default logo</string>
+</resources>

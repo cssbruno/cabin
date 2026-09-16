@@ -64,9 +64,10 @@ internal class JoyingEmbeddedSession(
     private var lastLinkState: Int? = null // Owned by controls executor.
     private val death = IBinder.DeathRecipient { fail("Carlink native service stopped.") }
     private val audio = JoyingAudioFocus(context) { play -> dispatch { command(216, intArrayOf(if (play) 1 else 0)) } }
+    private val settings = com.cabin.carlink.CarlinkSettings.read(context)
     private val wireless = JoyingWireless(context, ::dispatch, ::command,
         { state -> binder?.let { JoyingNativeProtocol.bluetoothState(it, state) } },
-        { bytes -> binder?.let { JoyingNativeProtocol.bluetoothBytes(it, bytes) } }, onStatus)
+        { bytes -> binder?.let { JoyingNativeProtocol.bluetoothBytes(it, bytes) } }, onStatus, settings.band, settings.channel)
     private val factoryBluetooth = JoyingFactoryBluetooth(context, ::dispatch) { name, address ->
         command(226, intArrayOf(), listOf(name, address))
     }
@@ -178,8 +179,11 @@ internal class JoyingEmbeddedSession(
                         com.cabin.reports.DebugJournal.record("CarPlay", "listener_registered", "")
                         factoryBluetooth.start()
                         // Screen geometry + physical reference width and stock FPS marker (c.m).
-                        command(218, display.nativeValues())
-                        command(223, intArrayOf(1)) // Wired auto-connect.
+                        command(218, display.nativeValues(settings.fps))
+                        command(223, intArrayOf(if (settings.autoConnect) 1 else 0))
+                        settings.logoFile(context)?.let { logo ->
+                            JoyingNativeProtocol.logo(checkNotNull(binder), logo.absolutePath)
+                        }
                         command(219) // Stock native startup request (c.m).
                         command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
                         com.cabin.reports.DebugJournal.record("CarPlay", "video_requested", "")

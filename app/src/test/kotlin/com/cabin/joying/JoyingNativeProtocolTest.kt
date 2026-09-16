@@ -16,6 +16,23 @@ class JoyingNativeProtocolTest {
     private val payload = byteArrayOf(0, 0, 0, 1, 0x65, 7, 8)
     private fun packet() = byteArrayOf(payload.size.toByte(), 0, 0, 0) + payload
 
+    @Test fun `logo command sends private path before dimensions`() {
+        val binder = object : Binder() {
+            override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+                assertEquals(0xd502, code)
+                data.enforceInterface(JoyingNativeProtocol.DESCRIPTOR)
+                assertNull(data.readString())
+                assertEquals("/data/user/0/com.cabin/files/carlink/logo.png", data.readString())
+                assertEquals(180, data.readInt())
+                assertEquals(180, data.readInt())
+                assertEquals(0, data.dataAvail())
+                reply!!.writeInt(0)
+                return true
+            }
+        }
+        JoyingNativeProtocol.logo(binder, "/data/user/0/com.cabin/files/carlink/logo.png")
+    }
+
     @Test fun `listener registration reads a boolean before the exception envelope`() {
         val listener = Binder()
         val binder = object : Binder() {

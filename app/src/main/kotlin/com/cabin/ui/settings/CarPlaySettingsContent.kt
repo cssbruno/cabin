@@ -17,27 +17,21 @@ import com.cabin.CabinManager
 import com.cabin.R
 
 @Composable
-internal fun CarPlaySettingsContent(manager: CabinManager, initialConnection: Boolean = false, onReinitForDisplayMode: (DisplayMode) -> Unit = {}) {
+internal fun CarPlaySettingsContent(manager: CabinManager) {
     val backends = com.cabin.ui.rememberCarPlayBackends()
     Column(Modifier.fillMaxSize()) {
-        if (backends.available.isEmpty()) {
-            Text(stringResource(R.string.carplay_backend_none), Modifier.padding(24.dp))
-            return@Column
-        }
-        if (backends.available.size > 1) com.cabin.ui.CarPlayBackendPicker(manager, backends)
-        else if (backends.selected == com.cabin.platform.CarPlayBackend.DONGLE)
-            Text(stringResource(R.string.carplay_backend_dongle), Modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
-        if (backends.available.size > 1 && backends.selected == null) return@Column
-        if (backends.selected == com.cabin.platform.CarPlayBackend.JOYING) {
-            NativeCarPlaySettings()
-        } else DongleCarPlaySettings(manager, initialConnection, onReinitForDisplayMode)
+        if (backends.available.size > 1 || backends.selected !in backends.available) com.cabin.ui.CarPlayBackendPicker(manager, backends)
+        NativeCarPlaySettings()
     }
 }
 
 @Composable
-private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean, onReinitForDisplayMode: (DisplayMode) -> Unit) {
+internal fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean, onReinitForDisplayMode: (DisplayMode) -> Unit) {
+    val backends = com.cabin.ui.rememberCarPlayBackends()
     var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
+        if (backends.available.size > 1 || backends.selected !in backends.available)
+            com.cabin.ui.CarPlayBackendPicker(manager, backends)
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(selected = !controls, onClick = { controls = false }, modifier = Modifier.heightIn(min = 56.dp),
                 label = { Text(stringResource(R.string.label_connection)) }, leadingIcon = { Icon(Icons.Default.PhoneAndroid, null, Modifier.size(20.dp)) })

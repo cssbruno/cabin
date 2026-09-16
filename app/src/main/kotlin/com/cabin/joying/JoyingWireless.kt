@@ -23,6 +23,8 @@ internal class JoyingWireless(
     private val btState: (String) -> Unit,
     private val btBytes: (ByteArray) -> Unit,
     private val status: (String) -> Unit,
+    private val band: Int = 0,
+    private val channel: Int = 6,
 ) : Closeable {
     companion object {
         val IAP2_UUID: UUID = UUID.fromString("00000000-deca-fade-deca-deafdecacafe")
@@ -127,8 +129,8 @@ internal class JoyingWireless(
             SSID = "CabinCarPlay-" + UUID.randomUUID().toString().take(4)
             preSharedKey = UUID.randomUUID().toString().replace("-", "").take(20)
             allowedKeyManagement.set(4) // WPA2_PSK in the inspected WifiConfiguration API.
-            javaClass.getField("apBand").setInt(this, 0)
-            javaClass.getField("apChannel").setInt(this, 6)
+            javaClass.getField("apBand").setInt(this, band)
+            javaClass.getField("apChannel").setInt(this, channel)
         }
         if (!receiverRegistered) {
             ContextCompat.registerReceiver(context, receiver, IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"), ContextCompat.RECEIVER_EXPORTED)

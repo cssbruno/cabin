@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="carplay_ccpa_settings">Adattatore CCPA</string>
+    <string name="carplay_settings_title">Impostazioni CarPlay</string>
+    <string name="carlink_reconnect_hint">Le modifiche si applicano alla prossima connessione. Usa Riprova per riconnetterti ora.</string>
+    <string name="carlink_frame_rate">Frequenza fotogrammi</string>
+    <string name="carlink_wifi_band">Banda Wi-Fi wireless</string>
+    <string name="carlink_auto_connect">Connessione automatica via cavo</string>
+    <string name="carlink_microphone">Riduzione del rumore di registrazione</string>
+    <string name="carlink_noise_none">Nessuna</string>
+    <string name="carlink_noise_right">Destra</string>
+    <string name="carlink_noise_left">Sinistra</string>
+    <string name="carlink_microphone_error">Il firmware non ha applicato la regolazione del microfono. La regolazione precedente resta selezionata.</string>
+    <string name="carlink_logo">Logo auto</string>
+    <string name="carlink_logo_number">Logo auto %1$d</string>
+    <string name="carlink_logo_default">Logo predefinito</string>
+</resources>

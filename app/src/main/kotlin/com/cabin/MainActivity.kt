@@ -1679,7 +1679,7 @@ fun CabinApp(
                 } else {
                     logInfo("[UI_NAV] Opening SettingsScreen overlay (video continues)", tag = "UI")
                     parkedAction {
-                        initialSettingsTab = com.cabin.ui.settings.SettingsTab.PHONES
+                        initialSettingsTab = com.cabin.ui.settings.SettingsTab.CCPA
                         showSettings = true
                     }
                 }
@@ -1809,7 +1809,7 @@ fun CabinApp(
             (projectionFullscreen || (liveModuleVisible && projectionPlacement?.editing != true) || !showHome)) {
             BoxWithConstraints(videoFrameModifier) {
                 if (maxWidth >= 144.dp) com.cabin.launcher.ProjectionSettingsButton(
-                    onClick = { parkedAction { initialSettingsTab = com.cabin.ui.settings.SettingsTab.PHONES; showSettings = true } },
+                    onClick = { parkedAction { initialSettingsTab = com.cabin.ui.settings.SettingsTab.CCPA; showSettings = true } },
                     modifier = Modifier.align(Alignment.BottomEnd).padding(end = 68.dp, bottom = 8.dp),
                 )
                 com.cabin.launcher.ProjectionFullscreenButton(

@@ -56,7 +56,7 @@ internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null, onOpenSet
     Column(Modifier.fillMaxSize().testTag("joying-embedded-carplay")) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.joying_title), Modifier.weight(1f))
-            if (onOpenSettings != null) TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
+            if (onOpenSettings != null) FilledTonalButton(onClick = onOpenSettings, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.carplay_settings_title)) }
             TextButton(enabled = sessionHandle != null, onClick = { sessionHandle?.siri() }) { Text(stringResource(R.string.joying_siri)) }
             TextButton(onClick = { retry() }) { Text(stringResource(R.string.joying_retry)) }
             TextButton(onClick = { com.cabin.reports.LiveDebugMenu.show(context) }) { Text("Live debug") }

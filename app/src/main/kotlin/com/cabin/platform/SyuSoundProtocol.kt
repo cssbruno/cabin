@@ -41,8 +41,8 @@ internal object SyuSoundProtocol {
 
     fun fields(moduleId: Int?): Set<Int> =
         when (moduleId) {
-            11 -> setOf(IDENTITY, 8, 9, 10, 11, 26)
-            6, 7 -> setOf(IDENTITY, 8, 9, 10, 11)
+            11 -> setOf(IDENTITY, 2, 3, 8, 9, 10, 11, 26)
+            6, 7 -> setOf(IDENTITY, 2, 3, 8, 9, 10, 11)
             else -> setOf(IDENTITY)
         }
 
@@ -50,7 +50,7 @@ internal object SyuSoundProtocol {
     fun normalizedSamples(field: Int, ints: List<Int>): Map<Int, List<Int>> = when {
         field == IDENTITY && ints.size == 1 -> mapOf(field to ints.toList())
         field == 8 && ints.size == 2 -> mapOf(field to ints.toList())
-        field in setOf(10, 11, 26) && ints.size == 1 -> mapOf(field to ints.toList())
+        field in setOf(2, 3, 10, 11, 26) && ints.size == 1 -> mapOf(field to ints.toList())
         field == 9 && ints.size == 2 && ints[0] in 0..35 ->
             mapOf(EQ_SAMPLE_BASE + ints[0] to listOf(ints[1]))
         else -> emptyMap()
@@ -80,6 +80,14 @@ internal object SyuSoundProtocol {
                 if (value in profile.gain) add(SyuSoundControl("eq.$band", SyuSoundControlKind.EQ_GAIN, value, profile.gain, band))
             }
         }
+    }
+
+    // SOUND command 0 delegates step size, limits and call mute policy to the firmware.
+    fun volumeCommand(moduleId: Int?, samples: Map<Int, List<Int>>, action: Int): SyuSoundCommand? {
+        if (!supported(moduleId) || samples[2]?.singleOrNull() !in 0..255) return null
+        if (action !in setOf(-1, -2, -5)) return null
+        if (action == -5 && samples[3]?.singleOrNull() !in 0..1) return null
+        return SyuSoundCommand(0, intArrayOf(action))
     }
 
     fun command(moduleId: Int?, samples: Map<Int, List<Int>>, key: String, value: Int): SyuSoundCommand? {

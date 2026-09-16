@@ -37,10 +37,33 @@ class SyuSoundControllerTest {
     @Test fun `cached identity precedes settings and synchronous callbacks do not deadlock`() {
         context.connect(); drain()
         assertEquals(11, controller.state.value.moduleId)
-        assertEquals(listOf(1, 8, 9, 10, 11, 26), context.remote.registrations)
+        assertEquals(listOf(1, 2, 3, 8, 9, 10, 11, 26), context.remote.registrations)
         assertEquals(listOf(8, 8), controller.state.value.samples[8])
         assertTrue(context.remote.commands.isEmpty())
     }
+    @Test fun `volume uses firmware steps and stays on confirmed feedback`() {
+        context.connect(); drain()
+        val epoch = controller.state.value.epoch
+        controller.adjustVolume(epoch, -1); drain()
+        assertTrue(context.remote.commands.isEmpty())
+        context.remote.emit(2, listOf(12)); context.remote.emit(3, listOf(0)); drain()
+        controller.adjustVolume(epoch, -1)
+        controller.adjustVolume(epoch, -2)
+        controller.adjustVolume(epoch, -5)
+        controller.adjustVolume(epoch, 100)
+        controller.adjustVolume(epoch - 1, -1)
+        drain()
+        assertEquals(listOf(0 to listOf(-1), 0 to listOf(-2), 0 to listOf(-5)), context.remote.commands)
+        assertEquals(listOf(12), controller.state.value.samples[2])
+        context.remote.emit(2, listOf(13)); drain()
+        assertEquals(listOf(13), controller.state.value.samples[2])
+        context.remote.commands.clear()
+        context.remote.replyCached = false
+        advance(46_000)
+        controller.adjustVolume(epoch, -1); drain()
+        assertTrue(context.remote.commands.isEmpty())
+    }
+
     @Test fun `unknown profile receives identity only and cannot write`() {
         context.remote.identity = 13
         context.connect(); drain()

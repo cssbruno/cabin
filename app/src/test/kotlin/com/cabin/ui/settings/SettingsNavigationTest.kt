@@ -100,14 +100,29 @@ class SettingsNavigationTest {
         compose.runOnIdle { assertEquals(1, backs) }
     }
 
-    @Test fun `CarPlay groups connection and display controls inside launcher settings`() {
-        com.cabin.test.attachCarPlayDongle(compose.activity)
+    @Test fun `CarPlay settings stay accessible without an adapter`() {
         compose.setContent {
             CabinTheme(darkTheme = true) {
                 SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.PHONES, embedded = true)
             }
         }
         compose.onNodeWithText("CarPlay").assertIsSelected()
+        compose.onNodeWithText("Carlink").assertIsDisplayed()
+        compose.onNodeWithText("CCPA adapter").assertIsDisplayed()
+        compose.onNodeWithText("Configure Adapter").assertDoesNotExist()
+        saveScreenshot("settings-carlink")
+        compose.onNodeWithText("60 FPS").performScrollTo().assertIsDisplayed()
+        saveScreenshot("settings-carlink-options")
+    }
+
+    @Test fun `CCPA configuration has its own navigation entry`() {
+        com.cabin.test.attachCarPlayDongle(compose.activity)
+        compose.setContent {
+            CabinTheme(darkTheme = true) {
+                SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CCPA, embedded = true)
+            }
+        }
+        compose.onNodeWithText("CCPA adapter").assertIsSelected()
         compose.onNodeWithText("Display & controls").assertIsSelected()
         compose.onNodeWithText("Reset Decoder").performScrollTo().assertIsDisplayed()
         saveScreenshot("settings-carplay-integrated")

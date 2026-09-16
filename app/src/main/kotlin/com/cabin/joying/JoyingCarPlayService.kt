@@ -22,6 +22,10 @@ internal open class JoyingCarPlayService : Service() {
     data class State(val status: String = "CarPlay disconnected", val ratio: Float = 1280f / 720f, val running: Boolean = false)
     private val mutable = MutableStateFlow(State())
     val state = mutable.asStateFlow()
+    private val selectionListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        if (!backendSelected()) stopProjection()
+    }
+    protected open fun backendSelected() = com.cabin.platform.CarPlayBackendSelection.usesNative(this)
     private var session: JoyingSessionRuntime? = null
     private var surface: Surface? = null
     private val recovery = Handler(Looper.getMainLooper())
@@ -34,17 +38,19 @@ internal open class JoyingCarPlayService : Service() {
     override fun onBind(intent: Intent?): IBinder = connection
     override fun onCreate() {
         super.onCreate()
+        instance = this
+        com.cabin.platform.CarPlayBackendSelection.preferences(this).registerOnSharedPreferenceChangeListener(selectionListener)
         getSystemService(NotificationManager::class.java).createNotificationChannel(
             NotificationChannel(CHANNEL, "Carlink", NotificationManager.IMPORTANCE_LOW))
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == STOP) {
+        if (intent == null || intent.action == STOP || !backendSelected()) {
             stopProjection()
             return START_NOT_STICKY
         }
         promote()
         if (intent?.action == RETRY || session == null) restart()
-        return START_STICKY
+        return START_NOT_STICKY
     }
     private fun promote() {
         val open = PendingIntent.getActivity(this, 0,
@@ -62,6 +68,7 @@ internal open class JoyingCarPlayService : Service() {
         startSession()
     }
     private fun startSession() {
+        if (!backendSelected()) { stopProjection(); return }
         CabinTelemetry.record(DiagnosticEvent.JOYING_START)
         disconnect()
         val current = generation
@@ -73,16 +80,18 @@ internal open class JoyingCarPlayService : Service() {
         ).also { next -> surface?.let(next::attach); next.start() }
     }
     private fun scheduleRecovery(failedGeneration: Int, retryable: Boolean) {
+        if (!backendSelected()) { stopProjection(); return }
         if (generation != failedGeneration || recoveryPending) return
         if (!retryable) {
             // Keep the actionable bind/handoff error supplied by the failed session.
             recoveryPending = true
+            mutable.update { it.copy(running = false) }
             return
         }
         if (retries >= 3) {
             recoveryPending = true
             reportRecoveryExhausted()
-            mutable.update { it.copy(status = getString(R.string.joying_recovery_exhausted)) }
+            mutable.update { it.copy(status = getString(R.string.joying_recovery_exhausted), running = false) }
             return
         }
         CabinTelemetry.record(DiagnosticEvent.JOYING_RETRY)
@@ -126,8 +135,22 @@ internal open class JoyingCarPlayService : Service() {
     fun connectPhone(address: String) { session?.connectPhone(address) }
     fun enableWireless() { session?.enableWireless() }
     fun siri() { session?.siri() }
-    override fun onDestroy() { disconnect(); super.onDestroy() }
+    override fun onDestroy() {
+        com.cabin.platform.CarPlayBackendSelection.preferences(this).unregisterOnSharedPreferenceChangeListener(selectionListener)
+        if (instance === this) instance = null
+        disconnect(); super.onDestroy()
+    }
     companion object {
+        @Volatile private var instance: JoyingCarPlayService? = null
+        suspend fun stopAndAwait(context: android.content.Context) {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main.immediate) {
+                instance?.stopProjection()
+                context.stopService(Intent(context, JoyingCarPlayService::class.java))
+            }
+            check(kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { JoyingEmbeddedSession.awaitReleased() }) {
+                "CarPlay is still shutting down"
+            }
+        }
         const val RETRY = "com.cabin.joying.RETRY"
         const val STOP = "com.cabin.joying.STOP"
         private const val CHANNEL = "joying_carplay"

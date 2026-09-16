@@ -24,11 +24,18 @@ import com.cabin.ui.JoyingPhonePicker
 @Composable
 internal fun NativeCarPlaySettings() {
     val context = LocalContext.current
+    val nativeSelected = com.cabin.ui.rememberCarPlayBackends().selected == com.cabin.platform.CarPlayBackend.JOYING
     var service by remember { mutableStateOf<JoyingCarPlayService?>(null) }
     var status by remember { mutableStateOf("") }
     var running by remember { mutableStateOf(false) }
+    var configuration by remember { mutableStateOf(com.cabin.carlink.CarlinkSettings.read(context)) }
+    var microphone by remember { mutableStateOf(com.cabin.carlink.CarlinkMicrophone.read()) }
+    var microphoneError by remember { mutableStateOf(false) }
+    var showLogos by remember { mutableStateOf(false) }
+    fun save(value: com.cabin.carlink.CarlinkSettings) { value.save(context); configuration = value }
     var showPhones by remember { mutableStateOf(false) }
     fun retry() {
+        if (!nativeSelected) return
         runCatching {
             ContextCompat.startForegroundService(context,
                 Intent(context, JoyingCarPlayService::class.java).setAction(JoyingCarPlayService.RETRY))
@@ -51,6 +58,9 @@ internal fun NativeCarPlaySettings() {
         onConnect = { address -> service?.connectPhone(address); showPhones = false },
         onDismiss = { showPhones = false },
     )
+    if (showLogos) CarlinkLogoPicker(configuration.logo,
+        onSelect = { save(configuration.copy(logo = it)); showLogos = false },
+        onDismiss = { showLogos = false })
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp).testTag("native-carplay-settings"),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -58,18 +68,56 @@ internal fun NativeCarPlaySettings() {
         Text(stringResource(R.string.carplay_backend_native), style = MaterialTheme.typography.headlineSmall)
         if (status.isNotEmpty()) Text(status)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { retry() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            Button(enabled = nativeSelected, onClick = { retry() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_retry))
             }
-            OutlinedButton(enabled = service != null, onClick = { service?.stopProjection() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = nativeSelected && service != null, onClick = { service?.stopProjection() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_disconnect))
             }
-            OutlinedButton(enabled = service != null && running, onClick = { service?.enableWireless() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = nativeSelected && service != null && running, onClick = { service?.enableWireless() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_wireless))
             }
-            OutlinedButton(enabled = service != null && running, onClick = { showPhones = true }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = nativeSelected && service != null && running, onClick = { showPhones = true }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_phone))
             }
         }
+        HorizontalDivider()
+        Text(stringResource(R.string.carlink_reconnect_hint), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.carlink_frame_rate), style = MaterialTheme.typography.titleMedium)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(20, 25, 30, 60).forEach { fps ->
+                FilterChip(selected = configuration.fps == fps, onClick = { save(configuration.copy(fps = fps)) },
+                    label = { Text("$fps FPS") }, modifier = Modifier.heightIn(min = 56.dp))
+            }
+        }
+        Text(stringResource(R.string.carlink_wifi_band), style = MaterialTheme.typography.titleMedium)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf("2.4 GHz", "5 GHz").forEachIndexed { band, label ->
+                FilterChip(selected = configuration.band == band, onClick = { save(configuration.copy(band = band)) },
+                    label = { Text(label) }, modifier = Modifier.heightIn(min = 56.dp))
+            }
+        }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Text(stringResource(R.string.carlink_auto_connect), Modifier.weight(1f))
+            Switch(checked = configuration.autoConnect, onCheckedChange = { save(configuration.copy(autoConnect = it)) },
+                modifier = Modifier.testTag("carlink-auto-connect"))
+        }
+        Text(stringResource(R.string.carlink_microphone), style = MaterialTheme.typography.titleMedium)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(R.string.carlink_noise_none, R.string.carlink_noise_right, R.string.carlink_noise_left).forEachIndexed { value, label ->
+                FilterChip(selected = microphone == value, onClick = {
+                    runCatching { com.cabin.carlink.CarlinkMicrophone.set(value) }
+                        .onSuccess { microphone = value; microphoneError = false }
+                        .onFailure { microphoneError = true }
+                }, label = { Text(stringResource(label)) }, modifier = Modifier.heightIn(min = 56.dp))
+            }
+        }
+        if (microphoneError) Text(stringResource(R.string.carlink_microphone_error), color = MaterialTheme.colorScheme.error)
+        OutlinedButton(onClick = { showLogos = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.carlink_logo))
+        }
+        Text("Cabin ${com.cabin.BuildConfig.VERSION_NAME} · Carlink 2.23.0712.1954", style = MaterialTheme.typography.bodySmall)
+
     }
 }

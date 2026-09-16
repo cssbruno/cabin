@@ -59,13 +59,15 @@ internal fun CarPlayBackendPicker(manager: CabinManager, state: CarPlayBackends)
                         if (state.selected != backend) scope.launch {
                             switching = true
                             failed = false
+                            CarPlayBackendSelection.switching = true
                             try {
                                 CabinProjectionService.stopForAppExit(context, manager)
-                                context.startService(Intent(context, JoyingCarPlayService::class.java).setAction(JoyingCarPlayService.STOP))
+                                JoyingCarPlayService.stopAndAwait(context)
+                                CarPlayBackendSelection.switching = false
                                 CarPlayBackendSelection.select(context, backend)
                             } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
                             catch (_: Exception) { failed = true }
-                            finally { switching = false }
+                            finally { CarPlayBackendSelection.switching = false; switching = false }
                         }
                     }, label = { Text(stringResource(if (backend == CarPlayBackend.DONGLE)
                         R.string.carplay_backend_dongle else R.string.carplay_backend_native)) })
