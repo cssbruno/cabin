@@ -34,3 +34,5 @@ Optional crash reporting: **Settings → Logs → Share crash reports**. Require
 - `tools/`: build, firmware-analysis and packaging scripts.
 - `documents/`: [documentation index](documents/README.md), research and archived notes.
 - `assets/`: store artwork; runtime resources belong under each module’s `src/main/res`.
+
+CarPlay configuration stays inside **Settings → CarPlay**. Native Joying wireless setup, phone selection, retry, disconnect and service takeover are grouped there. The projection screen provides a Settings shortcut. Cabin does not redirect to stock Car Link or Android display/sound settings; use Cabin’s built-in brightness and volume controls. Android may still present required permission, pairing and default-Home consent. Firmware that denies CarPlay takeover requires integration support; Cabin reports that limitation in place.

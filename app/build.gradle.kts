@@ -125,8 +125,8 @@ detekt {
 }
 
 dependencies {
-    // Read installed vendor DEX as data; never load or execute vendor classes.
-    implementation("org.smali:dexlib2:2.5.2")
+    // Offline firmware research and comparison fixtures only; excluded from every APK.
+    testImplementation("org.smali:dexlib2:2.5.2")
     implementation(project(":diagnostics"))
     implementation("io.sentry:sentry-android-core:8.56.0")
     implementation("io.sentry:sentry-android-ndk:8.56.0")

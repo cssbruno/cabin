@@ -30,6 +30,9 @@ data class ClimateWidgetActions(
     val onVehicleLighting: ((com.cabin.platform.SyuLightingSetting, Int) -> Unit)? = null,
     val onFactoryAmplifier: ((com.cabin.platform.SyuAmplifierSetting, Int) -> Unit)? = null,
     val onFactoryControl: ((com.cabin.platform.SyuFactoryControl, Int) -> Unit)? = null,
+    val onSyuChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)? = null,
+    val onSyuAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)? = null,
+    val onSyuVehicleOption: ((Int, Int, Int) -> Unit)? = null,
 )
 
 /** Shared FYT toolkit telemetry; freshness is checked per field, including temperature units. */

@@ -1,4 +1,91 @@
-# FYT runtime field detection
+# Cabin-owned FYT protocols
+
+## Current implementation (unreleased)
+
+Active full-port work is tracked in [SYU-NATIVE-PORT-STATUS.md](SYU-NATIVE-PORT-STATUS.md).
+The machine-readable source inventory is a work list, not a coverage certificate.
+
+Cabin now selects its own bundled protocol registry using `com.syu.ms` package
+version metadata and the full live CAN profile ID. It does not open vendor APKs,
+scan DEX, load vendor classes, or interpret their instructions at runtime.
+`dexlib2` and the comparison interpreter exist only in test sources.
+
+The registry targets version family `2.23.07xx.xxxx`, including the researched
+2.23.0711.1001 and the reported 2.23.0718.1700. Family matching is a compatibility
+selection, not proof that every revision has identical behavior. Unknown families
+and unmapped fields remain unavailable; no Civic profile is substituted.
+
+### Actual coverage
+
+- 3,349 profile entries, deduplicated into 713 protocol templates.
+- 3,328 profiles have reference callback inventories; 21 have no packet reader.
+- 584 profiles have bounded enum display tables (658 entries across templates).
+- Own Kotlin Honda 0298 conversions cover temperatures, units, maintenance,
+  seat levels and selected settings; Audi profile 286 has its verified speed scale.
+- Own Honda setting commands use explicit command 105 parameters and profile
+  exceptions. Other enum tables are read-only and never infer write capability.
+- CAN and MAIN subscriptions remain separate, and stale feedback is removed.
+  Option writes require current profile, connection ownership, fresh feedback and
+  an explicitly supported target. Display changes wait for actual service feedback.
+
+These counts are not complete data/control parity for all profiles. Numeric formats,
+commands and conditional screens outside the explicit implementations still need
+individual protocol work. Real head-unit behavior has not been tested locally.
+
+### Native Golf/MQB mirror and wiper settings
+
+The July 2023 reference `Golf7FunctionalMirrorsAndWipersActi` uses fields
+51–55 and commands 67–71 for mirror synchronization, reverse dip, parked folding,
+automatic rain wiping and rear wiping in reverse. This differs from the older
+reference's fields 148–152, which overlap climate fields in this firmware.
+
+`CabinGolfSettings` implements those conversions and command frames directly in
+Kotlin. Selection intersects the exact `ConstGolf.isWcGolf` / `isRZCGolf` lists
+with the registry's corresponding callback: 44 WC and 52 RZC profiles. WC requires
+an availability byte except for parked folding; RZC accepts plain boolean feedback.
+Missing/invalid values cannot enable writes. The existing WC mirror widget receives
+normalized values from 51–55; old raw climate IDs cannot populate its switches.
+Commands retain the controller's profile, connection and fresh-feedback guards.
+The focused protocol/Binder run passed 42 tests, including raw-field collision,
+WC availability, RZC values and reconnecting after a profile change.
+
+Subsequent native work adds parking and opening options, multifunction display
+toggles and confirmed trip resets, unit selection, base lighting, and WC hybrid
+charging/energy readings. The latest focused run passed 72 tests with zero failures
+or errors. Coverage is still partial; see the active port status for remaining
+pages, families and protocol differences.
+
+### Removal audit
+
+The local release build and 53 selected tests passed (protocol, Binder, settings
+navigation, car tools, and option-picker checks). The final APK's 5,592 classes
+were inspected with Android SDK `dexdump`; the vendor DEX reader/interpreter
+classes and `org.jf` implementation are absent. The release dependency model also
+contains no dexlib/smali dependency, and the APK registry matches the source asset.
+
+The previously completed v0.1.5 release was withdrawn to a draft because it still
+contained the old reader. This replacement has not been published. These checks
+prove the architecture change and local software behavior, not vehicle testing or
+full SYU feature parity.
+
+### Development reference tools
+
+`app/src/test/kotlin/com/cabin/platform/reference/` contains the offline research
+and comparison tools. `FytProtocolExportTest` is opt-in with
+`CABIN_EXPORT_FYT_REGISTRY=1` and `CABIN_SYU_RESOURCE_DUMP` pointing to an `aapt2 dump
+resources` text file. It uses local reference APKs to generate
+`app/src/main/assets/syu/protocols-2023.json`. The shipped file contains field maps,
+finite value/text ranges and profile facts, not executable vendor instructions.
+
+The original-settings launcher fallback has been removed from this viewer.
+
+---
+
+## Historical implementation: v0.1.5 and earlier
+
+The following notes describe the previous runtime inspector and the reference
+research behind the bundled registry. They are **not** the current runtime architecture.
+
 
 ## Reference and scope
 

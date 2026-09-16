@@ -1,9 +1,7 @@
 package com.cabin.joying
 
 import android.app.ActivityManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.LocalServerSocket
 import android.os.IBinder
@@ -16,12 +14,9 @@ internal object JoyingServiceHandoff {
             val manager = context.getSystemService(ActivityManager::class.java)
             ActivityManager::class.java.getMethod("forceStopPackage", String::class.java).invoke(manager, "com.syu.carlink")
         } else {
-            throw SecurityException("Open Stock Car Link settings → Force stop, then return to Cabin → Retry.")
+            throw SecurityException("This firmware has not granted Cabin permission to release the CarPlay connection. Cabin firmware integration is required.")
         }
     }
-
-    fun stockSettingsIntent() = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        android.net.Uri.parse("package:com.syu.carlink"))
 
     fun prepare(context: Context) {
         check(JoyingEmbeddedSession.awaitReleased()) { "CarPlay is still shutting down; try again" }
@@ -54,13 +49,6 @@ internal object JoyingServiceHandoff {
             pause()
             lookup()?.let { return it }
         }
-        error("Joying CarPlay service did not start. Restore stock service and retry.")
-    }
-
-    fun restore(context: Context) {
-        check(JoyingEmbeddedSession.awaitReleased()) { "CarPlay is still shutting down; try again" }
-        check(context.startService(Intent().setComponent(ComponentName("com.syu.carlink", "com.syu.carlink.CarLinkService"))) != null) {
-            "Stock Car Link service could not be restored"
-        }
+        error("Joying CarPlay service did not start. Retry in Cabin. If this continues, the firmware integration needs attention.")
     }
 }

@@ -54,6 +54,9 @@ import kotlinx.coroutines.withContext
 fun TeyesFeaturesScreen(
     manager: CabinManager,
     vehicle: TeyesClimateState = TeyesClimateState(),
+    onSyuChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)? = null,
+    onSyuAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)? = null,
+    onSyuVehicleOption: ((Int, Int, Int) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val resources = androidx.compose.ui.platform.LocalResources.current
@@ -181,7 +184,7 @@ fun TeyesFeaturesScreen(
                 if (!manager.supportsProjectionGain) SettingsNotice(stringResource(R.string.teyes_audio_unavailable))
                 Text(stringResource(R.string.teyes_audio_gain_detail))
             }
-            ObdSettingsSection(vehicle)
+            ObdSettingsSection(vehicle, onSyuAction, onSyuChoice, onSyuVehicleOption)
             SettingsDisclosure(stringResource(R.string.teyes_camera_recovery), stringResource(R.string.teyes_camera_recovery_detail)) {
                 SettingsToggle(
                     stringResource(R.string.teyes_recover_overlays),

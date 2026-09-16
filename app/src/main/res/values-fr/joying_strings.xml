@@ -7,7 +7,6 @@
     <string name="joying_wireless">Activer la connexion sans fil</string>
     <string name="joying_phone">Connecter un téléphone</string>
     <string name="joying_siri">Siri</string>
-    <string name="joying_restore">Restaurer le service d’origine</string>
     <string name="joying_search">Rechercher</string>
     <string name="joying_close">Fermer</string>
     <string name="joying_connect">Connecter</string>
@@ -18,6 +17,4 @@
     <string name="joying_background">Connexion Joying active</string>
     <string name="joying_recovering">Reconnexion à CarPlay… (%1$d/%2$d)</string>
     <string name="joying_recovery_exhausted">Impossible de reconnecter CarPlay. Appuyez sur Réessayer.</string>
-    <string name="joying_stock_settings">Réglages de Car Link d’origine</string>
-    <string name="joying_stock_settings_missing">Les réglages des applications sont indisponibles. Utilisez l’outil ADB Joying puis réessayez.</string>
 </resources>

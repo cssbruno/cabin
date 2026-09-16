@@ -13,7 +13,7 @@ internal class TireHistory(context: Context) {
 
     fun record(state: TeyesClimateState, elapsed: Long, wallTime: Long = System.currentTimeMillis()) {
         synchronized(storageLock) {
-            if (!state.connected || state.profileId !in SyuVehicleProtocol.tireProfiles || wallTime <= 0) return
+            if (!state.connected || state.profileId <= 0 || state.syuVehicle.tireProfileId != state.profileId || wallTime <= 0) return
             val tires = state.syuVehicle.tires
             if (tires.size != 4 || tires.none { it.pressureKpa != null || it.warning != null }) return
             if (lastRecorded[state.profileId]?.let { elapsed >= it && elapsed - it < 60_000 } == true) return
@@ -28,7 +28,7 @@ internal class TireHistory(context: Context) {
     }
 
     fun read(profile: Int): List<TireHistoryPoint> = try {
-        if (profile !in SyuVehicleProtocol.tireProfiles) emptyList() else {
+        if (profile <= 0) emptyList() else {
             val raw = prefs.all[profile.toString()] as? String
             if (raw == null || raw.length > 200_000) emptyList() else {
                 val array = JSONArray(raw)

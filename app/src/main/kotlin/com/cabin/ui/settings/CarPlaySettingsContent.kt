@@ -51,26 +51,3 @@ private fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Bool
         } else Box(Modifier.weight(1f)) { PhonesTabContent(manager) }
     }
 }
-
-@Composable
-private fun NativeCarPlaySettings() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    var error by remember { mutableStateOf<String?>(null) }
-    Column(
-        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp).testTag("native-carplay-settings"),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Text(stringResource(R.string.carplay_backend_native), style = MaterialTheme.typography.headlineSmall)
-        Button(onClick = { com.cabin.platform.JoyingCarPlay.open(context) }) {
-            Text(stringResource(R.string.carplay_backend_open))
-        }
-        OutlinedButton(onClick = {
-            try {
-                context.startActivity(com.cabin.joying.JoyingServiceHandoff.stockSettingsIntent())
-            } catch (_: android.content.ActivityNotFoundException) {
-                error = context.getString(R.string.joying_stock_settings_missing)
-            }
-        }) { Text(stringResource(R.string.joying_stock_settings)) }
-        error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-    }
-}

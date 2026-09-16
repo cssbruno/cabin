@@ -6,6 +6,11 @@ import org.jf.dexlib2.iface.reference.*
 
 /** An inert, bounded interpreter for SYU display calculations. No vendor code is loaded or invoked. */
 internal class FytSyuReadProgram(private val method: Method, private val inputField: Int? = null) {
+    val referenceKey: String get() = org.jf.dexlib2.util.ReferenceUtil.getMethodDescriptor(method) + ":" + inputField
+    val profileDependent: Boolean get() = body.instructions.any {
+        (it as? WideLiteralInstruction)?.wideLiteral == 1000L ||
+            ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name == "sCanbusId"
+    }
     private val body = requireNotNull(method.implementation)
     private val code = linkedMapOf<Int, Instruction>().apply {
         var pc = 0

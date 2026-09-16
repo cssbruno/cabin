@@ -158,8 +158,8 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
             DashboardModule.CAMERA_MODE -> vehicle.syuVehicle.factoryCapabilities.any { it.group == SyuFactoryGroup.CAMERA }
             DashboardModule.MIRROR_SETTINGS -> vehicle.syuVehicle.factoryCapabilities.any { it.group == SyuFactoryGroup.MIRRORS }
             DashboardModule.PARKING_SETTINGS -> vehicle.syuVehicle.factoryCapabilities.any { it.group == SyuFactoryGroup.PARKING }
-            DashboardModule.TIRE_HISTORY -> vehicle.profileId in SyuVehicleProtocol.tireProfiles
-            DashboardModule.TIRE_PRESSURE -> vehicle.syuVehicle.tires.isNotEmpty()
+            DashboardModule.TIRE_HISTORY -> vehicle.syuVehicle.tireProfileId == vehicle.profileId && vehicle.syuVehicle.tires.isNotEmpty()
+            DashboardModule.TIRE_PRESSURE -> vehicle.syuVehicle.tireProfileId == vehicle.profileId && vehicle.syuVehicle.tires.isNotEmpty()
             DashboardModule.FACTORY_AMPLIFIER -> vehicle.syuVehicle.amplifier.isNotEmpty()
             DashboardModule.VEHICLE_LIGHTING -> vehicle.syuVehicle.lighting.isNotEmpty()
             DashboardModule.TRIP_CONSUMPTION -> vehicle.syuVehicle.tripSupported

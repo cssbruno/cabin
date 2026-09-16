@@ -44,6 +44,8 @@ data class TeyesClimateState(
     val fytReceiver: String = "",
     val fytClientCallback: String = "",
     val fytFieldNames: Map<Int, List<String>> = emptyMap(),
+    val fytActions: Set<FytVehicleAction> = emptySet(),
+    val fytChoices: Map<FytVehicleChoice, Map<Int, String>> = emptyMap(),
     val fytSyuReadings: List<FytSyuReading> = emptyList(),
     val fytProfileName: String = "",
     val fytRawValues: Map<Int, FytRawSample> = emptyMap(),
@@ -163,6 +165,15 @@ class TeyesClimateController(
     private var callback: IBinder? = null
     private var deathRecipient: IBinder.DeathRecipient? = null
     private var lastProfile: Int? = null
+    private var stopAdjustment: Runnable? = null
+
+    private fun releaseAdjustment() {
+        val stop = stopAdjustment ?: return
+        stopAdjustment = null
+        handler.removeCallbacks(stop)
+        stop.run()
+    }
+
     private var connectedAt: Long? = null
     private val retry = Runnable { bind() }
     private val bindTimeout = Runnable { disconnectAndRetry() }
@@ -179,7 +190,9 @@ class TeyesClimateController(
                         val remote = moduleBinder!!
                         val listener = callback!!
                         // Refresh quiet door/climate/settings values, never cached speed/RPM.
-                        registeredCodes.toList().filter { it !in setOf(89, 90, 149, 151) }.forEach {
+                        val excluded = (detectedProfile?.syuClient?.display as? CabinSyuDecoder)?.cachedRefreshExcludedFields
+                            ?: setOf(89, 90, 149, 151)
+                        registeredCodes.toList().filter { it !in excluded }.forEach {
                             SyuBinderTransport.register(remote, listener, it)
                         }
                     } catch (_: Exception) { disconnectAndRetry() }
@@ -370,6 +383,67 @@ class TeyesClimateController(
         }
     }
 
+    fun selectSyuVehicleChoice(expectedProfile: Int, choice: FytVehicleChoice, value: Int) {
+        if (closed.get() || expectedProfile != mutableState.value.profileId) return
+        val epoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || epoch != connectionEpoch.get() || moduleBinder == null) return@post
+            val selected = detectedProfile ?: return@post
+            if (selected.profile != expectedProfile || samples.snapshot(SystemClock.elapsedRealtime())[1000] != expectedProfile) return@post
+            val decoder = selected.syuClient.display as? CabinSyuDecoder ?: return@post
+            val frame = decoder.choiceFrame(choice, value) ?: return@post
+            command(frame.first, frame.second.toIntArray())
+        }
+    }
+
+    fun performSyuVehicleAction(expectedProfile: Int, action: FytVehicleAction) {
+        if (closed.get() || expectedProfile != mutableState.value.profileId) return
+        val epoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || epoch != connectionEpoch.get() || moduleBinder == null) return@post
+            val selected = detectedProfile ?: return@post
+            if (selected.profile != expectedProfile || samples.snapshot(SystemClock.elapsedRealtime())[1000] != expectedProfile) return@post
+            val decoder = selected.syuClient.display as? CabinSyuDecoder ?: return@post
+            val frame = decoder.actionFrame(action) ?: return@post
+            command(frame.first, frame.second.toIntArray())
+        }
+    }
+
+    fun setSyuVehicleOption(expectedProfile: Int, field: Int, value: Int) {
+        if (closed.get() || expectedProfile != mutableState.value.profileId) return
+        val epoch = connectionEpoch.get()
+        handler.post {
+            if (closed.get() || epoch != connectionEpoch.get() || moduleBinder == null) return@post
+            val selected = detectedProfile ?: return@post
+            if (selected.profile != expectedProfile || samples.snapshot(SystemClock.elapsedRealtime())[1000] != expectedProfile) return@post
+            if (field !in selected.publishedFields) return@post
+            val decoder = selected.syuClient.display as? CabinSyuDecoder ?: return@post
+            val fresh = samples.rawSnapshot(SystemClock.elapsedRealtime())
+            val frame = decoder.command(field, value, fresh) ?: return@post
+            releaseAdjustment()
+            val remote = moduleBinder ?: return@post
+            decoder.releaseFrame(field)?.let { release ->
+                // Capture the current binder. Never send a delayed stop to a replacement profile.
+                val stop = Runnable {
+                    stopAdjustment = null
+                    try {
+                        SyuBinderTransport.transact(remote, 1, { data ->
+                            data.writeInt(release.first)
+                            data.writeIntArray(release.second.toIntArray())
+                            data.writeFloatArray(null)
+                            data.writeStringArray(null)
+                        }, {})
+                    } catch (error: Exception) {
+                        com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, error)
+                    }
+                }
+                stopAdjustment = stop
+                handler.postDelayed(stop, 250L)
+            }
+            command(frame.first, frame.second.toIntArray())
+        }
+    }
+
     fun setFactoryControl(control: SyuFactoryControl, value: Int) {
         if (closed.get()) return
         val expectedProfile = mutableState.value.profileId
@@ -547,7 +621,13 @@ class TeyesClimateController(
             airProfile = if (TeyesClimateControlPolicy.supports(value)) null else airRegistry.profiles[value]
             SyuVehicleProtocol.codes(value).forEach { if (it !in registeredCodes) register(it) }
             airProfile?.fields?.values?.distinct()?.forEach { if (it !in registeredCodes) register(it) }
-            if (newProfile) SyuVehicleProtocol.queryFrames(value).forEach { (code, payload) ->
+            val nativeDecoder = detectedProfile?.syuClient?.display as? CabinSyuDecoder
+            // An empty native request list can be intentional: Honda WC publishes trip data
+            // automatically and its service does not implement the RZC command 100.
+            val requests = if (nativeDecoder?.ownsReadRequests == true)
+                nativeDecoder.initialReadRequests(detectedProfile?.publishedFields.orEmpty())
+            else SyuVehicleProtocol.queryFrames(value)
+            if (newProfile) requests.distinct().forEach { (code, payload) ->
                 if (moduleBinder != null) command(code, payload.toIntArray())
             }
         }
@@ -591,14 +671,29 @@ class TeyesClimateController(
                 definition.fields.mapNotNull { (name, code) -> airValues[code]?.let { name to it } }.toMap(),
                 definition.commands.keys, definition.low, definition.high, definition.unavailable, definition.temperatureFormats)
         }
-        val syuReadings = detectedProfile?.syuClient?.display?.read(samples.rawSnapshot(now).filterKeys {
-            it in detectedProfile?.publishedFields.orEmpty()
-        }).orEmpty()
+        val nativeDecoder = detectedProfile?.syuClient?.display as? CabinSyuDecoder
+        val nativeValues = samples.rawSnapshot(now, shortLivedFields = nativeDecoder?.motionFields.orEmpty())
+            .filterKeys { it in detectedProfile?.publishedFields.orEmpty() }
+        val nativeMotion = nativeDecoder?.motionValues(nativeValues).orEmpty()
+        val syuReadings = detectedProfile?.syuClient?.display?.readPayloads(nativeValues, rawSamples.filter { (id, sample) -> id in detectedProfile?.publishedFields.orEmpty() && now - sample.first in 0 until 60_000L }
+            .mapValues { it.value.second }).orEmpty()
+        val golfDialect = CabinGolfSettings.dialect(profile, detectedProfile?.syuClient?.callback.orEmpty()).orEmpty()
+        val factoryValues = CabinGolfHybrid.widgetValues(profile, golfDialect,
+            CabinGolfSettings.widgetValues(golfDialect, airValues, samples.rawSnapshot(now)), samples.rawSnapshot(now))
+        val widgetValues = nativeDecoder?.widgetValues(factoryValues, samples.rawSnapshot(now)) ?: factoryValues
+        val vehicleTelemetry = SyuVehicleProtocol.decode(profile, widgetValues).let { telemetry ->
+            if ((detectedProfile?.syuClient?.display as? CabinSyuDecoder)?.hasHondaTrip == true &&
+                setOf(1, 2, 7).all { it in detectedProfile?.publishedFields.orEmpty() })
+                CabinHondaTrip.telemetry(telemetry, samples.rawSnapshot(now))
+            else if ((detectedProfile?.syuClient?.display as? CabinSyuDecoder)?.hasFordTires == true &&
+                (78..85).all { it in detectedProfile?.publishedFields.orEmpty() })
+                CabinFordTires.telemetry(profile, telemetry, samples.rawSnapshot(now)) else telemetry
+        }
         mutableState.value =
             TeyesClimateState(
                 connected = moduleBinder != null,
                 syuAir = airState,
-                syuVehicle = SyuVehicleProtocol.decode(profile, airValues),
+                syuVehicle = vehicleTelemetry,
                 health =
                     when {
                         moduleBinder == null && connection != null -> TeyesTelemetryHealth.CONNECTING
@@ -607,7 +702,7 @@ class TeyesClimateController(
                         else -> TeyesTelemetryHealth.LIVE
                     },
                 lastUpdateElapsedRealtimeMs = samples.lastUpdateElapsedRealtimeMs,
-                availableCodes = values.keys.toSet(),
+                availableCodes = values.keys + nativeMotion.keys,
                 doorsAvailable = (36..41).all { values.containsKey(it) },
                 controlsSupported = TeyesClimateControlPolicy.supports(profile),
                 controlsAvailable = originalCommandInterface && TeyesClimateControlPolicy.canControl(moduleBinder != null, profile, values),
@@ -634,6 +729,8 @@ class TeyesClimateController(
                 fytClientCallback = detectedProfile?.syuClient?.callback.orEmpty(),
                 fytFieldNames = detectedProfile?.syuClient?.names.orEmpty(),
                 fytSyuReadings = syuReadings,
+                fytChoices = if (moduleBinder != null) nativeDecoder?.choices.orEmpty() else emptyMap(),
+                fytActions = if (moduleBinder != null) (detectedProfile?.syuClient?.display as? CabinSyuDecoder)?.actions.orEmpty() else emptySet(),
                 fytMainFields = detectedProfile?.moduleFields?.get(0).orEmpty(),
                 fytMainRawValues = mainRawSamples.filterValues { now - it.first in 0 until 60_000L }.mapValues { it.value.second },
                 fytProfileName = profileCatalog[profile].orEmpty(),
@@ -651,8 +748,8 @@ class TeyesClimateController(
                 rightTemperature = values[31],
                 fahrenheit = values[33] == 1,
                 fanLevel = (values[if (alternate) 35 else 29] ?: 0).coerceIn(0, 7),
-                speedKph = values[89]?.takeIf { it in 0..400 },
-                engineRpm = values[90]?.takeIf { it in 0..10_000 },
+                speedKph = (nativeMotion[89] ?: values[89])?.takeIf { it in 0..400 },
+                engineRpm = (nativeMotion[90] ?: values[90])?.takeIf { it in 0..10_000 },
                 oilLifePercent = values[137]?.takeIf { it in 0..100 },
                 oilServiceDistance = values[181]?.let { if (values[180] == 1) -it else it },
                 oilServiceDistanceMiles = values[179] == 1,
@@ -754,6 +851,7 @@ class TeyesClimateController(
     }
 
     private fun clearConnection() {
+        releaseAdjustment()
         subscriptionsReady = false
         connectionEpoch.incrementAndGet()
         handler.removeCallbacks(bindTimeout)

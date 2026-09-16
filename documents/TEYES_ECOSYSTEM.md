@@ -184,18 +184,11 @@ This is reference-code compatibility, not certification of TEYES firmware or a h
 Profile 262465 retains its separate command 107 path, including single-key airflow release.
 No temperature, defrost or arbitrary CAN write interface is enabled by this change.
 
-Vehicle data format is detected by reading `classes*.dex` from the installed
-`com.syu.ms` base/split APKs. Cabin checks the publisher's argument flow, follows
-profile dispatch, and analyzes climate/door packet expressions and branch conditions.
-It discovers callback IDs independently of version, APK hash or complete-method
-fingerprints, then subscribes to and normalizes those IDs. Missing/ambiguous fields
-remain unavailable, while other matched fields can still be read. Live debug and
-vehicle diagnostics include detection status, mapped IDs and unmatched fields.
-Results are cached until package/source changes; vendor code is never executed.
-This supports the inspected SYU contract and receiver-selected profiles, not arbitrary
-firmware. Stock-client-backed maintenance and temperature formats are described below;
-unverified motion scales remain unavailable. Changed read IDs do not
-provide new write commands. Existing per-profile SYU definitions remain separate.
+Vehicle data format uses Cabin's bundled protocol registry, selected by service
+version family and the full live CAN profile. Vendor APKs and DEX are not read at
+runtime. Own Kotlin decoders and explicit command maps handle supported formats;
+finite bundled enum tables cover additional read-only states. Unmapped values
+remain unavailable. See [current scope](research/JOYING-FIRMWARE-FIELDS.md).
 
 Reference149/151 motion scaling, modern temperature encoding, coolant and voltage remain
 unverified and unavailable. In the reference,89/90 are seat fields: they must NOT be
@@ -397,24 +390,14 @@ list contains no Bluetooth/Nearby-device permissions. This is software verificat
 not certification of the user's TPRO, projection adapter or Honda Civic installation.
 A debug APK and passing software checks do not constitute vehicle compatibility certification.
 
-### Installed-code profile discovery
+### Cabin-owned profile registry
 
-The FYT inspector follows the installed dispatcher without a Civic-ID whitelist.
-A 3,349-entry stock catalog supplies reference names only. Discovery includes
-receiver helpers, Runnable publications and separate CAN/MAIN callback arrays.
-**FYT → Raw FYT fields** shows complete bounded payloads locally. MAIN is a
-separate live-only subscription and never feeds CAN gauges or controls.
+The bundled registry contains 3,349 profiles, including 3,328 with reference
+callback inventories and 21 with empty packet readers. Names and inventories do
+not establish semantic or control support. CAN and MAIN remain separate.
 
-In the supplied firmware, 3,328 profiles have discovered callback fields and 21
-have empty packet readers. Climate/door semantics match for 65 profiles (one
-partially). The other fields retain raw presentation unless independently
-verified. See [firmware field analysis](research/JOYING-FIRMWARE-FIELDS.md) for
-coverage and limits. No hardware compatibility is implied by these counts.
-
-The installed SYU CAN Bus client now supplies its actual callback dispatch and
-field names. Stock 0298 packet-expression checks additionally cover temperatures,
-rear climate, seat levels and maintenance distance. Maintenance uses vendor
-135/136/137 (unit/sign/distance), never clock 181 or oil-life percentage 137.
-Names are searchable in the FYT field viewer. Full parity with every stock
-settings screen, enum and command is still incomplete; see the comparison table
-in the firmware field analysis.
+584 profiles include finite enum tables. Own Kotlin Honda conversions use fields
+135/136/137 for maintenance unit/sign/distance, never clock 181. Own setting
+commands validate fresh feedback, target values and the full active profile.
+Other families still lack full numeric and control parity. See
+[current implementation and reference history](research/JOYING-FIRMWARE-FIELDS.md).

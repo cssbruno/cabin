@@ -53,9 +53,12 @@ class TeyesClimateBinderIntegrationTest {
         try {
             shadowOf(looper).idle()
         } catch (error: IllegalStateException) {
-            // close() can finish on the worker before Robolectric submits its idle task.
-            // Only this already-quitting outcome is expected; all other failures propagate.
-            if (error.message != "Looper is quitting") throw error
+            // close() can terminate the worker between idle() checking it and posting its barrier.
+            // Only Robolectric's own failed barrier on a verified terminated thread is expected.
+            worker.join(1_000)
+            val deadBarrier = error.message?.let { it.startsWith("post to Handler ") && it.endsWith("failed. Is handler thread dead?") } == true &&
+                error.stackTrace.firstOrNull()?.className == "org.robolectric.shadows.ShadowPausedLooper\$HandlerExecutor" && !worker.isAlive
+            if (error.message != "Looper is quitting" && !deadBarrier) throw error
         }
         worker.join(1_000)
         assertFalse("Vehicle worker must terminate after close", worker.isAlive)
@@ -151,6 +154,214 @@ class TeyesClimateBinderIntegrationTest {
         assertTrue(controller.state.value.fytSyuReadings.isEmpty())
     }
 
+    @Test fun `WC GM gauges use fresh motion callbacks instead of old Civic IDs`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 36); emit(13, 60); emit(107, 2400); emit(145, 126)
+        assertEquals(60, controller.state.value.speedKph)
+        assertEquals(2400, controller.state.value.engineRpm)
+        assertTrue(controller.state.value.availableCodes.containsAll(listOf(89, 90)))
+        context.module.registrationHistory.clear()
+        shadowOf(worker.looper).idleFor(16, java.util.concurrent.TimeUnit.SECONDS)
+        assertNull(controller.state.value.speedKph)
+        assertNull(controller.state.value.engineRpm)
+        assertFalse(context.module.registrationHistory.any { it in setOf(13, 107) })
+        assertTrue(controller.state.value.fytSyuReadings.any { it.viewId == 145 && it.text == "12.6 V" })
+    }
+
+    @Test fun `Explorer support releases on timeout replacement and suspend`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 590158); emit(100, 1); emit(102, 5); emit(103, 4)
+        context.module.commands.clear()
+        controller.setSyuVehicleOption(590158, 102, 1); drain()
+        assertEquals(listOf(11 to listOf(167, 0, 1)), context.module.commands)
+        shadowOf(worker.looper).idleFor(250, java.util.concurrent.TimeUnit.MILLISECONDS)
+        assertEquals(11 to listOf(167, 0, 0), context.module.commands.last())
+        controller.setSyuVehicleOption(590158, 102, 2); drain()
+        controller.setSyuVehicleOption(590158, 103, 1); drain()
+        assertEquals(listOf(11 to listOf(167, 0, 2), 11 to listOf(167, 0, 0), 11 to listOf(167, 1, 1)), context.module.commands.takeLast(3))
+        controller.suspendUpdates(); drain()
+        assertEquals(11 to listOf(167, 1, 0), context.module.commands.last())
+        val count = context.module.commands.size
+        shadowOf(worker.looper).idleFor(1, java.util.concurrent.TimeUnit.SECONDS)
+        assertEquals(count, context.module.commands.size)
+    }
+
+    @Test fun `Ford native tires request once and replace obsolete widget fields`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 1376590)
+        assertEquals(listOf(0 to listOf(99, 0), 0 to listOf(98, 0)), context.module.commands)
+        emit(146, 80); emit(150, 1)
+        assertNull(controller.state.value.syuVehicle.tires[0].pressureKpa)
+        emit(78, 80); emit(82, 1); emit(180, 0)
+        assertEquals(220.0, controller.state.value.syuVehicle.tires[0].pressureKpa!!, 0.0001)
+        assertEquals(1, controller.state.value.syuVehicle.tires[0].warning)
+        assertTrue(controller.state.value.fytSyuReadings.any { it.viewId == 78 && it.text == "220 kPa" })
+        emit(78, 255)
+        assertNull(controller.state.value.syuVehicle.tires[0].pressureKpa)
+        controller.suspendUpdates(); drain()
+        assertTrue(controller.state.value.syuVehicle.tires.isEmpty())
+    }
+
+    @Test fun `Honda trip reads request verified data and update the existing widget from actual fields`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 262442)
+        assertEquals(listOf(100 to listOf(1), 100 to listOf(2)), context.module.commands)
+        assertTrue(controller.state.value.syuVehicle.tripSupported)
+        emit(99, 123); emit(100, 145); emit(105, 2)
+        assertNull(controller.state.value.syuVehicle.averageConsumption)
+        emit(1, 123)
+        assertNull(controller.state.value.syuVehicle.averageConsumption)
+        emit(7, 2); emit(2, 145)
+        assertEquals(12.3, controller.state.value.syuVehicle.averageConsumption!!, 0.0001)
+        assertEquals(14.5, controller.state.value.syuVehicle.previousConsumption!!, 0.0001)
+        emit(1, 65535)
+        assertNull(controller.state.value.syuVehicle.averageConsumption)
+        controller.suspendUpdates(); drain()
+        assertNull(controller.state.value.syuVehicle.previousConsumption)
+    }
+
+    @Test fun `language command requires current registered profile and bounded choice`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 321)
+        controller.selectSyuVehicleChoice(321, FytVehicleChoice.LANGUAGE, 33); drain()
+        assertTrue(context.module.commands.isEmpty())
+        controller.selectSyuVehicleChoice(321, FytVehicleChoice.LANGUAGE, 1); drain()
+        assertEquals(listOf(112 to listOf(1, 1)), context.module.commands)
+        emit(1000, 17)
+        controller.selectSyuVehicleChoice(321, FytVehicleChoice.LANGUAGE, 1); drain()
+        controller.selectSyuVehicleChoice(17, FytVehicleChoice.LANGUAGE, 1); drain()
+        assertEquals(1, context.module.commands.size)
+        assertTrue(controller.state.value.fytChoices.isEmpty())
+    }
+
+    @Test fun `Honda WC uses own fields and rejects stale history reset`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 852289)
+        assertTrue(context.module.commands.isEmpty())
+        emit(1, 123); emit(7, 2)
+        assertEquals(12.3, controller.state.value.syuVehicle.averageConsumption!!, 0.0001)
+        controller.setSyuVehicleOption(852289, 50, 3); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(50, 2)
+        controller.setSyuVehicleOption(852289, 50, 3); drain()
+        controller.performSyuVehicleAction(852289, FytVehicleAction.RESET_HONDA_TRIP_HISTORY); drain()
+        assertEquals(listOf(102 to listOf(4, 3), 101 to listOf(3)), context.module.commands)
+        emit(1000, 17)
+        controller.performSyuVehicleAction(852289, FytVehicleAction.RESET_HONDA_TRIP_HISTORY); drain()
+        controller.performSyuVehicleAction(17, FytVehicleAction.RESET_HONDA_TRIP_HISTORY); drain()
+        assertEquals(2, context.module.commands.size)
+    }
+
+    @Test fun `Golf trip reset actions require active supported profile and connection`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        controller.performSyuVehicleAction(17, FytVehicleAction.RESET_TRIP_SINCE_START); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(1000, 17)
+        assertEquals(setOf(FytVehicleAction.RESET_TRIP_SINCE_START, FytVehicleAction.RESET_TRIP_LONG_TERM), controller.state.value.fytActions)
+        controller.performSyuVehicleAction(17, FytVehicleAction.RESET_TRIP_SINCE_START); drain()
+        controller.performSyuVehicleAction(17, FytVehicleAction.RESET_TRIP_LONG_TERM); drain()
+        assertEquals(listOf(84 to listOf(1), 85 to listOf(1)), context.module.commands)
+        controller.suspendUpdates(); drain()
+        controller.performSyuVehicleAction(17, FytVehicleAction.RESET_TRIP_LONG_TERM); drain()
+        assertEquals(2, context.module.commands.size)
+        assertTrue(controller.state.value.fytActions.isEmpty())
+        assertEquals(setOf(FytVehicleAction.CALIBRATE_COMPASS), (registry.profile(262442).syuClient.display as CabinSyuDecoder).actions)
+    }
+
+    @Test fun `RZC charging refuses incomplete records and keeps the active schedules`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 655520)
+        emit(407, 7)
+        controller.setSyuVehicleOption(655520, 407, 9); drain()
+        assertTrue(context.module.commands.isEmpty())
+        listOf(7, 35, 1, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 1, 22, 30, 6, 0, 80)
+            .forEachIndexed { i, value -> emit(407 + i, value) }
+        controller.setSyuVehicleOption(655520, 407, 9); drain()
+        assertEquals(listOf(143 to listOf(1, 9, 35, 210, 170, 22, 30, 6, 0, 80)), context.module.commands)
+        emit(404, 1); emit(405, 0); emit(406, 1)
+        controller.setSyuVehicleOption(655520, 405, 1); drain()
+        assertEquals(142 to listOf(0, 7), context.module.commands.last())
+        emit(1000, 17)
+        controller.setSyuVehicleOption(655520, 405, 0); drain()
+        assertEquals(2, context.module.commands.size)
+    }
+
+    @Test fun `Golf options use current raw fields and never climate values at old mirror IDs`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 17)
+        emit(148, 257)
+        assertFalse(SyuFactoryControl.MIRROR_SYNC in controller.state.value.syuVehicle.factoryControls)
+        controller.setSyuVehicleOption(17, 51, 1); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(51, 256)
+        controller.setSyuVehicleOption(17, 51, 1); drain()
+        assertEquals(listOf(67 to listOf(1)), context.module.commands)
+        assertEquals(0, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.MIRROR_SYNC])
+        emit(116, 257)
+        assertFalse(SyuFactoryControl.PARKING_AUTO in controller.state.value.syuVehicle.factoryControls)
+        emit(19, 256)
+        assertEquals(0, controller.state.value.syuVehicle.factoryControls[SyuFactoryControl.PARKING_AUTO])
+        emit(1000, 1310880)
+        controller.setSyuVehicleOption(17, 51, 0); drain()
+        assertEquals(1, context.module.commands.size)
+        shadowOf(worker.looper).idleFor(5, java.util.concurrent.TimeUnit.SECONDS)
+        drain()
+        emit(1000, 1310880)
+        emit(55, 1)
+        controller.setSyuVehicleOption(1310880, 55, 0); drain()
+        assertEquals(listOf(67 to listOf(1), 71 to listOf(0)), context.module.commands)
+    }
+
+    @Test fun `Cabin vehicle options send own protocol frames only for the current live profile`() {
+        controller.suspendUpdates(); drain()
+        val definition = FytDetectedProfile(262442, emptyMap(), "registered_protocol", publishedFields = setOf(61),
+            syuClient = FytSyuClientFields(display = CabinSyuDecoder(262442, "honda_0298")))
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, profiles = mapOf(262442 to definition)) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 262442)
+        controller.setSyuVehicleOption(262442, 61, 3); drain()
+        assertTrue(context.module.commands.isEmpty())
+        emit(61, 2)
+        controller.setSyuVehicleOption(262442, 61, 5); drain()
+        assertTrue(context.module.commands.isEmpty())
+        controller.setSyuVehicleOption(262442, 61, 3); drain()
+        assertEquals(listOf(105 to listOf(6, 3)), context.module.commands)
+        assertEquals("Medium", controller.state.value.fytSyuReadings.single { it.viewId == 61 }.text)
+        emit(1000, 1)
+        controller.setSyuVehicleOption(262442, 61, 1); drain()
+        assertEquals(1, context.module.commands.size)
+        controller.suspendUpdates(); drain()
+        controller.setSyuVehicleOption(262442, 61, 0); drain()
+        assertEquals(1, context.module.commands.size)
+    }
+
     @Test fun `stock maintenance and temperatures use verified fields without disabling existing climate controls`() {
         controller.suspendUpdates(); drain()
         val mapping = FytDetectedProfile(262442,
@@ -197,6 +408,40 @@ class TeyesClimateBinderIntegrationTest {
         assertTrue(context.module.registrationHistory.containsAll(listOf(1000, 0, 1, 11, 21)))
         assertFalse(context.module.registrationHistory.any { it in setOf(89, 90, 149, 151) })
         assertTrue(context.module.commands.isEmpty())
+    }
+
+    @Test fun `Ford settings refresh even when their IDs overlap legacy motion`() {
+        controller.suspendUpdates(); drain()
+        val registry = FytProtocolRegistry.parse(java.io.File("src/main/assets/syu/protocols-2023.json").readText())
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN, resolveProfile = registry::profile) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 917838)
+        context.module.registrationHistory.clear()
+        context.module.commands.clear()
+        shadowOf(worker.looper).idleFor(16, java.util.concurrent.TimeUnit.SECONDS)
+        assertTrue(context.module.registrationHistory.containsAll(listOf(89, 149, 151)))
+        assertNull(controller.state.value.speedKph)
+        assertNull(controller.state.value.engineRpm)
+        assertTrue(context.module.commands.isEmpty())
+        emit(1000, 334)
+        context.module.registrationHistory.clear()
+        shadowOf(worker.looper).idleFor(16, java.util.concurrent.TimeUnit.SECONDS)
+        assertTrue(context.module.registrationHistory.contains(90))
+    }
+
+    @Test fun `Audi native speed expires without refreshing cached speed as live`() {
+        controller.suspendUpdates(); drain()
+        val mapping = FytDetectedProfile(286, emptyMap(), "registered_protocol", publishedFields = setOf(1),
+            syuClient = FytSyuClientFields(display = CabinSyuDecoder(286, "bagoo_audi")))
+        controller.firmwareDetector = { FytFirmware("2.23.0718.1700", TeyesVehicleDataLayout.UNKNOWN,
+            profiles = mapOf(286 to mapping)) }
+        controller.resumeUpdates(); drain()
+        emit(1000, 286); emit(1, 800)
+        assertEquals("50.0000 km/h", controller.state.value.fytSyuReadings.single().text)
+        context.module.registrationHistory.clear()
+        shadowOf(worker.looper).idleFor(16, java.util.concurrent.TimeUnit.SECONDS)
+        assertTrue(controller.state.value.fytSyuReadings.isEmpty())
+        assertFalse(context.module.registrationHistory.contains(1))
     }
 
     @Test fun `integrated RZC units use Cabin direct FYT connection and returned values`() {

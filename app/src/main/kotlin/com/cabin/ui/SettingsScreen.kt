@@ -187,7 +187,16 @@ fun SettingsScreen(
                     SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager, initialConnection = initialCarPlayConnection, onReinitForDisplayMode = onReinitForDisplayMode)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
                     SettingsTab.CAR -> com.cabin.ui.settings.CarSettingsScreen(vehicleState, moving, carActions, onParkedAction, onOpenClimate)
-                    SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState)
+                    SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState,
+                        onSyuChoice = carActions.onSyuChoice?.let { send ->
+                            { profile, choice, value -> onParkedAction { send(profile, choice, value) } }
+                        },
+                        onSyuAction = carActions.onSyuAction?.let { send ->
+                            { profile, action -> onParkedAction { send(profile, action) } }
+                        },
+                        onSyuVehicleOption = carActions.onSyuVehicleOption?.let { send ->
+                            { profile, field, value -> onParkedAction { send(profile, field, value) } }
+                        })
                 }
             }
             if (horizontalNavigation) {

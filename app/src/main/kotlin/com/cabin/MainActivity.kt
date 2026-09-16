@@ -446,6 +446,9 @@ class MainActivity : ComponentActivity() {
                                 onVehicleLighting = climateController?.let { controller -> controller::setVehicleLighting },
                                 onFactoryAmplifier = climateController?.let { controller -> controller::setFactoryAmplifier },
                                 onFactoryControl = climateController?.let { controller -> controller::setFactoryControl },
+                                onSyuChoice = climateController?.let { controller -> controller::selectSyuVehicleChoice },
+                                onSyuAction = climateController?.let { controller -> controller::performSyuVehicleAction },
+                                onSyuVehicleOption = climateController?.let { controller -> controller::setSyuVehicleOption },
                                 onSetClimateAirflow = climateController?.let { controller -> controller::setAirflow },
                                 onResetCluster = ::restartClusterBinding,
                                 onRetryVehicle = { teyesClimateController?.retryConnection() },
@@ -1501,6 +1504,9 @@ fun CabinApp(
     onVehicleLighting: ((com.cabin.platform.SyuLightingSetting, Int) -> Unit)? = null,
     onFactoryAmplifier: ((com.cabin.platform.SyuAmplifierSetting, Int) -> Unit)? = null,
     onFactoryControl: ((com.cabin.platform.SyuFactoryControl, Int) -> Unit)? = null,
+    onSyuChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)? = null,
+    onSyuAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)? = null,
+    onSyuVehicleOption: ((Int, Int, Int) -> Unit)? = null,
     onSetClimateAirflow: ((TeyesAirflowMode) -> Unit)? = null,
     onResetCluster: () -> Unit,
     onRetryVehicle: () -> Unit = {},
@@ -1748,7 +1754,7 @@ fun CabinApp(
                 page = launcherPage,
                 onPageChange = ::selectLauncherPage,
                 onProjectionPlacement = { projectionPlacement = it },
-                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl),
+                climateActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl, onSyuChoice, onSyuAction, onSyuVehicleOption),
             )
         }
 
@@ -1780,7 +1786,7 @@ fun CabinApp(
                 embedded = true,
                 vehicleState = climateState,
                 moving = driving.moving,
-                carActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl),
+                carActions = com.cabin.launcher.ClimateWidgetActions(onSetClimateAc, onSetClimateFan, onRefreshClimate, onSetClimateAirflow, onAdjustClimateTemperature, onToggleClimateSwitch, onAirAction, onVehicleLighting, onFactoryAmplifier, onFactoryControl, onSyuChoice, onSyuAction, onSyuVehicleOption),
                 onParkedAction = parkedAction,
                 onOpenClimate = onOpenClimate?.let { open -> { showSettings = false; open() } },
             )

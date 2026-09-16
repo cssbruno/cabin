@@ -8,33 +8,53 @@ import org.jf.dexlib2.iface.ClassDef
 import org.jf.dexlib2.iface.Method
 import org.jf.dexlib2.iface.value.IntEncodedValue
 
-/** Names from the installed SYU client. Names alone never establish units, scaling or write commands. */
-data class FytSyuReading(
-    val screen: String,
-    val viewId: Int,
-    val fields: Set<Int>,
-    val text: String? = null,
-    val checked: Boolean? = null,
-)
-
-internal data class FytSyuClientFields(
-    val callback: String = "",
-    val names: Map<Int, List<String>> = emptyMap(),
-    val screens: Set<String> = emptySet(),
-    val display: FytSyuDisplay? = null,
-)
-
-internal class FytSyuDisplay(
+internal class ReferenceSyuDisplay(
     private val profile: Int,
     private val programs: List<Pair<String, FytSyuReadProgram>>,
     private val forwarded: Set<Int>? = null,
     private val string: (Int) -> String?,
-) {
+) : FytSyuDisplay {
+    /** Exhaustive finite-state tables for offline export, never run by Cabin. */
+    fun enumFacts(cache: MutableMap<String, List<org.json.JSONObject>>): List<org.json.JSONObject> {
+        val facts = programs.flatMap { (_, program) ->
+            val key = program.referenceKey + if (program.profileDependent) ":$profile" else ""
+            cache.getOrPut(key) {
+                val all = (0..1199).associateWith { 0 }
+                val probe = sequenceOf(0, 1, 2, 3).mapNotNull { value -> program.read(profile, all.mapValues { value }, string) }
+                    .firstOrNull { it.fields.size == 1 }
+                val field = probe?.fields?.singleOrNull()
+                if (field == null) emptyList() else {
+                    val results = (-3..255).mapNotNull { raw ->
+                        program.read(profile, mapOf(field to raw), string)?.takeIf { it.fields == setOf(field) }?.output?.map { raw to it }
+                    }.flatten().groupBy { it.second.view }
+                    results.values.mapNotNull { rows ->
+                        if (rows.map { it.second.text to it.second.checked }.distinct().size !in 1..24) null else {
+                            val ranges = org.json.JSONArray()
+                            var start = 0
+                            while (start < rows.size) {
+                                val first = rows[start]
+                                var end = start
+                                while (end + 1 < rows.size && rows[end + 1].first == rows[end].first + 1 && rows[end + 1].second == first.second) end++
+                                val range = org.json.JSONObject().put("min", first.first).put("max", rows[end].first)
+                                first.second.text?.let { range.put("text", it) }
+                                first.second.checked?.let { range.put("checked", it) }
+                                ranges.put(range)
+                                start = end + 1
+                            }
+                            org.json.JSONObject().put("field", field).put("values", ranges)
+                        }
+                    }
+                }
+            }.filter { forwarded == null || it.getInt("field") in forwarded }
+        }
+        return facts.distinctBy { it.toString() }.groupBy { it.getInt("field") }.values.mapNotNull { it.singleOrNull() }
+    }
+
     private var previous: Map<Int, Int>? = null
     private var previousRows: List<FytSyuReading> = emptyList()
     private val calculated = mutableMapOf<Int, FytSyuReadProgram.Result>()
 
-    @Synchronized fun read(raw: Map<Int, Int>): List<FytSyuReading> {
+    @Synchronized override fun read(raw: Map<Int, Int>): List<FytSyuReading> {
         val values = if (forwarded == null) raw else raw.filterKeys { it in forwarded }
         if (values == previous) return previousRows
         val rows = programs.flatMapIndexed { index, (screen, program) ->
@@ -123,6 +143,6 @@ internal object FytSyuClientCatalog {
             }
         }
         FytSyuClientFields(type, names.entries.groupBy { it.value }.mapValues { (_, entries) -> entries.map { it.key }.sorted() },
-            screens, if (programs.size <= 512) FytSyuDisplay(profile, programs, forwarded, string ?: { null }) else null)
+            screens, if (programs.size <= 512) ReferenceSyuDisplay(profile, programs, forwarded, string ?: { null }) else null)
     } catch (_: Exception) { FytSyuClientFields() }
 }

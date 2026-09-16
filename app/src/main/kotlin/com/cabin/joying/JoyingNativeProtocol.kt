@@ -41,8 +41,11 @@ internal object JoyingNativeProtocol {
             request.writeStrongBinder(listener)
             check(binder.transact(3, request, reply, 0)) { "Joying listener registration rejected" }
             check(reply.dataAvail() >= 4) { "Missing Joying listener reply" }
-            check(reply.readInt() >= 0) { "Joying listener registration failed" }
+            // f.a.run reads a boolean here, unlike ordinary command status replies.
+            // Zero means the daemon did not register our callback.
+            val registered = reply.readInt()
             if (reply.dataAvail() >= 4) reply.readException()
+            check(registered > 0) { "Joying listener registration failed: $registered" }
         } finally { request.recycle(); reply.recycle() }
     }
 

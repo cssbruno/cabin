@@ -13,26 +13,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.cabin.joying.JoyingCarPlayService
 import android.content.*
 import android.os.IBinder
 import androidx.core.content.ContextCompat
-import com.cabin.joying.JoyingServiceHandoff
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
-import com.cabin.platform.JoyingCarPlay
 
 @Composable
 internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null, onOpenSettings: (() -> Unit)? = null) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     var sessionHandle by remember { mutableStateOf<JoyingCarPlayService?>(null) }
-    var showPhones by remember { mutableStateOf(false) }
-    var preparing by remember { mutableStateOf(false) }
     var active by remember { mutableStateOf(false) }
     var status by remember { mutableStateOf("Connecting to Joying’s native CarPlay service…") }
     var ratio by remember { mutableFloatStateOf(1280f / 720f) }
@@ -63,48 +53,14 @@ internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null, onOpenSet
         active = true
         onPauseOrDispose { active = false }
     }
-    if (showPhones) JoyingPhonePicker(
-        onConnect = { address -> sessionHandle?.connectPhone(address); showPhones = false },
-        onDismiss = { showPhones = false },
-    )
     Column(Modifier.fillMaxSize().testTag("joying-embedded-carplay")) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.joying_title), Modifier.weight(1f))
-            if (onOpenSettings != null) TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.label_connection)) }
+            if (onOpenSettings != null) TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
+            TextButton(enabled = sessionHandle != null, onClick = { sessionHandle?.siri() }) { Text(stringResource(R.string.joying_siri)) }
             TextButton(onClick = { retry() }) { Text(stringResource(R.string.joying_retry)) }
             TextButton(onClick = { com.cabin.reports.LiveDebugMenu.show(context) }) { Text("Live debug") }
             if (onOpenLauncher != null) TextButton(onClick = onOpenLauncher) { Text(stringResource(R.string.joying_home)) }
-        }
-        FlowRow(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-            TextButton(enabled = !preparing, onClick = {
-                sessionHandle?.disconnect()
-                try { context.startActivity(JoyingServiceHandoff.stockSettingsIntent()) }
-                catch (_: android.content.ActivityNotFoundException) { status = context.getString(R.string.joying_stock_settings_missing) }
-            }) { Text(stringResource(R.string.joying_stock_settings)) }
-            TextButton(enabled = !preparing, onClick = {
-                sessionHandle?.disconnect()
-                preparing = true
-                scope.launch {
-                    val result = withContext(Dispatchers.IO) { runCatching { JoyingServiceHandoff.prepare(context) } }
-                    preparing = false
-                    result.onSuccess { retry() }.onFailure { status = it.cause?.message ?: it.message ?: "Handoff failed" }
-                }
-            }) { Text(stringResource(R.string.joying_takeover)) }
-            TextButton(enabled = sessionHandle != null && !preparing, onClick = { sessionHandle?.enableWireless() }) { Text(stringResource(R.string.joying_wireless)) }
-            TextButton(enabled = sessionHandle != null && !preparing, onClick = {
-                showPhones = true
-            }) { Text(stringResource(R.string.joying_phone)) }
-            TextButton(enabled = sessionHandle != null && !preparing, onClick = { sessionHandle?.siri() }) { Text(stringResource(R.string.joying_siri)) }
-            TextButton(enabled = !preparing, onClick = {
-                sessionHandle?.disconnect()
-                preparing = true
-                scope.launch {
-                    val result = withContext(Dispatchers.IO) { runCatching { JoyingServiceHandoff.restore(context) } }
-                    preparing = false
-                    result.onSuccess { sessionHandle?.stopProjection() }
-                    status = result.fold({ "Stock Car Link service restored" }, { it.cause?.message ?: it.message ?: "Restore failed" })
-                }
-            }) { Text(stringResource(R.string.joying_restore)) }
         }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
             val viewport = if (maxWidth / maxHeight > ratio) Modifier.fillMaxHeight().aspectRatio(ratio)

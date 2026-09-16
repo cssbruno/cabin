@@ -32,6 +32,7 @@ internal class JoyingEmbeddedSession(
         onFailure(retryable)
     }
     private val videoLock = Any()
+    private var videoHasRendered = false // Guarded by videoLock, shared with native callbacks.
     private var outputSurface: Surface? = null
     private var decoder: MediaCodec? = null
     private var parkingSurface: Surface? = null
@@ -133,12 +134,17 @@ internal class JoyingEmbeddedSession(
         if (value == 0) {
             audio.reset()
             factoryBluetooth.restoreHandsFree()
-            onStatus("Waiting for iPhone…")
+            synchronized(videoLock) {
+                videoHasRendered = false
+                onStatus("Waiting for iPhone…")
+            }
         } else if (changed && value in 1..4) {
             // Stock f.d publishes link changes and the CarplayView requests video
             // when it becomes visible. The startup request can precede phone readiness.
             command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
-            onStatus("Waiting for CarPlay video…")
+            synchronized(videoLock) {
+                if (!videoHasRendered) onStatus("Waiting for CarPlay video…")
+            }
         }
     }
 
@@ -191,7 +197,10 @@ internal class JoyingEmbeddedSession(
                 while (!closed.get()) {
                     val accepted = server!!.accept()
                     com.cabin.reports.DebugJournal.record("CarPlay", "video_connected", "Native video stream accepted")
-                    onStatus("Waiting for first video frame…")
+                    synchronized(videoLock) {
+                        videoHasRendered = false
+                        onStatus("Waiting for first video frame…")
+                    }
                     synchronized(this) {
                         if (closed.get()) { accepted.close(); return@execute }
                         socket = accepted
@@ -215,6 +224,7 @@ internal class JoyingEmbeddedSession(
                         if (!closed.get()) onStatus("Video link interrupted; waiting for Joying to reconnect…")
                     } finally {
                         runCatching { accepted.close() }
+                        synchronized(videoLock) { videoHasRendered = false }
                         synchronized(this) { if (socket === accepted) socket = null }
                     }
                     if (!closed.get()) onStatus("Waiting for Joying video to reconnect…")
@@ -247,14 +257,13 @@ internal class JoyingEmbeddedSession(
             }
             val info = MediaCodec.BufferInfo()
             var pending: ByteArray? = null
-            var firstRendered = false
             while (!closed.get()) {
                 if (pending == null) pending = frames.poll(5, TimeUnit.MILLISECONDS)
                 synchronized(videoLock) {
                 if (pending?.isEmpty() == true) {
                     codec.flush()
                     pending = null
-                    firstRendered = false
+                    videoHasRendered = false
                 }
                 if (pending != null) {
                     val index = codec.dequeueInputBuffer(1_000)
@@ -271,8 +280,9 @@ internal class JoyingEmbeddedSession(
                 var output = codec.dequeueOutputBuffer(info, 1_000)
                 while (output >= 0) {
                     codec.releaseOutputBuffer(output, outputSurface != null)
-                    if (!firstRendered && outputSurface != null) {
-                        firstRendered = true; onStatus("")
+                    if (!videoHasRendered && outputSurface != null) {
+                        videoHasRendered = true
+                        onStatus("")
                         com.cabin.reports.DebugJournal.record("CarPlay", "video_rendering", "First frame displayed")
                     }
                     output = codec.dequeueOutputBuffer(info, 0)

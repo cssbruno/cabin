@@ -38,6 +38,19 @@ class JoyingCarPlayServiceTest {
     private fun advance(seconds: Long) = org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
         .idleFor(java.time.Duration.ofSeconds(seconds))
 
+    @Test fun `settings binding does not start projection and disconnect clears running state`() {
+        val controller = Robolectric.buildService(TestService::class.java).create()
+        val service = controller.get()
+        service.onBind(Intent())
+        assertTrue(service.runtimes.isEmpty())
+        assertFalse(service.state.value.running)
+        service.onStartCommand(Intent().setAction(JoyingCarPlayService.RETRY), 0, 1)
+        assertTrue(service.state.value.running)
+        service.stopProjection()
+        assertFalse(service.state.value.running)
+        controller.destroy()
+    }
+
     @Test fun `failure retries are bounded and manual retry resets the budget`() {
         val controller = Robolectric.buildService(TestService::class.java).create()
         val service = controller.get()

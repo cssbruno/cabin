@@ -16,6 +16,37 @@ class JoyingNativeProtocolTest {
     private val payload = byteArrayOf(0, 0, 0, 1, 0x65, 7, 8)
     private fun packet() = byteArrayOf(payload.size.toByte(), 0, 0, 0) + payload
 
+    @Test fun `listener registration reads a boolean before the exception envelope`() {
+        val listener = Binder()
+        val binder = object : Binder() {
+            override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+                assertEquals(3, code)
+                data.enforceInterface(JoyingNativeProtocol.DESCRIPTOR)
+                assertEquals(listener, data.readStrongBinder())
+                assertEquals(0, data.dataAvail())
+                reply!!.writeInt(1)
+                reply.writeNoException()
+                return true
+            }
+        }
+        JoyingNativeProtocol.registerListener(binder, listener)
+    }
+
+    @Test fun `listener refusal is not accepted as ordinary command success`() {
+        for (result in listOf(0, -1)) {
+            val binder = object : Binder() {
+                override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+                    reply!!.writeInt(result)
+                    reply.writeNoException()
+                    return true
+                }
+            }
+            assertThrows(IllegalStateException::class.java) {
+                JoyingNativeProtocol.registerListener(binder, Binder())
+            }
+        }
+    }
+
     @Test fun `initial link state uses stock query with no request payload`() {
         val binder = object : Binder() {
             override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

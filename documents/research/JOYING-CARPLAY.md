@@ -42,7 +42,7 @@ Cabin owns the projection UI and implements the following native client paths:
 - FYT toolkit module 2 subscriptions for remote MAC (6), phone state (9), hands-free cut state (13), local MAC (14), and local name (15). Validated factory identity is published through native command 226. The inspected `f.d` → `CarLinkService$c` callbacks map `_btcmd` prefixes `AT#SP` to RFCOMM reconnect, `AT#SH` to RFCOMM close, and `AT#CD` to `CarLinkService.g(true)`: module 2 command 13 with `[1]`. Cabin only cuts an active factory phone connection with a known uncut state and restores its owned cut with `[0]` on disconnect/cleanup. Raw external Bluetooth driver I/O remains in the firmware.
 - Android 10 soft-AP configuration and tethering through the inspected ConnectivityManager/IConnectivityManager contract. Callback completion publishes actual channel/security/band/credentials through command 225. Session-created credentials are random and never logged. Cleanup restores previous Wi-Fi settings only while Cabin still owns the AP configuration.
 - Native audio-state callbacks drive Android media, assistant, and call focus. Media focus changes use native command 216. Old listeners cannot pause newer sessions. PCM playback stays in the vendor native engine; Cabin does not create duplicate PCM playback.
-- Explicit **Use Cabin for CarPlay** and **Restore stock service** controls. Handoff uses existing firmware privileges to stop `com.syu.carlink` and request the firmware's `sys.fyt.carplay=1` startup trigger if necessary. The optional [ADB handoff tool](../../tools/joying/README.md) provides a separate shell-authorized handoff path. No root, flashing, hidden-API exemption, or SELinux modification is attempted.
+- In-app **Settings → CarPlay** controls for wireless setup, phone selection, Retry, Disconnect and **Use Cabin for CarPlay**. Configuration is separate from the projection surface; there are no stock-app settings or restore shortcuts. Handoff uses existing firmware privileges to stop `com.syu.carlink` and request the firmware's `sys.fyt.carplay=1` startup trigger if necessary. The optional [ADB handoff tool](../../tools/joying/README.md) provides a separate shell-authorized handoff path. No root, flashing, hidden-API exemption, or SELinux modification is attempted.
 
 Native Binder operations and cleanup run off the UI thread. A process-wide session gate prevents a retiring session from stopping a new session's native screen. No stock activity is launched by Connect. The stock APK's native libraries and firmware daemon remain installed and provide the licensed underlying engine; they are not bundled into Cabin.
 
@@ -55,3 +55,26 @@ The Android Bluetooth adapter path and the inspected factory metadata/hands-free
 Initial geometry follows the stock 221 mm reference width, proportional height, and 30 FPS configuration. These are protocol defaults from the image, not measurements of the user's display.
 
 Validation: Kotlin compilation, debug APK build, and focused automated tests for service lifetime across screen unbind, explicit stop/retry, stale callbacks/surfaces, factory identity and hands-free ownership, alongside existing tests covering video framing, native request/callback envelopes, Bluetooth/AP messages, geometry negotiation, audio-focus lifecycle, and Connect routing. This is code-level validation, not a successful physical CarPlay session. No APK installation, device handoff, pairing, or audio/video validation on the head unit has occurred.
+
+
+### Rendered-video status ordering
+
+A late native link-state transition could put “Waiting for CarPlay video” back
+on screen after the decoder had already cleared it. Rendered-video state now
+shares the decoder lock with status updates. Native link transitions request the
+screen but only publish waiting status while no frame has rendered. Disconnect,
+new stream and decoder flush reset that state. This corrects status ordering;
+it does not establish that a firmware-denied or missing native stream works.
+No physical Android device was connected during this check.
+
+
+### Native listener registration result (2026-09-16)
+
+The local CarLink reference's `f.a.run` treats transaction 3's first reply integer
+as a boolean (nonzero = registered), then consumes the exception trailer. Cabin
+previously accepted zero, confusing it with an ordinary command success code.
+`JoyingNativeProtocol.registerListener` now rejects zero/negative registration
+results after reading the trailer. Local Binder tests cover success/refusal.
+Ordinary command status zero remains successful. This fixes a path that could
+wait for callbacks after registration was refused; it is not proof that the
+physical unit now streams video.

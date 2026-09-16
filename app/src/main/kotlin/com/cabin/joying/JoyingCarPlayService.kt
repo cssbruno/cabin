@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.update
 
 /** The started service owns CarPlay; Activity bindings only own a video surface. */
 internal open class JoyingCarPlayService : Service() {
-    data class State(val status: String = "Connecting to Joying’s native CarPlay service…", val ratio: Float = 1280f / 720f)
+    data class State(val status: String = "CarPlay disconnected", val ratio: Float = 1280f / 720f, val running: Boolean = false)
     private val mutable = MutableStateFlow(State())
     val state = mutable.asStateFlow()
     private var session: JoyingSessionRuntime? = null
@@ -65,7 +65,7 @@ internal open class JoyingCarPlayService : Service() {
         CabinTelemetry.record(DiagnosticEvent.JOYING_START)
         disconnect()
         val current = generation
-        mutable.value = State()
+        mutable.value = State(status = "Connecting to Joying’s native CarPlay service…", running = true)
         session = createSession(
             { message -> mutable.update { if (generation == current) it.copy(status = message) else it } },
             { width, height -> mutable.update { if (generation == current && height > 0) it.copy(ratio = width.toFloat() / height) else it } },
@@ -114,7 +114,7 @@ internal open class JoyingCarPlayService : Service() {
         generation++
         session?.close()
         session = null
-        mutable.value = mutable.value.copy(status = "CarPlay disconnected")
+        mutable.value = mutable.value.copy(status = "CarPlay disconnected", running = false)
     }
     fun attach(next: Surface) { surface = next; session?.attach(next) }
     fun detach(old: Surface) {

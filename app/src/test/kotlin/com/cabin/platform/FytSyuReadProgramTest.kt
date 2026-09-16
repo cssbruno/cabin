@@ -54,7 +54,7 @@ class FytSyuReadProgramTest {
         assertTrue(rows.toString(), rows.any { it.fields == setOf(114) && it.text == "res:2131299464" })
     }
     @Test fun `formatter cache removes expired fields and refreshes changes`() {
-        val display = FytSyuDisplay(262442, listOf("screen" to stock("updateAutoLightSens"))) { null }
+        val display = ReferenceSyuDisplay(262442, listOf("screen" to stock("updateAutoLightSens"))) { null }
         assertEquals("middle", display.read(mapOf(61 to 2)).single().text)
         assertEquals("middle", display.read(mapOf(61 to 2, 89 to 30)).single().text)
         assertEquals("high", display.read(mapOf(61 to 3)).single().text)

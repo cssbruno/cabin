@@ -82,18 +82,16 @@ internal fun teyesOilServiceReading(
             setOf(179, 180, 181).all { code -> code in vehicle.availableCodes }
     }?.let { MeasurementFormatter.serviceDistance(it, vehicle.oilServiceDistanceMiles, measurementUnit) } ?: "—"
 
-/** Read-only TEYES subsystem presentation. This composable never opens a transport or permission flow. */
+/** Vehicle presentation; supported option writes are delegated to the guarded controller. */
 @Composable
-fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
+fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)? = null, onSyuChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)? = null, onSyuVehicleOption: ((Int, Int, Int) -> Unit)? = null) {
     val context = LocalContext.current
     val measurementPreferences = remember(context) { MeasurementPreferences.get(context) }
     val measurementUnit by measurementPreferences.unit.collectAsStateWithLifecycle()
     val readings = teyesVehicleSettingsReadings(vehicle, measurementUnit)
-    val stockAvailable = com.cabin.platform.SyuOriginalSettings.intent(context) != null
-    var stockUnavailable by remember { mutableStateOf(false) }
     var showRawFields by remember { mutableStateOf(false) }
     var showSyuFields by remember { mutableStateOf(false) }
-    if (showSyuFields) SyuReadingsDialog(vehicle, onClose = { showSyuFields = false })
+    if (showSyuFields) SyuReadingsDialog(vehicle, onSyuVehicleOption, onSyuAction, onSyuChoice, onClose = { showSyuFields = false })
     var fieldFilter by remember { mutableStateOf("") }
     if (showRawFields) AlertDialog(
         onDismissRequest = { showRawFields = false },
@@ -125,13 +123,7 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
         if (vehicle.connected && vehicle.profileId != 0) {
             Text(stringResource(R.string.vehicle_profile_detail, vehicle.profileId))
         }
-        if (stockAvailable) {
-            TextButton(onClick = { stockUnavailable = !com.cabin.platform.SyuOriginalSettings.open(context) }) {
-                Text(stringResource(R.string.vehicle_syu_original))
-            }
-            if (stockUnavailable) Text(stringResource(R.string.vehicle_syu_open_failed))
-        }
-        if (vehicle.fytSyuReadings.isNotEmpty()) {
+        if (vehicle.fytSyuReadings.isNotEmpty() || vehicle.fytActions.isNotEmpty() || vehicle.fytChoices.isNotEmpty()) {
             TextButton(onClick = { showSyuFields = true }) { Text(stringResource(R.string.vehicle_syu_readings)) }
         }
         if (vehicle.fytPublishedFields.isNotEmpty() || vehicle.fytMainFields.isNotEmpty()) {
@@ -175,8 +167,51 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState()) {
 }
 
 @Composable
-private fun SyuReadingsDialog(vehicle: TeyesClimateState, onClose: () -> Unit) {
+private fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, Int, Int) -> Unit)?, onAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)?, onChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)?, onClose: () -> Unit) {
+    val portuguese = LocalContext.current.resources.configuration.locales[0].language == "pt"
+    var pendingChoice by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleChoice>?>(null) }
+    pendingChoice?.let { (profile, choice) ->
+        val options = vehicle.fytChoices[choice].orEmpty()
+        AlertDialog(onDismissRequest = { pendingChoice = null },
+            title = { Text(choice.title(portuguese)) },
+            text = { LazyColumn(Modifier.heightIn(max = 320.dp)) {
+                items(options.entries.toList(), key = { it.key }) { (value, label) ->
+                    TextButton(enabled = vehicle.connected && vehicle.profileId == profile, onClick = {
+                        onChoice?.invoke(profile, choice, value)
+                        pendingChoice = null
+                    }) { Text(label) }
+                }
+            } },
+            confirmButton = { TextButton(onClick = { pendingChoice = null }) { Text(stringResource(R.string.action_close)) } })
+    }
+    var pendingAction by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleAction>?>(null) }
+    pendingAction?.let { (profile, action) ->
+        AlertDialog(onDismissRequest = { pendingAction = null },
+            title = { Text(action.title(portuguese)) },
+            text = { Text(action.confirmation(portuguese)) },
+            confirmButton = { TextButton(enabled = vehicle.connected && vehicle.profileId == profile && action in vehicle.fytActions, onClick = {
+                onAction?.invoke(profile, action)
+                pendingAction = null
+            }) { Text(action.confirmLabel(portuguese)) } },
+            dismissButton = { TextButton(onClick = { pendingAction = null }) { Text(stringResource(R.string.action_close)) } })
+    }
     var search by remember { mutableStateOf("") }
+    var selected by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytSyuReading>?>(null) }
+    selected?.let { (profile, setting) ->
+        val current = vehicle.fytSyuReadings.firstOrNull { it.screen == setting.screen && it.viewId == setting.viewId }
+        val valid = vehicle.connected && vehicle.profileId == profile && current != null
+        AlertDialog(onDismissRequest = { selected = null },
+            title = { Text(setting.label ?: "CAN ${setting.viewId}") },
+            text = { LazyColumn(Modifier.heightIn(max = 320.dp)) {
+                items(setting.options.entries.toList(), key = { it.key }) { (value, text) ->
+                    TextButton(enabled = valid && current?.options?.containsKey(value) == true, onClick = {
+                        onSetOption?.invoke(profile, setting.viewId, value)
+                        selected = null
+                    }) { Text(text) }
+                }
+            } },
+            confirmButton = { TextButton(onClick = { selected = null }) { Text(stringResource(R.string.action_close)) } })
+    }
     AlertDialog(
         onDismissRequest = onClose,
         title = { Text(stringResource(R.string.vehicle_syu_readings)) },
@@ -185,8 +220,18 @@ private fun SyuReadingsDialog(vehicle: TeyesClimateState, onClose: () -> Unit) {
                 OutlinedTextField(value = search, onValueChange = { search = it }, singleLine = true,
                     label = { Text(stringResource(R.string.vehicle_find_field)) })
                 LazyColumn(Modifier.heightIn(max = 400.dp)) {
+                    if (onChoice != null) items(vehicle.fytChoices.keys.toList(), key = { "choice:$it" }) { choice ->
+                        TextButton(enabled = vehicle.connected, onClick = { pendingChoice = vehicle.profileId to choice }) {
+                            Text(choice.title(portuguese))
+                        }
+                    }
+                    if (onAction != null) items(vehicle.fytActions.toList(), key = { "action:$it" }) { action ->
+                        TextButton(enabled = vehicle.connected, onClick = { pendingAction = vehicle.profileId to action }) {
+                            Text(action.title(portuguese))
+                        }
+                    }
                     val rows = vehicle.fytSyuReadings.map { row ->
-                        val names = row.fields.sorted().joinToString(" / ") { id ->
+                        val names = row.label ?: row.fields.sorted().joinToString(" / ") { id ->
                             vehicle.fytFieldNames[id]?.joinToString(" / ") { it.removePrefix("U_").replace('_', ' ') } ?: "CAN $id"
                         }
                         row to names
@@ -196,10 +241,10 @@ private fun SyuReadingsDialog(vehicle: TeyesClimateState, onClose: () -> Unit) {
                     items(rows, key = { (row, _) -> "${row.screen}:${row.viewId}" }) { (row, names) ->
                         Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Text(names, style = MaterialTheme.typography.labelMedium)
-                            Text(row.text ?: stringResource(if (row.checked == true) R.string.vehicle_syu_checked else R.string.vehicle_syu_unchecked),
-                                style = MaterialTheme.typography.titleMedium)
-                            Text(row.screen.substringAfterLast('/').removeSuffix(";"), style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            val value = row.text ?: stringResource(if (row.checked == true) R.string.vehicle_syu_checked else R.string.vehicle_syu_unchecked)
+                            if (row.options.isNotEmpty() && onSetOption != null) {
+                                TextButton(onClick = { selected = vehicle.profileId to row }) { Text(value) }
+                            } else Text(value, style = MaterialTheme.typography.titleMedium)
                         }
                     }
                 }

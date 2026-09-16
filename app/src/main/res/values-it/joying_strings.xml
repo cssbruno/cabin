@@ -7,7 +7,6 @@
     <string name="joying_wireless">Attiva connessione wireless</string>
     <string name="joying_phone">Connetti telefono</string>
     <string name="joying_siri">Siri</string>
-    <string name="joying_restore">Ripristina servizio originale</string>
     <string name="joying_search">Cerca</string>
     <string name="joying_close">Chiudi</string>
     <string name="joying_connect">Connetti</string>
@@ -18,6 +17,4 @@
     <string name="joying_background">Connessione Joying attiva</string>
     <string name="joying_recovering">Riconnessione a CarPlay… (%1$d/%2$d)</string>
     <string name="joying_recovery_exhausted">Impossibile riconnettersi a CarPlay. Tocca Riprova.</string>
-    <string name="joying_stock_settings">Impostazioni Car Link originale</string>
-    <string name="joying_stock_settings_missing">Le impostazioni delle app non sono disponibili. Usa lo strumento ADB Joying e riprova.</string>
 </resources>

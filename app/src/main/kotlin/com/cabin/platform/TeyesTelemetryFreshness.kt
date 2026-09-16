@@ -139,8 +139,8 @@ internal class TeyesTelemetryFreshness {
     }.mapValues { it.value.value }
 
     /** Raw diagnostics retain no inferred units or field-specific range assumptions. */
-    fun rawSnapshot(now: Long): Map<Int, Int> = samples.filter { (_, sample) ->
-        now - sample.receivedAt in 0 until 60_000L
+    fun rawSnapshot(now: Long, shortLivedFields: Set<Int> = emptySet()): Map<Int, Int> = samples.filter { (code, sample) ->
+        now - sample.receivedAt in 0 until if (code in shortLivedFields) 5_000L else 60_000L
     }.mapValues { it.value.value }
 
     fun remove(code: Int) { samples.remove(code) }

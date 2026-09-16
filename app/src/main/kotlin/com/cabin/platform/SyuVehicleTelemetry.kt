@@ -14,6 +14,7 @@ data class SyuVehicleTelemetry(
     val factoryControls: Map<SyuFactoryControl, Int> = emptyMap(),
     val factoryCapabilities: Set<SyuFactoryControl> = emptySet(),
     val energy: SyuEnergyTelemetry? = null,
+    val tireProfileId: Int? = null,
 )
 
 internal object SyuVehicleProtocol {
@@ -72,7 +73,7 @@ internal object SyuVehicleProtocol {
             if (profile in tireProfiles) (0..3).map { wheel ->
                 SyuTireReading(readings[146 + wheel]?.takeIf { it in 0..254 }?.times(2.75),
                     readings[150 + wheel]?.takeIf { it in 0..7 })
-            } else emptyList(), SyuFactoryProtocol.decode(profile, readings), SyuFactoryProtocol.controls(profile), decodeEnergy(profile, readings))
+            } else emptyList(), SyuFactoryProtocol.decode(profile, readings), SyuFactoryProtocol.controls(profile), decodeEnergy(profile, readings), if (profile in tireProfiles) profile else null)
     }
 }
 
