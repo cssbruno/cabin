@@ -4,7 +4,7 @@
   "libraries": [
     {
       "name": "libcps_7862.so",
-      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libcps_7862.so",
+      "source": "artifacts/joying-uis7862/joying-uis7862-20230831/AllAppUpdate (1)/app/190000000_com.syu.carlink/lib/arm64/libcps_7862.so",
       "sha256": "5d96348c6629cc5330b1b57cb510fafe6ee1a861069decba07426e4ed78c22d8",
       "patches": [],
       "needed": [
@@ -25,7 +25,7 @@
     },
     {
       "name": "libcarplay_plugin_r14g.so",
-      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libcarplay_plugin_r14g.so",
+      "source": "artifacts/joying-uis7862/joying-uis7862-20230831/AllAppUpdate (1)/app/190000000_com.syu.carlink/lib/arm64/libcarplay_plugin_r14g.so",
       "sha256": "63903a6f42a7bf606907acb3588563c40d55b922976c6619d488303bd4d4858e",
       "patches": [
         {
@@ -61,7 +61,7 @@
     },
     {
       "name": "libaaudio_l.so",
-      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libaaudio_l.so",
+      "source": "artifacts/joying-uis7862/joying-uis7862-20230831/AllAppUpdate (1)/app/190000000_com.syu.carlink/lib/arm64/libaaudio_l.so",
       "sha256": "a211dff62999a6edd0c3e119585bcff0e231aad105fdd74eeffa0527710fd3bd",
       "patches": [],
       "needed": [
@@ -81,7 +81,7 @@
     },
     {
       "name": "libblinkAEC.so",
-      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libblinkAEC.so",
+      "source": "artifacts/joying-uis7862/joying-uis7862-20230831/AllAppUpdate (1)/app/190000000_com.syu.carlink/lib/arm64/libblinkAEC.so",
       "sha256": "6518af805ebdab9d96f7c3f38b8573845c03e63b7f7a59b2e236fee9e58350a8",
       "patches": [],
       "needed": [
