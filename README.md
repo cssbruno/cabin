@@ -9,7 +9,7 @@ and is packaged in the Cabin APK.
 A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto projection, and compatible FYT vehicle integration.
 
 - Android 8.1+ · English, Portuguese, Spanish, French, German and Italian.
-- Joying native CarPlay integration includes video, touch, wireless setup and bounded recovery. Firmware privileges and physical validation are required. See [Joying integration](documents/research/JOYING-CARPLAY.md).
+- Carlink imports its engine libraries into Cabin and runs them in a private app process. This engine targets ARM64 Android 10 and still needs compatible platform libraries and hardware access. See [Carlink integration](documents/research/CARLINK-INDEPENDENT-ENGINE.md).
 - Vehicle readings and A/C controls depend on the head unit, firmware and CAN profile.
 - Honda customization is built into **Car Settings → Honda instrument panel**, using the shared FYT connection. WC panel controls and mapped RZC/BNR units/tachometer settings are available here. See [supported Honda controls](documents/research/HONDA-FYT-PANEL.md).
 
@@ -35,4 +35,4 @@ Optional crash reporting: **Settings → Logs → Share crash reports**. Require
 - `documents/`: [documentation index](documents/README.md), research and archived notes.
 - `assets/`: store artwork; runtime resources belong under each module’s `src/main/res`.
 
-CarPlay configuration stays inside **Settings → CarPlay**. Native Joying wireless setup, phone selection, retry, disconnect and service takeover are grouped there. The projection screen provides a Settings shortcut. Cabin does not redirect to stock Car Link or Android display/sound settings; use Cabin’s built-in brightness and volume controls. Android may still present required permission, pairing and default-Home consent. Firmware that denies CarPlay takeover requires integration support; Cabin reports that limitation in place.
+CarPlay configuration stays inside **Settings → CarPlay**: wireless setup, phone selection, retry and disconnect. Carlink runs Cabin’s bundled engine; it does not launch or bind to the stock app or start the firmware CarplayServer daemon. Android may still present required permission, pairing and default-Home consent. Native loading and physical playback on the head unit remain unverified.

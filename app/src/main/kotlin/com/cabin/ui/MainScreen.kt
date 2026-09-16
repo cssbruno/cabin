@@ -947,7 +947,6 @@ internal fun ClimatePanel(
     val selectedAirflow = selectedClimateAirflow(state)
     BoxWithConstraints(modifier = modifier.then(closeTimer.touchModifier).background(colors.background)) {
         val wideClimate = maxWidth >= 720.dp
-        val compactHeader = maxHeight < 220.dp
         val scrollWholePanel = maxHeight < 144.dp
         Column(
             modifier =
@@ -966,12 +965,6 @@ internal fun ClimatePanel(
                     if (state.health != TeyesTelemetryHealth.LIVE) {
                         Text(stringResource(state.health.labelRes), style = MaterialTheme.typography.bodySmall,
                             color = colors.onSurfaceVariant)
-                    }
-                    if (!compactHeader && !civicControls) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                            ClimateTemperature(stringResource(R.string.label_left), state.leftTemperature, state.fahrenheit)
-                            ClimateTemperature(stringResource(R.string.label_right), state.rightTemperature, state.fahrenheit)
-                        }
                     }
                 }
                 onRefresh?.let { refresh ->
@@ -992,28 +985,19 @@ internal fun ClimatePanel(
                         .then(if (scrollWholePanel) Modifier else Modifier.weight(1f).verticalScroll(rememberScrollState())),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                if (compactHeader && !civicControls) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                    ) {
-                        ClimateTemperature(stringResource(R.string.label_left), state.leftTemperature, state.fahrenheit)
-                        ClimateTemperature(stringResource(R.string.label_right), state.rightTemperature, state.fahrenheit)
-                    }
-                }
-                if (civicControls) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Row(Modifier.widthIn(max = 640.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         com.cabin.platform.TeyesTemperatureZone.entries.forEach { zone ->
                             Surface(Modifier.weight(1f), shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
                                 color = colors.surfaceContainerLow) {
                                 ClimateTemperatureControl(state, zone, onAdjustTemperature,
-                                    Modifier.padding(if (wideClimate) 12.dp else 8.dp),
-                                    fontSize = if (wideClimate) 48.sp else 34.sp, horizontal = wideClimate)
+                                    Modifier.padding(16.dp),
+                                    fontSize = if (wideClimate) 56.sp else 44.sp)
                             }
                         }
                     }
-                    ClimateSwitchControls(state, onSwitch)
                 }
+                if (civicControls) ClimateSwitchControls(state, onSwitch)
                 val extraControlsAvailable = com.cabin.platform.TeyesClimateSwitch.entries.any {
                     com.cabin.platform.TeyesClimateControlPolicy.canToggle(state, it)
                 } || com.cabin.platform.TeyesTemperatureZone.entries.any {
@@ -1081,23 +1065,6 @@ internal fun ClimatePanel(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun ClimateTemperature(
-    label: String,
-    raw: Int?,
-    fahrenheit: Boolean,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
-        Text(
-            formatClimateTemperature(raw, fahrenheit),
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold,
-        )
     }
 }
 

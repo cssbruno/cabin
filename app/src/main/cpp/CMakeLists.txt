@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
+project(cabin_carlink LANGUAGES CXX)
+add_library(cabin_carlink SHARED carlink_engine.cpp)
+target_compile_features(cabin_carlink PRIVATE cxx_std_17)
+target_compile_options(cabin_carlink PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(cabin_carlink PRIVATE dl)

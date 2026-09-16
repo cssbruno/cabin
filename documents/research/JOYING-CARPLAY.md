@@ -1,5 +1,9 @@
 # Joying built-in CarPlay inspection
 
+**Historical stock-client research.** The current implementation imports the
+engine into Cabin. See [app-owned Carlink](CARLINK-INDEPENDENT-ENGINE.md). The
+stock service and handoff descriptions below describe the earlier implementation.
+
 Inspected the local `artifacts/joying-uis7862` firmware reference (2023-08-31) on 2026-09-13. This identifies the software in that image; it does not establish the firmware installed on the live head unit.
 
 ## Confirmed in the image
@@ -78,3 +82,18 @@ results after reading the trailer. Local Binder tests cover success/refusal.
 Ordinary command status zero remains successful. This fixes a path that could
 wait for callbacks after registration was refused; it is not proof that the
 physical unit now streams video.
+
+
+### Carlink routing and naming (2026-09-16)
+
+The connection is labeled **Carlink** in all six UI locales and in session status
+messages. Backend discovery probes the native `CarplayServer` Binder or the
+installed `/system/bin/CarplayService` and `/system/bin/cps.sh` runtime files.
+It no longer queries or requires the stock Android launcher activity. Settings
+and Connect target Cabin-owned code; the stock-app settings redirect is removed.
+If another client owns the video socket, the existing privileged release path
+can stop that client. Denied ownership is reported inside Cabin.
+
+This is an embedded Android client implementation, not a replacement native
+CarPlay engine. The firmware daemon and its library dependencies described above
+are still required. Removing the stock APK's engine libraries is not supported.

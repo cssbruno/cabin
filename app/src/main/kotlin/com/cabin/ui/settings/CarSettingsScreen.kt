@@ -39,6 +39,7 @@ internal fun CarSettingsScreen(
         Text(stringResource(R.string.car_settings_detail), color = MaterialTheme.colorScheme.onSurfaceVariant)
         SettingsNotice(stringResource(if (vehicle.connected) R.string.car_settings_connected else R.string.car_settings_disconnected))
         key(profile) {
+            NativeCarSettings(vehicle, moving, actions, guarded)
             @Composable fun factoryGroup(group: SyuFactoryGroup) {
                 SyuFactoryControl.entries.filter { it.group == group && it in supported }.forEach { control ->
                     val current = data.factoryControls[control]?.takeIf { vehicle.connected && it in 0..control.maximum }
@@ -151,4 +152,62 @@ private fun CarSettingPicker(
             }
         }
     }
+}
+
+/** The native decoder already supplies the profile-specific labels, choices and fresh feedback. */
+@Composable
+private fun NativeCarSettings(
+    vehicle: TeyesClimateState,
+    moving: Boolean,
+    actions: ClimateWidgetActions,
+    guarded: (() -> Unit) -> Unit,
+) {
+    val latestVehicle by rememberUpdatedState(vehicle)
+    val latestActions by rememberUpdatedState(actions)
+    val profile = vehicle.profileId
+    var selected by remember { mutableStateOf<FytSyuReading?>(null) }
+    var showAll by remember { mutableStateOf(false) }
+    val rows = vehicle.fytSyuReadings.filter { it.options.isNotEmpty() }
+    rows.forEach { row ->
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(row.label ?: "CAN ${row.viewId}", style = MaterialTheme.typography.titleMedium)
+            OutlinedButton(onClick = { selected = row },
+                enabled = vehicle.connected && !moving && actions.onSyuVehicleOption != null,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                Text(row.text ?: stringResource(if (row.checked == true) R.string.vehicle_syu_checked else R.string.vehicle_syu_unchecked))
+            }
+        }
+    }
+    selected?.let { setting ->
+        val current = rows.firstOrNull { it.screen == setting.screen && it.viewId == setting.viewId }
+        AlertDialog(onDismissRequest = { selected = null },
+            title = { Text(setting.label ?: "CAN ${setting.viewId}") },
+            text = {
+                Column(Modifier.heightIn(max = 320.dp).verticalScroll(rememberScrollState())) {
+                    current?.options?.forEach { (value, label) ->
+                        TextButton(enabled = vehicle.connected && !moving, onClick = {
+                            selected = null
+                            guarded {
+                                val fresh = latestVehicle.fytSyuReadings.firstOrNull {
+                                    it.screen == setting.screen && it.viewId == setting.viewId
+                                }
+                                if (latestVehicle.profileId == profile && fresh?.options?.containsKey(value) == true)
+                                    latestActions.onSyuVehicleOption?.invoke(profile, setting.viewId, value)
+                            }
+                        }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(label) }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { selected = null }) { Text(stringResource(R.string.action_close)) } })
+    }
+    if (vehicle.fytChoices.isNotEmpty() || vehicle.fytActions.isNotEmpty()) {
+        OutlinedButton(onClick = { showAll = true }, modifier = Modifier.heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.vehicle_syu_readings))
+        }
+    }
+    if (showAll) SyuReadingsDialog(vehicle,
+        onSetOption = { id, field, value -> guarded { latestActions.onSyuVehicleOption?.invoke(id, field, value) } },
+        onAction = { id, action -> guarded { latestActions.onSyuAction?.invoke(id, action) } },
+        onChoice = { id, choice, value -> guarded { latestActions.onSyuChoice?.invoke(id, choice, value) } },
+        onClose = { showAll = false })
 }

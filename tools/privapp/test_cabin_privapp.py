@@ -7,11 +7,12 @@ import subprocess
 import unittest
 from unittest.mock import patch
 import zipfile
+import xml.etree.ElementTree as ET
 import cabin_privapp as installer
 
 
 class InstallerTest(unittest.TestCase):
-    def test_archive_contains_only_cabin_and_widget_allowlist(self):
+    def test_archive_contains_cabin_and_exact_widget_and_carlink_permissions(self):
         with tempfile.TemporaryDirectory() as folder:
             apk = Path(folder) / 'signed.apk'
             apk.write_bytes(b'fixture')
@@ -21,9 +22,35 @@ class InstallerTest(unittest.TestCase):
                 self.assertEqual(set(archive.namelist()), {'module.prop', 'customize.sh',
                     'system/priv-app/Cabin/Cabin.apk', 'system/etc/permissions/privapp-permissions-cabin.xml'})
                 self.assertEqual(archive.read('system/priv-app/Cabin/Cabin.apk'), b'fixture')
-                self.assertEqual(archive.read('system/etc/permissions/privapp-permissions-cabin.xml').count(b'<permission name='), 1)
+                root = ET.fromstring(archive.read('system/etc/permissions/privapp-permissions-cabin.xml'))
+                allowlist = root.find('privapp-permissions')
+                self.assertEqual(allowlist.attrib['package'], 'zeno.carlink')
+                self.assertEqual({item.attrib['name'] for item in allowlist}, {
+                    'android.permission.BIND_APPWIDGET',
+                    'android.permission.LOCAL_MAC_ADDRESS', 'android.permission.TETHER_PRIVILEGED',
+                    'android.permission.OVERRIDE_WIFI_CONFIG', 'android.permission.INSTALL_PACKAGES'})
+                manifest = ET.parse(Path(__file__).resolve().parents[2] / 'app/src/main/AndroidManifest.xml')
+                declared = {item.attrib['{http://schemas.android.com/apk/res/android}name']
+                            for item in manifest.findall('uses-permission')}
+                self.assertTrue({item.attrib['name'] for item in allowlist} <= declared)
             with self.assertRaises(FileExistsError):
                 installer.package(apk, output, 1005)
+
+    def test_permission_audit_does_not_confuse_requests_with_grants(self):
+        dump = """requested permissions:
+          android.permission.FORCE_STOP_PACKAGES
+          android.permission.INTERNET
+        install permissions:
+          android.permission.INTERNET: granted=true
+          android.permission.LOCAL_MAC_ADDRESS: granted=false
+        """
+        report = installer.permission_report(dump)
+        self.assertIn('FORCE_STOP_PACKAGES: not reported', report)
+        self.assertIn('INTERNET: granted', report)
+        self.assertIn('LOCAL_MAC_ADDRESS: denied', report)
+        self.assertIn('BLUETOOTH_CONNECT: not reported', report)
+        self.assertIn('RECORD_AUDIO: mixed user states', installer.permission_report(
+            'android.permission.RECORD_AUDIO: granted=true\nandroid.permission.RECORD_AUDIO: granted=false'))
 
     def test_module_setup_requires_exact_installed_apk(self):
         with tempfile.TemporaryDirectory() as folder:

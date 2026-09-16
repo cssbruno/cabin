@@ -41,7 +41,7 @@ internal object JoyingVideoConnection {
         } catch (error: InterruptedException) {
             throw error
         } catch (error: Exception) {
-            throw ConnectionException(Failure.HANDOFF_BLOCKED, "The CarPlay video connection is occupied. This firmware does not allow Cabin to release it. Cabin firmware integration is required.", error)
+            throw ConnectionException(Failure.HANDOFF_BLOCKED, "Carlink cannot acquire the video connection. Firmware integration must release the existing client and grant Cabin access.", error)
         }
         // Allow up to two seconds for the stopped process to release its descriptors.
         repeat(10) {
@@ -56,9 +56,9 @@ internal object JoyingVideoConnection {
     }
 
     private fun failure(error: IOException) = ConnectionException(classify(error), when (classify(error)) {
-        Failure.BUSY -> "The CarPlay video connection is still in use. Try Use Cabin for CarPlay in Settings → CarPlay. If this continues, the firmware integration needs attention."
-        Failure.DENIED -> "Joying firmware denied Cabin access to CarPlay video. This requires firmware-provided access; Retry cannot grant it."
-        Failure.HANDOFF_BLOCKED -> "Joying did not allow the stock video connection to be released."
-        Failure.OTHER -> "Joying video connection failed: ${error.message ?: error.javaClass.simpleName}"
+        Failure.BUSY -> "The Carlink video connection is still in use. Firmware integration must release the existing client."
+        Failure.DENIED -> "Carlink firmware denied Cabin access to CarPlay video. This requires firmware-provided access; Retry cannot grant it."
+        Failure.HANDOFF_BLOCKED -> "Carlink did not allow the stock video connection to be released."
+        Failure.OTHER -> "Carlink video connection failed: ${error.message ?: error.javaClass.simpleName}"
     }, error)
 }

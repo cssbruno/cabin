@@ -18,21 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.cabin.R
 import com.cabin.joying.JoyingCarPlayService
-import com.cabin.joying.JoyingServiceHandoff
 import com.cabin.ui.JoyingPhonePicker
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /** Configuration stays in Cabin; merely opening settings must not start projection. */
 @Composable
 internal fun NativeCarPlaySettings() {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     var service by remember { mutableStateOf<JoyingCarPlayService?>(null) }
     var status by remember { mutableStateOf("") }
     var running by remember { mutableStateOf(false) }
-    var preparing by remember { mutableStateOf(false) }
     var showPhones by remember { mutableStateOf(false) }
     fun retry() {
         runCatching {
@@ -64,26 +58,16 @@ internal fun NativeCarPlaySettings() {
         Text(stringResource(R.string.carplay_backend_native), style = MaterialTheme.typography.headlineSmall)
         if (status.isNotEmpty()) Text(status)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(enabled = !preparing, onClick = { retry() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            Button(onClick = { retry() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_retry))
             }
-            OutlinedButton(enabled = service != null && !preparing, onClick = { service?.stopProjection() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = service != null, onClick = { service?.stopProjection() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_disconnect))
             }
-            OutlinedButton(enabled = service != null && !preparing, onClick = {
-                service?.disconnect()
-                preparing = true
-                scope.launch {
-                    try {
-                        val result = withContext(Dispatchers.IO) { runCatching { JoyingServiceHandoff.prepare(context) } }
-                        result.onSuccess { retry() }.onFailure { status = it.cause?.message ?: it.message.orEmpty() }
-                    } finally { preparing = false }
-                }
-            }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.joying_takeover)) }
-            OutlinedButton(enabled = service != null && running && !preparing, onClick = { service?.enableWireless() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = service != null && running, onClick = { service?.enableWireless() }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_wireless))
             }
-            OutlinedButton(enabled = service != null && running && !preparing, onClick = { showPhones = true }, modifier = Modifier.heightIn(min = 56.dp)) {
+            OutlinedButton(enabled = service != null && running, onClick = { showPhones = true }, modifier = Modifier.heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.joying_phone))
             }
         }

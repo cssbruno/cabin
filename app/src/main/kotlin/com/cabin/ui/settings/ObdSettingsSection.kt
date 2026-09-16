@@ -167,7 +167,7 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAc
 }
 
 @Composable
-private fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, Int, Int) -> Unit)?, onAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)?, onChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)?, onClose: () -> Unit) {
+internal fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, Int, Int) -> Unit)?, onAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)?, onChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)?, onClose: () -> Unit) {
     val portuguese = LocalContext.current.resources.configuration.locales[0].language == "pt"
     var pendingChoice by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleChoice>?>(null) }
     pendingChoice?.let { (profile, choice) ->

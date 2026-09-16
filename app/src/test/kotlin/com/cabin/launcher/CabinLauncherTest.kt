@@ -142,7 +142,7 @@ class CabinLauncherTest {
         compose.onNodeWithText("23.0°C").assertIsDisplayed()
     }
 
-    @Test fun `other vehicle profiles have no temperature arrows`() {
+    @Test fun `unsupported vehicle profiles keep temperature arrows disabled`() {
         compose.setContent {
             CabinTheme {
                 Box(Modifier.width(480.dp).height(560.dp)) {
@@ -150,8 +150,8 @@ class CabinLauncherTest {
                 }
             }
         }
-        compose.onNodeWithContentDescription("Increase Driver temperature").assertDoesNotExist()
-        compose.onNodeWithContentDescription("Decrease Passenger temperature").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Increase Driver temperature").assertIsDisplayed().assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Decrease Passenger temperature").assertIsDisplayed().assertIsNotEnabled()
     }
 
     @Test fun `launcher opens projection and app drawer without starting a session`() {

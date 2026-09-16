@@ -97,19 +97,24 @@ internal fun SyuAirWidget(state: SyuAirState, onAction: ((String) -> Unit)?, onO
 
 @Composable
 private fun SyuTemperatureRow(state: SyuAirState, onAction: ((String) -> Unit)?) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        listOf("LEFT" to R.string.widget_driver, "RIGHT" to R.string.widget_passenger).forEach { (side, labelId) ->
-            val label = stringResource(labelId)
-            Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                val up = "C_AIR_TEMP_${side}_ADD"
-                val down = "C_AIR_TEMP_${side}_SUB"
-                IconButton({ onAction?.invoke(up) }, enabled = onAction != null && state.canSend(up), modifier = Modifier.size(56.dp)) {
-                    Icon(Icons.Default.KeyboardArrowUp, stringResource(R.string.climate_temperature_increase, label))
-                }
-                Text(state.temperatureText("U_AIR_TEMP_$side"), fontSize = 32.sp, maxLines = 1)
-                Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1)
-                IconButton({ onAction?.invoke(down) }, enabled = onAction != null && state.canSend(down), modifier = Modifier.size(56.dp)) {
-                    Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.climate_temperature_decrease, label))
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Row(Modifier.widthIn(max = 640.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            listOf("LEFT" to R.string.widget_driver, "RIGHT" to R.string.widget_passenger).forEach { (side, labelId) ->
+                val label = stringResource(labelId)
+                Surface(Modifier.weight(1f), shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                    Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        val up = "C_AIR_TEMP_${side}_ADD"
+                        val down = "C_AIR_TEMP_${side}_SUB"
+                        FilledTonalIconButton({ onAction?.invoke(up) }, enabled = onAction != null && state.canSend(up), modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.KeyboardArrowUp, stringResource(R.string.climate_temperature_increase, label))
+                        }
+                        Text(state.temperatureText("U_AIR_TEMP_$side"), fontSize = 44.sp, maxLines = 1)
+                        Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1)
+                        FilledTonalIconButton({ onAction?.invoke(down) }, enabled = onAction != null && state.canSend(down), modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.climate_temperature_decrease, label))
+                        }
+                    }
                 }
             }
         }

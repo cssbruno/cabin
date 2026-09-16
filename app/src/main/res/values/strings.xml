@@ -27,7 +27,7 @@
     <string name="vehicle_decoder_automatic">Data format selected automatically from recognized firmware.</string>
     <string name="vehicle_decoder_unknown">Unknown data format</string>
     <string name="carplay_backend_dongle">CCPA dongle</string>
-    <string name="carplay_backend_native">Joying native</string>
+    <string name="carplay_backend_native">Carlink</string>
     <string name="carplay_backend_open">Open CarPlay</string>
     <string name="carplay_backend_switch_failed">Could not switch connection. Retry.</string>
     <string name="carplay_backend_none">No CarPlay connection detected</string>

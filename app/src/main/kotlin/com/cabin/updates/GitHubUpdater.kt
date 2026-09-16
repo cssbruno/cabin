@@ -1,5 +1,7 @@
 package com.cabin.updates
 
+import android.app.PendingIntent
+import android.content.pm.PackageInstaller
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,7 +21,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 
-internal enum class UpdatePhase { IDLE, CHECKING, CURRENT, AVAILABLE, DOWNLOADING, READY, FAILED }
+internal enum class UpdatePhase { IDLE, CHECKING, CURRENT, AVAILABLE, DOWNLOADING, READY, INSTALLING, FAILED }
 internal data class UpdateStatus(val phase: UpdatePhase = UpdatePhase.IDLE, val release: UpdateRelease? = null, val progress: Int = 0, val errorRes: Int? = null)
 internal class GitHubUpdater private constructor(private val context: Context) {
     private val prefs = context.getSharedPreferences("github_updates_v2", Context.MODE_PRIVATE)
@@ -27,13 +29,14 @@ internal class GitHubUpdater private constructor(private val context: Context) {
     private val readyFile get() = File(context.filesDir, "updates/update.apk")
     private val installed get() = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName, 0))
     private val cached = cachedRelease(prefs.getString("release", null))?.takeIf { it.versionCode > installed }
-    private val mutable = MutableStateFlow(UpdateStatus(if (cached == null) UpdatePhase.IDLE else if (readyFile.exists()) UpdatePhase.READY else UpdatePhase.AVAILABLE, cached))
+    private val mutable = MutableStateFlow(UpdateStatus(if (cached == null) UpdatePhase.IDLE else if (hasPendingInstall()) UpdatePhase.INSTALLING else if (readyFile.exists()) UpdatePhase.READY else UpdatePhase.AVAILABLE, cached))
     val state = mutable.asStateFlow()
     val automatic get() = prefs.getBoolean("automatic", true)
     val lastCheck get() = prefs.getLong("last_check", 0)
     fun setAutomatic(enabled: Boolean) { prefs.edit().putBoolean("automatic", enabled).apply(); UpdateJobService.schedule(context) }
 
     suspend fun check() = withContext(Dispatchers.IO) { lock.withLock {
+        if (mutable.value.phase == UpdatePhase.INSTALLING) return@withLock
         val old = mutable.value
         mutable.value = old.copy(phase = UpdatePhase.CHECKING, errorRes = null)
         try {
@@ -65,6 +68,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
     } }
 
     suspend fun download() = withContext(Dispatchers.IO) { lock.withLock {
+        if (mutable.value.phase == UpdatePhase.INSTALLING) return@withLock
         val release = mutable.value.release ?: return@withLock
         val partial = File(context.filesDir, "updates/download.tmp")
         try {
@@ -110,7 +114,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
         val candidate = context.packageManager.getPackageArchiveInfo(file.absolutePath, flags) ?: throw UpdateException(R.string.update_error_apk)
         validateUpdatePackage(current, candidate, release, context.packageName, Build.VERSION.SDK_INT)
     }
-    suspend fun installIntent(): Intent = withContext(Dispatchers.IO) { lock.withLock {
+    private suspend fun verifyReady() {
         val release = mutable.value.release ?: error("No update")
         requireUpdate(readyFile.length() == release.size, R.string.update_error_integrity)
         val digest = MessageDigest.getInstance("SHA-256")
@@ -120,10 +124,88 @@ internal class GitHubUpdater private constructor(private val context: Context) {
         }
         requireUpdate(digest.digest().hex() == release.sha256, R.string.update_error_integrity)
         validateApk(readyFile, release)
+    }
+    val canInstallSilently get() = context.checkSelfPermission("android.permission.INSTALL_PACKAGES") == PackageManager.PERMISSION_GRANTED &&
+        !prefs.getBoolean("install_confirmation_required", false)
+
+    private fun hasPendingInstall(): Boolean {
+        val id = prefs.getInt("install_session", -1)
+        if (id < 0) return false
+        val installer = context.packageManager.packageInstaller
+        val session = installer.getSessionInfo(id)
+        if (session?.isSealed == true) return true
+        if (session != null) runCatching { installer.abandonSession(id) }
+        prefs.edit().remove("install_session").commit()
+        return false
+    }
+
+    suspend fun installIntent(): Intent = withContext(Dispatchers.IO) { lock.withLock {
+        verifyReady()
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.updates", readyFile)
         Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive")
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
     } }
+
+    /** User-triggered, verified self-update. Never accepts an external APK or package name. */
+    suspend fun installSilently() = withContext(Dispatchers.IO) { lock.withLock {
+        check(canInstallSilently) { "Privileged installation unavailable" }
+        check(!hasPendingInstall()) { "An update is already installing" }
+        verifyReady()
+        val installer = context.packageManager.packageInstaller
+        val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
+            setAppPackageName(context.packageName)
+            setSize(readyFile.length())
+            if (Build.VERSION.SDK_INT >= 31) setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
+        }
+        val id = installer.createSession(params)
+        var committed = false
+        try {
+            installer.openSession(id).use { session ->
+                session.openWrite("base.apk", 0, readyFile.length()).use { output ->
+                    readyFile.inputStream().use { input ->
+                        val buffer = ByteArray(64 * 1024)
+                        while (true) {
+                            currentCoroutineContext().ensureActive()
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            output.write(buffer, 0, count)
+                        }
+                    }
+                    session.fsync(output)
+                }
+                val callback = Intent(context, UpdateInstallReceiver::class.java)
+                    .setAction(UpdateInstallReceiver.ACTION)
+                    .setData(android.net.Uri.parse("cabin-update://session/$id"))
+                val flags = PendingIntent.FLAG_UPDATE_CURRENT or
+                    (if (Build.VERSION.SDK_INT >= 31) PendingIntent.FLAG_MUTABLE else 0)
+                val sender = PendingIntent.getBroadcast(context, id, callback, flags).intentSender
+                check(prefs.edit().putInt("install_session", id).commit())
+                mutable.value = mutable.value.copy(phase = UpdatePhase.INSTALLING, errorRes = null)
+                session.commit(sender)
+                committed = true
+            }
+        } finally {
+            if (!committed) {
+                runCatching { installer.abandonSession(id) }
+                prefs.edit().remove("install_session").commit()
+                mutable.value = mutable.value.copy(phase = UpdatePhase.READY, errorRes = R.string.update_install_failed)
+            }
+        }
+    } }
+
+    internal fun installResult(id: Int, result: Int) {
+        if (id < 0 || prefs.getInt("install_session", -1) != id) return
+        if (result == PackageInstaller.STATUS_PENDING_USER_ACTION) {
+            // The firmware still requires consent. Offer the existing Android installer on the next tap.
+            runCatching { context.packageManager.packageInstaller.abandonSession(id) }
+            prefs.edit().remove("install_session").putBoolean("install_confirmation_required", true).commit()
+            mutable.value = mutable.value.copy(phase = UpdatePhase.READY, errorRes = R.string.update_install_confirmation)
+        } else {
+            prefs.edit().remove("install_session").commit()
+            mutable.value = if (result == PackageInstaller.STATUS_SUCCESS) UpdateStatus(UpdatePhase.CURRENT)
+                else mutable.value.copy(phase = UpdatePhase.READY, errorRes = R.string.update_install_failed)
+        }
+    }
     companion object {
         @Volatile private var instance: GitHubUpdater? = null
         fun get(context: Context): GitHubUpdater = instance ?: synchronized(this) {

@@ -24,7 +24,7 @@ internal fun JoyingCarPlayScreen(onOpenLauncher: (() -> Unit)? = null, onOpenSet
     val context = LocalContext.current
     var sessionHandle by remember { mutableStateOf<JoyingCarPlayService?>(null) }
     var active by remember { mutableStateOf(false) }
-    var status by remember { mutableStateOf("Connecting to Joying’s native CarPlay service…") }
+    var status by remember { mutableStateOf("Connecting to Carlink service…") }
     var ratio by remember { mutableFloatStateOf(1280f / 720f) }
     fun retry() {
         runCatching { ContextCompat.startForegroundService(context,

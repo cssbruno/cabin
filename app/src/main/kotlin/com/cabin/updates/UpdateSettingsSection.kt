@@ -25,7 +25,7 @@ internal fun UpdateSettingsSection() {
     var installError by remember { mutableStateOf<Int?>(null) }
     var permissionNeeded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val busy = status.phase in setOf(UpdatePhase.CHECKING, UpdatePhase.DOWNLOADING) || action?.isActive == true
+    val busy = status.phase in setOf(UpdatePhase.CHECKING, UpdatePhase.DOWNLOADING, UpdatePhase.INSTALLING) || action?.isActive == true
     OutlinedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.update_title), style = MaterialTheme.typography.titleLarge)
@@ -41,6 +41,7 @@ internal fun UpdateSettingsSection() {
                 UpdatePhase.AVAILABLE -> R.string.update_available
                 UpdatePhase.DOWNLOADING -> R.string.update_downloading
                 UpdatePhase.READY -> R.string.update_ready
+                UpdatePhase.INSTALLING -> R.string.update_installing
                 UpdatePhase.FAILED -> R.string.update_failed
             }
             Text(stringResource(status.errorRes ?: label))
@@ -62,7 +63,11 @@ internal fun UpdateSettingsSection() {
                     installError = null
                     action = scope.launch {
                         try {
-                            if (!context.packageManager.canRequestPackageInstalls()) {
+                            if (updater.canInstallSilently) {
+                                permissionNeeded = false
+                                updater.installSilently()
+                            } else if (context.checkSelfPermission("android.permission.INSTALL_PACKAGES") != android.content.pm.PackageManager.PERMISSION_GRANTED &&
+                                !context.packageManager.canRequestPackageInstalls()) {
                                 permissionNeeded = true
                                 context.startActivity(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}")))
                             } else {

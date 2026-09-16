@@ -37,7 +37,7 @@ internal fun ClimateTemperatureControl(
     val code = if (driver) 25 else 31
     val known = state.connected && state.health == TeyesTelemetryHealth.LIVE && code in state.availableCodes && 33 in state.availableCodes
     val raw = (if (driver) state.leftTemperature else state.rightTemperature).takeIf { known }
-    val arrows = showArrows && TeyesClimateControlPolicy.supportsTemperature(state.profileId)
+    val arrows = showArrows
     val unavailable = stringResource(R.string.climate_temperature_unavailable)
     @Composable fun Arrow(up: Boolean) {
         val enabled = onAdjust != null && TeyesClimateControlPolicy.canAdjustTemperature(state, zone, up)

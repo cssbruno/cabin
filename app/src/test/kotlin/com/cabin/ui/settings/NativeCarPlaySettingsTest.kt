@@ -25,8 +25,9 @@ class NativeCarPlaySettingsTest {
         compose.setContent { CabinTheme { NativeCarPlaySettings() } }
         compose.onNodeWithText("Enable wireless").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("Connect phone").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Use Cabin for CarPlay").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Stock Car Link settings").assertDoesNotExist()
+        compose.onNodeWithText("Use Cabin for CarPlay").assertDoesNotExist()
+        compose.onNodeWithText("Carlink").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Open Car Link settings").assertDoesNotExist()
         compose.onNodeWithText("Restore stock service").assertDoesNotExist()
         val app = shadowOf(compose.activity.application)
         assertNull(app.nextStartedActivity)

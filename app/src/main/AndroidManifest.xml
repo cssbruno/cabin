@@ -11,12 +11,13 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.NETWORK_STACK" />
     <uses-permission android:name="android.permission.TETHER_PRIVILEGED" />
+    <uses-permission android:name="android.permission.OVERRIDE_WIFI_CONFIG" />
     <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
-    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BIND_APPWIDGET" tools:ignore="ProtectedPermissions" />
@@ -94,7 +95,6 @@
             <category android:name="android.intent.category.HOME" />
         </intent>
         <package android:name="com.syu.ms" />
-        <package android:name="com.syu.carlink" />
     </queries>
 
     <application
@@ -110,7 +110,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CabinNative"
         tools:targetApi="35">
+        <receiver android:name=".updates.UpdateInstallReceiver" android:exported="false" />
         <meta-data android:name="io.sentry.auto-init" android:value="false" />
+        <service android:name=".carlink.CarlinkEngineService"
+            android:process=":carlink" android:exported="false" />
         <service android:name="com.cabin.platform.CabinMediaListener"
             android:exported="true" android:label="@string/tools_media_access"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">

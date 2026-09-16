@@ -15,8 +15,32 @@ MODULE = 'cabin_privapp'
 PERMISSIONS = '''<?xml version="1.0" encoding="utf-8"?>
 <permissions><privapp-permissions package="zeno.carlink">
     <permission name="android.permission.BIND_APPWIDGET" />
+    <permission name="android.permission.LOCAL_MAC_ADDRESS" />
+    <permission name="android.permission.TETHER_PRIVILEGED" />
+    <permission name="android.permission.OVERRIDE_WIFI_CONFIG" />
+    <permission name="android.permission.INSTALL_PACKAGES" />
 </privapp-permissions></permissions>
 '''
+# Read-only, local output. Never uploaded to telemetry.
+AUDIT_PERMISSIONS = (
+    'BIND_APPWIDGET', 'FORCE_STOP_PACKAGES', 'LOCAL_MAC_ADDRESS', 'TETHER_PRIVILEGED',
+    'OVERRIDE_WIFI_CONFIG', 'NETWORK_STACK', 'INTERNET', 'ACCESS_NETWORK_STATE',
+    'ACCESS_WIFI_STATE', 'CHANGE_WIFI_STATE', 'RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS',
+    'BLUETOOTH', 'BLUETOOTH_ADMIN', 'BLUETOOTH_CONNECT', 'BLUETOOTH_SCAN',
+    'ACCESS_FINE_LOCATION', 'POST_NOTIFICATIONS', 'INSTALL_PACKAGES',
+)
+
+
+def permission_report(dump):
+    result = []
+    for name in AUDIT_PERMISSIONS:
+        states = re.findall(r'android\.permission\.' + name + r':\s*granted=(true|false)\b', dump)
+        # Preserve mixed user/runtime states rather than declaring the whole device granted.
+        state = 'not reported' if not states else 'mixed user states' if len(set(states)) > 1 else 'granted' if states[0] == 'true' else 'denied'
+        result.append(name + ': ' + state)
+    return result
+
+
 CUSTOMIZE = '''[ "$BOOTMODE" = true ] || abort "Install from running Android, not recovery."
 [ "$API" -ge 27 ] || abort "Cabin requires Android 8.1 or newer."
 installed=$(pm path zeno.carlink | sed -n 's/^package://p' | head -n 1)
@@ -80,8 +104,10 @@ def main():
     if args.action == 'status':
         dump = device('shell', 'dumpsys package zeno.carlink')
         for line in dump.splitlines():
-            if any(key in line for key in ['codePath=', 'pkgFlags=', 'privateFlags=', 'BIND_APPWIDGET:']):
+            if any(key in line for key in ['codePath=', 'pkgFlags=', 'privateFlags=']):
                 print(line.strip())
+        print('Local permission audit (not reported is not the same as denied):')
+        print('\n'.join(permission_report(dump)))
         return
     if args.action in ['install', 'disable']:
         if device('shell', "su -c 'id -u'").strip() != '0':

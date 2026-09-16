@@ -21,7 +21,12 @@ Targets:
   system/priv-app/Cabin/Cabin.apk
   system/etc/permissions/privapp-permissions-cabin.xml
 
-The permission allowlist grants only the existing BIND_APPWIDGET request.
+The permission allowlist includes BIND_APPWIDGET, LOCAL_MAC_ADDRESS,
+TETHER_PRIVILEGED, OVERRIDE_WIFI_CONFIG and INSTALL_PACKAGES. These cover widgets,
+local Bluetooth addressing, the Android 10 hotspot path and privileged self-updates.
+Carlink's engine libraries are inside Cabin; there is no stock-app handoff.
+An ordinary APK install does not apply this allowlist. Native library visibility,
+authentication hardware, audio and USB access still require firmware validation.
 It does not grant root, manufacturer signing keys, arbitrary CAN access,
 or unrestricted environment editing. No FYT updater binaries or auto-flash hooks
 are included.

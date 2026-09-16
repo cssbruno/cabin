@@ -147,3 +147,6 @@
 -keep,allowshrinking class com.cabin.logging.** { *; }
 -keep,allowshrinking class com.cabin.telemetry.** { *; }
 -keep,allowshrinking class com.cabin.reports.DebugJournal { *; }
+
+# JNI entry point used by the imported Carlink engine bridge.
+-keep class com.cabin.carlink.CarlinkNative { *; }

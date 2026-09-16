@@ -7,11 +7,12 @@ import java.util.ArrayDeque;
 /** Bounded, app-owned diagnostics only; no system logcat, phone identities or credentials. */
 public final class DebugJournal {
     private static final ArrayDeque<JSONObject> events = new ArrayDeque<>();
-    private static volatile Runnable observer;
-    public static void setObserver(Runnable value) { observer = value; }
+    public interface Observer { void onEvent(String area, String event, String detail); }
+    private static volatile Observer observer;
+    public static void setObserver(Observer value) { observer = value; }
     public static synchronized void record(String area, String event, String detail) {
-        Runnable current = observer;
-        if (current != null) { try { current.run(); } catch (RuntimeException ignored) { } }
+        Observer current = observer;
+        if (current != null) { try { current.onEvent(area, event, detail); } catch (RuntimeException ignored) { } }
         try {
             events.addLast(new JSONObject().put("elapsedMs", SystemClock.elapsedRealtime())
                 .put("area", area).put("event", event).put("detail", detail == null ? "" : detail.substring(0, Math.min(1000, detail.length()))));

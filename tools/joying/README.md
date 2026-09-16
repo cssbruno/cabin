@@ -1,8 +1,14 @@
-# Joying native CarPlay handoff
+# Legacy firmware CarPlay handoff
+
+**For earlier Cabin builds only.** Cabin 0.1.7 imports its own Carlink engine and
+uses a separate video socket. Do not use this handoff procedure for the current
+engine. See [current integration](../../documents/research/CARLINK-INDEPENDENT-ENGINE.md).
 
 Cabin implements a direct client of the licensed CarPlay engine already installed in the inspected Joying firmware. It does not bundle the vendor engine or launch the stock UI.
 
-The stock Car Link service must relinquish the abstract video socket. When the socket is busy, Cabin automatically requests that the stock client stop and retries for up to two seconds. It uses `FORCE_STOP_PACKAGES` if already granted, otherwise an explicit `stopService` request to the exported Car Link service. The **Use Cabin for CarPlay** button uses the same release path. A bound or restarted stock service may retain the socket, in which case the ADB handoff below is still needed. After an unsuccessful handoff, known socket conflicts and access denials wait for manual Retry rather than repeating the full session automatically. Sentry retains only a fixed `joying_video_failure` code (`BUSY`, `DENIED`, `HANDOFF_BLOCKED`, or `OTHER`), not vendor error text. Access-denied errors do not trigger handoff; full exception details are logged under `JoyingCarPlay`.
+The stock Car Link process must relinquish the abstract video socket. When the socket is busy, Cabin uses `FORCE_STOP_PACKAGES` only if already granted. Otherwise it directs the user to Android app settings for a manual force stop. `stopService` is insufficient: the inspected stock process retains its socket thread. A force stop is not proof of recovery; a restarted or different client may still own the socket. Known conflicts wait for manual Retry. Access-denied errors do not trigger handoff.
+
+The ADB tool reports the exact video socket and stock process before acting. After `prepare`, it waits up to five seconds for the socket to disappear and checks that the native daemon is still registered. If either check fails, it reports an incomplete handoff instead of success. These checks do not prove Cabin has Binder access or that video frames will arrive.
 
 A normal sideload may not hold `FORCE_STOP_PACKAGES`, native Binder access, `LOCAL_MAC_ADDRESS`, or tethering permissions; manifest declarations alone do not grant those permissions. No permission bypass or SELinux changes are performed. Automatic recovery is covered by local tests but still needs validation on a physical Joying unit.
 

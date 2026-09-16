@@ -1,0 +1,174 @@
+{
+  "abi": "arm64-v8a",
+  "androidApi": 29,
+  "libraries": [
+    {
+      "name": "libcps_7862.so",
+      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libcps_7862.so",
+      "sha256": "5d96348c6629cc5330b1b57cb510fafe6ee1a861069decba07426e4ed78c22d8",
+      "patches": [],
+      "needed": [
+        "libutils.so",
+        "libbinder.so",
+        "liblog.so",
+        "libusb.so",
+        "libaudioclient.so",
+        "libaudiomanager.so",
+        "libcutils.so",
+        "libcarplay_plugin_r14g.so",
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "5d96348c6629cc5330b1b57cb510fafe6ee1a861069decba07426e4ed78c22d8"
+    },
+    {
+      "name": "libcarplay_plugin_r14g.so",
+      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libcarplay_plugin_r14g.so",
+      "sha256": "63903a6f42a7bf606907acb3588563c40d55b922976c6619d488303bd4d4858e",
+      "patches": [
+        {
+          "from": "/proc/mysocket",
+          "to": "cabin.carlink",
+          "count": 1
+        },
+        {
+          "from": "/data/KeyChains/default.keychain",
+          "to": "KeyChains/default.keychain",
+          "count": 1
+        },
+        {
+          "from": "/data/KeyChains",
+          "to": "KeyChains",
+          "count": 1
+        }
+      ],
+      "needed": [
+        "libcrypto.so",
+        "libmdnssd-client.so",
+        "liblog.so",
+        "libaaudio_l.so",
+        "libutils.so",
+        "libopus.so",
+        "libblinkAEC.so",
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "87ecbe30a306a5462bf42f4be816d1979b2c2ba10abf138219fd8c4ac0173ab3"
+    },
+    {
+      "name": "libaaudio_l.so",
+      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libaaudio_l.so",
+      "sha256": "a211dff62999a6edd0c3e119585bcff0e231aad105fdd74eeffa0527710fd3bd",
+      "patches": [],
+      "needed": [
+        "libaudioclient.so",
+        "libaudioutils.so",
+        "liblog.so",
+        "libcutils.so",
+        "libutils.so",
+        "libbinder.so",
+        "libaudiomanager.so",
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "a211dff62999a6edd0c3e119585bcff0e231aad105fdd74eeffa0527710fd3bd"
+    },
+    {
+      "name": "libblinkAEC.so",
+      "source": "artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libblinkAEC.so",
+      "sha256": "6518af805ebdab9d96f7c3f38b8573845c03e63b7f7a59b2e236fee9e58350a8",
+      "patches": [],
+      "needed": [
+        "libtinyalsa.so",
+        "libcutils.so",
+        "liblog.so",
+        "libm.so",
+        "libstdc++.so",
+        "libc.so",
+        "libdl.so"
+      ],
+      "importedSha256": "6518af805ebdab9d96f7c3f38b8573845c03e63b7f7a59b2e236fee9e58350a8"
+    },
+    {
+      "name": "libusb.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libusb.so",
+      "sha256": "1550eea0cdaea47429883948e1c2b41f7eeb2a942fa13d6afc9d29d7e16c93ce",
+      "patches": [],
+      "needed": [
+        "liblog.so",
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "1550eea0cdaea47429883948e1c2b41f7eeb2a942fa13d6afc9d29d7e16c93ce"
+    },
+    {
+      "name": "libcrypto.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libcrypto.so",
+      "sha256": "f421c7742cba6e4f38ff3903096aecf426160db75166a9672d52a9023a119a90",
+      "patches": [],
+      "needed": [
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "f421c7742cba6e4f38ff3903096aecf426160db75166a9672d52a9023a119a90"
+    },
+    {
+      "name": "libmdnssd-client.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libmdnssd-client.so",
+      "sha256": "cf7b730ab619477d86072568cc8aa3ae57436f0cfcb6a7dd1b440f6d6bed7c20",
+      "patches": [],
+      "needed": [
+        "libcutils.so",
+        "liblog.so",
+        "libc++.so",
+        "libc.so"
+      ],
+      "importedSha256": "cf7b730ab619477d86072568cc8aa3ae57436f0cfcb6a7dd1b440f6d6bed7c20"
+    },
+    {
+      "name": "libopus.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libopus.so",
+      "sha256": "8191aa36b71cd5fae837290ad3a473bf4a59a18efc49cfd2e84cbb2feda99570",
+      "patches": [],
+      "needed": [
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "8191aa36b71cd5fae837290ad3a473bf4a59a18efc49cfd2e84cbb2feda99570"
+    },
+    {
+      "name": "libtinyalsa.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libtinyalsa.so",
+      "sha256": "601789e6782aee93e6bc6e528bb57b2cacabe53753f96f192a07faac17a36fa5",
+      "patches": [],
+      "needed": [
+        "libc++.so",
+        "libc.so",
+        "libm.so",
+        "libdl.so"
+      ],
+      "importedSha256": "601789e6782aee93e6bc6e528bb57b2cacabe53753f96f192a07faac17a36fa5"
+    },
+    {
+      "name": "libstdc++.so",
+      "source": "artifacts/joying-uis7862/extracted/system-files/system/lib64/libstdc++.so",
+      "sha256": "8deedf56ed0a11b694acf8971bfbe542cd5e12de3b62c723bc74ea363c7634c8",
+      "patches": [],
+      "needed": [
+        "libc.so"
+      ],
+      "importedSha256": "8deedf56ed0a11b694acf8971bfbe542cd5e12de3b62c723bc74ea363c7634c8"
+    }
+  ]
+}

@@ -64,6 +64,19 @@ class JoyingVideoConnectionTest {
         assertSame(denied, error.cause)
     }
 
+    @Test fun `manual force stop permits a new attempt without privileged handoff`() {
+        var occupied = true
+        var releaseAttempts = 0
+        val bind = { if (occupied) throw IOException("EADDRINUSE") else "socket" }
+        val release: () -> Unit = { releaseAttempts++; throw SecurityException("Not privileged") }
+        assertThrows(JoyingVideoConnection.ConnectionException::class.java) {
+            JoyingVideoConnection.open(bind, release, {})
+        }
+        occupied = false // User stops Car Link through Android app settings.
+        assertEquals("socket", JoyingVideoConnection.open(bind, release, {}))
+        assertEquals(1, releaseAttempts)
+    }
+
     @Test fun `interrupted handoff remains cancellation`() {
         assertThrows(InterruptedException::class.java) {
             JoyingVideoConnection.open({ throw IOException("EADDRINUSE") }, { throw InterruptedException() }, {})

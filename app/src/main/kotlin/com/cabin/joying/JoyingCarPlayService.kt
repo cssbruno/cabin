@@ -35,7 +35,7 @@ internal open class JoyingCarPlayService : Service() {
     override fun onCreate() {
         super.onCreate()
         getSystemService(NotificationManager::class.java).createNotificationChannel(
-            NotificationChannel(CHANNEL, "Joying CarPlay", NotificationManager.IMPORTANCE_LOW))
+            NotificationChannel(CHANNEL, "Carlink", NotificationManager.IMPORTANCE_LOW))
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == STOP) {
@@ -65,7 +65,7 @@ internal open class JoyingCarPlayService : Service() {
         CabinTelemetry.record(DiagnosticEvent.JOYING_START)
         disconnect()
         val current = generation
-        mutable.value = State(status = "Connecting to Joying’s native CarPlay service…", running = true)
+        mutable.value = State(status = "Connecting to Carlink service…", running = true)
         session = createSession(
             { message -> mutable.update { if (generation == current) it.copy(status = message) else it } },
             { width, height -> mutable.update { if (generation == current && height > 0) it.copy(ratio = width.toFloat() / height) else it } },

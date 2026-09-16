@@ -78,6 +78,34 @@ class CabinTelemetryTest {
         assertNull(CabinTelemetry.cleanLog(log))
     }
 
+    @Test fun `CarPlay journal keeps meaningful stages and bounded measurements`() {
+        val body = CabinTelemetry.journalBody("CarPlay", "first_frame_received", "bytes=4096")!!
+        assertEquals("Cabin diagnostic CarPlay/first_frame_received bytes=4096", body)
+        val log = io.sentry.SentryLogEvent(SentryId(), 1.0, body, io.sentry.SentryLogLevel.DEBUG)
+        assertEquals(body, CabinTelemetry.cleanLog(log)!!.body)
+        val crumb = Breadcrumb().apply { category = "cabin.diagnostic"; message = body; setData("phone", "private") }
+        val clean = CabinTelemetry.sanitize(SentryEvent().apply { breadcrumbs = listOf(crumb) }).breadcrumbs!!.single()
+        assertEquals(body, clean.message)
+        assertTrue(clean.data.isEmpty())
+        assertEquals("Cabin diagnostic CarPlay/connection_failed",
+            CabinTelemetry.journalBody("CarPlay", "connection_failed", "private phone and SSID"))
+        assertEquals("Cabin diagnostic CarPlay/link_state state=2",
+            CabinTelemetry.journalBody("CarPlay", "link_state", "state=2"))
+    }
+
+    @Test fun `journal rejects unknown events and does not leak arbitrary diagnostic details`() {
+        assertNull(CabinTelemetry.journalBody("CAN", "callback", "field=1; value=42"))
+        assertNull(CabinTelemetry.journalBody("phone", "connected", "private"))
+        assertEquals("Cabin diagnostic CarPlay/link_state",
+            CabinTelemetry.journalBody("CarPlay", "link_state", "state=2 private"))
+        val log = io.sentry.SentryLogEvent(SentryId(), 1.0,
+            "Cabin diagnostic CarPlay/link_state state=2 private", io.sentry.SentryLogLevel.DEBUG)
+        assertNull(CabinTelemetry.cleanLog(log))
+        assertNull(CabinTelemetry.cleanBreadcrumb(Breadcrumb().apply {
+            category = "cabin.diagnostic"; message = "Cabin diagnostic CarPlay/private"
+        }))
+    }
+
     @Test fun `native addresses build IDs and crashed threads survive without private fields`() {
         val nativeFrame = SentryStackFrame().apply { instructionAddr = "0x1234"; imageAddr = "0x1000"; vars = mapOf("secret" to "value") }
         val event = SentryEvent().apply {

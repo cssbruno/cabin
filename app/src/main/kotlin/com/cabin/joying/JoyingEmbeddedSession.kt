@@ -62,7 +62,7 @@ internal class JoyingEmbeddedSession(
     private var ownsSession = false
     private var listenerRegistered = false
     private var lastLinkState: Int? = null // Owned by controls executor.
-    private val death = IBinder.DeathRecipient { fail("Joying native service stopped.") }
+    private val death = IBinder.DeathRecipient { fail("Carlink native service stopped.") }
     private val audio = JoyingAudioFocus(context) { play -> dispatch { command(216, intArrayOf(if (play) 1 else 0)) } }
     private val wireless = JoyingWireless(context, ::dispatch, ::command,
         { state -> binder?.let { JoyingNativeProtocol.bluetoothState(it, state) } },
@@ -74,6 +74,7 @@ internal class JoyingEmbeddedSession(
     private var server: LocalServerSocket? = null
     private var socket: LocalSocket? = null
     private var binder: IBinder? = null
+    private var engineConnection: com.cabin.carlink.CarlinkEngineConnection? = null
     private val pointerIds = intArrayOf(-1, -1)
     private val touches = IntArray(6)
     private val display = JoyingDisplayConfiguration.fromDisplay(width, height)
@@ -92,11 +93,11 @@ internal class JoyingEmbeddedSession(
     private fun dispatch(work: () -> Unit) {
         if (closed.get()) return
         runCatching { controls.execute {
-            if (!closed.get()) try { work() } catch (e: Exception) { com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e); onStatus(e.cause?.message ?: e.message ?: "Joying control failed") }
+            if (!closed.get()) try { work() } catch (e: Exception) { com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e); onStatus(e.cause?.message ?: e.message ?: "Carlink control failed") }
         } }
     }
     private fun command(code: Int, ints: IntArray = intArrayOf(), strings: List<String> = emptyList()) {
-        JoyingNativeProtocol.command(checkNotNull(binder) { "Joying session is not ready" }, code, ints, strings)
+        JoyingNativeProtocol.command(checkNotNull(binder) { "Carlink session is not ready" }, code, ints, strings)
     }
     override fun connectPhone(address: String) = dispatch { wireless.connect(address) }
     override fun enableWireless() = dispatch { wireless.hotspot(true) }
@@ -149,29 +150,15 @@ internal class JoyingEmbeddedSession(
     }
 
     override fun start() {
-        com.cabin.reports.DebugJournal.record("CarPlay", "starting", "Connecting to Joying native service")
+        com.cabin.reports.DebugJournal.record("CarPlay", "starting", "Starting Cabin’s Carlink engine")
         workers.execute {
             try {
-                val remote = JoyingServiceHandoff.nativeService()
                 check(sessionGate.tryAcquire(5, TimeUnit.SECONDS)) { "Previous CarPlay session is still shutting down" }
                 synchronized(this) {
                     ownsSession = true
                     if (closed.get()) { ownsSession = false; sessionGate.release(); return@execute }
-                    binder = remote
                 }
-                val acquired = JoyingVideoConnection.open(
-                    bind = {
-                        if (closed.get()) throw InterruptedException("CarPlay disconnected")
-                        LocalServerSocket(JoyingNativeProtocol.VIDEO_SOCKET)
-                    },
-                    releaseStock = {
-                        if (closed.get()) throw InterruptedException("CarPlay disconnected")
-                        onStatus("Releasing stock Car Link’s video connection…")
-                        com.cabin.reports.DebugJournal.record("CarPlay", "handoff", "Releasing stock video connection")
-                        JoyingServiceHandoff.releaseStockClient(context)
-                    },
-                    pause = { Thread.sleep(200) },
-                )
+                val acquired = LocalServerSocket(JoyingNativeProtocol.VIDEO_SOCKET)
                 synchronized(this) {
                     if (closed.get()) { acquired.close(); return@execute }
                     server = acquired
@@ -179,15 +166,23 @@ internal class JoyingEmbeddedSession(
                 }
                 controls.submit {
                     if (!closed.get()) {
+                        val ownedEngine = com.cabin.carlink.CarlinkEngineConnection.open(context)
+                        engineConnection = ownedEngine
+                        val remote = ownedEngine.engine
+                        binder = remote
+                        if (closed.get()) return@submit
+                        com.cabin.reports.DebugJournal.record("CarPlay", "native_engine_ready", "App-owned receiver")
                         remote.linkToDeath(death, 0)
                         JoyingNativeProtocol.registerListener(remote, listener)
                         listenerRegistered = true
+                        com.cabin.reports.DebugJournal.record("CarPlay", "listener_registered", "")
                         factoryBluetooth.start()
                         // Screen geometry + physical reference width and stock FPS marker (c.m).
                         command(218, display.nativeValues())
                         command(223, intArrayOf(1)) // Wired auto-connect.
                         command(219) // Stock native startup request (c.m).
                         command(JoyingNativeProtocol.SCREEN, intArrayOf(3))
+                        com.cabin.reports.DebugJournal.record("CarPlay", "video_requested", "")
                         updateLinkState(JoyingNativeProtocol.command(remote, JoyingNativeProtocol.LINK_STATE))
                     }
                 }.get()
@@ -221,19 +216,19 @@ internal class JoyingEmbeddedSession(
                             }
                         }
                     } catch (e: java.io.IOException) {
-                        if (!closed.get()) onStatus("Video link interrupted; waiting for Joying to reconnect…")
+                        if (!closed.get()) onStatus("Video link interrupted; waiting for Carlink to reconnect…")
                     } finally {
                         runCatching { accepted.close() }
                         synchronized(videoLock) { videoHasRendered = false }
                         synchronized(this) { if (socket === accepted) socket = null }
                     }
-                    if (!closed.get()) onStatus("Waiting for Joying video to reconnect…")
+                    if (!closed.get()) onStatus("Waiting for Carlink video to reconnect…")
                 }
             } catch (e: Exception) {
-                if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
-                android.util.Log.e("JoyingCarPlay", "Native CarPlay connection failed", e)
                 com.cabin.reports.DebugJournal.record("CarPlay", "connection_failed", "$e; cause=${e.cause}")
-                fail(e.message ?: "Joying connection failed", (e as? JoyingVideoConnection.ConnectionException)?.retryable ?: true)
+                if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
+                android.util.Log.e("CarlinkCarPlay", "Native CarPlay connection failed", e)
+                fail(e.message ?: "Carlink connection failed", (e as? JoyingVideoConnection.ConnectionException)?.retryable ?: true)
             } finally {
                 close()
             }
@@ -270,7 +265,7 @@ internal class JoyingEmbeddedSession(
                     if (index >= 0) {
                         val frame = requireNotNull(pending)
                         val buffer = requireNotNull(codec.getInputBuffer(index))
-                        check(buffer.capacity() >= frame.size) { "Joying frame exceeds decoder capacity" }
+                        check(buffer.capacity() >= frame.size) { "Carlink frame exceeds decoder capacity" }
                         buffer.clear()
                         buffer.put(frame)
                         codec.queueInputBuffer(index, 0, frame.size, System.nanoTime() / 1000, 0)
@@ -296,8 +291,9 @@ internal class JoyingEmbeddedSession(
                 }
             }
         } catch (e: Exception) {
+            com.cabin.reports.DebugJournal.record("CarPlay", "decoder_failed", "")
             if (!closed.get()) com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.ERROR, e)
-            fail(e.message ?: "Joying video decoder failed")
+            fail(e.message ?: "Carlink video decoder failed")
         } finally {
             synchronized(videoLock) {
                 decoder = null
@@ -361,6 +357,8 @@ internal class JoyingEmbeddedSession(
                     runCatching { remote.unlinkToDeath(death, 0) }
                 }
             } finally {
+                runCatching { engineConnection?.close() }
+                engineConnection = null
                 synchronized(this) {
                     runCatching { server?.close() }
                     binder = null

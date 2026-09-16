@@ -1,29 +1,21 @@
 package com.cabin.platform
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 
-/** Stock entry point verified in the Joying 2023-08-31 image. No adapter protocol is used. */
+/** Cabin's embedded Carlink client. Loads the bundled engine in Cabin’s private process. */
 object JoyingCarPlay {
-    const val PACKAGE = "com.syu.carlink"
-    const val ACTIVITY = "com.syu.carlink.MainActivity"
+    fun isAvailable(context: Context): Boolean = bundledRuntimeAvailable(
+        android.os.Build.VERSION.SDK_INT,
+        android.os.Build.SUPPORTED_ABIS.firstOrNull(),
+        context.applicationInfo.nativeLibraryDir,
+    )
 
-    fun launchIntent() = Intent(Intent.ACTION_MAIN)
-        .addCategory(Intent.CATEGORY_LAUNCHER)
-        .setComponent(ComponentName(PACKAGE, ACTIVITY))
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-    fun isAvailable(context: Context): Boolean = try {
-        val info = context.packageManager.getActivityInfo(ComponentName(PACKAGE, ACTIVITY), 0)
-        info.enabled && info.applicationInfo.enabled && info.exported &&
-            context.packageManager.resolveActivity(launchIntent(), 0) != null
-    } catch (_: PackageManager.NameNotFoundException) {
-        false
-    } catch (_: SecurityException) {
-        false
-    }
+    internal fun bundledRuntimeAvailable(api: Int, abi: String?, directory: String?): Boolean =
+        api == 29 && abi == "arm64-v8a" && directory != null &&
+            listOf("libcabin_carlink.so", "libcps_7862.so", "libcarplay_plugin_r14g.so").all {
+                java.io.File(directory, it).isFile
+            }
 
     /** Open Cabin's own embedded projection page; never launch the vendor activity. */
     fun open(context: Context): Boolean = try {

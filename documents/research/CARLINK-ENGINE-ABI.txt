@@ -1,0 +1,229 @@
+
+artifacts/joying-uis7862/extracted/applications/app/190000000_com.syu.carlink/lib/arm64/libcps_7862.so:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+00000000000330e8 <android::CarplayServiceInstance(int)>:
+   330e8: d10143ff     	sub	sp, sp, #0x50
+   330ec: a90257f6     	stp	x22, x21, [sp, #0x20]
+   330f0: a9034ff4     	stp	x20, x19, [sp, #0x30]
+   330f4: a9047bfd     	stp	x29, x30, [sp, #0x40]
+   330f8: 910103fd     	add	x29, sp, #0x40
+   330fc: d53bd055     	mrs	x21, TPIDR_EL0
+   33100: f94016a8     	ldr	x8, [x21, #0x28]
+   33104: 2a0003f3     	mov	w19, w0
+   33108: f9000fe8     	str	x8, [sp, #0x18]
+   3310c: 910043e8     	add	x8, sp, #0x10
+   33110: 940105e0     	bl	0x74890 <_ZN7android21defaultServiceManagerEv@plt>
+   33114: b0ffff81     	adrp	x1, 0x24000
+   33118: 9109f821     	add	x1, x1, #0x27e
+   3311c: 910023e0     	add	x0, sp, #0x8
+   33120: 940105e0     	bl	0x748a0 <_ZN7android8String16C1EPKc@plt>
+   33124: 7100027f     	cmp	w19, #0x0
+   33128: 5400088d     	b.le	0x33238 <android::CarplayServiceInstance(int)+0x150>
+   3312c: 52803700     	mov	w0, #0x1b8              // =440
+   33130: 940105e0     	bl	0x748b0 <_Znwm@plt>
+   33134: aa0003f3     	mov	x19, x0
+   33138: 940105e2     	bl	0x748c0 <_ZN7android14CarplayServiceC1Ev@plt>
+   3313c: 90000294     	adrp	x20, 0x83000
+   33140: f940a294     	ldr	x20, [x20, #0x140]
+   33144: f9400296     	ldr	x22, [x20]
+   33148: f9400268     	ldr	x8, [x19]
+   3314c: f85e8108     	ldur	x8, [x8, #-0x18]
+   33150: 8b080260     	add	x0, x19, x8
+   33154: aa1403e1     	mov	x1, x20
+   33158: 940105de     	bl	0x748d0 <_ZNK7android7RefBase9incStrongEPKv@plt>
+   3315c: b40000f6     	cbz	x22, 0x33178 <android::CarplayServiceInstance(int)+0x90>
+   33160: f94002c8     	ldr	x8, [x22]
+   33164: f85e8108     	ldur	x8, [x8, #-0x18]
+   33168: 8b0802c0     	add	x0, x22, x8
+   3316c: 90000281     	adrp	x1, 0x83000
+   33170: f940a021     	ldr	x1, [x1, #0x140]
+   33174: 940105c3     	bl	0x74880 <_ZNK7android7RefBase9decStrongEPKv@plt>
+   33178: f9400288     	ldr	x8, [x20]
+   3317c: eb0802df     	cmp	x22, x8
+   33180: 54000040     	b.eq	0x33188 <android::CarplayServiceInstance(int)+0xa0>
+   33184: 940105d7     	bl	0x748e0 <_ZN7android14sp_report_raceEv@plt>
+   33188: 91002268     	add	x8, x19, #0x8
+   3318c: f9400669     	ldr	x9, [x19, #0x8]
+   33190: f9000293     	str	x19, [x20]
+   33194: f90003e8     	str	x8, [sp]
+   33198: f85e8129     	ldur	x9, [x9, #-0x18]
+   3319c: f9400bf3     	ldr	x19, [sp, #0x10]
+   331a0: 8b090100     	add	x0, x8, x9
+   331a4: 910003e1     	mov	x1, sp
+   331a8: 940105ca     	bl	0x748d0 <_ZNK7android7RefBase9incStrongEPKv@plt>
+   331ac: f9400268     	ldr	x8, [x19]
+   331b0: f9401908     	ldr	x8, [x8, #0x30]
+   331b4: 910023e1     	add	x1, sp, #0x8
+   331b8: 910003e2     	mov	x2, sp
+   331bc: aa1303e0     	mov	x0, x19
+   331c0: 2a1f03e3     	mov	w3, wzr
+   331c4: 321d03e4     	orr	w4, wzr, #0x8
+   331c8: d63f0100     	blr	x8
+   331cc: f94003e8     	ldr	x8, [sp]
+   331d0: 2a0003f3     	mov	w19, w0
+   331d4: b40000c8     	cbz	x8, 0x331ec <android::CarplayServiceInstance(int)+0x104>
+   331d8: f9400109     	ldr	x9, [x8]
+   331dc: f85e8129     	ldur	x9, [x9, #-0x18]
+   331e0: 8b090100     	add	x0, x8, x9
+   331e4: 910003e1     	mov	x1, sp
+   331e8: 940105a6     	bl	0x74880 <_ZNK7android7RefBase9decStrongEPKv@plt>
+   331ec: 910023e0     	add	x0, sp, #0x8
+   331f0: 940105c0     	bl	0x748f0 <_ZN7android8String16D1Ev@plt>
+   331f4: f9400be8     	ldr	x8, [sp, #0x10]
+   331f8: b40000c8     	cbz	x8, 0x33210 <android::CarplayServiceInstance(int)+0x128>
+   331fc: f9400109     	ldr	x9, [x8]
+   33200: f85e8129     	ldur	x9, [x9, #-0x18]
+   33204: 8b090100     	add	x0, x8, x9
+   33208: 910043e1     	add	x1, sp, #0x10
+   3320c: 9401059d     	bl	0x74880 <_ZNK7android7RefBase9decStrongEPKv@plt>
+   33210: f94016a8     	ldr	x8, [x21, #0x28]
+   33214: f9400fe9     	ldr	x9, [sp, #0x18]
+   33218: eb09011f     	cmp	x8, x9
+   3321c: 54000221     	b.ne	0x33260 <android::CarplayServiceInstance(int)+0x178>
+   33220: 2a1303e0     	mov	w0, w19
+   33224: a9447bfd     	ldp	x29, x30, [sp, #0x40]
+   33228: a9434ff4     	ldp	x20, x19, [sp, #0x30]
+   3322c: a94257f6     	ldp	x22, x21, [sp, #0x20]
+   33230: 910143ff     	add	sp, sp, #0x50
+   33234: d65f03c0     	ret
+   33238: 90ffff61     	adrp	x1, 0x1f000
+   3323c: 91095021     	add	x1, x1, #0x254
+   33240: b0ffff82     	adrp	x2, 0x24000
+   33244: 9118b042     	add	x2, x2, #0x62c
+   33248: 321e03e0     	orr	w0, wzr, #0x4
+   3324c: 2a1303e3     	mov	w3, w19
+   33250: 320003e4     	orr	w4, wzr, #0x1
+   33254: 940105ab     	bl	0x74900 <__android_log_print@plt>
+   33258: 2a1f03e0     	mov	w0, wzr
+   3325c: 940105ad     	bl	0x74910 <exit@plt>
+   33260: 940105b0     	bl	0x74920 <__stack_chk_fail@plt>
+
+0000000000033264 <android::CarplayService::CarplayService()>:
+   33264: d10343ff     	sub	sp, sp, #0xd0
+   33268: f9004bf7     	str	x23, [sp, #0x90]
+   3326c: a90a57f6     	stp	x22, x21, [sp, #0xa0]
+   33270: a90b4ff4     	stp	x20, x19, [sp, #0xb0]
+   33274: a90c7bfd     	stp	x29, x30, [sp, #0xc0]
+   33278: 910303fd     	add	x29, sp, #0xc0
+   3327c: d53bd057     	mrs	x23, TPIDR_EL0
+   33280: f94016e8     	ldr	x8, [x23, #0x28]
+   33284: aa0003f3     	mov	x19, x0
+   33288: 9106a000     	add	x0, x0, #0x1a8
+   3328c: f81c83a8     	stur	x8, [x29, #-0x38]
+   33290: 940105a8     	bl	0x74930 <_ZN7android7RefBaseC2Ev@plt>
+   33294: 90000294     	adrp	x20, 0x83000
+   33298: f940a694     	ldr	x20, [x20, #0x148]
+   3329c: 91006281     	add	x1, x20, #0x18
+   332a0: aa1303e0     	mov	x0, x19
+   332a4: 940105a7     	bl	0x74940 <_ZN7android15ICarplayServiceC2Ev@plt>
+   332a8: 91002260     	add	x0, x19, #0x8
+   332ac: 9100e281     	add	x1, x20, #0x38
+   332b0: 940105a8     	bl	0x74950 <_ZN7android7BBinderC2Ev@plt>
+   332b4: 90000288     	adrp	x8, 0x83000
+   332b8: f940a908     	ldr	x8, [x8, #0x150]
+   332bc: 91006109     	add	x9, x8, #0x18
+   332c0: 9e670120     	fmov	d0, x9
+   332c4: 9101e109     	add	x9, x8, #0x78
+   332c8: 4e181d20     	mov	v0.d[1], x9
+   332cc: 9104e108     	add	x8, x8, #0x138
+   332d0: 91008260     	add	x0, x19, #0x20
+   332d4: f900d668     	str	x8, [x19, #0x1a8]
+   332d8: 3d800260     	str	q0, [x19]
+   332dc: 9101e281     	add	x1, x20, #0x78
+   332e0: 320003e2     	orr	w2, wzr, #0x1
+   332e4: 9401059f     	bl	0x74960 <_ZN7android6ThreadC2Eb@plt>
+   332e8: 90000288     	adrp	x8, 0x83000
+   332ec: f940ad08     	ldr	x8, [x8, #0x158]
+   332f0: 91006109     	add	x9, x8, #0x18
+   332f4: 9102610a     	add	x10, x8, #0x98
+   332f8: 9e670120     	fmov	d0, x9
+   332fc: 91074109     	add	x9, x8, #0x1d0
+   33300: 4e181d40     	mov	v0.d[1], x10
+   33304: 9104e10a     	add	x10, x8, #0x138
+   33308: 91060108     	add	x8, x8, #0x180
+   3330c: f900d669     	str	x9, [x19, #0x1a8]
+   33310: f900126a     	str	x10, [x19, #0x20]
+   33314: aa1303f4     	mov	x20, x19
+   33318: a90afe68     	stp	x8, xzr, [x19, #0xa8]
+   3331c: 3d800260     	str	q0, [x19]
+   33320: f80f8e9f     	str	xzr, [x20, #0xf8]!
+   33324: 90ffff61     	adrp	x1, 0x1f000
+   33328: 91095021     	add	x1, x1, #0x254
+   3332c: b0ffff62     	adrp	x2, 0x20000
+   33330: 912d0842     	add	x2, x2, #0xb42
+   33334: 321e03e0     	orr	w0, wzr, #0x4
+   33338: 94010572     	bl	0x74900 <__android_log_print@plt>
+   3333c: 90000288     	adrp	x8, 0x83000
+   33340: f940b108     	ldr	x8, [x8, #0x160]
+   33344: b900011f     	str	wzr, [x8]
+   33348: 3906927f     	strb	wzr, [x19, #0x1a4]
+   3334c: b0ffff60     	adrp	x0, 0x20000
+   33350: 91217800     	add	x0, x0, #0x85e
+   33354: f0ffff75     	adrp	x21, 0x22000
+   33358: 912feeb5     	add	x21, x21, #0xbfb
+   3335c: aa1503e1     	mov	x1, x21
+   33360: 94010584     	bl	0x74970 <property_set@plt>
+   33364: 6f00e400     	movi	v0.2d, #0000000000000000
+   33368: ad0303e0     	stp	q0, q0, [sp, #0x60]
+   3336c: ad0203e0     	stp	q0, q0, [sp, #0x40]
+   33370: ad0103e0     	stp	q0, q0, [sp, #0x20]
+   33374: ad0003e0     	stp	q0, q0, [sp]
+   33378: f0ffff40     	adrp	x0, 0x1e000
+   3337c: 91190800     	add	x0, x0, #0x642
+   33380: b0ffff62     	adrp	x2, 0x20000
+   33384: 912d0042     	add	x2, x2, #0xb40
+   33388: 910003e1     	mov	x1, sp
+   3338c: 9401057d     	bl	0x74980 <property_get@plt>
+   33390: 910003e0     	mov	x0, sp
+   33394: 9401057f     	bl	0x74990 <atoi@plt>
+   33398: 2a0003f6     	mov	w22, w0
+   3339c: d0ffff80     	adrp	x0, 0x25000
+   333a0: 91025c00     	add	x0, x0, #0x97
+   333a4: 910003e1     	mov	x1, sp
+   333a8: aa1503e2     	mov	x2, x21
+   333ac: 94010575     	bl	0x74980 <property_get@plt>
+   333b0: 910003e0     	mov	x0, sp
+   333b4: 94010577     	bl	0x74990 <atoi@plt>
+   333b8: 7100001f     	cmp	w0, #0x0
+   333bc: 7a411ac4     	ccmp	w22, #0x1, #0x4, ne
+   333c0: 1a9f16c8     	csinc	w8, w22, wzr, ne
+   333c4: b9019a68     	str	w8, [x19, #0x198]
+   333c8: f9400295     	ldr	x21, [x20]
+   333cc: b40000d5     	cbz	x21, 0x333e4 <android::CarplayService::CarplayService()+0x180>
+   333d0: f94002a8     	ldr	x8, [x21]
+   333d4: f85e8108     	ldur	x8, [x8, #-0x18]
+   333d8: 8b0802a0     	add	x0, x21, x8
+   333dc: aa1403e1     	mov	x1, x20
+   333e0: 94010528     	bl	0x74880 <_ZNK7android7RefBase9decStrongEPKv@plt>
+   333e4: f9400288     	ldr	x8, [x20]
+   333e8: eb0802bf     	cmp	x21, x8
+   333ec: 54000040     	b.eq	0x333f4 <android::CarplayService::CarplayService()+0x190>
+   333f0: 9401053c     	bl	0x748e0 <_ZN7android14sp_report_raceEv@plt>
+   333f4: a9007e9f     	stp	xzr, xzr, [x20]
+   333f8: 9401056a     	bl	0x749a0 <mfi_scan@plt>
+   333fc: aa1303e0     	mov	x0, x19
+   33400: 9401056c     	bl	0x749b0 <_ZN7android14CarplayService16EnableCpWirelessEv@plt>
+   33404: b900da7f     	str	wzr, [x19, #0xd8]
+   33408: d0ffff60     	adrp	x0, 0x21000
+   3340c: 9101b800     	add	x0, x0, #0x6e
+   33410: b0ffff62     	adrp	x2, 0x20000
+   33414: 912d0042     	add	x2, x2, #0xb40
+   33418: 910003e1     	mov	x1, sp
+   3341c: 94010559     	bl	0x74980 <property_get@plt>
+   33420: 394003e8     	ldrb	w8, [sp]
+   33424: 7100c51f     	cmp	w8, #0x31
+   33428: 1a9f17e8     	cset	w8, eq
+   3342c: 291a7e68     	stp	w8, wzr, [x19, #0xd0]
+   33430: f94016e8     	ldr	x8, [x23, #0x28]
+   33434: f85c83a9     	ldur	x9, [x29, #-0x38]
+   33438: eb09011f     	cmp	x8, x9
+   3343c: 540000e1     	b.ne	0x33458 <android::CarplayService::CarplayService()+0x1f4>
+   33440: a94c7bfd     	ldp	x29, x30, [sp, #0xc0]
+   33444: a94b4ff4     	ldp	x20, x19, [sp, #0xb0]
+   33448: a94a57f6     	ldp	x22, x21, [sp, #0xa0]
+   3344c: f9404bf7     	ldr	x23, [sp, #0x90]
+   33450: 910343ff     	add	sp, sp, #0xd0
+   33454: d65f03c0     	ret
+   33458: 94010532     	bl	0x74920 <__stack_chk_fail@plt>

@@ -32,7 +32,9 @@ enum class DiagnosticEvent {
 class CabinApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        com.cabin.reports.DebugJournal.setObserver { CabinTelemetry.log(Logger.Level.DEBUG, null) }
+        // Engine IPC reports failures to the main process; avoid competing telemetry caches.
+        if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName() == "$packageName:carlink") return
+        com.cabin.reports.DebugJournal.setObserver { area, event, detail -> CabinTelemetry.journal(area, event, detail) }
         CabinTelemetry.initialize(this)
     }
 }
@@ -171,9 +173,44 @@ object CabinTelemetry {
         }
     }
 
+    private val journalEvents = mapOf(
+        "CarPlay" to setOf("starting", "native_service_ready", "handoff", "socket_acquired",
+            "listener_registered", "video_requested", "video_connected", "first_frame_received",
+            "video_rendering", "link_state", "connection_failed", "decoder_failed"),
+        "CAN" to setOf("bind", "connected", "bind_failed", "bind_rejected", "module_unavailable"),
+    )
+    internal fun journalBody(area: String, event: String, detail: String?): String? {
+        if (event !in journalEvents[area].orEmpty()) return null
+        val number = when (event) {
+            "link_state" -> detail?.takeIf { it.matches(Regex("state=[0-9]{1,3}")) }
+            "first_frame_received" -> detail?.takeIf { it.matches(Regex("bytes=[0-9]{1,7}")) }
+            else -> null
+        }
+        return "Cabin diagnostic $area/$event" + (number?.let { " $it" } ?: "")
+    }
+    private fun safeJournal(body: String): Boolean {
+        val parts = body.removePrefix("Cabin diagnostic ").split(' ', limit = 2)
+        val path = parts[0].split('/')
+        return path.size == 2 && journalBody(path[0], path[1], parts.getOrNull(1)) == body
+    }
+    private val journalBudget = TelemetryBudget(120)
+    fun journal(area: String, event: String, detail: String?) {
+        if (!active) return
+        val body = journalBody(area, event, detail) ?: return
+        if (!journalBudget.take(android.os.SystemClock.elapsedRealtime())) return
+        try {
+            val failed = event.endsWith("failed") || event.endsWith("rejected") || event.endsWith("unavailable")
+            Sentry.addBreadcrumb(Breadcrumb().apply {
+                category = "cabin.diagnostic"; message = body
+                level = if (failed) SentryLevel.ERROR else SentryLevel.DEBUG
+            })
+            Sentry.logger().log(if (failed) SentryLogLevel.ERROR else SentryLogLevel.DEBUG, body)
+        } catch (_: RuntimeException) { }
+    }
+
     private val safeLog = Regex("Cabin log (unknown|com\\.cabin\\.[A-Za-z0-9_.$<>:-]+)")
     internal fun cleanLog(log: SentryLogEvent): SentryLogEvent? {
-        if (!safeLog.matches(log.body) && DiagnosticEvent.entries.none { log.body == "Cabin event ${it.name}" }) return null
+        if (!safeLog.matches(log.body) && !safeJournal(log.body) && DiagnosticEvent.entries.none { log.body == "Cabin event ${it.name}" }) return null
         return SentryLogEvent(log.traceId, log.timestamp, log.body, log.level).apply {
             setAttribute("sentry.release", io.sentry.SentryLogEventAttributeValue("string", "${BuildConfig.APPLICATION_ID}@${BuildConfig.VERSION_NAME}+${BuildConfig.VERSION_CODE}"))
             setAttribute("sentry.environment", io.sentry.SentryLogEventAttributeValue("string", if (BuildConfig.DEBUG) "development" else "production"))
@@ -181,6 +218,9 @@ object CabinTelemetry {
     }
 
     internal fun cleanBreadcrumb(crumb: Breadcrumb): Breadcrumb? {
+        if (crumb.category == "cabin.diagnostic" && safeJournal(crumb.message.orEmpty())) {
+            return Breadcrumb(crumb.timestamp).apply { category = crumb.category; message = crumb.message; level = crumb.level }
+        }
         if (crumb.category == "cabin.log" && safeLog.matches(crumb.message.orEmpty())) {
             return Breadcrumb(crumb.timestamp).apply { category = "cabin.log"; message = crumb.message; level = crumb.level }
         }

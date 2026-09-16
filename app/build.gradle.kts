@@ -5,19 +5,31 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+val verifyCarlinkLibraries by tasks.registering(Exec::class) {
+    workingDir(rootProject.projectDir)
+    commandLine("python3", "tools/carlink/import_libraries.py", "--verify")
+    inputs.files(rootProject.file("tools/carlink/libraries.json"),
+        rootProject.file("tools/carlink/import_libraries.py"))
+    inputs.dir("src/main/jniLibs/arm64-v8a")
+}
+tasks.named("preBuild") { dependsOn(verifyCarlinkLibraries) }
+
 android {
     namespace = "com.cabin"
     compileSdk = 36
+    ndkVersion = "27.0.12077973"
+    externalNativeBuild { cmake { path = file("src/main/cpp/CMakeLists.txt"); version = "3.22.1" } }
 
     // Keep the installed application identity so existing data and upgrades remain valid.
     val ownerApplicationId = "zeno.carlink"
 
     defaultConfig {
         applicationId = ownerApplicationId
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1017
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.6"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1018
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.7"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
         require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
@@ -81,6 +93,12 @@ android {
     }
 
     packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            keepDebugSymbols += listOf("libcps_7862.so", "libcarplay_plugin_r14g.so", "libaaudio_l.so",
+                "libblinkAEC.so", "libusb.so", "libcrypto.so", "libmdnssd-client.so", "libopus.so",
+                "libtinyalsa.so", "libstdc++.so").map { "**/$it" }
+        }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }

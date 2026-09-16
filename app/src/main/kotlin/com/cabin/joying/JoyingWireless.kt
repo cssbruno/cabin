@@ -47,7 +47,7 @@ internal class JoyingWireless(
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.getIntExtra("wifi_state", -1) == 13) dispatch { if (ownsAp && !closed.get()) publishAp() }
-            if (intent.getIntExtra("wifi_state", -1) == 14) status("Joying Wi-Fi hotspot failed to start")
+            if (intent.getIntExtra("wifi_state", -1) == 14) status("Carlink Wi-Fi hotspot failed to start")
         }
     }
 
@@ -59,7 +59,7 @@ internal class JoyingWireless(
         val device = adapter.bondedDevices.firstOrNull { it.address == address } ?: error("Pair this phone in Android Bluetooth settings first")
         val localAddress = adapter.address
         check(!localAddress.isNullOrBlank() && localAddress != "02:00:00:00:00:00") {
-            "Joying firmware must grant Cabin access to the local Bluetooth address"
+            "Carlink firmware must grant Cabin access to the local Bluetooth address"
         }
         var name = adapter.name ?: "Cabin"
         while (name.toByteArray(Charsets.UTF_8).size > 63) name = name.dropLast(1)
@@ -118,7 +118,7 @@ internal class JoyingWireless(
         if (!enabled) { stopAp(); return }
         if (ownsAp) { publishAp(); return }
         // This backend is pinned to the inspected Android 10 soft-AP contract.
-        check(Build.VERSION.SDK_INT in 27..29) { "This Joying hotspot interface requires Android 8.1–10 firmware" }
+        check(Build.VERSION.SDK_INT in 27..29) { "This Carlink hotspot interface requires Android 8.1–10 firmware" }
         val getConfig = wifi.javaClass.getMethod("getWifiApConfiguration")
         val currentState = wifi.javaClass.getMethod("getWifiApState").invoke(wifi) as Int
         check(currentState != 13 && currentState != 12) { "Another hotspot is active. Turn it off before starting Cabin wireless CarPlay." }

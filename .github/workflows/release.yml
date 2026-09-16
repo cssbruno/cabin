@@ -35,6 +35,10 @@ jobs:
           cmake -S diagnostics/src/main/cpp -B /tmp/cabin-native-tests
           cmake --build /tmp/cabin-native-tests
           ctest --test-dir /tmp/cabin-native-tests --output-on-failure
+      - name: Verify engine import and OEM packaging
+        run: |
+          python3 -m unittest discover -s tools/carlink -p 'test_*.py'
+          python3 -m unittest discover -s tools/privapp -p 'test_*.py'
       - name: Save test reports
         if: always()
         uses: actions/upload-artifact@v4
