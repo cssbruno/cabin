@@ -16,6 +16,214 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [29], manifest = Config.NONE)
 class CabinSyuProtocolTest {
+    @Test fun `Early Honda trip packets use verified unit fields and protocol specific refresh`() {
+        val wc = setOf(64, 65, 166, 196774, 192, 65728, 297, 65833)
+        val profiles = wc + setOf(19, 117, 65653, 131189, 196725, 141, 203, 196811, 262347, 370, 65906, 131442)
+        for (profile in profiles) {
+            val detected = registry().profile(profile)
+            val decoder = detected.syuClient.display as CabinSyuDecoder
+            assertTrue(decoder.hasHondaTrip)
+            val rows = decoder.read(mapOf(1 to 75, 7 to 1, 4 to 12345, 9 to 0, 5 to 400, 10 to 1, 103 to 3, 104 to 20))
+            assertEquals("7.5 km/L", rows.single { it.viewId == 1 }.text)
+            assertEquals("1234.5 km", rows.single { it.viewId == 4 }.text)
+            assertEquals("400 mi", rows.single { it.viewId == 5 }.text)
+            assertTrue(rows.none { it.screen == "honda_trip_2023" && it.viewId == 103 })
+            val requests = decoder.initialReadRequests(detected.publishedFields)
+            if (profile in wc) assertTrue(requests.isEmpty())
+            else assertEquals(listOf(100 to listOf(1), 100 to listOf(2)), requests)
+            assertNotNull(decoder.actionFrame(FytVehicleAction.RESET_HONDA_TRIP_HISTORY))
+        }
+        assertEquals(100 to listOf(3), CabinHondaEarlyTrip.reset(141))
+        assertEquals(101 to listOf(3), CabinHondaEarlyTrip.reset(19))
+        assertNull(CabinHondaEarlyTrip.dialect(124, "Lcom/syu/module/canbus/Callback_0124_XP1_2014SIYU_CRV;"))
+        assertNull(CabinHondaEarlyTrip.reset(124))
+    }
+
+    @Test fun `WC Accord language is offered only on low service with supported values`() {
+        for (profile in listOf(42, 59, 65578, 131114)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            assertEquals(setOf(1, 2), decoder.choices[FytVehicleChoice.LANGUAGE]?.keys)
+            assertEquals(17 to listOf(2), decoder.choiceFrame(FytVehicleChoice.LANGUAGE, 2))
+            assertNull(decoder.choiceFrame(FytVehicleChoice.LANGUAGE, 3))
+        }
+        assertNull((registry().profile(37).syuClient.display as CabinSyuDecoder).choiceFrame(FytVehicleChoice.LANGUAGE, 1))
+    }
+
+    @Test fun `XBS Accord high maps distinct settings and corrects ignored single byte trip requests`() {
+        val high = registry().profile(410).syuClient.display as CabinSyuDecoder
+        val raw = CabinHondaAccordXbs.fields(410).associateWith { 0 }
+        assertEquals(0 to listOf(10), high.command(53, 10, raw))
+        assertEquals(12 to listOf(1), high.command(63, 1, raw))
+        assertEquals(13 to listOf(1), high.command(59, 1, raw))
+        assertEquals(29 to listOf(2), high.command(68, 2, raw))
+        assertNull(high.command(68, 3, raw))
+        assertEquals(35 to listOf(1), high.command(83, 1, raw))
+        assertEquals(23 to listOf(10), high.command(80, 10, raw))
+        assertNull(high.command(20, 10, raw))
+        assertEquals("Medium", high.read(mapOf(68 to 1)).single().text)
+        assertEquals("On", high.read(mapOf(66 to 1)).single().text)
+        assertNull(high.actionFrame(FytVehicleAction.RESET_SERVICE_INTERVAL))
+        assertEquals(101 to listOf(3), high.actionFrame(FytVehicleAction.RESET_HONDA_TRIP_HISTORY))
+        assertEquals(listOf(100 to listOf(8, 1), 100 to listOf(8, 2), 100 to listOf(10, 0), 100 to listOf(11, 0)), high.initialReadRequests((0..100).toSet()))
+        val low = registry().profile(262).syuClient.display as CabinSyuDecoder
+        assertEquals(21 to listOf(4), low.command(34, 4, mapOf(34 to 0)))
+        assertEquals("Violet", low.read(mapOf(34 to 4)).single().text)
+        assertNull(low.command(22, 1, mapOf(22 to 0))) // r8 never publishes this stock UI field.
+        assertEquals(listOf(100 to listOf(5, 1), 100 to listOf(5, 2), 100 to listOf(4, 0), 100 to listOf(11, 0)), low.initialReadRequests(registry().profile(262).publishedFields))
+    }
+
+    @Test fun `Acura signed amplifier feedback uses relative commands and refreshes subwoofer`() {
+        for (profile in listOf(12452293, 12911044, 12976580, 13042116)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            val raw = mapOf(81 to 30, 82 to -3, 83 to 2, 84 to -1, 85 to 1, 87 to 2, 88 to -2, 89 to 3)
+            assertEquals(8, decoder.read(raw).size)
+            assertEquals("-3", decoder.read(raw).single { it.viewId == 82 }.text)
+            assertEquals(0 to listOf(34, 33), decoder.command(82, 33, raw))
+            assertEquals(0 to listOf(49, 49), decoder.command(89, 49, raw))
+            assertNull(decoder.command(82, 4, raw))
+            assertNull(decoder.command(82, 33, emptyMap()))
+            assertNull(decoder.command(87, 33, mapOf(87 to 7)))
+            assertNull(decoder.command(82, 33, mapOf(82 to 128)))
+            assertFalse(89 in decoder.cachedRefreshExcludedFields)
+            assertTrue(decoder.motionValues(raw).isEmpty())
+            assertEquals(listOf(1 to listOf(115)), decoder.initialReadRequests(raw.keys))
+            assertTrue(decoder.initialReadRequests(raw.keys - 89).isEmpty())
+        }
+    }
+
+    @Test fun `Spirior and Civic instruments use their own scales and do not expose writes`() {
+        val decoder = registry().profile(197033).syuClient.display as CabinSyuDecoder
+        val raw = mapOf(7 to 123, 8 to 2000, 9 to 100000, 10 to 1, 11 to 0)
+        val rows = decoder.read(raw).associateBy { it.viewId }
+        assertEquals("12.3 km/h", rows[7]?.text)
+        assertEquals("2000 RPM", rows[8]?.text)
+        assertEquals("100000 km", rows[9]?.text)
+        assertEquals("On", rows[10]?.text)
+        assertEquals(mapOf(89 to 12, 90 to 2000), decoder.motionValues(raw))
+        assertEquals(setOf(7, 8), decoder.motionFields)
+        assertNull(decoder.command(10, 1, raw))
+        assertTrue(decoder.read(mapOf(7 to 4001, 8 to 7001, 9 to -1, 10 to 2)).isEmpty())
+        for (profile in listOf(15729093, 15794629)) {
+            val civic = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            assertEquals("123456 km", civic.read(mapOf(81 to 123456)).single().text)
+            assertTrue(civic.read(mapOf(81 to -1)).isEmpty())
+            assertNull(civic.command(81, 0, mapOf(81 to 123456)))
+        }
+    }
+
+    @Test fun `WC Accord settings use own callback IDs and relative camera commands`() {
+        for (profile in listOf(37, 131109)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            assertEquals(0 to listOf(2), decoder.command(1, 2, mapOf(1 to 0)))
+            assertEquals(1 to listOf(4), decoder.command(3, 4, mapOf(3 to 1)))
+            assertEquals(2 to listOf(0), decoder.command(4, 0, mapOf(4 to 1)))
+            assertNull(decoder.command(3, 0, mapOf(3 to 1)))
+            assertEquals("Blue", decoder.read(mapOf(3 to 1)).single().text)
+            assertFalse(decoder.hasHondaTrip)
+        }
+        for (profile in listOf(42, 59, 65578, 131114)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            assertEquals(6 to listOf(1), decoder.command(28, 1, mapOf(28 to 3)))
+            assertEquals(7 to listOf(2), decoder.command(30, 2, mapOf(30 to 3)))
+            assertNull(decoder.command(28, 0, mapOf(28 to 3)))
+            assertNull(decoder.command(25, 0, mapOf(25 to 1)))
+            assertEquals("60 s", decoder.read(mapOf(25 to 2)).single().text)
+            assertEquals("-5", decoder.read(mapOf(18 to 0)).single().text)
+            if (profile != 59) {
+                assertEquals(11 to listOf(-1), decoder.command(32, 6, mapOf(32 to 5)))
+                assertEquals(12 to listOf(-2), decoder.command(33, 4, mapOf(33 to 5)))
+                assertNull(decoder.command(33, 8, mapOf(33 to 5)))
+                assertEquals(setOf(4, 6), decoder.read(mapOf(33 to 5)).single().options.keys)
+            } else assertNull(decoder.command(32, 6, mapOf(32 to 5)))
+            if (profile in listOf(65578, 131114)) {
+                assertEquals(16 to listOf(1), decoder.command(64, 1, mapOf(64 to 0)))
+                assertEquals(14 to listOf(1), decoder.actionFrame(FytVehicleAction.CALIBRATE_TIRE_PRESSURE))
+            } else {
+                assertNull(decoder.command(64, 1, mapOf(64 to 0)))
+                assertNull(decoder.actionFrame(FytVehicleAction.CALIBRATE_TIRE_PRESSURE))
+            }
+            assertTrue(decoder.hasHondaTrip)
+            assertTrue(decoder.initialReadRequests((0..100).toSet()).isEmpty())
+        }
+    }
+
+    @Test fun `Accord trip units and history reuse verified wire layout without unrelated clocks`() {
+        for (profile in listOf(41, 77, 42, 59, 65578, 131114)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            val rows = decoder.read(mapOf(1 to 123, 7 to 2, 4 to 321, 9 to 1, 103 to 12, 104 to 30))
+            assertEquals("12.3 L/100 km", rows.single { it.viewId == 1 }.text)
+            assertEquals("32.1 mi", rows.single { it.viewId == 4 }.text)
+            assertTrue(rows.none { it.screen == "honda_trip_2023" && it.viewId == 103 })
+        }
+    }
+
+    @Test fun `Honda legacy Civic uses its own media IDs instead of CRV screen IDs`() {
+        val civic = registry().profile(67).syuClient.display as CabinSyuDecoder
+        val crv = registry().profile(76).syuClient.display as CabinSyuDecoder
+        val raw = mapOf(0 to 60, 1 to 13, 2 to 0x023b, 3 to 2, 4 to 10, 5 to 1, 6 to 20, 7 to 2)
+        assertEquals(mapOf(89 to 60), civic.motionValues(raw))
+        assertEquals(setOf(0), civic.motionFields)
+        val rows = civic.read(raw).associateBy { it.viewId }
+        assertEquals("USB", rows[1]?.text)
+        assertEquals("02:59", rows[2]?.text)
+        assertEquals("2 / 10", rows[3]?.text)
+        assertEquals("Playing", rows[7]?.text)
+        assertEquals(0 to listOf(3), civic.command(7, 3, raw))
+        assertNull(civic.command(17, 3, raw))
+        assertNull(crv.command(7, 3, raw))
+        assertEquals(0 to listOf(3), crv.command(17, 3, mapOf(17 to 2)))
+        assertTrue(crv.motionValues(raw).isEmpty())
+        assertTrue(civic.read(mapOf(2 to 0x023c, 3 to 0xffffff, 4 to 10)).isEmpty())
+        assertNull(civic.command(7, 1, emptyMap()))
+    }
+
+    @Test fun `Honda XP compass and media commands stay within routed profiles`() {
+        for (profile in listOf(24, 47, 65560, 131119, 196655)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            assertEquals(1 to listOf(15), decoder.command(8, 15, mapOf(8 to 1)))
+            assertNull(decoder.command(8, 16, mapOf(8 to 1)))
+            assertNull(decoder.command(8, 1, mapOf(8 to 0)))
+            assertEquals(2 to emptyList<Int>(), decoder.actionFrame(FytVehicleAction.CALIBRATE_COMPASS))
+            assertEquals(0 to listOf(1), decoder.command(0, 1, mapOf(0 to 5)))
+        }
+        assertNull(CabinHondaLegacy.dialect(65583, "Lcom/syu/module/canbus/Callback_0047_XP1_CRV2012;"))
+        assertNull(CabinHondaLegacy.dialect(24, "Lcom/syu/module/canbus/Callback_0067_WC3_SiYu;"))
+    }
+
+    @Test fun `Accord low and high use distinct settings and screen capabilities`() {
+        for (profile in listOf(41, 65577, 77, 65613, 131149, 196685, 262221)) {
+            val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
+            val raw = CabinHondaAccord.fields.associateWith { 0 }
+            assertEquals(0 to listOf(10), decoder.command(20, 10, raw))
+            assertEquals(2 to listOf(2), decoder.command(19, 2, raw))
+            assertEquals(3 to listOf(1), decoder.command(18, 1, raw))
+            assertEquals(5 to listOf(3), decoder.command(23, 3, raw))
+            assertEquals(11 to listOf(2), decoder.command(26, 2, raw))
+            assertNull(decoder.command(20, 11, raw))
+            assertNull(decoder.command(20, 2, emptyMap()))
+            assertNull(decoder.command(20, 2, mapOf(20 to 255)))
+            assertEquals("-5", decoder.read(raw).single { it.viewId == 20 }.text)
+            val high = profile !in listOf(41, 65577)
+            if (high) {
+                assertEquals(102 to listOf(1), decoder.command(60, 1, raw))
+                assertEquals(66 to listOf(2), decoder.command(29, 2, raw))
+                assertNull(decoder.command(30, 5, raw))
+                assertEquals(14 to listOf(0), decoder.actionFrame(FytVehicleAction.RESET_SERVICE_INTERVAL))
+            } else {
+                assertNull(decoder.command(60, 1, raw))
+                assertNull(decoder.command(22, 4, raw))
+                assertEquals(67 to listOf(10), decoder.command(30, 10, raw))
+                assertEquals(65 to listOf(3), decoder.command(34, 3, raw))
+                assertNull(decoder.actionFrame(FytVehicleAction.RESET_SERVICE_INTERVAL))
+            }
+            assertEquals(15 to listOf(0), decoder.actionFrame(FytVehicleAction.RESET_VEHICLE_SETTINGS))
+            assertEquals(17 to listOf(0), decoder.actionFrame(FytVehicleAction.CALIBRATE_TIRE_PRESSURE))
+            assertEquals(listOf(100 to listOf(50, 0), 100 to listOf(211, 0)), decoder.initialReadRequests(CabinHondaAccord.fields))
+            assertTrue(decoder.initialReadRequests(emptySet()).isEmpty())
+        }
+        assertNull(CabinHondaAccord.dialect(41, "Lcom/syu/module/canbus/Callback_0077_XP1_ACCORD9_H;"))
+    }
+
     @Test fun `WC GM settings require enabled capability bytes and send only target values`() {
         val gm = registry().profile(36).syuClient.display as CabinSyuDecoder
         val raw = CabinGmWcSettings.fields.associateWith { 0x100 }

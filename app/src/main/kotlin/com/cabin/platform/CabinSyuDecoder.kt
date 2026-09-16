@@ -6,22 +6,34 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
     val motionFields: Set<Int> get() = when (protocol) {
         "bagoo_audi" -> setOf(1)
         "gm_wc_0036" -> CabinGmWcReadings.motionFields
+        "honda_specialized" -> CabinHondaSpecialized.motionFields(profile)
+        "honda_legacy" -> if (profile == 67) setOf(0) else emptySet()
         else -> emptySet()
     }
-    fun motionValues(raw: Map<Int, Int>): Map<Int, Int> = if (protocol == "gm_wc_0036") CabinGmWcReadings.motion(raw) else emptyMap()
+    fun motionValues(raw: Map<Int, Int>): Map<Int, Int> = when (protocol) {
+        "gm_wc_0036" -> CabinGmWcReadings.motion(raw)
+        "honda_specialized" -> CabinHondaSpecialized.motion(profile, raw)
+        "honda_legacy" -> CabinHondaLegacy.motion(profile, raw)
+        else -> emptyMap()
+    }
     val cachedRefreshExcludedFields: Set<Int> get() {
         val legacyMotion = setOf(89, 90, 149, 151)
         val verifiedNonMotion = if (hasFordTires) CabinFordTires.fields +
             (if (CabinFordSettings.supports(profile)) CabinFordSettings.fields else emptySet()) +
             (if (CabinFordLegacySettings.supports(profile)) CabinFordLegacySettings.fields else emptySet())
             else emptySet()
-        return (legacyMotion - verifiedNonMotion) + motionFields
+        return (legacyMotion - verifiedNonMotion - (if (protocol == "honda_specialized") CabinHondaSpecialized.nonMotionFields(profile) else emptySet())) + motionFields
     }
 
-    val hasHondaTrip: Boolean get() = protocol in setOf("honda_0298", "honda_wc_0321")
-    val ownsReadRequests: Boolean get() = hasHondaTrip || hasFordTires
+    private val hasLegacyTrip: Boolean get() = protocol in setOf("honda_accord_xp", "honda_accord_xbs", "honda_early_trip") || (protocol == "honda_accord_wc" && profile in setOf(42, 59, 65578, 131114))
+    val hasHondaTrip: Boolean get() = protocol in setOf("honda_0298", "honda_wc_0321") || hasLegacyTrip
+    val ownsReadRequests: Boolean get() = hasHondaTrip || hasFordTires || protocol in setOf("honda_specialized", "honda_accord_xbs")
     val hasFordTires: Boolean get() = protocol == "ford_0334"
     fun initialReadRequests(published: Set<Int>): List<Pair<Int, List<Int>>> = when {
+        protocol == "honda_early_trip" -> CabinHondaEarlyTrip.requests(profile, published)
+        protocol == "honda_accord_xbs" -> CabinHondaAccordXbs.requests(profile, published)
+        protocol == "honda_specialized" -> CabinHondaSpecialized.requests(profile, published)
+        protocol == "honda_accord_xp" -> CabinHondaAccord.requests(published) + CabinHondaTrip.requests(profile, published)
         protocol == "honda_0298" -> CabinHondaTrip.requests(profile, published)
         hasFordTires -> buildList {
             if ((78..85).all { it in published }) add(0 to listOf(99, 0)) // eb requires two bytes; 0x63 publishes tires and trip data.
@@ -38,16 +50,23 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
     }
 
     val choices: Map<FytVehicleChoice, Map<Int, String>> get() =
-        (if (hasFordTires && CabinFordLegacySettings.supports(profile)) CabinFordLegacySettings.languages
+        (if (protocol == "honda_accord_wc") CabinHondaAccordWc.languages(profile)
+            else if (hasFordTires && CabinFordLegacySettings.supports(profile)) CabinFordLegacySettings.languages
             else CabinHondaLanguage.options(profile, protocol)).takeIf { it.isNotEmpty() }
             ?.let { mapOf(FytVehicleChoice.LANGUAGE to it) }.orEmpty()
 
     fun choiceFrame(choice: FytVehicleChoice, value: Int): Pair<Int, List<Int>>? = when (choice) {
-        FytVehicleChoice.LANGUAGE -> if (hasFordTires) CabinFordLegacySettings.languageCommand(profile, value)
+        FytVehicleChoice.LANGUAGE -> if (protocol == "honda_accord_wc") CabinHondaAccordWc.language(profile, value)
+            else if (hasFordTires) CabinFordLegacySettings.languageCommand(profile, value)
             else CabinHondaLanguage.command(profile, protocol, value)
     }
 
     val actions: Set<FytVehicleAction> get() = when {
+        protocol == "honda_early_trip" && CabinHondaEarlyTrip.supports(profile) -> setOf(FytVehicleAction.RESET_HONDA_TRIP_HISTORY)
+        protocol == "honda_accord_xbs" -> CabinHondaAccordXbs.actions(profile)
+        protocol == "honda_accord_wc" -> CabinHondaAccordWc.actions(profile)
+        protocol == "honda_accord_xp" -> CabinHondaAccord.actions(profile)
+        protocol == "honda_legacy" && CabinHondaLegacy.compass(profile) -> setOf(FytVehicleAction.CALIBRATE_COMPASS)
         CabinGolfSettings.supports(protocol) -> setOf(FytVehicleAction.RESET_TRIP_SINCE_START, FytVehicleAction.RESET_TRIP_LONG_TERM)
         protocol == "honda_wc_0321" -> setOf(FytVehicleAction.RESET_HONDA_TRIP_HISTORY,
             FytVehicleAction.RESET_SERVICE_INTERVAL, FytVehicleAction.RESET_VEHICLE_SETTINGS, FytVehicleAction.CALIBRATE_TIRE_PRESSURE)
@@ -62,6 +81,10 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
 
     fun actionFrame(action: FytVehicleAction): Pair<Int, List<Int>>? {
         if (action !in actions) return null
+        if (protocol == "honda_early_trip") return CabinHondaEarlyTrip.reset(profile)
+        if (protocol == "honda_accord_xbs") return CabinHondaAccordXbs.action(profile, action)
+        if (protocol == "honda_accord_wc") return CabinHondaAccordWc.action(profile, action)
+        if (protocol == "honda_accord_xp") return CabinHondaAccord.action(profile, action)
         return when (action) {
             FytVehicleAction.RESET_TRIP_SINCE_START -> 84 to listOf(1)
             FytVehicleAction.RESET_TRIP_LONG_TERM -> 85 to listOf(1)
@@ -70,7 +93,7 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
             FytVehicleAction.RESET_SERVICE_INTERVAL -> 105 to if (protocol == "honda_0298") listOf(14, 0) else listOf(6, 1)
             FytVehicleAction.RESET_VEHICLE_SETTINGS -> 105 to if (protocol == "honda_0298") listOf(15, 0) else listOf(5, 1)
             FytVehicleAction.CALIBRATE_TIRE_PRESSURE -> if (protocol == "honda_0298") 105 to listOf(17, 0) else 108 to listOf(0)
-            FytVehicleAction.CALIBRATE_COMPASS -> 103 to emptyList()
+            FytVehicleAction.CALIBRATE_COMPASS -> (if (protocol == "honda_legacy") 2 else 103) to emptyList()
             FytVehicleAction.INITIALIZE_PANORAMA -> 105 to listOf(48, 0)
         }
     }
@@ -149,6 +172,11 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
                 for (id in 94..97) raw[id]?.takeIf { it in 0..3 }?.let { row(id, it.toString()) }
             }
         }
+        if (protocol == "honda_accord_xbs") addAll(CabinHondaAccordXbs.read(profile, raw, portuguese))
+        if (protocol == "honda_specialized") addAll(CabinHondaSpecialized.read(profile, raw, portuguese))
+        if (protocol == "honda_accord_wc") addAll(CabinHondaAccordWc.read(profile, raw, portuguese))
+        if (protocol == "honda_accord_xp") addAll(CabinHondaAccord.read(profile, raw, portuguese))
+        if (protocol == "honda_legacy") addAll(CabinHondaLegacy.read(profile, raw, portuguese))
         if (protocol == "gm_wc_0036") {
             addAll(CabinGmWcReadings.read(raw, portuguese))
             addAll(CabinGmWcSettings.read(raw, portuguese))
@@ -170,7 +198,7 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
             addAll(CabinFordSettings.read(profile, raw, portuguese))
             addAll(CabinFordLegacySettings.read(profile, raw, portuguese))
         }
-        if (hasHondaTrip) addAll(CabinHondaTrip.read(profile, raw, portuguese))
+        if (hasHondaTrip) addAll(CabinHondaTrip.read(profile, if (hasLegacyTrip) raw.filterKeys { it in 0..17 } else raw, portuguese))
         if (CabinGolfSettings.supports(protocol)) {
             addAll(CabinGolfSettings.read(profile, protocol, raw, portuguese))
             addAll(CabinGolfUnits.read(profile, protocol, raw, portuguese))
@@ -183,6 +211,11 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
         val displayedFields = flatMap { it.fields }
         val ownFields = buildSet {
             addAll(displayedFields)
+            if (protocol == "honda_accord_xbs") addAll(CabinHondaAccordXbs.fields(profile))
+            if (protocol == "honda_specialized") addAll(CabinHondaSpecialized.fields(profile))
+            if (protocol == "honda_accord_wc") addAll(CabinHondaAccordWc.fields(profile))
+            if (protocol == "honda_accord_xp") addAll(CabinHondaAccord.fields)
+            if (protocol == "honda_legacy") addAll(CabinHondaLegacy.fields(profile))
             if (protocol == "gm_wc_0036") addAll(CabinGmWcReadings.fields + CabinGmWcSettings.fields)
             if (protocol == "honda_0298") {
                 addAll((58..87).toSet() + booleanFields + setOf(25, 31, 33, 52, 94, 95, 96, 97, 108, 110, 114, 135, 136, 137))
@@ -199,7 +232,7 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
             if (hasFordTires && CabinFordAmplifier.supports(profile)) addAll(CabinFordAmplifier.fields)
             if (hasFordTires && CabinFordSettings.supports(profile)) addAll(CabinFordSettings.fields)
             if (hasFordTires && CabinFordLegacySettings.supports(profile)) addAll(CabinFordLegacySettings.fields)
-            if (hasHondaTrip) addAll(CabinHondaTrip.fields(profile))
+            if (hasHondaTrip) addAll(if (hasLegacyTrip) (0..17).toSet() else CabinHondaTrip.fields(profile))
             if (CabinGolfSettings.supports(protocol)) {
                 addAll(CabinGolfSettings.fields(protocol))
                 addAll(CabinGolfUnits.fields(profile))
@@ -216,6 +249,11 @@ internal class CabinSyuDecoder(private val profile: Int, private val protocol: S
     fun releaseFrame(field: Int): Pair<Int, List<Int>>? = if (hasFordTires) CabinFordSeats.releaseFrame(profile, field) ?: CabinFordMedia.releaseFrame(profile, field) else null
 
     internal fun command(field: Int, value: Int, current: Map<Int, Int>): Pair<Int, List<Int>>? {
+        if (protocol == "honda_accord_xbs") return CabinHondaAccordXbs.command(profile, field, value, current)
+        if (protocol == "honda_specialized") return CabinHondaSpecialized.command(profile, field, value, current)
+        if (protocol == "honda_accord_wc") return CabinHondaAccordWc.command(profile, field, value, current)
+        if (protocol == "honda_accord_xp") return CabinHondaAccord.command(profile, field, value, current)
+        if (protocol == "honda_legacy") return CabinHondaLegacy.command(profile, field, value, current)
         if (protocol == "gm_wc_0036") return CabinGmWcSettings.command(field, value, current)
         if (hasFordTires && field in CabinFordMedia.fields && CabinFordMedia.supports(profile))
             return CabinFordMedia.command(profile, field, value, current)

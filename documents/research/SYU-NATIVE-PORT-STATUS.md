@@ -368,3 +368,60 @@ DEX class-definition audit: 5,624 definitions, zero runtime dexlib2 or moved
 reference-reader classes. `eb.smali` command-0 dispatch was also checked:
 `intsOk` receives 2, then forwards both arguments to request opcode 0x90.
 This is local software validation only, not physical CAN/CarPlay verification.
+
+### Additional native Honda contracts (2026-09-16)
+
+This batch adds native capabilities on **49 additional exact profiles**, not full
+Honda parity. Registry routing requires both the numeric profile and the verified
+callback. All implementations are Kotlin; reference APKs/smali remain development
+inputs only.
+
+| Implementation | Profiles | Verified capabilities |
+| --- | --- | --- |
+| `CabinHondaLegacy` | 24, 47, 65560, 131119, 196655, 67, 76 | Factory USB/iPod source, transport, time, track counts/progress; XP compass zone/calibration; Civic WC speed |
+| `CabinHondaAccord` | 41, 65577, 77, 65613, 131149, 196685, 262221 | Accord XP settings, screen controls, profile-specific confirmed reset actions, trip/history |
+| `CabinHondaAccordWc` | 37, 131109, 42, 59, 65578, 131114 | WC high screen/color/camera; low settings, two languages, relative camera adjustments, supported TPMS reset and trip/history |
+| `CabinHondaSpecialized` | 12452293, 12911044, 12976580, 13042116 | Eight XC Acura amplifier controls, signed feedback and request 1/[115] |
+| `CabinHondaSpecialized` | 197033, 15729093, 15794629 | Spirior speed/RPM/odometer/seven light states; Civic 2006 odometer |
+| `CabinHondaAccordXbs` | 262, 410 | Distinct low/high settings, screen, assistance preferences, confirmed reset actions and trip/history |
+| `CabinHondaEarlyTrip` | 19, 64, 65, 117, 65653, 131189, 196725, 141, 166, 196774, 192, 65728, 203, 196811, 262347, 297, 65833, 370, 65906, 131442 | Current/previous consumption, range, A history/units, protocol-specific read and history reset commands |
+
+Corrections verified against service code:
+
+- WC Civic 67 publishes media at 1..7, with speed at 0. The shared stock CR-V
+  activity's 11..17 IDs are wrong for Civic; those IDs belong to CR-V 76.
+- Accord callback constant names describe unrelated locks/warnings; the native
+  UI uses meanings from the packet reader plus the matching stock activity.
+- Accord WC camera commands 11/12/13 accept relative steps (-1 up, -2 down),
+  not absolute values. Only adjacent choices are exposed and current feedback
+  is required. Brightness command 11 is implemented by o0 even though the
+  stock activity leaves its brightness handler empty.
+- XC Acura fields 81..85/88/89 are signed bytes. Field 87 is three bits.
+  Field 89 is subwoofer, so it is eligible for non-motion cached refresh.
+- XBS 410 beep volume is field 63. A stock decrement handler incorrectly reads
+  field 59, which is beep enable. Native code uses 63 consistently.
+- XBS service wd ignores one-argument command 100. Trip requests use 100/[8,1]
+  and 100/[8,2]; r8 uses 100/[5,1] and 100/[5,2]. Settings/screen requests have
+  their own packet selectors. The reset is 101/[3].
+- XBS wd does not implement maintenance command 14 despite the stock button.
+  Cabin does not expose that action on 410. r8 lacks callback fields 22/27/28;
+  those unavailable stock settings do not appear as working controls.
+- The early RZC services b4/l6/kc omit command 101. Their history reset uses
+  100/[3], producing the same Honda 0x33/3 request as the XP reset path.
+
+References: client `crv/{XpCrvActi,XpCompassActi,WcCrvActi}`,
+`accord9/{xp,wc}`, `xbs/accord9`, `lz/spirior`,
+`rzc/sanlin/{XCHondaAmpCarSet,LZHonda06CivicCarInfo}`, `honda/Honda*`;
+service `w,t0,j1,s1,n0,t1,i0,o0,c1,r8,wd,cn,le,fo,r,h1,i1,b4,c5,l6,y9,kc`
+and `module/canbus/{g,m}`. i0 command dispatch was checked directly in smali
+because the Java decompiler incorrectly suggests camera-command fallthrough.
+
+Still not implemented in this batch: remaining factory media systems, additional
+Honda camera/climate/amplifier variants, and every remaining callback family.
+No physical vehicle validation is implied by local tests or APK compilation.
+
+Local validation of the 49-profile batch: `/tmp/cabin-honda-local-final.log`,
+133 test suites, 841 passed, one intentional opt-in reference-export test skipped,
+zero failures/errors. `assembleRelease` completed. APK SHA-256
+`ae0fec583e4fa9945a04994b24ff91045a156ad9186fed30496a610c1ec6ecd4`;
+5,630 class definitions; no runtime reference-reader/interpreter definitions.

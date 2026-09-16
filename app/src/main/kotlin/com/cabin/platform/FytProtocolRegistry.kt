@@ -22,7 +22,13 @@ internal class FytProtocolRegistry private constructor(
             val array = obj.getJSONArray(key)
             key.toInt() to (0 until array.length()).map(array::getString)
         } }
-        val decoder = CabinGolfSettings.dialect(id, template.getString("callback"))
+        val decoder = CabinHondaLegacy.dialect(id, template.getString("callback"))
+            ?: CabinHondaEarlyTrip.dialect(id, template.getString("callback"))
+            ?: CabinHondaAccordXbs.dialect(id, template.getString("callback"))
+            ?: CabinHondaSpecialized.dialect(id, template.getString("callback"))
+            ?: CabinHondaAccordWc.dialect(id, template.getString("callback"))
+            ?: CabinHondaAccord.dialect(id, template.getString("callback"))
+            ?: CabinGolfSettings.dialect(id, template.getString("callback"))
             ?: when (template.getString("callback")) {
                 CabinGmWcReadings.CALLBACK -> "gm_wc_0036"
                 CabinFordTires.CALLBACK -> "ford_0334"
