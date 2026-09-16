@@ -2,13 +2,13 @@ package com.cabin.platform
 
 /** Civic/CR-V factory USB/iPod, verified against w/t0/j1/s1 rather than shared screen IDs. */
 internal object CabinHondaLegacy {
-    private val xp = setOf(24, 47, 65560, 131119, 196655)
+    private val xp = setOf(24, 47, 65560, 65583, 131119, 196655)
     fun supports(profile: Int) = profile in xp || profile in setOf(67, 76)
     fun compass(profile: Int) = profile in xp
     fun dialect(profile: Int, callback: String): String? {
         val expected = when (profile) {
             24, 65560 -> "Callback_0024_XP1_SIYU2012"
-            47, 131119, 196655 -> "Callback_0047_XP1_CRV2012"
+            47, 65583, 131119, 196655 -> "Callback_0047_XP1_CRV2012"
             67 -> "Callback_0067_WC3_SiYu"
             76 -> "Callback_0076_WC3_CRV"
             else -> return null

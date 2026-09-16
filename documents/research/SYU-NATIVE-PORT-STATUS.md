@@ -448,3 +448,8 @@ wire transport for replacing this vendor operation has not been verified.
 Reference: `CrvXBSActi`, `Act_WC_CarCD_AoDeSai`, callbacks 0188/0443, service y5/bk.
 Local protocol regression tests passed in `/tmp/cabin-honda-media-after-016.log`.
 This continuation is not included in tag v0.1.6.
+
+The post-0.1.6 continuation also enables legacy media/compass on profile 65583.
+Its `KangshengXpCrvActi` is an index screen that opens the same `XpCrvActi`;
+service t0 has the same media/compass command paths. The separate entry screen
+was not a valid reason to omit this profile from the native media route.

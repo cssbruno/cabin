@@ -216,7 +216,7 @@ class CabinSyuProtocolTest {
     }
 
     @Test fun `Honda XP compass and media commands stay within routed profiles`() {
-        for (profile in listOf(24, 47, 65560, 131119, 196655)) {
+        for (profile in listOf(24, 47, 65560, 65583, 131119, 196655)) {
             val decoder = registry().profile(profile).syuClient.display as CabinSyuDecoder
             assertEquals(1 to listOf(15), decoder.command(8, 15, mapOf(8 to 1)))
             assertNull(decoder.command(8, 16, mapOf(8 to 1)))
@@ -224,7 +224,7 @@ class CabinSyuProtocolTest {
             assertEquals(2 to emptyList<Int>(), decoder.actionFrame(FytVehicleAction.CALIBRATE_COMPASS))
             assertEquals(0 to listOf(1), decoder.command(0, 1, mapOf(0 to 5)))
         }
-        assertNull(CabinHondaLegacy.dialect(65583, "Lcom/syu/module/canbus/Callback_0047_XP1_CRV2012;"))
+        assertNull(CabinHondaLegacy.dialect(65583, "Lcom/syu/module/canbus/Callback_0067_WC3_SiYu;"))
         assertNull(CabinHondaLegacy.dialect(24, "Lcom/syu/module/canbus/Callback_0067_WC3_SiYu;"))
     }
 
