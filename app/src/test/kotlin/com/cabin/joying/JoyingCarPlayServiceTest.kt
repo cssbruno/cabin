@@ -95,6 +95,26 @@ class JoyingCarPlayServiceTest {
         controller.destroy()
     }
 
+    @Test fun `automatic recovery and exhaustion retain the actual failure`() {
+        val controller = Robolectric.buildService(TestService::class.java).create()
+        val service = controller.get()
+        service.onStartCommand(Intent(), 0, 1)
+        for (delay in listOf(2L, 4L, 8L)) {
+            service.runtimes.last().status("Native receiver initialization failed")
+            service.runtimes.last().failed()
+            advance(0)
+            assertTrue(service.state.value.status.contains("Native receiver initialization failed"))
+            advance(delay)
+        }
+        service.runtimes.last().status("Native receiver initialization failed")
+        service.runtimes.last().failed()
+        advance(60)
+        assertFalse(service.state.value.running)
+        assertTrue(service.state.value.status.contains("Native receiver initialization failed"))
+        assertEquals(4, service.runtimes.size)
+        controller.destroy()
+    }
+
     @Test fun `permanent socket failure preserves guidance until manual retry`() {
         val controller = Robolectric.buildService(TestService::class.java).create()
         val service = controller.get()

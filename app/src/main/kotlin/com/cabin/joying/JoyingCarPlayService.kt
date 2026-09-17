@@ -82,6 +82,7 @@ internal open class JoyingCarPlayService : Service() {
     private fun scheduleRecovery(failedGeneration: Int, retryable: Boolean) {
         if (!backendSelected()) { stopProjection(); return }
         if (generation != failedGeneration || recoveryPending) return
+        val failureDetail = mutable.value.status
         if (!retryable) {
             // Keep the actionable bind/handoff error supplied by the failed session.
             recoveryPending = true
@@ -91,14 +92,14 @@ internal open class JoyingCarPlayService : Service() {
         if (retries >= 3) {
             recoveryPending = true
             reportRecoveryExhausted()
-            mutable.update { it.copy(status = getString(R.string.joying_recovery_exhausted), running = false) }
+            mutable.update { it.copy(status = "${getString(R.string.joying_recovery_exhausted)}\n$failureDetail", running = false) }
             return
         }
         CabinTelemetry.record(DiagnosticEvent.JOYING_RETRY)
         recoveryPending = true
         val delay = 2_000L shl retries
         retries++
-        mutable.update { it.copy(status = getString(R.string.joying_recovering, retries, 3)) }
+        mutable.update { it.copy(status = "${getString(R.string.joying_recovering, retries, 3)}\n$failureDetail") }
         recovery.postDelayed({
             if (generation == failedGeneration) startSession()
         }, delay)

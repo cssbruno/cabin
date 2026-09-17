@@ -224,6 +224,25 @@ class TeyesVideoOverlayLifecycleTest {
     }
 
     @Test
+    fun `reattached UI receives streaming state without another USB transition`() {
+        (field("currentState") as AtomicReference<CabinManager.State>).set(CabinManager.State.STREAMING)
+        setField("currentStatusText", "Phone connected")
+        var observedState = CabinManager.State.DISCONNECTED
+        var observedStatus = ""
+        var observedPhone: PhoneType? = null
+        manager.initialize(surface, 640, 480, object : CabinManager.Callback {
+            override fun onStateChanged(state: CabinManager.State) { observedState = state }
+            override fun onStatusTextChanged(text: String) { observedStatus = text }
+            override fun onHostUIPressed() {}
+            override fun onPhoneTypeChanged(phoneType: PhoneType) { observedPhone = phoneType }
+        })
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(200))
+        assertEquals(CabinManager.State.STREAMING, observedState)
+        assertEquals("Phone connected", observedStatus)
+        assertEquals(PhoneType.CARPLAY, observedPhone)
+    }
+
+    @Test
     fun `covered video drains USB and parses header without feeding decoder`() {
         setField("codecDeferred", false)
         val method = CabinManager::class.java.getDeclaredMethod("createVideoProcessor").apply { isAccessible = true }

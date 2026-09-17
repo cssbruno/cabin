@@ -800,6 +800,10 @@ class CabinManager(
                     this@CabinManager.callback = finalCallback
                     this@CabinManager.videoSurface = finalSurface
                     surfaceReadyForDeferredCodec = true
+                    // A recreated UI starts with disconnected/default phone state even
+                    // when USB is already streaming. Replay it when replacing the
+                    // callback so the connection overlay cannot hide the live video.
+                    publishCurrentSnapshot(finalCallback)
 
                     // If container dimensions changed during an AA session, resend
                     // BoxSettings so the phone re-renders for the new content area.

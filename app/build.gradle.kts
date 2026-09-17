@@ -28,8 +28,8 @@ android {
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1020
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.9"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1021
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.10"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
         require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
