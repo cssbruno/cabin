@@ -69,10 +69,13 @@ class LogWorkspaceUiTest {
         compose.waitUntil(10_000) { compose.onAllNodesWithText("multi-one.log").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText(compose.activity.getString(com.cabin.R.string.ux_review_logs_start)).assertIsDisplayed()
         compose.onNodeWithText("Select / clear all").performScrollTo().performClick()
-        compose.onNode(hasSetTextAction() and hasText(compose.activity.getString(com.cabin.R.string.logx_search))).performScrollTo().performTextInput("absent text")
+        val query = compose.onNode(hasSetTextAction() and hasText(compose.activity.getString(com.cabin.R.string.logx_search)))
+        query.performScrollTo().performTextInput("absent text")
+        query.assertIsFocused()
         compose.onNodeWithText("Search selected files").performScrollTo().performClick()
         val message = compose.activity.getString(com.cabin.R.string.ux_review_logs_page_empty)
         compose.waitUntil(10_000) { compose.onAllNodesWithText(message).fetchSemanticsNodes().isNotEmpty() }
+        query.assertIsNotFocused()
         compose.onNodeWithText(message).assertIsDisplayed()
         compose.onNodeWithText("Continue search — next page").performScrollTo().performClick()
         compose.waitUntil(10_000) { compose.onAllNodesWithText(compose.activity.getString(com.cabin.R.string.ux_review_logs_empty)).fetchSemanticsNodes().isNotEmpty() }
@@ -91,8 +94,11 @@ class LogWorkspaceUiTest {
         compose.onNodeWithText(context.getString(com.cabin.R.string.uxf_search_changed)).assertIsDisplayed()
         compose.onNodeWithText("Continue search — next page").assertIsNotEnabled()
         compose.onNodeWithText("Export all matching records").assertIsNotEnabled()
-        search.performScrollTo().performImeAction()
+        search.performScrollTo().assertIsFocused().performImeAction()
         compose.waitUntil(10_000) { compose.onAllNodesWithText("Scanned: 303 lines.", substring = true).fetchSemanticsNodes().isNotEmpty() }
+        // The dialog owns a separate focus root. Completing a search must release
+        // its field so the software keyboard stops covering the result list.
+        search.assertIsNotFocused()
         compose.onNodeWithText(context.getString(com.cabin.R.string.uxf_search_changed)).assertDoesNotExist()
         compose.onNodeWithText("Export all matching records").performScrollTo().assertIsEnabled().performClick()
         val queue = SupportExportQueue(context)

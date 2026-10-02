@@ -49,6 +49,21 @@ def main():
     }
     (args.output / 'device.json').write_text(json.dumps(manifest, indent=2) + '\n')
     if not passed:
+        # Preserve the test's timeout snapshot before runner cleanup can hide the
+        # original window, plus host-side diagnostics even if the app crashed.
+        # Diagnostic collection must never turn a failed instrumentation run green.
+        diagnostics = [
+            (['pull', '/sdcard/Android/data/zeno.carlink/files/quality/', str(args.output / 'failure')], None),
+            (['shell', 'dumpsys', 'window', 'windows'], 'failure-windows.txt'),
+            (['logcat', '-d', '-t', '1500'], 'failure-logcat.txt'),
+        ]
+        for command, filename in diagnostics:
+            try:
+                output = run(*command, timeout=30)
+                if filename:
+                    (args.output / filename).write_text(output)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+                print('Could not collect failure diagnostic:', command, str(error))
         print(result.stdout)
         raise SystemExit('Minified device checks failed; see instrumentation.txt')
     for name in ('soak.json', 'startup-phases.json'):

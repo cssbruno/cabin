@@ -17,8 +17,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -58,7 +61,6 @@ private data class WorkspaceInputs(
 internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val focus = LocalFocusManager.current
     val queue = remember { SupportExportQueue(context) }
     val bookmarks = remember { LogBookmarks(context) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -120,10 +122,11 @@ internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose:
         page.severities.forEach { (level, count) -> total[level] = (total[level] ?: 0) + count }
         summary = total
     }
-    fun search() {
+    fun search(focus: FocusManager, keyboard: SoftwareKeyboardController?) {
         if (busy || selected.isEmpty()) return
         val request = inputs()
         focus.clearFocus()
+        keyboard?.hide()
         follow = false
         run {
             val nextQuery = request.query(zone)
@@ -189,6 +192,9 @@ internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose:
         }
     }
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        // A Dialog has its own focus root; clear the field that owns its keyboard.
+        val focus = LocalFocusManager.current
+        val keyboard = LocalSoftwareKeyboardController.current
         Surface(Modifier.fillMaxSize().padding(12.dp), shape = MaterialTheme.shapes.large) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val controlsHeight = (maxHeight - 104.dp).coerceAtLeast(0.dp) * .60f
@@ -201,7 +207,7 @@ internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose:
                         OutlinedTextField(query, { query = it.take(200) }, singleLine = true, enabled = !follow,
                             label = { Text(stringResource(R.string.logx_search), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                            keyboardActions = KeyboardActions(onSearch = { if (!follow) search() }), modifier = Modifier.fillMaxWidth())
+                            keyboardActions = KeyboardActions(onSearch = { if (!follow) search(focus, keyboard) }), modifier = Modifier.fillMaxWidth())
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             FilterChip(chooseFiles, { chooseFiles = !chooseFiles }, label = { Text(stringResource(R.string.lxg_files, selected.size)) })
                             FilterChip(showMarks, { showMarks = !showMarks }, label = { Text(stringResource(R.string.lxg_bookmarks)) })
@@ -234,7 +240,7 @@ internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose:
                             LogSeverity.entries.forEach { level ->
                                 FilterChip(severity == level, { severity = level }, enabled = !follow, label = { Text(stringResource(level.label())) })
                             }
-                            Button(onClick = ::search, enabled = !busy && selected.isNotEmpty()) { Text(stringResource(R.string.lxg_search)) }
+                            Button(onClick = { search(focus, keyboard) }, enabled = !busy && selected.isNotEmpty()) { Text(stringResource(R.string.lxg_search)) }
                             if (cursor != null && !follow) OutlinedButton(enabled = !busy && !inputsChanged, onClick = { val next = cursor!!; run { accept(withContext(Dispatchers.IO) { scanLogWorkspace(next, frozenQuery) }, false) } }) { Text(stringResource(R.string.lxg_continue)) }
                             if (busy) TextButton({ job?.cancel() }) { Text(stringResource(R.string.update_cancel)) }
                         }
@@ -242,7 +248,7 @@ internal fun LogWorkspaceDialog(store: LogFilesStore, logging: Boolean, onClose:
                         Text(stringResource(R.string.lxg_scan_scope, scanned, unknown))
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             listOf(LogSeverity.ERROR, LogSeverity.WARNING, LogSeverity.INFO).forEach { level ->
-                                TextButton(onClick = { severity = level; search() }, enabled = !busy && selected.isNotEmpty()) {
+                                TextButton(onClick = { severity = level; search(focus, keyboard) }, enabled = !busy && selected.isNotEmpty()) {
                                     Text("${stringResource(level.label())}: ${summary[level.name.take(1)] ?: 0}")
                                 }
                             }

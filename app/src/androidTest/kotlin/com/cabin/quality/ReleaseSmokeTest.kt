@@ -1,11 +1,13 @@
 package com.cabin.quality
 
 import android.Manifest
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityNodeInfo
@@ -38,11 +40,35 @@ class ReleaseSmokeTest {
         check(id != 0) { "Missing UI resource: $name" }
         return context.getString(id, *arguments)
     }
-    private fun launch(): ActivityScenario<Activity> = ActivityScenario.launch<Activity>(
-        Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
-            .setComponent(ComponentName(context.packageName, "com.cabin.MainActivity"))
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
-    )
+    private fun launch(): ActivityScenario<Activity> {
+        val automation = instrumentation.uiAutomation
+        val serviceInfo = automation.serviceInfo
+        serviceInfo.flags = serviceInfo.flags or AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+        automation.serviceInfo = serviceInfo
+        val activity = ActivityScenario.launch<Activity>(
+            Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+                .setComponent(ComponentName(context.packageName, "com.cabin.MainActivity"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
+        )
+        try {
+            // A fresh API27 emulator can resume the Activity before its window/tree
+            // becomes usable. Keep this separate from the 20-second action deadlines.
+            await("Focused Cabin window and accessibility tree", timeout = 60_000) {
+                var focused = false
+                activity.onActivity { focused = it.hasWindowFocus() }
+                var ready = false
+                if (focused) for (node in nodes()) if (
+                    node.isVisibleToUser && node.packageName?.toString() == context.packageName &&
+                    (node.isClickable || node.text != null || node.contentDescription != null)
+                ) ready = true
+                ready
+            }
+            return activity
+        } catch (error: Throwable) {
+            try { activity.close() } catch (close: Throwable) { error.addSuppressed(close) }
+            throw error
+        }
+    }
     private fun shell(command: String) {
         val descriptor = instrumentation.uiAutomation.executeShellCommand(command)
         val stream = android.os.ParcelFileDescriptor.AutoCloseInputStream(descriptor)
@@ -70,17 +96,22 @@ class ReleaseSmokeTest {
     private fun await(description: String, timeout: Long = 20_000, condition: () -> Boolean) {
         val deadline = SystemClock.uptimeMillis() + timeout
         while (SystemClock.uptimeMillis() < deadline) {
+            dismissImmersiveEducation()
             if (condition()) return
             SystemClock.sleep(100)
         }
-        val labels = StringBuilder()
-        for (node in nodes()) if (node.isVisibleToUser) labels.append(node.text).append('/').append(node.contentDescription).append('\n')
-        fail("Timed out: $description\n$labels")
+        fail(captureFailure("Timed out: $description"))
     }
     private fun clickNode(node: AccessibilityNodeInfo): Boolean {
         var target: AccessibilityNodeInfo? = node
         while (target != null) {
-            if (target.isEnabled && target.isClickable && target.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return true
+            if (target.isEnabled && target.isClickable) {
+                val clicked = target.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                val bounds = Rect()
+                target.getBoundsInScreen(bounds)
+                System.out.println("Accessibility click: ${node.text}/${node.contentDescription}; target=${target.text}/${target.contentDescription}; class=${target.className}; bounds=$bounds; accepted=$clicked")
+                if (clicked) return true
+            }
             target = target.parent
         }
         return false
@@ -129,24 +160,81 @@ class ReleaseSmokeTest {
         SystemClock.sleep(150)
         return true
     }
-    private fun describeVisibleUi(): String {
-        val result = StringBuilder()
-        for (node in nodes()) if (node.isVisibleToUser) {
-            result.append(node.text).append('/').append(node.contentDescription)
-                .append(" selected=").append(node.isSelected).append(" clickable=").append(node.isClickable).append('\n')
-        }
+    private fun captureFailure(description: String): String {
+        val result = StringBuilder(description).append('\n')
+        val directory = File(context.getExternalFilesDir(null) ?: context.filesDir, "quality")
+        val preserveFirst = File(directory, "failure-ui.txt").exists()
+        // Capture the failed screen before ActivityScenario.close or a later test replaces it.
+        if (!preserveFirst) try {
+            directory.mkdirs()
+            val bitmap = instrumentation.uiAutomation.takeScreenshot()
+            if (bitmap == null) result.append("Screenshot unavailable\n")
+            else {
+                try {
+                    val output = FileOutputStream(File(directory, "failure.png"))
+                    try { bitmap.compress(Bitmap.CompressFormat.PNG, 100, output) }
+                    finally { output.close() }
+                } finally { bitmap.recycle() }
+            }
+        } catch (error: Exception) { result.append("Screenshot error: ").append(error).append('\n') }
+        try {
+            val root = instrumentation.uiAutomation.rootInActiveWindow
+            result.append("Active root: ")
+            if (root == null) result.append("null\n")
+            else {
+                val bounds = Rect()
+                root.getBoundsInScreen(bounds)
+                result.append("package=").append(root.packageName).append(" window=").append(root.windowId)
+                    .append(" visible=").append(root.isVisibleToUser).append(" focused=").append(root.isFocused)
+                    .append(" bounds=").append(bounds).append('\n')
+            }
+            for (window in instrumentation.uiAutomation.windows) {
+                val bounds = Rect()
+                window.getBoundsInScreen(bounds)
+                result.append("Window id=").append(window.id).append(" type=").append(window.type)
+                    .append(" active=").append(window.isActive).append(" focused=").append(window.isFocused)
+                    .append(" package=").append(window.root?.packageName).append(" bounds=").append(bounds).append('\n')
+            }
+            val snapshot = nodes()
+            result.append("Active-tree nodes: ").append(snapshot.size).append('\n')
+            for (node in snapshot) if (node.isVisibleToUser) {
+                val bounds = Rect()
+                node.getBoundsInScreen(bounds)
+                result.append(node.text).append('/').append(node.contentDescription)
+                    .append(" package=").append(node.packageName).append(" selected=").append(node.isSelected)
+                    .append(" clickable=").append(node.isClickable).append(" enabled=").append(node.isEnabled)
+                    .append(" bounds=").append(bounds).append('\n')
+            }
+        } catch (error: Exception) { result.append("Window/tree error: ").append(error).append('\n') }
+        try { if (!preserveFirst) write(File(directory, "failure-ui.txt"), result.toString()) }
+        catch (error: Exception) { result.append("Evidence write error: ").append(error).append('\n') }
         return result.toString()
+    }
+    private fun dismissImmersiveEducation(): Boolean {
+        for (node in nodes()) if (node.isVisibleToUser &&
+            // API27 owns this system prompt in the framework package; newer
+            // images can expose it through System UI. Never accept app dialogs.
+            (node.packageName?.toString() == "android" || node.packageName?.toString() == "com.android.systemui") &&
+            (node.text?.toString() == "Got it" || node.text?.toString() == "GOT IT") && clickNode(node)
+        ) {
+            SystemClock.sleep(100)
+            return true
+        }
+        return false
     }
     private fun click(label: String, completed: (() -> Boolean)? = null) {
         // Compose exposes ACTION_SHOW_ON_SCREEN for laid-out content outside a scroll viewport.
         val navigation = label == text("settings_tab_teyes") || label == text("settings_tab_logs")
         for (pass in 0 until 32) {
+            // The system can show its education after Settings has already opened.
+            if (dismissImmersiveEducation()) continue
             // Some platform accessibility versions return false after dispatching an
             // action that has already changed the chip label. Confirm its observable result.
             if (completed?.invoke() == true) return
             val snapshot = nodes()
             for (index in snapshot.size - 1 downTo 0) {
                 val node = snapshot[index]
+                if (!node.refresh()) continue
                 if (matches(node, label)) {
                     if (node.isVisibleToUser && clickNode(node)) { SystemClock.sleep(100); return }
                     node.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
@@ -156,10 +244,7 @@ class ReleaseSmokeTest {
             SystemClock.sleep(100)
         }
         if (completed?.invoke() == true) return
-        fail("No reachable action: $label\n" + describeVisibleUi())
-    }
-    private fun dismissImmersiveEducation() {
-        for (node in nodes()) if (node.text?.toString() == "Got it" || node.text?.toString() == "GOT IT") clickNode(node)
+        fail(captureFailure("No reachable action: $label"))
     }
     private fun openSettings() {
         // Education may appear after the app opens or after a recreation, so handle it
@@ -167,7 +252,6 @@ class ReleaseSmokeTest {
         var lastRequestAt = 0L
         var visibleSince = 0L
         await("Settings opened") {
-            dismissImmersiveEducation()
             val now = SystemClock.uptimeMillis()
             if (present(text("settings_back_cabin"))) {
                 // A just-closed settings window may still be in the accessibility tree.
@@ -231,6 +315,7 @@ class ReleaseSmokeTest {
     private fun setSearchQuery(value: String) {
         // The log workspace's first editable field is the labelled full-text search field.
         for (pass in 0 until 16) {
+            if (dismissImmersiveEducation()) continue
             for (node in nodes()) {
                 if (node.isVisibleToUser && node.isEditable && node.isEnabled) {
                     val arguments = Bundle()
@@ -240,7 +325,7 @@ class ReleaseSmokeTest {
             }
             scroll(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD)
         }
-        fail("Log search text field is not editable")
+        fail(captureFailure("Log search text field is not editable"))
     }
     private fun write(file: File, content: String) {
         file.parentFile?.mkdirs()
@@ -268,6 +353,18 @@ class ReleaseSmokeTest {
             click(text("lxg_workspace"))
             await("Log workspace") { present(text("logs_close_viewer")) }
             setSearchQuery("release-smoke-marker")
+            // Finish text entry before navigating file/filter controls. A real
+            // Back action dismisses only the visible keyboard on compact devices.
+            if (instrumentation.uiAutomation.windows.any {
+                    it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD
+                }) {
+                shell("input keyevent KEYCODE_BACK")
+                await("Keyboard dismissed before selecting files") {
+                    instrumentation.uiAutomation.windows.none {
+                        it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD
+                    }
+                }
+            }
             // File selection opens expanded; choose only this fixture to bound export work.
             click(log.name)
             click(text("lxg_search"))
