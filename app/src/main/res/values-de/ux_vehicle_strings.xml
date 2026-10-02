@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxv_document_picker_missing">Keine Dateiauswahl verfügbar. Aktiviere eine Dateien-App auf diesem Gerät und versuche es erneut.</string>
+    <string name="uxv_backup_rejected">Diese Sicherung konnte nicht geöffnet werden. Prüfe die Datei und bei verschlüsselten Sicherungen das Passwort. Es wurde nichts geändert.</string>
+    <string name="uxv_delete_maintenance">„%1$s“ aus dem Wartungsplan löschen? Abgeschlossene Wartungseinträge bleiben erhalten. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="uxv_maintenance_empty">Noch keine Wartungseinträge. Gib unten einen Namen und ein Fälligkeitsdatum ein.</string>
+    <string name="uxv_service_export_saved">Wartungsverlauf als CSV gespeichert</string>
+    <string name="uxv_select_trip">Fahrt vom %1$s auswählen</string>
+    <string name="uxv_map_unavailable">Keine Karten-App konnte diese Parkposition öffnen. Aktiviere eine Karten-App und versuche es erneut.</string>
+    <string name="uxv_forget_parking">Gespeicherte Parkposition, Notiz und Erinnerung für dieses Fahrzeug löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="uxv_favorite_limit">Bis zu 6 Favoriten wählen · %1$d ausgewählt</string>
+    <string name="uxv_move_favorite">%1$s nach vorne verschieben</string>
+    <string name="uxv_notification_settings">Benachrichtigungseinstellungen</string>
+    <string name="uxv_service_history">Wartungsverlauf</string>
+    <string name="uxv_prepared_exports">Vorbereitete Support-Exporte</string>
+    <string name="uxv_stop_connection_history">Keine Verbindungsübersichten mehr speichern?</string>
+    <string name="uxv_stop_connection_history_detail">Dabei werden auch die vorhandenen Verbindungsübersichten aller Fahrer gelöscht.</string>
+    <string name="uxv_delete_category">%1$s löschen?</string>
+</resources>

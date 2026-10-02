@@ -1,5 +1,9 @@
 package com.cabin
 
+import androidx.compose.foundation.rememberScrollState
+
+import androidx.compose.foundation.verticalScroll
+
 import android.Manifest
 import android.app.ActivityManager
 import android.content.BroadcastReceiver
@@ -19,6 +23,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.createLifecycleAwareWindowRecomposer
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -143,6 +148,7 @@ import java.nio.ByteOrder
  *    [SettingsScreen] on top via AnimatedVisibility rather than replacing it.
  */
 class MainActivity : ComponentActivity() {
+    private var cabinMotionScale: com.cabin.ui.settings.CabinMotionDurationScale? = null
     companion object {
         private val activityOwner = ActivityInstanceOwner<MainActivity>()
         const val ACTION_SHOW_COMPACT_PROJECTION = "com.carlink.action.SHOW_COMPACT_PROJECTION"
@@ -283,6 +289,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        com.cabin.quality.StartupMeasurements.activityCreated(this)
         activityOwner.claim(this)?.let { existing ->
             // Some head units launch HOME aliases in a separate task despite singleTask.
             // Forward the request before creating another manager or video surface.
@@ -296,6 +303,9 @@ class MainActivity : ComponentActivity() {
             }
             finish()
             return
+        }
+        com.cabin.ui.settings.VideoSettingsTrial.get(this).onRollback {
+            if (!isFinishing && !isDestroyed && cabinManager?.projectionSessionRequested == true) reinitializeForDisplayMode(currentDisplayMode)
         }
         val homeLaunch = BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE &&
             intent?.action != ACTION_SHOW_COMPACT_PROJECTION && intent?.action != ACTION_SHOW_FULLSCREEN_PROJECTION
@@ -383,7 +393,9 @@ class MainActivity : ComponentActivity() {
         // Set up Compose UI
         // CabinManager is observed via mutableStateOf — replacement during display mode
         // reinit triggers full recomposition without Activity restart.
-        setContent {
+        val motionScale = com.cabin.ui.settings.CabinMotionDurationScale(applicationContext).also { cabinMotionScale = it }
+        val cabinRecomposer = window.decorView.createLifecycleAwareWindowRecomposer(coroutineContext = motionScale, lifecycle = lifecycle)
+        setContent(parent = cabinRecomposer) {
             val manager = cabinManagerState.value
             val displayMode = displayModeState.value
             val compactPanel = compactPanelState.value
@@ -729,6 +741,9 @@ class MainActivity : ComponentActivity() {
             packageManager.hasSystemFeature("android.software.car.templates_host")
 
     override fun onDestroy() {
+        cabinMotionScale?.close()
+        cabinMotionScale = null
+        if (!redirectedDuplicate) com.cabin.ui.settings.VideoSettingsTrial.get(this).onRollback(null)
         super.onDestroy()
         if (redirectedDuplicate) return
         activityOwner.release(this)
@@ -1797,7 +1812,7 @@ fun CabinApp(
             AlertDialog(
                 onDismissRequest = { pendingParkedAction = null },
                 title = { Text(androidx.compose.ui.res.stringResource(R.string.app_status_park_title)) },
-                text = { Text(androidx.compose.ui.res.stringResource(R.string.app_status_park_message)) },
+                text = { Text(androidx.compose.ui.res.stringResource(R.string.app_status_park_message), Modifier.verticalScroll(rememberScrollState())) },
                 confirmButton = { TextButton(onClick = {
                     guard.observe(speed)
                     if (guard.confirmParked()) { val action = pendingParkedAction; pendingParkedAction = null; action?.invoke() }

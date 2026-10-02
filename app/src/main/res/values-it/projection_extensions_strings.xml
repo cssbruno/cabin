@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="px_restart_title">Ricominciare la guida di configurazione?</string>
+    <string name="px_restart_detail">Verranno cancellati i progressi e le verifiche manuali. Le impostazioni audio e del telefono saranno conservate.</string>
+    <string name="px_restart">Ricomincia la guida</string>
+    <string name="px_checklist_title">Verifica una sessione reale del telefono</string>
+    <string name="px_checklist_detail">Seleziona solo ciò che hai provato a veicolo fermo. Le verifiche vengono salvate; puoi terminare anche con elementi non selezionati.</string>
+    <string name="px_check_audio">Ho sentito l’audio del telefono dagli altoparlanti dell’auto</string>
+    <string name="px_check_microphone">Il mio interlocutore ha sentito chiaramente la mia voce</string>
+    <string name="px_check_touch">I controlli del telefono hanno risposto ai miei tocchi</string>
+    <string name="px_check_progress">%1$d verifiche confermate su %2$d</string>
+    <string name="px_refresh_phones">Aggiorna telefoni associati</string>
+    <string name="px_hide_phone_filters">Nascondi ricerca e filtri</string>
+    <string name="px_find_phones">Cerca e ordina telefoni</string>
+    <string name="px_search_phones">Cerca nome o piattaforma</string>
+    <string name="px_all_platforms">Tutte le piattaforme</string>
+    <string name="px_sort_phones">Ordina nomi A–Z</string>
+    <string name="px_no_phone_matches">Nessun telefono corrisponde a questi filtri.</string>
+    <string name="px_clear_filters">Cancella filtri</string>
+    <string name="px_touch_test">Bersagli tattili</string>
+    <string name="px_multitouch_test">Test multitocco</string>
+    <string name="px_touch_canvas">Cinque bersagli per il test tattile</string>
+    <string name="px_multitouch_canvas">Area del test multitocco</string>
+    <string name="px_touch_instruction">Tocca ciascuno dei cinque cerchi per verificare la risposta tattile di questo schermo.</string>
+    <string name="px_multitouch_instruction">Appoggia due o più dita contemporaneamente nell’area di test.</string>
+    <string name="px_touch_local">Verifica solo l’unità del veicolo. Non cambia la calibrazione e non verifica la connessione del telefono.</string>
+    <string name="px_multitouch_count">Dita attuali: %1$d · Massimo rilevato: %2$d</string>
+    <string name="px_multitouch_pass">Rilevati due o più tocchi simultanei.</string>
+    <string name="px_touch_progress">Bersagli raggiunti: %1$d su %2$d</string>
+    <string name="px_touch_pass">Tutti e cinque i bersagli hanno risposto.</string>
+    <string name="px_touch_reset">Azzera risultati del test</string>
+    <string name="px_report_filter_detail">I filtri modificano solo questa anteprima. Copia e Salva includono sempre il rapporto completo.</string>
+    <string name="px_report_search">Cerca nel rapporto</string>
+    <string name="px_report_all_sections">Tutte le sezioni</string>
+    <string name="px_report_copy">Copia rapporto completo</string>
+    <string name="px_report_copied">Rapporto completo copiato</string>
+    <string name="px_report_matches">Righe corrispondenti: %1$d</string>
+    <string name="px_report_no_matches">Nessuna riga corrisponde alla ricerca.</string>
+</resources>

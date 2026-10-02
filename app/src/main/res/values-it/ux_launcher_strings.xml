@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">Nessuna app in questa vista. Scegli un altro filtro o mostra tutte le app.</string>
+    <string name="ux_launcher_show_all">Mostra tutte le app</string>
+    <string name="ux_launcher_clear_pins_note">Rimuovere tutte le app fissate di questo conducente? Le app restano installate. Annulla modifiche alle app ripristina i collegamenti.</string>
+    <string name="ux_launcher_choose_media">Scegli sorgente multimediale</string>
+    <string name="ux_launcher_media_ready">Pronto per la musica</string>
+    <string name="ux_launcher_media_hint">Avvia la riproduzione sul telefono o scegli una sorgente multimediale sopra.</string>
+    <string name="ux_launcher_track_unavailable">Informazioni sulla traccia non disponibili</string>
+    <string name="ux_launcher_media_idle">Niente musica</string>
+</resources>

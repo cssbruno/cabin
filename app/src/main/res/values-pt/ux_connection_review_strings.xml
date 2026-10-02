@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxc_delete_preset">Excluir a predefinição de áudio “%1$s”?</string>
+    <string name="uxc_delete_preset_detail">Isso remove apenas esta predefinição salva. Os níveis de áudio atuais permanecem iguais.</string>
+</resources>

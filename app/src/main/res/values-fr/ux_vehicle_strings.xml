@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxv_document_picker_missing">Aucun sélecteur de documents disponible. Activez une application de fichiers sur cet appareil, puis réessayez.</string>
+    <string name="uxv_backup_rejected">Impossible d’ouvrir cette sauvegarde. Vérifiez le fichier et, s’il est chiffré, le mot de passe. Rien n’a été modifié.</string>
+    <string name="uxv_delete_maintenance">Supprimer « %1$s » du programme d’entretien ? Les interventions effectuées sont conservées. Cette action est irréversible.</string>
+    <string name="uxv_maintenance_empty">Aucun entretien prévu. Ajoutez un nom et une échéance ci-dessous.</string>
+    <string name="uxv_service_export_saved">Historique d’entretien enregistré en CSV</string>
+    <string name="uxv_select_trip">Sélectionner le trajet du %1$s</string>
+    <string name="uxv_map_unavailable">Aucune application de cartes n’a pu ouvrir cette position de stationnement. Activez-en une, puis réessayez.</string>
+    <string name="uxv_forget_parking">Supprimer la position de stationnement, la note et le rappel de ce véhicule ? Cette action est irréversible.</string>
+    <string name="uxv_favorite_limit">Choisissez jusqu’à 6 favoris · %1$d sélectionnés</string>
+    <string name="uxv_move_favorite">Déplacer %1$s avant</string>
+    <string name="uxv_notification_settings">Paramètres des notifications</string>
+    <string name="uxv_service_history">Historique d’entretien</string>
+    <string name="uxv_prepared_exports">Exports d’assistance préparés</string>
+    <string name="uxv_stop_connection_history">Arrêter de conserver les résumés de connexion ?</string>
+    <string name="uxv_stop_connection_history_detail">Cela supprime aussi les résumés de connexion existants de tous les conducteurs.</string>
+    <string name="uxv_delete_category">Supprimer %1$s ?</string>
+</resources>

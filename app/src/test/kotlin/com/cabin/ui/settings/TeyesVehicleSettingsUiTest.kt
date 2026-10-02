@@ -16,13 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -30,7 +28,7 @@ import com.cabin.platform.MeasurementPreferences
 import com.cabin.platform.MeasurementUnit
 import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesTelemetryHealth
-import com.cabin.platform.TeyesVehicleDataLayout
+import com.cabin.R
 import com.cabin.ui.theme.CabinTheme
 import org.junit.Before
 import org.junit.Rule
@@ -125,14 +123,21 @@ class TeyesVehicleSettingsUiTest {
         }
     }
 
-    private fun assertNoExternalAdapterControls(hasLayoutSelector: Boolean = false) {
+    private fun assertNoExternalAdapterControls() {
         listOf("Bluetooth", "ELM327", "Nearby devices", "paired adapters").forEach { text ->
             compose.onAllNodes(hasText(text, substring = true)).assertCountEquals(0)
         }
         listOf("Connect", "Disconnect", "Clear selection", "Load paired adapters", "Refresh adapters").forEach { label ->
             compose.onNodeWithText(label).assertDoesNotExist()
         }
-        compose.onAllNodes(hasClickAction()).assertCountEquals(if (hasLayoutSelector) 2 else 0)
+        // These local presentation/safety preferences are intentionally interactive. They do
+        // not represent an external adapter connection or make telemetry readings writable.
+        compose.onNodeWithText(compose.activity.getString(R.string.gv_read_only)).assertExists()
+        compose.onNodeWithText(compose.activity.getString(R.string.gv_climate_timeout)).assertExists()
+        compose.onNodeWithText(compose.activity.getString(R.string.gv_freshness)).assertExists()
+        listOf("45 km/h", "850 RPM", "78 %", "-402 km").forEach { value ->
+            compose.onAllNodes(hasClickAction() and hasText(value)).assertCountEquals(0)
+        }
     }
 
     private fun liveVehicle() =

@@ -10,6 +10,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import java.util.concurrent.atomic.AtomicBoolean
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -40,12 +42,19 @@ class CabinMicrophoneRecoveryTest {
                 ReflectionHelpers.ClassParameter.from(Int::class.javaPrimitiveType!!, AudioCommand.AUDIO_PHONECALL_START.id),
             )
 
-            // Permission failure leaves capture stopped, but the scheduled retry must
-            // retain this 8 kHz call instead of falling back to 16 kHz Siri defaults.
+            // Permission failure retains this 8 kHz call, but cannot schedule capture
+            // until both permission and projection intent allow recovery.
             assertFalse(microphone.isCapturing())
             assertEquals(3, ReflectionHelpers.getField<Int>(manager, "currentMicDecodeType"))
             assertEquals(3, ReflectionHelpers.getField<Int>(manager, "currentMicAudioType"))
+            assertNull(ReflectionHelpers.getField<Any?>(manager, "micRecoveryJob"))
+            shadowOf(application).grantPermissions(Manifest.permission.RECORD_AUDIO)
+            ReflectionHelpers.callInstanceMethod<Unit>(manager, "scheduleMicrophoneRecovery")
+            assertNull(ReflectionHelpers.getField<Any?>(manager, "micRecoveryJob"))
+            ReflectionHelpers.getField<AtomicBoolean>(manager, "shouldBeRunning").set(true)
+            ReflectionHelpers.callInstanceMethod<Unit>(manager, "scheduleMicrophoneRecovery")
             assertNotNull(ReflectionHelpers.getField<Any?>(manager, "micRecoveryJob"))
+            assertEquals(3, ReflectionHelpers.getField<Int>(manager, "currentMicDecodeType"))
         } finally {
             manager.releaseAndWait()
         }

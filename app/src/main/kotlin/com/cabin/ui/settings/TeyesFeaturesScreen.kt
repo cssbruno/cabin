@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +44,6 @@ import com.cabin.CabinManager
 import com.cabin.platform.labelRes
 import com.cabin.platform.TeyesAppShortcuts
 import com.cabin.platform.TeyesAppearance
-import com.cabin.platform.TeyesClimateState
 import com.cabin.platform.TeyesFeaturePreferences
 import com.cabin.platform.TeyesLaunchableApp
 import com.cabin.platform.TeyesShortcut
@@ -53,10 +53,6 @@ import kotlinx.coroutines.withContext
 @Composable
 fun TeyesFeaturesScreen(
     manager: CabinManager,
-    vehicle: TeyesClimateState = TeyesClimateState(),
-    onSyuChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)? = null,
-    onSyuAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)? = null,
-    onSyuVehicleOption: ((Int, Int, Int) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val resources = androidx.compose.ui.platform.LocalResources.current
@@ -67,7 +63,7 @@ fun TeyesFeaturesScreen(
     val shortcutRevision by preferences.revision.collectAsStateWithLifecycle()
     var apps by remember { mutableStateOf<List<TeyesLaunchableApp>>(emptyList()) }
     var loadingApps by remember { mutableStateOf(false) }
-    var name by remember(profile.slot, profile.name) { mutableStateOf(profile.name) }
+    var name by rememberSaveable(profile.slot, profile.name) { mutableStateOf(profile.name) }
     var feedback by remember(profile.slot) { mutableStateOf("") }
     LaunchedEffect(shortcutPicker) {
         if (shortcutPicker != null) {
@@ -90,7 +86,7 @@ fun TeyesFeaturesScreen(
     }
 
     Column(
-        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),
+        Modifier.fillMaxWidth().verticalScroll(rememberSettingsScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -120,6 +116,7 @@ fun TeyesFeaturesScreen(
                     preferences.update { it.copy(name = name) }
                     feedback = resources.getString(R.string.teyes_profile_name_saved)
                 }, enabled = name != profile.name && name.isNotBlank(), modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.teyes_save_name)) }
+                androidx.compose.material3.TextButton(onClick = { name = profile.name; feedback = "" }, enabled = name != profile.name) { Text(stringResource(R.string.action_cancel)) }
                 if (feedback.isNotEmpty()) SettingsNotice(feedback)
                 SettingsToggle(stringResource(R.string.teyes_compact_launch), profile.compactOnLaunch, stringResource(R.string.teyes_compact_launch_detail)) { value ->
                     preferences.update { it.copy(compactOnLaunch = value) }
@@ -128,6 +125,7 @@ fun TeyesFeaturesScreen(
             SettingsDisclosure(
                 stringResource(R.string.teyes_preferred_phone),
                 phones.firstOrNull { it.btMac == profile.preferredPhone }?.name ?: profile.preferredPhone.ifEmpty { stringResource(R.string.teyes_adapter_chooses) },
+                searchLabels = setOf(stringResource(R.string.teyes_adapter_default)),
             ) {
                 Text(stringResource(R.string.teyes_preferred_wireless, phones.firstOrNull { it.btMac == profile.preferredPhone }?.name ?: profile.preferredPhone.ifEmpty { stringResource(R.string.teyes_adapter_default) }))
                 Text(stringResource(R.string.teyes_preferred_phone_detail))
@@ -184,8 +182,7 @@ fun TeyesFeaturesScreen(
                 if (!manager.supportsProjectionGain) SettingsNotice(stringResource(R.string.teyes_audio_unavailable))
                 Text(stringResource(R.string.teyes_audio_gain_detail))
             }
-            ObdSettingsSection(vehicle, onSyuAction, onSyuChoice, onSyuVehicleOption)
-            SettingsDisclosure(stringResource(R.string.teyes_camera_recovery), stringResource(R.string.teyes_camera_recovery_detail)) {
+            SettingsDisclosure(stringResource(R.string.teyes_camera_recovery), stringResource(R.string.teyes_camera_recovery_detail), searchLabels = setOf(stringResource(R.string.teyes_recover_overlays), stringResource(R.string.teyes_retry_wake))) {
                 SettingsToggle(
                     stringResource(R.string.teyes_recover_overlays),
                     profile.recoverOverlays,
@@ -205,12 +202,7 @@ fun TeyesFeaturesScreen(
                     }
                 }
             }
-            TripToolsPanel(vehicle)
-            CarAutomationPanel(vehicle)
-            VehicleAppearancePanel(vehicle.profileId)
-            VehicleCompatibilityPanel(vehicle)
-            SteeringSettingsPanel()
-            SettingsDisclosure(stringResource(R.string.teyes_accessory_shortcuts), stringResource(R.string.teyes_accessory_shortcuts_summary)) {
+            SettingsDisclosure(stringResource(R.string.teyes_accessory_shortcuts), stringResource(R.string.teyes_accessory_shortcuts_summary), searchLabels = emptySet()) {
                 Text(stringResource(R.string.teyes_accessory_shortcuts_detail))
                 // Preserve legacy backup data, but never offer a generic OBD app path.
                 TeyesShortcut.entries.filter { it != TeyesShortcut.OBD }.forEach { kind ->
@@ -249,7 +241,7 @@ fun TeyesFeaturesScreen(
             onDismissRequest = { shortcutPicker = null },
             title = { Text(stringResource(R.string.teyes_choose_kind_app, stringResource(kind.labelRes))) },
             text = {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
+                Column(Modifier.verticalScroll(rememberSettingsScrollState())) {
                     if (loadingApps) {
                         CircularProgressIndicator()
                         Text(stringResource(R.string.teyes_finding_apps))

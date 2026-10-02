@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Build %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">Aucun sélecteur de fichiers disponible. La sauvegarde est enregistrée localement ; exportez-la plus tard depuis Journaux.</string>
+    <string name="ux_review_logs_waiting">En attente de lignes de journal correspondantes…</string>
+    <string name="ux_review_logs_no_files">Aucun fichier journal. Activez les journaux, puis rouvrez cet espace.</string>
+    <string name="ux_review_logs_start">Sélectionnez des fichiers journaux, puis lancez la recherche dans les fichiers sélectionnés.</string>
+    <string name="ux_review_logs_page_empty">Aucun résultat sur cette page. Continuez la recherche sur la suivante.</string>
+    <string name="ux_review_logs_empty">Aucun résultat sur cette page pour la recherche actuelle.</string>
+</resources>

@@ -1,0 +1,326 @@
+{
+  "scope": "G031–G050",
+  "locale_resources": "41 keys in goal_launcher_strings.xml in all six supported locales",
+  "goals": [
+    {
+      "id": "G031",
+      "status": "complete",
+      "implementation": "Driver-scoped persisted folders, rename/remove and move membership; removal keeps installed apps.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppLibrary.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherFolderDialog.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: folders survive restart and remain driver isolated with removable membership"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G032",
+      "status": "complete",
+      "implementation": "Multiple selection, named affected-app preview, pin/unpin/hide/restore and one grouped Undo.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherPreferences.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: bulk pin preview commits together and one undo restores all"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G033",
+      "status": "complete",
+      "implementation": "Pinned-order editor supports long-press drag across the complete pin list, keyboard-accessible arrow alternatives and Apply/Cancel; no writes while dragging. The unsaved reorder draft also survives saved-state recreation.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherFolderDialog.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherPreferences.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: reorder draft survives recreation while arrow controls preserve saved order",
+        "LauncherImprovementTest: pin reorder persists exact order and Undo restores it"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G034",
+      "status": "complete",
+      "implementation": "Twenty-entry driver-local undo covers favorites, hidden state, names, folders and batch operations. Undo preserves newer launch history.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherPreferences.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppLibrary.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: bulk undo, bounded history and rename undo"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G035",
+      "status": "complete",
+      "implementation": "Install/remove/replace/enable-change broadcasts refresh app inventory while preserving library preferences; receiver removed with composition.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherLibraryTools.kt",
+        "app/src/main/kotlin/com/cabin/launcher/CabinLauncher.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: package changes refresh only while observer remains composed"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G036",
+      "status": "complete",
+      "implementation": "Separate Newly installed filter reads firstInstallTime, with 7/30/90-day choice independent of launch history.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppLibrary.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: recent installation excludes stale/future timestamps and needs no usage history"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G037",
+      "status": "complete",
+      "implementation": "Missing saved pins remain recoverable; Android metadata distinguishes removed/disabled/failed launches, offering app details or reinstall.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherLibraryTools.kt",
+        "app/src/main/kotlin/com/cabin/launcher/CabinLauncher.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: disabled/removed/failed shortcut classification"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G038",
+      "status": "complete",
+      "implementation": "Saved comfortable/compact density; columns/rows account for font scale. Search and page state remain composed; short screens move extra controls into Options.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppLibrary.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt",
+        "app/src/main/kotlin/com/cabin/launcher/PagedLauncherItems.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: 480×180dp drawer at 200% fonts preserves 56dp Manage/Options controls, visible package subtitle and search input in both comfortable and compact modes",
+        "LauncherAppDrawerTest: existing app-library flows"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G039",
+      "status": "complete",
+      "implementation": "Page names and ordering are persisted per driver/vehicle/dialect; tiles and selected page remap together, with migration defaults for old layouts.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/DashboardLayout.kt",
+        "app/src/main/kotlin/com/cabin/launcher/DashboardPageTools.kt",
+        "app/src/main/kotlin/com/cabin/launcher/ModularDashboard.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: page names/order/selected page survive restart"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G040",
+      "status": "complete",
+      "implementation": "Preview identifies excluded unique projection and Android widget bindings; supported tiles receive new IDs on a new page.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/DashboardLayout.kt",
+        "app/src/main/kotlin/com/cabin/launcher/DashboardPageTools.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: copied page preserves unique surface and widget IDs"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G041",
+      "status": "complete",
+      "implementation": "Localized accent-insensitive search indexes primary settings, native projection, diagnostics/update entry points and capability-filtered vehicle controls. Matching disclosures expand and controls scroll into view. All nine nested adapter option cards are separately indexed and search opens the dialog at its matching tab and card. Bounded search dialog prevents editor measurement oscillation; lazy result list retains a stable viewport.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsSearch.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsUi.kt",
+        "app/src/main/kotlin/com/cabin/ui/SettingsScreen.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: localized search destination; existing SettingsNavigationTest",
+        "SettingsAccessibilityGoalsTest: adapter setting labels route to exact tab in all six locales"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G042",
+      "status": "complete",
+      "implementation": "Saved reduced-motion option disables decorative tile settling, pager transitions and action-icon transitions; related projection dialogs consume the shared policy. Essential progress remains visible. MainActivity installs a lifecycle-owned Recomposer with CabinMotionDurationScale, covering Material and child dialogs while honoring the Android animator scale.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/AccessibilityPreferences.kt",
+        "app/src/main/kotlin/com/cabin/ui/theme/Theme.kt",
+        "app/src/main/kotlin/com/cabin/ui/SettingsScreen.kt",
+        "app/src/main/kotlin/com/cabin/launcher/ModularDashboard.kt",
+        "app/src/main/kotlin/com/cabin/launcher/SyuFactoryWidget.kt",
+        "app/src/main/kotlin/com/cabin/launcher/SyuAmplifierWidget.kt",
+        "app/src/main/kotlin/com/cabin/launcher/SyuLightingWidget.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/CabinMotionDurationScale.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: preference persists; production compile",
+        "SettingsAccessibilityGoalsTest: application recomposer motion scale follows saved preference and honors Android system animator scale"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G043",
+      "status": "complete",
+      "implementation": "App-wide high-contrast Material palette with 4.5:1 minimum normal-text role checks; selected navigation remains indicated by check marks, radios and semantics.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/theme/Theme.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/AccessibilityPreferences.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: both high-contrast palettes meet 4.5:1; CabinThemeTest"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G044",
+      "status": "complete",
+      "implementation": "Visible focus rings, standard actionable controls, pin-reorder buttons, and directional-key widget resize with bounded edge behavior. Dashboard header reserves fixed 56dp Quick/Edit/Settings actions and bounds page dots/names inside a horizontally scrollable area on narrow displays.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsSearch.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsUi.kt",
+        "app/src/main/kotlin/com/cabin/launcher/PageDots.kt",
+        "app/src/main/kotlin/com/cabin/launcher/WidgetResizeHandle.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherFolderDialog.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: Enter activates shared switch; LauncherGoalsUiTest: keyboard resize",
+        "CoreAccessibilityFlowsTest: keyboard Tab reaches all projection Tools destinations and an outside Leave tools sentinel; keyboard traverses report Save/Cancel and both-zone climate actions; Enter invokes actual callbacks",
+        "SettingsNavigationTest: safe return and exit controls on compact screens",
+        "CabinLauncherTest: narrow 352dp dashboard keeps full-size actions and scrollable compact page navigation at 100%/200% fonts, preserving parked gates"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G045",
+      "status": "complete",
+      "implementation": "Existing headings/live notices retained; app management has app-specific state descriptions; custom resize exposes four named accessibility actions and dimensions; page tabs have labels/selection.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsUi.kt",
+        "app/src/main/kotlin/com/cabin/launcher/WidgetResizeHandle.kt",
+        "app/src/main/kotlin/com/cabin/launcher/CabinLauncher.kt",
+        "app/src/main/kotlin/com/cabin/launcher/PageDots.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: four accessible widget actions; SettingsAccessibilityGoalsTest: announced switch state",
+        "CoreAccessibilityFlowsTest: core action labels, focus traversal and state-preserving climate activation",
+        "SettingsNavigationTest: icon-only portrait navigation labels and selected-state semantics"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G046",
+      "status": "complete",
+      "implementation": "Global Material minimum interaction size 56dp, actual 56x56 page targets, 56dp app management, and responsive drawer controls on short displays. Compact media reserves a 56dp transport row before metadata; portrait settings use labeled 56dp Search/Exit icons beside a single-line title. Dashboard header reserves fixed 56dp Quick/Edit/Settings actions and bounds page dots/names inside a horizontally scrollable area on narrow displays.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/theme/Theme.kt",
+        "app/src/main/kotlin/com/cabin/launcher/PageDots.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt",
+        "app/src/main/kotlin/com/cabin/launcher/WidgetResizeHandle.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: 480x180dp drawer at 200% fonts and resize targets; SettingsAccessibilityGoalsTest: 200% settings toggle",
+        "CoreAccessibilityFlowsTest: projection Tools, report actions and climate controls at 200% font scale with 56dp target assertions",
+        "SettingsNavigationTest: 411dp portrait header at 200% fonts retains one-line title and 56dp Back/Search/Exit",
+        "CabinLauncherTest: compact media Play target and Portuguese Home at 200% fonts",
+        "CabinLauncherTest: narrow 352dp dashboard keeps full-size actions and scrollable compact page navigation at 100%/200% fonts, preserving parked gates"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G047",
+      "status": "complete",
+      "implementation": "Selected settings tab and scroll offsets persist under driver/vehicle/dialect/tab keys. Saveable-state holders preserve tab contents across recreation/navigation.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/SettingsScreen.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsSearch.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/CarPlaySettingsContent.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: settings scroll restores after recreation and isolates driver vehicle and tab"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G048",
+      "status": "complete",
+      "implementation": "Rename/folder/page drafts and open-dialog state survive recreation; text explicitly distinguishes drafts; Save/Cancel applies/discards. Driver names and quiet-hour forms now have saved drafts and explicit Discard; quiet hours validate then apply both values atomically. Vehicle/adapter editors also retain drafts.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherFolderDialog.kt",
+        "app/src/main/kotlin/com/cabin/launcher/DashboardPageTools.kt",
+        "app/src/main/kotlin/com/cabin/ui/SettingsScreen.kt"
+      ],
+      "tests": [
+        "LauncherGoalsUiTest: unsaved folder draft survives recreation and only Save commits",
+        "SettingsAccessibilityGoalsTest: quiet-hour draft restoration and atomic valid Apply",
+        "LauncherGoalsUiTest: unsaved pinned-order draft survives recreation"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G049",
+      "status": "complete",
+      "implementation": "Shared described sections and disclosures expose localized offline Help with their exact effect description plus requirements and recovery guidance.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsUi.kt"
+      ],
+      "tests": [
+        "SettingsAccessibilityGoalsTest: offline section help explains effect and recovery without leaving settings"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    },
+    {
+      "id": "G050",
+      "status": "complete",
+      "implementation": "Accent-insensitive match ranges retain original accented spelling/custom labels; app and settings result text highlights match spans without replacing accessible text.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/launcher/LauncherLibraryTools.kt",
+        "app/src/main/kotlin/com/cabin/launcher/CabinLauncher.kt",
+        "app/src/main/kotlin/com/cabin/launcher/LauncherAppDrawer.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/SettingsSearch.kt"
+      ],
+      "tests": [
+        "LauncherImprovementTest: accent match offsets; SettingsAccessibilityGoalsTest: search destination"
+      ],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed.",
+      "remaining": []
+    }
+  ],
+  "verification_run": "documents/features/verification-software.json",
+  "limitations": "Automated keyboard and accessibility-semantics checks cover core workflows; no claim of a physical TalkBack session or target head-unit validation. G031–G050 do not require a hardware gate in the approved backlog."
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">No apps in this view. Choose another filter or show all apps.</string>
+    <string name="ux_launcher_show_all">Show all apps</string>
+    <string name="ux_launcher_clear_pins_note">Remove every pinned app for this driver? Apps stay installed. Undo app changes restores the pins.</string>
+    <string name="ux_launcher_choose_media">Choose media source</string>
+    <string name="ux_launcher_media_ready">Ready for music</string>
+    <string name="ux_launcher_media_hint">Play on your phone, or choose a media source above.</string>
+    <string name="ux_launcher_track_unavailable">Track information unavailable</string>
+    <string name="ux_launcher_media_idle">No music</string>
+</resources>

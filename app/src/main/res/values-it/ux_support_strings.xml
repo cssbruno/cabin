@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Build %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">Nessun selettore di file disponibile. Il backup è salvato localmente; esportalo in seguito dai Registri.</string>
+    <string name="ux_review_logs_waiting">In attesa di voci di registro corrispondenti…</string>
+    <string name="ux_review_logs_no_files">Nessun file di registro. Attiva la registrazione, poi riapri questo spazio.</string>
+    <string name="ux_review_logs_start">Seleziona i file di registro, poi avvia la ricerca nei file selezionati.</string>
+    <string name="ux_review_logs_page_empty">Nessun risultato in questa pagina. Continua la ricerca nella prossima.</string>
+    <string name="ux_review_logs_empty">Nessun risultato in questa pagina per la ricerca attuale.</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">Nenhum app nesta visualização. Escolha outro filtro ou mostre todos os apps.</string>
+    <string name="ux_launcher_show_all">Mostrar todos os apps</string>
+    <string name="ux_launcher_clear_pins_note">Remover todos os apps fixados deste motorista? Os apps continuam instalados. Desfazer alterações de apps restaura os atalhos.</string>
+    <string name="ux_launcher_choose_media">Escolher fonte de mídia</string>
+    <string name="ux_launcher_media_ready">Pronto para ouvir música</string>
+    <string name="ux_launcher_media_hint">Reproduza no telefone ou escolha uma fonte de mídia acima.</string>
+    <string name="ux_launcher_track_unavailable">Informações da faixa indisponíveis</string>
+    <string name="ux_launcher_media_idle">Sem música</string>
+</resources>

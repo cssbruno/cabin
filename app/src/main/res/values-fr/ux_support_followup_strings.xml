@@ -1,0 +1,6 @@
+<resources>
+    <string name="uxf_search_changed">Les fichiers ou filtres ont changé. Relancez la recherche avant de continuer ou d’exporter.</string>
+    <string name="uxf_follow_search_required">Les résultats en direct sont en pause. Recherchez dans les fichiers sélectionnés pour créer un export.</string>
+    <string name="uxf_export_saved_locally">Le sélecteur de fichiers n’a pas pu s’ouvrir. La copie est conservée dans Exports en attente ; reprenez-la lorsque l’accès aux fichiers est disponible.</string>
+    <string name="uxf_bookmarks_empty">Aucun signet. Recherchez dans les journaux, puis marquez une ligne pour y revenir.</string>
+</resources>

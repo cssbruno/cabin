@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Buscar texto nos registros</string>
+    <string name="logx_filters">Filtros e exibição</string>
+    <string name="logx_follow">Acompanhar este arquivo</string>
+    <string name="logx_tag">Marcador do subsistema</string>
+    <string name="logx_newest">Mais recentes primeiro</string>
+    <string name="logx_numbers">Números das linhas</string>
+    <string name="logx_wrap">Quebrar linhas</string>
+    <string name="logx_smaller">Texto menor</string>
+    <string name="logx_larger">Texto maior</string>
+    <string name="logx_export_scope">A exportação salva apenas os resultados exibidos. O texto inclui as mensagens originais; os metadados incluem apenas horários, níveis e números das linhas.</string>
+    <string name="logx_metadata_export">Exportar apenas metadados</string>
+    <string name="logx_export">Exportar texto filtrado</string>
+    <string name="logx_export_done">Exportação salva</string>
+    <string name="logx_export_failed">Não foi possível salvar a exportação</string>
+    <string name="logx_count">%1$d exibidos · %2$d resultados · %3$d linhas analisadas</string>
+    <string name="logx_limited">Visualização limitada: até 1.000 resultados, 16 MiB analisados e 4 KiB por linha. Refine os filtros ou exporte o arquivo original.</string>
+    <string name="logx_no_matches">Nenhum resultado encontrado</string>
+    <string name="logx_all">Todos os níveis</string>
+    <string name="logx_errors">Erros</string>
+    <string name="logx_warnings">Avisos</string>
+    <string name="logx_info">Informações</string>
+    <string name="logx_debug">Depuração</string>
+    <string name="logx_verbose">Detalhado</string>
+    <string name="logx_file_search">Buscar arquivos de registro</string>
+    <string name="logx_oldest">Mais antigos primeiro</string>
+    <string name="logx_largest">Maiores primeiro</string>
+    <string name="logx_name">Nome do arquivo</string>
+    <string name="logx_original">Navegar pelas páginas originais</string>
+</resources>

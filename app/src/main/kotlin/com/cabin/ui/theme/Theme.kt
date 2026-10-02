@@ -13,6 +13,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -111,9 +112,11 @@ fun CabinTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    val accessibility = com.cabin.ui.settings.rememberAccessibilityOptions()
     val view = LocalView.current
     val colorScheme =
         when {
+            accessibility.highContrast -> cabinHighContrastScheme(darkTheme)
             dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 if (darkTheme) dynamicDarkColorScheme(view.context) else dynamicLightColorScheme(view.context)
             }
@@ -135,12 +138,15 @@ fun CabinTheme(
         }
     }
 
+    CompositionLocalProvider(com.cabin.ui.settings.LocalReducedMotion provides accessibility.reducedMotion,
+        androidx.compose.material3.LocalMinimumInteractiveComponentSize provides 56.dp) {
     MaterialTheme(
         colorScheme = colorScheme,
         typography = CabinTypography,
         shapes = CabinShapes,
         content = content,
     )
+    }
 }
 
 internal fun Context.findActivity(): Activity? {
@@ -188,4 +194,21 @@ object AutomotiveDimens {
     val ButtonPaddingHorizontal = 24.dp
     val ButtonPaddingVertical = 20.dp
     val IconSize = 28.dp
+}
+
+/** Normal text pairs target at least 4.5:1; tests cover every role and container. */
+internal fun cabinHighContrastScheme(dark: Boolean): ColorScheme {
+    val background = if (dark) Color.Black else Color.White
+    val text = if (dark) Color.White else Color.Black
+    return cabinColorScheme(dark).copy(
+        background = background, onBackground = text, surface = background, onSurface = text,
+        surfaceContainerLowest = background, surfaceContainerLow = background, surfaceContainer = background,
+        surfaceContainerHigh = background, surfaceContainerHighest = background, surfaceVariant = background, onSurfaceVariant = text,
+        primary = text, onPrimary = background, primaryContainer = background, onPrimaryContainer = text,
+        secondary = text, onSecondary = background, secondaryContainer = background, onSecondaryContainer = text,
+        tertiary = text, onTertiary = background, tertiaryContainer = background, onTertiaryContainer = text,
+        error = if (dark) Color(0xFFFFB4AB) else Color(0xFF8C0010), onError = background,
+        errorContainer = background, onErrorContainer = text, outline = text, outlineVariant = text,
+        inverseSurface = text, inverseOnSurface = background, inversePrimary = background,
+    )
 }

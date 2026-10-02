@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lxg_workspace">Search across logs</string>
+    <string name="lxg_pending_exports">Unfinished exports — choose a destination to resume</string>
+    <string name="lxg_resume">Resume export</string>
+    <string name="lxg_discard">Discard</string>
+    <string name="lxg_files">Files (%1$d selected)</string>
+    <string name="lxg_bookmarks">Bookmarks</string>
+    <string name="lxg_bookmark">Bookmark line</string>
+    <string name="lxg_remove_bookmark">Remove bookmark</string>
+    <string name="lxg_remove">Remove</string>
+    <string name="lxg_follow_rotation">Follow current logging session</string>
+    <string name="lxg_select_all">Select / clear all</string>
+    <string name="lxg_time_zone">Time zone: %1$s</string>
+    <string name="lxg_from">From (inclusive)</string>
+    <string name="lxg_until">Until (inclusive)</string>
+    <string name="lxg_range_format">Optional: 2026-09-30T14:30. Unknown or ambiguous timestamps are excluded when filtering by time.</string>
+    <string name="lxg_search">Search selected files</string>
+    <string name="lxg_continue">Continue search — next page</string>
+    <string name="lxg_scan_scope">Scanned: %1$d lines. Unknown/ambiguous time: %2$d. Counts cover scanned lines only.</string>
+    <string name="lxg_export_scope">Export scans every selected file with the last applied filters. Full export includes complete matching records and file names, without context. Metadata omits unstructured records.</string>
+    <string name="lxg_export_all">Export all matching records</string>
+    <string name="lxg_context">Nearby original lines</string>
+    <string name="lxg_context_not_exported">Context preview only; these extra lines are not included in filtered exports.</string>
+    <string name="lxg_preview_shortened">Preview shortened; full export keeps the complete record.</string>
+    <string name="lxg_source_changed">A source changed or was deleted. Start a new search.</string>
+    <string name="lxg_invalid_range">Check the selected files and start/end times. End must follow start; ambiguous times are not accepted.</string>
+    <string name="lxg_compare_reports">Compare saved health reports</string>
+    <string name="lxg_first_report">Choose first report</string>
+    <string name="lxg_second_report">Choose second report</string>
+    <string name="lxg_replace_first">Replace first report</string>
+    <string name="lxg_replace_second">Replace second report</string>
+    <string name="lxg_report_invalid">Reports must be valid Cabin health JSON, at most 1 MiB each, and use the same supported schema (1 or 2).</string>
+    <string name="lxg_changed">Changed</string>
+    <string name="lxg_missing">Added / missing</string>
+    <string name="lxg_unchanged">Unchanged</string>
+    <string name="lxg_before">Before: %1$s</string>
+    <string name="lxg_after">After: %1$s</string>
+    <string name="lxg_scan_limits">Each page stops at 250 matching records or 2 MiB scanned. The last record is read in full, so the byte limit may be exceeded.</string>
+    <string name="lxg_preparation_interrupted">Export preparation was interrupted. No complete snapshot is available; discard this entry and start a new export.</string>
+</resources>

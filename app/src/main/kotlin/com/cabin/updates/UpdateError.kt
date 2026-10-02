@@ -14,7 +14,7 @@ internal fun requireUpdate(condition: Boolean, errorRes: Int) {
 
 internal fun updateErrorResource(error: Exception): Int = when (error) {
     is UpdateException -> error.errorRes
-    is SocketTimeoutException, is UnknownHostException, is ConnectException -> R.string.update_error_network
+    is SocketTimeoutException, is UnknownHostException, is ConnectException, is java.io.EOFException -> R.string.update_error_network
     is SSLException -> R.string.update_error_tls
     else -> R.string.update_failed
 }

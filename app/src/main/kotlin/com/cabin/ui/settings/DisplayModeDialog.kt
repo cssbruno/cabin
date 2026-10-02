@@ -38,6 +38,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -93,33 +95,22 @@ internal fun DisplayModeDialog(
 
     // Load saved mode from preferences
     val savedMode by displayModePreference.displayModeFlow.collectAsStateWithLifecycle(
-        initialValue = DisplayMode.SYSTEM_UI_VISIBLE,
+        initialValue = displayModePreference.getDisplayModeSync(),
     )
 
     // Local state for preview - allows cancel without saving
-    var selectedMode by remember { mutableStateOf(savedMode) }
-
-    // Sync local state when saved value loads (for initial load)
-    LaunchedEffect(savedMode) {
-        selectedMode = savedMode
-    }
+    var selectedMode by rememberSaveable { mutableStateOf(displayModePreference.getDisplayModeSync()) }
 
     // LIVE PREVIEW: Apply mode instantly when selection changes
     LaunchedEffect(selectedMode) {
         window?.let { applyDisplayModePreview(it, selectedMode) }
     }
 
-    // Restore original mode when dialog dismissed without saving.
-    // KNOWN ISSUE (flicker on Apply): SettingsScreen.kt:548 flips
-    // showDisplayModeDialog=false synchronously, so onDispose fires immediately
-    // with the STALE captured savedMode — before the setDisplayMode(newMode)
-    // coroutine has emitted. System bars briefly flip to the old mode until
-    // MainActivity.reinitializeForDisplayMode applies the new one.
-    // Also redundant: Cancel, back-press, and outside-tap each already call
-    // applyDisplayModePreview(savedMode); onDispose is a third (harmless) call.
-    DisposableEffect(Unit) {
+    var applied by remember { mutableStateOf(false) }
+    val restoreMode by rememberUpdatedState(savedMode)
+    DisposableEffect(window) {
         onDispose {
-            window?.let { applyDisplayModePreview(it, savedMode) }
+            if (!applied) window?.let { applyDisplayModePreview(it, restoreMode) }
         }
     }
 
@@ -184,7 +175,7 @@ internal fun DisplayModeDialog(
                     modifier =
                         Modifier
                             .weight(1f, fill = false)
-                            .verticalScroll(rememberScrollState()),
+                            .verticalScroll(rememberSettingsScrollState()),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     // Configuration option card
@@ -279,7 +270,7 @@ internal fun DisplayModeDialog(
                     // is an in-place session reinit (MainActivity.reinitializeForDisplayMode),
                     // NOT a process restart. Label preserved for user familiarity.
                     Button(
-                        onClick = { onApplyAndRestart(selectedMode) },
+                        onClick = { applied = true; onApplyAndRestart(selectedMode) },
                         modifier = Modifier.weight(1.5f),
                         enabled = hasChanges,
                     ) {
@@ -364,22 +355,27 @@ private fun DisplayModeButton(
 
     // Animated properties for smooth selection transitions
     val backgroundColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primaryContainer else colorScheme.surfaceContainer,
         label = "backgroundColor",
     )
     val borderWidth by animateDpAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) 2.dp else 1.dp,
         label = "borderWidth",
     )
     val borderColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.outline,
         label = "borderColor",
     )
     val contentColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.onSurfaceVariant,
         label = "contentColor",
     )
     val iconScale by animateFloatAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) 1.1f else 1f,
         label = "iconScale",
     )

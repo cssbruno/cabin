@@ -60,6 +60,28 @@ class ProjectionSetupPreferencesTest {
     }
 
     @Test
+    fun `manual checks persist and restarting clears only guide progress`() {
+        val audio = context.getSharedPreferences("adapter_config", Context.MODE_PRIVATE)
+        audio.edit().putString("audio_source", "BLUETOOTH").commit()
+        val preferences = ProjectionSetupPreferences(context)
+        preferences.verify(ProjectionSetupCheck.AUDIO, true)
+        preferences.verify(ProjectionSetupCheck.TOUCH, true)
+        preferences.verify(ProjectionSetupCheck.AUDIO, false)
+        preferences.complete()
+        assertEquals(setOf(ProjectionSetupCheck.TOUCH), ProjectionSetupPreferences(context).progress.value.verified)
+        preferences.restart()
+        assertEquals(ProjectionSetupProgress(), ProjectionSetupPreferences(context).progress.value)
+        assertEquals("BLUETOOTH", audio.getString("audio_source", null))
+    }
+
+    @Test
+    fun `unknown checklist values cannot mark real checks verified`() {
+        context.getSharedPreferences(ProjectionSetupPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+            .putStringSet("verified", setOf("FUTURE_TEST", "AUDIO")).commit()
+        assertEquals(setOf(ProjectionSetupCheck.AUDIO), ProjectionSetupPreferences(context).progress.value.verified)
+    }
+
+    @Test
     fun `diagnostics need parked acknowledgment and two independent idle checks`() {
         val idle = ProjectionReadinessSnapshot()
         assertTrue(projectionDiagnosticsAllowed(true, idle, true))

@@ -697,6 +697,18 @@ class CabinProjectionService : Service() {
             return service.releaseManagerForReconfiguration(manager)
         }
 
+        /** A background trial expiry rebuilds only an already requested headless session. */
+        fun reconfigureHeadlessAfterVideoTrial() {
+            val service = synchronized(ownershipLock) { if (activeActivityManager == null) instance else null } ?: return
+            service.serviceScope.launch {
+                val target = service.manager ?: return@launch
+                if (service.stopping || !target.projectionSessionRequested) return@launch
+                if (synchronized(ownershipLock) { activeActivityManager != null }) return@launch
+                service.releaseManagerForReconfiguration(target)
+                if (!service.stopping) service.connectIfNeeded()
+            }
+        }
+
         /** True while this foreground service owns a USB projection manager. */
         fun hasRunningSession(): Boolean = synchronized(ownershipLock) { instance?.manager != null }
     }

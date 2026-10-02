@@ -4,4 +4,5 @@
         <exclude domain="sharedpref" path="cabin_reporting.xml"/>
         <exclude domain="sharedpref" path="cabin_automation.xml"/>
         <exclude domain="sharedpref" path="cabin_trips.xml"/>
+        <exclude domain="sharedpref" path="cabin_launcher_library_v1.xml"/>
 </full-backup-content>

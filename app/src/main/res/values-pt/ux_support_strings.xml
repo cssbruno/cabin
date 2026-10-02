@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Compilação %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">Nenhum seletor de arquivos disponível. O backup foi salvo localmente; exporte-o depois em Registros.</string>
+    <string name="ux_review_logs_waiting">Aguardando entradas de registro correspondentes…</string>
+    <string name="ux_review_logs_no_files">Ainda não há arquivos de registro. Ative os registros e reabra este espaço.</string>
+    <string name="ux_review_logs_start">Selecione arquivos de registro e toque em Pesquisar arquivos selecionados.</string>
+    <string name="ux_review_logs_page_empty">Nenhum resultado nesta página. Continue a pesquisa na próxima página.</string>
+    <string name="ux_review_logs_empty">Nenhum resultado nesta página para a pesquisa atual.</string>
+</resources>

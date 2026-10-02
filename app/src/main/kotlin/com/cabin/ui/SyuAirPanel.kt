@@ -8,7 +8,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import com.cabin.platform.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,7 +22,7 @@ import com.cabin.platform.SyuAirState
 /** Profile-specific controls; a missing mapping never falls back to another car's keys. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun SyuAirPanel(state: SyuAirState, onAction: ((String) -> Unit)?, modifier: Modifier = Modifier, onClose: (() -> Unit)? = null) {
+internal fun SyuAirPanel(state: SyuAirState, onAction: ((String) -> Unit)?, modifier: Modifier = Modifier, onClose: (() -> Unit)? = null, vehicleState: TeyesClimateState? = null) {
     val closeTimer = rememberClimateCloseTimer(onClose)
     Column(modifier.then(closeTimer.touchModifier).fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -28,6 +30,16 @@ internal fun SyuAirPanel(state: SyuAirState, onAction: ((String) -> Unit)?, modi
             onClose?.let { close -> ClimateCloseButton(close, closeTimer.remaining.value) }
         }
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            vehicleState?.let { vehicle ->
+                if(vehicle.voluntaryReadOnly) Text(stringResource(R.string.gv_read_only))
+                if(vehicle.commandStatus != ClimateCommandStatus.NONE) Text(stringResource(when(vehicle.commandStatus) {
+                    ClimateCommandStatus.WAITING -> R.string.gv_command_waiting
+                    ClimateCommandStatus.CONFIRMED -> R.string.gv_command_confirmed
+                    ClimateCommandStatus.TIMED_OUT -> R.string.gv_command_timeout
+                    else -> R.string.gv_command_cancelled
+                }))
+            }
+            SyuAirFavorites(state, onAction)
             if (state.actions.isEmpty()) Text(stringResource(R.string.syu_air_unavailable), style = MaterialTheme.typography.bodyMedium)
             if (state.actions.any { it.startsWith("C_AIR_TEMP_") }) SyuTemperatureRow(state, onAction)
             for ((title, keys) in syuActionGroups) {
@@ -184,3 +196,27 @@ private val syuActionGroups = listOf(
         "C_SOFT" to R.string.syu_c_soft
     )
 )
+
+
+@Composable
+private fun SyuAirFavorites(state: SyuAirState, onAction: ((String) -> Unit)?) {
+    val context = LocalContext.current
+    val prefs = remember { vehicleToolsPreferences(context) }
+    val values = rememberAutomationValues("cabin_vehicle_tools")
+    val favorites = (values["airFavorites"] as? String)?.split(',')?.filter { it.isNotBlank() }?.distinct().orEmpty()
+    var editing by remember(state.profileId) { mutableStateOf(false) }
+    fun save(keys: List<String>) { prefs.edit().putString("airFavorites", keys.take(6).joinToString(",")).apply() }
+    val actions = syuActionGroups.flatMap { it.second }.distinctBy { it.first }
+    TextButton(onClick = { editing = !editing }) { Text(stringResource(R.string.gv_favorites)) }
+    FlowRow {
+        actions.filter { it.first in favorites || editing && it.first in state.actions }.sortedBy { favorites.indexOf(it.first).takeIf { i -> i >= 0 } ?: 99 }.forEach { (key, label) ->
+            if(editing) {
+                FilterChip(key in favorites, { save(if(key in favorites) favorites - key else favorites + key) }, label = { Text(stringResource(label)) })
+                if(key in favorites) TextButton(onClick = { val i = favorites.indexOf(key); if(i > 0) { val next = favorites.toMutableList(); next[i] = next[i-1]; next[i-1] = key; save(next) } }, enabled = favorites.indexOf(key) > 0) { Text("↑ " + stringResource(label)) }
+            } else {
+                FilledTonalButton(onClick = { onAction?.invoke(key) }, enabled = onAction != null && state.canSend(key)) { Text(stringResource(label)) }
+                if(!state.canSend(key)) Text(stringResource(if(key !in state.actions) R.string.gv_unsupported else R.string.gv_missing_feedback))
+            }
+        }
+    }
+}

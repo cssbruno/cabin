@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_folder_capacity">Alle %1$d Ordner sind belegt. Entferne einen Ordner, um einen neuen anzulegen, oder benenne einen vorhandenen um. Dein Entwurf bleibt erhalten.</string>
+    <string name="ux_launcher_pin_capacity">Nur noch %1$d Plätze zum Anheften frei. Wähle weniger neue Apps oder löse eine angeheftete App, bevor du bestätigst.</string>
+    <string name="ux_launcher_move_up">%1$s nach oben verschieben</string>
+    <string name="ux_launcher_move_down">%1$s nach unten verschieben</string>
+    <string name="ux_launcher_rename_folder">Ordner %1$s umbenennen</string>
+</resources>

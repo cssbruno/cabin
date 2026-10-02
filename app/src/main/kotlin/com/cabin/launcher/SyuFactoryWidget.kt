@@ -63,6 +63,7 @@ private fun CompactFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateSt
         return
     }
     val pager = rememberPagerState { controls.size }
+    val reducedMotion = com.cabin.ui.settings.LocalReducedMotion.current
     val scope = rememberCoroutineScope()
     BoxWithConstraints(Modifier.fillMaxSize().padding(8.dp)) {
         val showDots = controls.size > 1 && maxHeight >= 120.dp
@@ -109,7 +110,7 @@ private fun CompactFactoryWidget(group: SyuFactoryGroup, vehicle: TeyesClimateSt
                     }
                 }
             }
-            if (showDots) PageDots(pager.currentPage, pager.pageCount, { page -> scope.launch { pager.animateScrollToPage(page) } })
+            if (showDots) PageDots(pager.currentPage, pager.pageCount, { page -> scope.launch { if (reducedMotion) pager.scrollToPage(page) else pager.animateScrollToPage(page) } })
         }
     }
 }

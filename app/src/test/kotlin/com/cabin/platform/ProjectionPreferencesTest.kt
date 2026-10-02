@@ -76,7 +76,7 @@ class ProjectionPreferencesTest {
         preferences.setControlSide(ProjectionControlSide.LEFT)
         assertEquals(ProjectionPreferencesState(controlSide = ProjectionControlSide.LEFT), preferences.state.value)
         context.getSharedPreferences(ProjectionPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
-            .putString("control_side", "unknown").commit()
+            .putString("driver.0.control_side", "unknown").commit()
         assertEquals(ProjectionControlSide.RIGHT, ProjectionPreferences(context).state.value.controlSide)
     }
 

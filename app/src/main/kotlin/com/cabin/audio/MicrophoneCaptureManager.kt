@@ -126,6 +126,11 @@ class MicrophoneCaptureManager(
     private var readBuffer = ByteArray(640)
 
     private val lock = Any()
+    @Volatile var preferredInputApplied: Boolean? = null; private set
+    fun inputDevices(): List<android.media.AudioDeviceInfo> =
+        (context.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager)
+            .getDevices(android.media.AudioManager.GET_DEVICES_INPUTS).filter { it.isSource }
+    fun routedInput(): String? = runCatching { audioRecord?.routedDevice?.productName?.toString() }.getOrNull()
 
     fun hasPermission(): Boolean =
         ContextCompat.checkSelfPermission(
@@ -153,6 +158,10 @@ class MicrophoneCaptureManager(
                 return false
             }
 
+            if (decodeType != 3 && decodeType != 5) {
+                log("[MIC] Unsupported live format: $decodeType")
+                return false
+            }
             val format = MicFormats.fromDecodeType(decodeType)
 
             try {
@@ -187,6 +196,10 @@ class MicrophoneCaptureManager(
                     audioRecord = null
                     return false
                 }
+
+                val preferredId = AudioExperience(context).microphoneId
+                val preferred = inputDevices().firstOrNull { it.id == preferredId }
+                preferredInputApplied = if (preferredId == 0) null else preferred?.let { audioRecord?.setPreferredDevice(it) } ?: false
 
                 micBuffer =
                     AudioRingBuffer(
@@ -327,6 +340,8 @@ class MicrophoneCaptureManager(
 
             return mapOf(
                 "isCapturing" to isRunning.get(),
+                "route" to (routedInput() ?: ""),
+                "preferredInputApplied" to (preferredInputApplied != false && (AudioExperience(context).microphoneId == 0 || audioRecord?.routedDevice?.id?.let { it == AudioExperience(context).microphoneId } != false)),
                 "format" to (currentFormat?.let { "${it.sampleRate}Hz ${it.channelCount}ch" } ?: "none"),
                 "decodeType" to getCurrentDecodeType(),
                 "durationSeconds" to durationMs / 1000.0,

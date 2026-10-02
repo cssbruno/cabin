@@ -35,7 +35,7 @@
     <string name="vehicle_status_fresh">In attesa di dati clima recenti</string>
     <string name="vehicle_status_unverified">Interfaccia di controllo non verificata per il profilo %1$d</string>
     <string name="app_status_park_title">Parcheggia prima di continuare</string>
-    <string name="app_status_park_message">Conferma che il veicolo è parcheggiato in sicurezza. I dati di velocità di Cabin potrebbero non essere disponibili e non sono un interblocco di parcheggio.</string>
+    <string name="app_status_park_message">Continua solo quando il veicolo è parcheggiato in sicurezza. Cabin non può verificarlo per te.</string>
     <string name="app_status_park_confirm">Sono parcheggiato</string>
     <string name="app_status_cancel">Annulla</string>
     <string name="app_status_connect_failed">Impossibile avviare la connessione. Controlla i permessi dell’app.</string>

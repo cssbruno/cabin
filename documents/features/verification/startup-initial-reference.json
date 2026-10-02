@@ -1,0 +1,110 @@
+{
+  "sdk": "36",
+  "device": "sdk_gphone64_x86_64",
+  "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BE4B.251210.005/14574095:user/release-keys",
+  "apk_sha256": "728a647d93e5e775d11a5d609afea0ed6a6c0fb1bbab0efe9371795eda25b463",
+  "samples_ms": {
+    "cold": [
+      718,
+      440,
+      464,
+      346,
+      366,
+      466,
+      317
+    ],
+    "warm": [
+      28,
+      42,
+      32,
+      38,
+      17,
+      16,
+      28
+    ]
+  },
+  "medians_ms": {
+    "cold": 440,
+    "warm": 28
+  },
+  "android_timings": [
+    {
+      "mode": "cold",
+      "TotalTime": 718,
+      "WaitTime": 748
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 440,
+      "WaitTime": 446
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 464,
+      "WaitTime": 467
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 346,
+      "WaitTime": 510
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 366,
+      "WaitTime": 368
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 466,
+      "WaitTime": 477
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 317,
+      "WaitTime": 320
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 28
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 42
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 32
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 38
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 17
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 16
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 28
+    }
+  ],
+  "largest_launch_cost": "cold",
+  "budgets_ms": {
+    "cold_median_ms": 10000,
+    "warm_median_ms": 5000
+  },
+  "startup_phases_ms": {
+    "configuration recovery": 0,
+    "parking scheduling": 0,
+    "telemetry setup": 0,
+    "activity dispatch": 9,
+    "activity creation to first draw": 239
+  },
+  "largest_measured_phase": "activity creation to first draw",
+  "measurement": "Android am start -W; cold force-stop versus warm foreground return. Not a rendered-frame or head-unit measurement.",
+  "purpose": "Initial reference used to select startup ceilings; not the final delivery APK."
+}

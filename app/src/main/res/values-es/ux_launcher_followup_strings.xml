@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_folder_capacity">Las %1$d carpetas están en uso. Elimina una carpeta para crear otra o cambia el nombre de una existente. Se conserva el borrador.</string>
+    <string name="ux_launcher_pin_capacity">Solo quedan %1$d espacios para fijar apps. Selecciona menos apps nuevas o quita una fijada antes de confirmar.</string>
+    <string name="ux_launcher_move_up">Mover %1$s arriba</string>
+    <string name="ux_launcher_move_down">Mover %1$s abajo</string>
+    <string name="ux_launcher_rename_folder">Cambiar nombre de carpeta %1$s</string>
+</resources>

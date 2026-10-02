@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">No hay apps en esta vista. Elige otro filtro o muestra todas las apps.</string>
+    <string name="ux_launcher_show_all">Mostrar todas las apps</string>
+    <string name="ux_launcher_clear_pins_note">¿Quitar todas las apps fijadas de este conductor? Las apps siguen instaladas. Deshacer los cambios de apps restaura los accesos.</string>
+    <string name="ux_launcher_choose_media">Elegir fuente multimedia</string>
+    <string name="ux_launcher_media_ready">Todo listo para la música</string>
+    <string name="ux_launcher_media_hint">Reproduce en el teléfono o elige una fuente multimedia arriba.</string>
+    <string name="ux_launcher_track_unavailable">Información de la pista no disponible</string>
+    <string name="ux_launcher_media_idle">Sin música</string>
+</resources>

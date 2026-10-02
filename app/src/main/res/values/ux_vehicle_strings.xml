@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxv_document_picker_missing">No document picker is available. Enable a Files app on this device, then try again.</string>
+    <string name="uxv_backup_rejected">Could not open this backup. Check the file and, for encrypted backups, the password. Nothing was changed.</string>
+    <string name="uxv_delete_maintenance">Delete “%1$s” from your maintenance schedule? Completed service records are kept. This cannot be undone.</string>
+    <string name="uxv_maintenance_empty">No maintenance items yet. Add a name and due date below.</string>
+    <string name="uxv_service_export_saved">Service history CSV saved</string>
+    <string name="uxv_select_trip">Select trip from %1$s</string>
+    <string name="uxv_map_unavailable">No map app could open this parking position. Enable a map app, then try again.</string>
+    <string name="uxv_forget_parking">Delete the saved parking position, note and reminder for this vehicle? This cannot be undone.</string>
+    <string name="uxv_favorite_limit">Choose up to 6 favorites · %1$d selected</string>
+    <string name="uxv_move_favorite">Move %1$s earlier</string>
+    <string name="uxv_notification_settings">Notification settings</string>
+    <string name="uxv_service_history">Service history</string>
+    <string name="uxv_prepared_exports">Prepared support exports</string>
+    <string name="uxv_stop_connection_history">Stop keeping connection summaries?</string>
+    <string name="uxv_stop_connection_history_detail">This also deletes the existing connection summaries for all drivers.</string>
+    <string name="uxv_delete_category">Delete %1$s?</string>
+</resources>

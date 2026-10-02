@@ -15,7 +15,7 @@ import com.cabin.platform.*
 @Composable
 internal fun VehicleAppearancePanel(profile: Int) {
     val (appearance, update) = rememberVehicleAppearance(profile)
-    SettingsDisclosure(stringResource(R.string.car_appearance), stringResource(R.string.car_appearance_detail)) {
+    SettingsDisclosure(stringResource(R.string.car_appearance), stringResource(R.string.car_appearance_detail), searchLabels = emptySet()) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             VehicleBodyStyle.entries.forEach { body ->
                 FilterChip(selected = appearance.body == body, onClick = { update(appearance.copy(body = body)) },

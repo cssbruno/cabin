@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-01T17:14:09.577155+00:00",
+  "scope": "Continued multi-agent UX review, keyboard and editor recovery, locale input, exact log export scope. Physical acceptance remains pending.",
+  "units": {
+    "app": {
+      "tests": 1091,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 1090
+    },
+    "diagnostics": {
+      "tests": 155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 155
+    }
+  },
+  "passed_unit_tests": 1245,
+  "new_regressions": 25,
+  "artifacts": {
+    "debug": {
+      "path": "app/build/outputs/apk/debug/app-debug.apk",
+      "sha256": "474367352be4994453984fd66e35172bd380f1683771290978b093a5ed1e491d",
+      "bytes": 37503673
+    },
+    "releaseCheck": {
+      "path": "app/build/outputs/apk/releaseCheck/app-releaseCheck.apk",
+      "sha256": "32c9bc56acde9bc207c8bf3b48a40e8b38be9fee04364a0af51b272bec856ba3",
+      "bytes": 13066054
+    },
+    "instrumentation": {
+      "path": "app/build/outputs/apk/androidTest/releaseCheck/app-releaseCheck-androidTest.apk",
+      "sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+      "bytes": 432188
+    }
+  },
+  "devices": {
+    "api27": {
+      "apk_sha256": "32c9bc56acde9bc207c8bf3b48a40e8b38be9fee04364a0af51b272bec856ba3",
+      "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+      "sdk": "27",
+      "device": "Android SDK built for x86_64",
+      "fingerprint": "Android/sdk_phone_x86_64/generic_x86_64:8.1.0/OSM1.180201.023/4931629:userdebug/test-keys",
+      "instrumentation_passed": true,
+      "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+    },
+    "api35": {
+      "apk_sha256": "32c9bc56acde9bc207c8bf3b48a40e8b38be9fee04364a0af51b272bec856ba3",
+      "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+      "sdk": "35",
+      "device": "sdk_gphone64_x86_64",
+      "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+      "instrumentation_passed": true,
+      "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+    }
+  },
+  "physical_acceptance_pending": 35,
+  "release_note": "releaseCheck is optimized and test-signed, not a production release."
+}

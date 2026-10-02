@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goal_accessibility">Accessibility</string>
+    <string name="goal_all_folders">All folders</string>
+    <string name="goal_app_disabled">This app is disabled. Open app information to enable it. Your pin is kept.</string>
+    <string name="goal_app_failed">Android could not launch this app. Review its permissions or try again. Your pin is kept.</string>
+    <string name="goal_app_removed">This app or activity is no longer installed. Reinstall it to use the saved pin.</string>
+    <string name="goal_bulk_preview">Apply to %1$d selected apps. One Undo restores the whole change.</string>
+    <string name="goal_compact_tiles">Compact app tiles</string>
+    <string name="goal_days">%1$d days</string>
+    <string name="goal_draft_note">Draft: changes apply only when you save. Cancel or close to discard.</string>
+    <string name="goal_drag_reorder">Hold and drag a row up or down, then Save. Arrow buttons also reorder.</string>
+    <string name="goal_duplicate_excluded">not copied: add again with consent or move the existing projection</string>
+    <string name="goal_duplicate_page">Duplicate page</string>
+    <string name="goal_duplicate_preview">These tiles will be copied to a new page. Android widgets and the unique projection surface stay on their original page.</string>
+    <string name="goal_folder_name">Folder name</string>
+    <string name="goal_folders">Manage folders</string>
+    <string name="goal_help">Help</string>
+    <string name="goal_help_recovery">To recover, return to this setting and restore its previous value. Connection changes may require reconnecting the phone.</string>
+    <string name="goal_help_requirements">Change settings while parked. Availability depends on the selected backend and the capabilities reported by the device. This help works offline.</string>
+    <string name="goal_high_contrast">High contrast</string>
+    <string name="goal_high_contrast_detail">Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks.</string>
+    <string name="goal_move_folder">Move to folder</string>
+    <string name="goal_no_folder">No folder</string>
+    <string name="goal_page_name">Page name</string>
+    <string name="goal_page_tools">Manage dashboard pages</string>
+    <string name="goal_recent_installed">Newly installed</string>
+    <string name="goal_recent_period">Installed within</string>
+    <string name="goal_reduce_motion">Reduce motion</string>
+    <string name="goal_reduce_motion_detail">Remove decorative transitions. Progress and connection status remain visible.</string>
+    <string name="goal_reinstall">Find app to reinstall</string>
+    <string name="goal_remove_folder">Remove folder</string>
+    <string name="goal_reorder_pins">Reorder pinned apps</string>
+    <string name="goal_search_settings">Search settings</string>
+    <string name="goal_select_apps">Select several apps</string>
+    <string name="goal_selected_apps">%1$d selected</string>
+    <string name="goal_settings_empty">No settings match. Try a shorter word or a section name.</string>
+    <string name="goal_shortcut_unavailable">App shortcut unavailable</string>
+    <string name="goal_undo_library">Undo app changes</string>
+    <string name="goal_wider">Increase width</string>
+    <string name="goal_narrower">Decrease width</string>
+    <string name="goal_taller">Increase height</string>
+    <string name="goal_shorter">Decrease height</string>
+</resources>

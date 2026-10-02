@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_support_picker_unavailable">Die Dateiauswahl konnte nicht geöffnet werden. Versuche es erneut, sobald der Dokumentzugriff verfügbar ist.</string>
+    <string name="ux_support_discard_title">Gespeicherten Export verwerfen?</string>
+    <string name="ux_support_discard_message">„%1$s“ verwerfen? Nur die gespeicherte Exportkopie wird gelöscht. Ursprüngliche Protokolle, Berichte und Einstellungen bleiben auf diesem Gerät.</string>
+    <string name="ux_support_clear_reports">Berichtsauswahl löschen</string>
+    <string name="ux_support_no_category_rows">Keine Felder in dieser Kategorie. Wähle eine andere Kategorie, um die Berichte zu prüfen.</string>
+    <string name="ux_support_show_comparison">Vergleich anzeigen</string>
+</resources>

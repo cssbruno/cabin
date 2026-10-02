@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Build %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">Keine Dateiauswahl verfügbar. Die Sicherung ist lokal gespeichert; exportiere sie später unter Protokolle.</string>
+    <string name="ux_review_logs_waiting">Warte auf passende Protokolleinträge…</string>
+    <string name="ux_review_logs_no_files">Noch keine Protokolldateien. Starte die Aufzeichnung und öffne diesen Bereich erneut.</string>
+    <string name="ux_review_logs_start">Wähle Protokolldateien und dann Ausgewählte Dateien durchsuchen.</string>
+    <string name="ux_review_logs_page_empty">Keine Treffer auf dieser Seite. Setze die Suche auf der nächsten Seite fort.</string>
+    <string name="ux_review_logs_empty">Keine Treffer auf dieser Seite für die aktuelle Suche.</string>
+</resources>

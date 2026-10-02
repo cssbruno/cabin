@@ -35,7 +35,7 @@
     <string name="vehicle_status_fresh">Waiting for fresh climate data</string>
     <string name="vehicle_status_unverified">Control interface unverified for profile %1$d</string>
     <string name="app_status_park_title">Park before continuing</string>
-    <string name="app_status_park_message">Confirm the vehicle is safely parked. Cabin\'s speed data may be unavailable and is not a parking interlock.</string>
+    <string name="app_status_park_message">Continue only when the vehicle is safely parked. Cabin cannot confirm this for you.</string>
     <string name="app_status_park_confirm">I am parked</string>
     <string name="app_status_cancel">Cancel</string>
     <string name="app_status_connect_failed">Unable to start connection. Check app permissions.</string>

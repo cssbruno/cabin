@@ -1,0 +1,6 @@
+<resources>
+    <string name="uxf_search_changed">Files or filters changed. Search again before continuing or exporting.</string>
+    <string name="uxf_follow_search_required">Live results are paused. Search selected files to create an export.</string>
+    <string name="uxf_export_saved_locally">The file picker could not open. Your copy is saved in Pending exports; resume it there when file access is available.</string>
+    <string name="uxf_bookmarks_empty">No bookmarks yet. Search logs, then bookmark a line to return to it.</string>
+</resources>

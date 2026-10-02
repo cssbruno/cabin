@@ -1,0 +1,158 @@
+{
+  "sdk": 27,
+  "device": "Android SDK built for x86_64",
+  "cycles": 30,
+  "scope": "No-adapter connect\/stop via public service intents; driver selection and settings navigation via Android accessibility; activity recreation",
+  "samples": [
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 6435576
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5318000
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5333848
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5339848
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5366376
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 6469112
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5335424
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5358520
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5363568
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5388016
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 6493464
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5380056
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5401328
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5396904
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5391592
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 6503896
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5388344
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5410184
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5415392
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5442760
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 6515392
+    },
+    {
+      "threads": 19,
+      "fds": 68,
+      "heapBytes": 5398656
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5413936
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5406088
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5423384
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 6522256
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5405560
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5425864
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5428976
+    },
+    {
+      "threads": 20,
+      "fds": 68,
+      "heapBytes": 5430336
+    }
+  ]
+}

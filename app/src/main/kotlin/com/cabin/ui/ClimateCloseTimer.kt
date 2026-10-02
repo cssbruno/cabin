@@ -41,6 +41,8 @@ internal class ClimateCloseTimer {
 
 @Composable
 internal fun rememberClimateCloseTimer(onClose: (() -> Unit)?): ClimateCloseTimer {
+    val settings = com.cabin.platform.rememberAutomationValues("cabin_vehicle_tools")
+    val seconds = (settings["climateTimeout"] as? Int)?.takeIf { it in listOf(0, 5, 10, 20, 30, 60) } ?: 10
     val timer = remember { ClimateCloseTimer() }
     val close by rememberUpdatedState(onClose)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -52,10 +54,10 @@ internal fun rememberClimateCloseTimer(onClose: (() -> Unit)?): ClimateCloseTime
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer) }
     }
-    LaunchedEffect(timer.interaction, timer.pressed, resumed, onClose != null) {
+    LaunchedEffect(timer.interaction, timer.pressed, resumed, onClose != null, seconds) {
         timer.remaining.snapTo(1f)
-        if (resumed && !timer.pressed && onClose != null) {
-            timer.remaining.animateTo(0f, tween(10_000, easing = LinearEasing))
+        if (resumed && !timer.pressed && onClose != null && seconds > 0) {
+            timer.remaining.animateTo(0f, tween(seconds * 1000, easing = LinearEasing))
             close?.invoke()
         }
     }

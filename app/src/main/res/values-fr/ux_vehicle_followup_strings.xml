@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Échéance · AAAA-MM-JJ</string>
+    <string name="uxvf_odometer_date">Date du relevé · AAAA-MM-JJ</string>
+    <string name="uxvf_service_date">Date d’entretien · AAAA-MM-JJ</string>
+    <string name="uxvf_date_error">Saisissez une date valide au format AAAA-MM-JJ.</string>
+    <string name="uxvf_name_error">Saisissez un nom pour cet entretien.</string>
+    <string name="uxvf_interval_error">Saisissez un intervalle de 1 à 3650 jours.</string>
+    <string name="uxvf_decimal_error">Saisissez un nombre de 0 à 10 millions, sans séparateur de milliers.</string>
+    <string name="uxvf_distance_error">Saisissez une distance supérieure à 0 km. Le prochain kilométrage prévu doit être au maximum de 10 millions de km.</string>
+    <string name="uxvf_odometer_needed">Enregistrez un kilométrage avant d’ajouter un intervalle de distance.</string>
+    <string name="uxvf_odometer_order">Le kilométrage ne peut pas être inférieur au relevé enregistré.</string>
+    <string name="uxvf_future_reading">La date du relevé ne peut pas être dans le futur.</string>
+    <string name="uxvf_reading_date_order">La date du relevé ne peut pas précéder le relevé enregistré.</string>
+    <string name="uxvf_decimal_hint">Utilisez une virgule ou un point décimal, sans séparateur de milliers.</string>
+    <string name="uxvf_record_missing">Cet élément ou relevé a été supprimé. Fermez cet éditeur et choisissez un élément existant.</string>
+</resources>

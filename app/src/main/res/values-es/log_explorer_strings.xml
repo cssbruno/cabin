@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Buscar texto del registro</string>
+    <string name="logx_filters">Filtros y vista</string>
+    <string name="logx_follow">Seguir este archivo en vivo</string>
+    <string name="logx_tag">Etiqueta del subsistema</string>
+    <string name="logx_newest">Más recientes primero</string>
+    <string name="logx_numbers">Números de línea</string>
+    <string name="logx_wrap">Ajustar líneas</string>
+    <string name="logx_smaller">Texto más pequeño</string>
+    <string name="logx_larger">Texto más grande</string>
+    <string name="logx_export_scope">Se exportan solo los resultados visibles. El texto incluye mensajes originales; los metadatos solo incluyen fechas, niveles y números de línea.</string>
+    <string name="logx_metadata_export">Exportar solo metadatos</string>
+    <string name="logx_export">Exportar texto filtrado</string>
+    <string name="logx_export_done">Exportación guardada</string>
+    <string name="logx_export_failed">No se pudo guardar la exportación</string>
+    <string name="logx_count">%1$d visibles · %2$d resultados · %3$d líneas analizadas</string>
+    <string name="logx_limited">Vista limitada: hasta 1.000 resultados, 16 MiB analizados y 4 KiB por línea. Acote los filtros o exporte el archivo original.</string>
+    <string name="logx_no_matches">No hay resultados</string>
+    <string name="logx_all">Todos los niveles</string>
+    <string name="logx_errors">Errores</string>
+    <string name="logx_warnings">Avisos</string>
+    <string name="logx_info">Información</string>
+    <string name="logx_debug">Depuración</string>
+    <string name="logx_verbose">Detallado</string>
+    <string name="logx_file_search">Buscar archivos de registro</string>
+    <string name="logx_oldest">Más antiguos primero</string>
+    <string name="logx_largest">Más grandes primero</string>
+    <string name="logx_name">Nombre del archivo</string>
+    <string name="logx_original">Ver páginas originales</string>
+</resources>

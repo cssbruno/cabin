@@ -2,7 +2,6 @@ package com.cabin.ui.settings
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -39,7 +38,8 @@ class SyuVehicleOptionsTest {
         compose.runOnIdle { assertEquals(listOf(262442 to action), sent) }
         compose.onNodeWithText("Reset data since start").performClick()
         compose.runOnIdle { state.value = state.value.copy(profileId = 17) }
-        compose.onNodeWithText("Reset").assertIsNotEnabled().performClick()
+        compose.onNodeWithText("Reset").assertDoesNotExist()
+        compose.onNodeWithText("Reset data since start").assertDoesNotExist()
         compose.runOnIdle { assertEquals(1, sent.size) }
     }
 
@@ -67,7 +67,8 @@ class SyuVehicleOptionsTest {
         compose.runOnIdle { assertEquals(listOf(Triple(262442, choice, 1)), sent) }
         compose.onNodeWithText("Vehicle language").performClick()
         compose.runOnIdle { state.value = state.value.copy(profileId = 17) }
-        compose.onNodeWithText("English").assertIsNotEnabled().performClick()
+        compose.onNodeWithText("English").assertDoesNotExist()
+        compose.onNodeWithText("Vehicle language").assertDoesNotExist()
         compose.runOnIdle { assertEquals(1, sent.size) }
     }
 
@@ -80,14 +81,19 @@ class SyuVehicleOptionsTest {
         compose.runOnIdle { assertEquals(listOf(Triple(262442, 61, 3)), sent) }
     }
 
-    @Test fun `profile change disables already opened option picker`() {
+    @Test fun `profile change dismisses the old option picker and reopening uses the current profile`() {
         val state = mutableStateOf(initial)
         val sent = mutableListOf<Triple<Int, Int, Int>>()
         compose.setContent { CabinTheme { ObdSettingsSection(state.value) { p, f, v -> sent += Triple(p, f, v) } } }
         compose.onNodeWithText(compose.activity.getString(R.string.vehicle_syu_readings)).performClick()
         compose.onNodeWithText("Medium").performClick()
         compose.runOnIdle { state.value = initial.copy(profileId = 983338) }
-        compose.onNodeWithText("High").assertIsNotEnabled().performClick()
+        compose.onNodeWithText("High").assertDoesNotExist()
+        compose.onNodeWithText("Medium").assertDoesNotExist()
         compose.runOnIdle { assertEquals(emptyList<Triple<Int, Int, Int>>(), sent) }
+        compose.onNodeWithText(compose.activity.getString(R.string.vehicle_syu_readings)).performClick()
+        compose.onNodeWithText("Medium").performClick()
+        compose.onNodeWithText("High").performClick()
+        compose.runOnIdle { assertEquals(listOf(Triple(983338, 61, 3)), sent) }
     }
 }

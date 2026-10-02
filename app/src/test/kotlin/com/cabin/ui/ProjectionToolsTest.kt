@@ -23,6 +23,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.cabin.BuildConfig
@@ -224,6 +227,49 @@ class ProjectionToolsTest {
         }
         compose.onNodeWithText("No paired wireless devices").assertIsDisplayed()
         compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed()
+    }
+
+    @Test
+    fun `choosing a new preferred phone refreshes the previous preferred row`() {
+        val first = com.cabin.CabinManager.DeviceInfo("01", "First phone", "CarPlay")
+        val second = com.cabin.CabinManager.DeviceInfo("02", "Second phone", "CarPlay")
+        val choices = mutableMapOf(first.btMac to com.cabin.platform.PhoneConnectionPreference.PREFERRED,
+            second.btMac to com.cabin.platform.PhoneConnectionPreference.AUTOMATIC)
+        compose.setContent {
+            CabinTheme {
+                ProjectionDevicePicker(listOf(first, second), null, {}, {}, {},
+                    phonePreference = { choices.getValue(it) }, onPreference = { mac, value ->
+                        if (value == com.cabin.platform.PhoneConnectionPreference.PREFERRED) {
+                            choices.keys.toList().forEach { choices[it] = com.cabin.platform.PhoneConnectionPreference.AUTOMATIC }
+                        }
+                        choices[mac] = value
+                    })
+            }
+        }
+        val context = compose.activity
+        val preferred = context.getString(com.cabin.R.string.gx_phone_preferred)
+        compose.onAllNodesWithText(preferred)[0].assertIsSelected()
+        compose.onAllNodesWithText(preferred)[1].performScrollTo().performClick().assertIsSelected()
+        compose.onAllNodesWithText(preferred)[0].performScrollTo().assertIsNotSelected()
+    }
+
+    @Test
+    fun `phone picker keeps dismissal and refresh reachable on short double font screens`() {
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                CabinTheme { Box(Modifier.width(320.dp).height(240.dp)) {
+                    ProjectionDevicePicker(emptyList(), null, {}, {}, {}, onRefresh = {})
+                } }
+            }
+        }
+        listOf("Back", "Close projection tools").forEach { label ->
+            compose.onNodeWithContentDescription(label).assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        }
+        compose.onNodeWithText("Refresh paired phones").performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithText("No paired wireless devices").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithContentDescription("Close projection tools").assertIsDisplayed()
+        saveScreenshot("ux-phone-picker-short-double-font")
     }
 
     private fun assertFullyVisibleInShortViewport(label: String) {

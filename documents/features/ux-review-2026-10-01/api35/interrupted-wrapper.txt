@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/bruno/Documentos/ChatGPT/R/cabin/tools/quality/device_checks.py", line 61, in <module>
+    main()
+    ~~~~^^
+  File "/home/bruno/Documentos/ChatGPT/R/cabin/tools/quality/device_checks.py", line 44, in main
+    'sdk': run('shell', 'getprop', 'ro.build.version.sdk').strip(),
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bruno/Documentos/ChatGPT/R/cabin/tools/quality/device_checks.py", line 30, in run
+    return subprocess.check_output(adb + list(command), text=True, stderr=subprocess.STDOUT, timeout=timeout)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/usr/lib64/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/home/bruno/Android/Sdk/platform-tools/adb', '-s', 'emulator-5582', 'shell', 'getprop', 'ro.build.version.sdk']' returned non-zero exit status 1.

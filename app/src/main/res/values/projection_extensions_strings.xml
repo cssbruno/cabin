@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="px_restart_title">Restart the setup guide?</string>
+    <string name="px_restart_detail">This clears guide progress and your manual checks. Saved audio and phone settings are kept.</string>
+    <string name="px_restart">Restart guide</string>
+    <string name="px_checklist_title">Check your real phone session</string>
+    <string name="px_checklist_detail">Mark only what you have tested while parked. These checks are remembered; the guide can finish with items unchecked.</string>
+    <string name="px_check_audio">I heard phone audio through the car speakers</string>
+    <string name="px_check_microphone">The other caller heard my voice clearly</string>
+    <string name="px_check_touch">Phone controls responded to my touches</string>
+    <string name="px_check_progress">%1$d of %2$d checks verified</string>
+    <string name="px_refresh_phones">Refresh paired phones</string>
+    <string name="px_hide_phone_filters">Hide search and filters</string>
+    <string name="px_find_phones">Find and sort phones</string>
+    <string name="px_search_phones">Search phone name or platform</string>
+    <string name="px_all_platforms">All platforms</string>
+    <string name="px_sort_phones">Sort names A–Z</string>
+    <string name="px_no_phone_matches">No phones match these filters.</string>
+    <string name="px_clear_filters">Clear filters</string>
+    <string name="px_touch_test">Touch targets</string>
+    <string name="px_multitouch_test">Multi-touch test</string>
+    <string name="px_touch_canvas">Five touchscreen test targets</string>
+    <string name="px_multitouch_canvas">Multi-touch test area</string>
+    <string name="px_touch_instruction">Tap each of the five circles once to check this screen’s touch response.</string>
+    <string name="px_multitouch_instruction">Place two or more fingers inside the test area at the same time.</string>
+    <string name="px_touch_local">This checks the head unit only. It does not change calibration or test the phone connection.</string>
+    <string name="px_multitouch_count">Fingers now: %1$d · Maximum detected: %2$d</string>
+    <string name="px_multitouch_pass">Two or more simultaneous touches detected.</string>
+    <string name="px_touch_progress">Targets reached: %1$d of %2$d</string>
+    <string name="px_touch_pass">All five targets responded.</string>
+    <string name="px_touch_reset">Reset test results</string>
+    <string name="px_report_filter_detail">Filters only change this preview. Copy and Save always include the complete report.</string>
+    <string name="px_report_search">Search report</string>
+    <string name="px_report_all_sections">All report sections</string>
+    <string name="px_report_copy">Copy complete report</string>
+    <string name="px_report_copied">Complete report copied</string>
+    <string name="px_report_matches">Matching lines: %1$d</string>
+    <string name="px_report_no_matches">No report lines match your search.</string>
+</resources>

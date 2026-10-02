@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lxg_workspace">Cerca nei registri</string>
+    <string name="lxg_pending_exports">Esportazioni incomplete: scegli una destinazione per riprendere</string>
+    <string name="lxg_resume">Riprendi esportazione</string>
+    <string name="lxg_discard">Scarta</string>
+    <string name="lxg_files">File (%1$d selezionati)</string>
+    <string name="lxg_bookmarks">Segnalibri</string>
+    <string name="lxg_bookmark">Segna riga</string>
+    <string name="lxg_remove_bookmark">Rimuovi segnalibro</string>
+    <string name="lxg_remove">Rimuovi</string>
+    <string name="lxg_follow_rotation">Segui sessione di registrazione</string>
+    <string name="lxg_select_all">Seleziona / deseleziona tutto</string>
+    <string name="lxg_time_zone">Fuso orario: %1$s</string>
+    <string name="lxg_from">Da (incluso)</string>
+    <string name="lxg_until">Fino a (incluso)</string>
+    <string name="lxg_range_format">Facoltativo: 2026-09-30T14:30. Gli orari sconosciuti o ambigui sono esclusi dal filtro temporale.</string>
+    <string name="lxg_search">Cerca nei file selezionati</string>
+    <string name="lxg_continue">Continua ricerca: pagina successiva</string>
+    <string name="lxg_scan_scope">Righe esaminate: %1$d. Ora sconosciuta/ambigua: %2$d. Conteggi limitati alle righe esaminate.</string>
+    <string name="lxg_export_scope">L’esportazione esamina tutti i file selezionati con gli ultimi filtri applicati. Include record completi e nomi, senza contesto. I metadati omettono i record non strutturati.</string>
+    <string name="lxg_export_all">Esporta tutti i record corrispondenti</string>
+    <string name="lxg_context">Righe originali vicine</string>
+    <string name="lxg_context_not_exported">Solo anteprima del contesto; le righe aggiuntive non sono incluse nell’esportazione filtrata.</string>
+    <string name="lxg_preview_shortened">Anteprima abbreviata; l’esportazione completa mantiene tutto il record.</string>
+    <string name="lxg_source_changed">Una fonte è cambiata o è stata eliminata. Avvia una nuova ricerca.</string>
+    <string name="lxg_invalid_range">Controlla file e orari. La fine deve seguire l’inizio; gli orari ambigui non sono accettati.</string>
+    <string name="lxg_compare_reports">Confronta rapporti diagnostici salvati</string>
+    <string name="lxg_first_report">Scegli primo rapporto</string>
+    <string name="lxg_second_report">Scegli secondo rapporto</string>
+    <string name="lxg_replace_first">Sostituisci primo rapporto</string>
+    <string name="lxg_replace_second">Sostituisci secondo rapporto</string>
+    <string name="lxg_report_invalid">I rapporti devono essere JSON diagnostici Cabin validi, fino a 1 MiB, con lo stesso schema supportato (1 o 2).</string>
+    <string name="lxg_changed">Modificati</string>
+    <string name="lxg_missing">Aggiunti / mancanti</string>
+    <string name="lxg_unchanged">Invariati</string>
+    <string name="lxg_before">Prima: %1$s</string>
+    <string name="lxg_after">Dopo: %1$s</string>
+    <string name="lxg_scan_limits">Ogni pagina si ferma a 250 record corrispondenti o 2 MiB letti. L’ultimo record viene letto per intero, quindi il limite di byte può essere superato.</string>
+    <string name="lxg_preparation_interrupted">La preparazione dell’esportazione è stata interrotta. Non è disponibile una copia completa; elimina questa voce e avvia una nuova esportazione.</string>
+</resources>

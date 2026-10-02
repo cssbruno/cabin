@@ -143,6 +143,8 @@ internal class TeyesTelemetryFreshness {
         now - sample.receivedAt in 0 until if (code in shortLivedFields) 5_000L else 60_000L
     }.mapValues { it.value.value }
 
+    fun receivedTimes(): Map<Int, Long> = samples.mapValues { it.value.receivedAt }
+
     fun remove(code: Int) { samples.remove(code) }
 
     fun clear() {

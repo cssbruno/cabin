@@ -35,7 +35,7 @@
     <string name="vehicle_status_fresh">Esperando datos de climatización recientes</string>
     <string name="vehicle_status_unverified">Interfaz de control no verificada para el perfil %1$d</string>
     <string name="app_status_park_title">Estaciona antes de continuar</string>
-    <string name="app_status_park_message">Confirma que el vehículo está estacionado de forma segura. La velocidad de Cabin puede no estar disponible y no es un bloqueo de estacionamiento.</string>
+    <string name="app_status_park_message">Continúa solo cuando el vehículo esté estacionado de forma segura. Cabin no puede comprobarlo por ti.</string>
     <string name="app_status_park_confirm">Estoy estacionado</string>
     <string name="app_status_cancel">Cancelar</string>
     <string name="app_status_connect_failed">No se pudo iniciar la conexión. Revisa los permisos de la aplicación.</string>

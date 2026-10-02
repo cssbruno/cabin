@@ -4,6 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -32,6 +36,29 @@ import org.robolectric.util.ReflectionHelpers
 @Config(sdk = [35], qualifiers = "w800dp-h480dp-land-mdpi")
 class ProjectionConnectionHelpTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun `compact connection progress and navigation share a scroll container`() {
+        var stops = 0
+        var closes = 0
+        compose.setContent {
+            MaterialTheme {
+                Box(Modifier.width(480.dp).height(240.dp)) {
+                    ProjectionConnectionScreen(
+                        state = CabinManager.State.CONNECTING, statusText = "Connecting", isResetting = false,
+                        isCompactPanel = true, onReconnect = {}, onSettings = {}, onDashboard = null,
+                        onClimate = null, onClosePanel = { closes++ },
+                        connectionProgress = {
+                            Button(onClick = { stops++ }, modifier = Modifier.heightIn(min = 56.dp)) { Text("Stop pending connection") }
+                        },
+                    )
+                }
+            }
+        }
+        compose.onNodeWithText("Stop pending connection").performScrollTo().assertIsDisplayed().performClick()
+        compose.onNodeWithContentDescription("Close panel").performScrollTo().assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(1, stops); assertEquals(1, closes) }
+    }
 
     @Test
     fun `stopping for tests needs parked acknowledgment again after window focus loss`() {

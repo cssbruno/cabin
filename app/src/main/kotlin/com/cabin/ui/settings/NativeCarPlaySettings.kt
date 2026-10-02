@@ -62,10 +62,11 @@ internal fun NativeCarPlaySettings() {
         onSelect = { save(configuration.copy(logo = it)); showLogos = false },
         onDismiss = { showLogos = false })
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp).testTag("native-carplay-settings"),
+        Modifier.fillMaxSize().verticalScroll(rememberSettingsScrollState()).padding(24.dp).testTag("native-carplay-settings"),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(stringResource(R.string.carplay_backend_native), style = MaterialTheme.typography.headlineSmall)
+        Text(stringResource(R.string.gx_capability_native))
         if (status.isNotEmpty()) Text(status)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(enabled = nativeSelected, onClick = { retry() }, modifier = Modifier.heightIn(min = 56.dp)) {
@@ -83,14 +84,14 @@ internal fun NativeCarPlaySettings() {
         }
         HorizontalDivider()
         Text(stringResource(R.string.carlink_reconnect_hint), style = MaterialTheme.typography.bodyMedium)
-        Text(stringResource(R.string.carlink_frame_rate), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.carlink_frame_rate), modifier = Modifier.settingsSearchAnchor(stringResource(R.string.carlink_frame_rate)), style = MaterialTheme.typography.titleMedium)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(20, 25, 30, 60).forEach { fps ->
                 FilterChip(selected = configuration.fps == fps, onClick = { save(configuration.copy(fps = fps)) },
                     label = { Text("$fps FPS") }, modifier = Modifier.heightIn(min = 56.dp))
             }
         }
-        Text(stringResource(R.string.carlink_wifi_band), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.carlink_wifi_band), modifier = Modifier.settingsSearchAnchor(stringResource(R.string.carlink_wifi_band)), style = MaterialTheme.typography.titleMedium)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("2.4 GHz", "5 GHz").forEachIndexed { band, label ->
                 FilterChip(selected = configuration.band == band, onClick = { save(configuration.copy(band = band)) },
@@ -99,11 +100,11 @@ internal fun NativeCarPlaySettings() {
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-            Text(stringResource(R.string.carlink_auto_connect), Modifier.weight(1f))
+            Text(stringResource(R.string.carlink_auto_connect), Modifier.weight(1f).settingsSearchAnchor(stringResource(R.string.carlink_auto_connect)))
             Switch(checked = configuration.autoConnect, onCheckedChange = { save(configuration.copy(autoConnect = it)) },
                 modifier = Modifier.testTag("carlink-auto-connect"))
         }
-        Text(stringResource(R.string.carlink_microphone), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.carlink_microphone), modifier = Modifier.settingsSearchAnchor(stringResource(R.string.carlink_microphone)), style = MaterialTheme.typography.titleMedium)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(R.string.carlink_noise_none, R.string.carlink_noise_right, R.string.carlink_noise_left).forEachIndexed { value, label ->
                 FilterChip(selected = microphone == value, onClick = {
@@ -115,7 +116,7 @@ internal fun NativeCarPlaySettings() {
         }
         if (microphoneError) Text(stringResource(R.string.carlink_microphone_error), color = MaterialTheme.colorScheme.error)
         OutlinedButton(onClick = { showLogos = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(R.string.carlink_logo))
+            Text(stringResource(R.string.carlink_logo), modifier = Modifier.settingsSearchAnchor(stringResource(R.string.carlink_logo)))
         }
         Text("Cabin ${com.cabin.BuildConfig.VERSION_NAME} · Carlink 2.23.0712.1954", style = MaterialTheme.typography.bodySmall)
 

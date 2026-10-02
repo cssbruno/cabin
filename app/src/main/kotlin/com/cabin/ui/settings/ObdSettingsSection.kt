@@ -89,9 +89,9 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAc
     val measurementPreferences = remember(context) { MeasurementPreferences.get(context) }
     val measurementUnit by measurementPreferences.unit.collectAsStateWithLifecycle()
     val readings = teyesVehicleSettingsReadings(vehicle, measurementUnit)
-    var showRawFields by remember { mutableStateOf(false) }
-    var showSyuFields by remember { mutableStateOf(false) }
-    if (showSyuFields) SyuReadingsDialog(vehicle, onSyuVehicleOption, onSyuAction, onSyuChoice, onClose = { showSyuFields = false })
+    var showRawFields by remember(vehicle.profileId) { mutableStateOf(false) }
+    var showSyuFields by remember(vehicle.profileId) { mutableStateOf(false) }
+    if (showSyuFields) SyuReadingsDialog(vehicle, onSetOption = onSyuVehicleOption, onAction = onSyuAction, onChoice = onSyuChoice, onClose = { showSyuFields = false })
     var fieldFilter by remember { mutableStateOf("") }
     if (showRawFields) AlertDialog(
         onDismissRequest = { showRawFields = false },
@@ -106,10 +106,11 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAc
                         vehicle.fytFieldNames[id]?.joinToString(" / ") { it.removePrefix("U_").replace('_', ' ') }
                             ?.let { Text(it, style = MaterialTheme.typography.labelMedium) }
                         Text("CAN · $id: ${vehicle.fytRawValues[id]?.toString() ?: "—"}")
+                        Text(stringResource(when { !vehicle.connected -> R.string.telemetry_disconnected; vehicle.rawFieldAgesMs[id] == null -> R.string.compat_waiting; id !in vehicle.fytRawValues -> R.string.telemetry_stale; else -> R.string.telemetry_live }) + (vehicle.rawFieldAgesMs[id]?.let { " · ${it / 1000}s" } ?: ""), style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 items(vehicle.fytMainFields.filter { "MAIN $it".contains(fieldFilter.trim(), ignoreCase = true) }.sorted(), key = { "main:$it" }) { id ->
-                    Text("MAIN · $id: ${vehicle.fytMainRawValues[id]?.toString() ?: "—"}", Modifier.padding(vertical = 6.dp))
+                    Text("MAIN · $id: ${vehicle.fytMainRawValues[id]?.toString() ?: "—"}" + (vehicle.mainFieldAgesMs[id]?.let { " · ${it / 1000}s" } ?: ""), Modifier.padding(vertical = 6.dp))
                 }
             }
             }
@@ -119,6 +120,7 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAc
     SettingsSection(
         stringResource(R.string.vehicle_readings),
     ) {
+        VehicleReadingsTools(vehicle)
         SettingsNotice(teyesVehicleSettingsStatus(androidx.compose.ui.platform.LocalResources.current, vehicle))
         if (vehicle.connected && vehicle.profileId != 0) {
             Text(stringResource(R.string.vehicle_profile_detail, vehicle.profileId))
@@ -167,9 +169,9 @@ fun ObdSettingsSection(vehicle: TeyesClimateState = TeyesClimateState(), onSyuAc
 }
 
 @Composable
-internal fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, Int, Int) -> Unit)?, onAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)?, onChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)?, onClose: () -> Unit) {
+internal fun SyuReadingsDialog(vehicle: TeyesClimateState, actionsOnly: Boolean = false, onSetOption: ((Int, Int, Int) -> Unit)?, onAction: ((Int, com.cabin.platform.FytVehicleAction) -> Unit)?, onChoice: ((Int, com.cabin.platform.FytVehicleChoice, Int) -> Unit)?, onClose: () -> Unit) {
     val portuguese = LocalContext.current.resources.configuration.locales[0].language == "pt"
-    var pendingChoice by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleChoice>?>(null) }
+    var pendingChoice by remember(vehicle.profileId) { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleChoice>?>(null) }
     pendingChoice?.let { (profile, choice) ->
         val options = vehicle.fytChoices[choice].orEmpty()
         AlertDialog(onDismissRequest = { pendingChoice = null },
@@ -184,7 +186,7 @@ internal fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, I
             } },
             confirmButton = { TextButton(onClick = { pendingChoice = null }) { Text(stringResource(R.string.action_close)) } })
     }
-    var pendingAction by remember { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleAction>?>(null) }
+    var pendingAction by remember(vehicle.profileId) { mutableStateOf<Pair<Int, com.cabin.platform.FytVehicleAction>?>(null) }
     pendingAction?.let { (profile, action) ->
         AlertDialog(onDismissRequest = { pendingAction = null },
             title = { Text(action.title(portuguese)) },
@@ -214,10 +216,10 @@ internal fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, I
     }
     AlertDialog(
         onDismissRequest = onClose,
-        title = { Text(stringResource(R.string.vehicle_syu_readings)) },
+        title = { Text(stringResource(if (actionsOnly) R.string.car_settings_actions else R.string.vehicle_syu_readings)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = search, onValueChange = { search = it }, singleLine = true,
+                if (!actionsOnly) OutlinedTextField(value = search, onValueChange = { search = it }, singleLine = true,
                     label = { Text(stringResource(R.string.vehicle_find_field)) })
                 LazyColumn(Modifier.heightIn(max = 400.dp)) {
                     if (onChoice != null) items(vehicle.fytChoices.keys.toList(), key = { "choice:$it" }) { choice ->
@@ -230,7 +232,7 @@ internal fun SyuReadingsDialog(vehicle: TeyesClimateState, onSetOption: ((Int, I
                             Text(action.title(portuguese))
                         }
                     }
-                    val rows = vehicle.fytSyuReadings.map { row ->
+                    val rows = (if (actionsOnly) emptyList() else vehicle.fytSyuReadings).map { row ->
                         val names = row.label ?: row.fields.sorted().joinToString(" / ") { id ->
                             vehicle.fytFieldNames[id]?.joinToString(" / ") { it.removePrefix("U_").replace('_', ' ') } ?: "CAN $id"
                         }

@@ -41,6 +41,7 @@ class AdapterDriver(
     private val writeTimeout: Int = 1000,
     private val videoProcessor: UsbDeviceWrapper.VideoDataProcessor? = null,
     private val phoneConnectionAllowed: () -> Boolean = { true },
+    private val failureHandler: ((com.cabin.platform.ConnectionFailure, String) -> Unit)? = null,
 ) {
     private var heartbeatTimer: Timer? = null
     private var wifiConnectTimer: Timer? = null
@@ -104,7 +105,7 @@ class AdapterDriver(
 
         if (!usbDevice.isOpened) {
             log("USB device not opened")
-            errorHandler("USB device not opened")
+            reportFailure(com.cabin.platform.ConnectionFailure.OPEN_FAILED, "USB device not opened")
             isRunning.set(false)
             return false
         }
@@ -268,7 +269,7 @@ class AdapterDriver(
         if (!success && failureMessage != null && !isInitializing.get() &&
             transportFailureReported.compareAndSet(false, true)
         ) {
-            errorHandler(failureMessage)
+            reportFailure(com.cabin.platform.ConnectionFailure.WRITE_FAILED, failureMessage)
         }
         return success
     }
@@ -519,6 +520,12 @@ class AdapterDriver(
                     }
                 }
 
+                override fun onFailure(reason: com.cabin.platform.ConnectionFailure, error: String) {
+                    receiveErrors.incrementAndGet()
+                    log("Reading loop error: $error")
+                    reportFailure(reason, error)
+                }
+
                 override fun onError(error: String) {
                     receiveErrors.incrementAndGet()
                     log("Reading loop error: $error")
@@ -528,6 +535,10 @@ class AdapterDriver(
             readTimeout,
             videoProcessor,
         )
+    }
+
+    private fun reportFailure(reason: com.cabin.platform.ConnectionFailure, message: String) {
+        failureHandler?.invoke(reason, message) ?: errorHandler(message)
     }
 
     private fun logPerformanceStats() {

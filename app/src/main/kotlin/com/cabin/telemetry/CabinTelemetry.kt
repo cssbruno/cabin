@@ -34,8 +34,14 @@ class CabinApplication : Application() {
         super.onCreate()
         // Engine IPC reports failures to the main process; avoid competing telemetry caches.
         if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName() == "$packageName:carlink") return
+        com.cabin.quality.StartupMeasurements.mark("application start")
+        com.cabin.platform.PortableConfigurationBackup.recoverPending(this)
+        com.cabin.quality.StartupMeasurements.mark("configuration recovery")
+        com.cabin.platform.ParkingReminder.restore(this)
+        com.cabin.quality.StartupMeasurements.mark("parking scheduling")
         com.cabin.reports.DebugJournal.setObserver { area, event, detail -> CabinTelemetry.journal(area, event, detail) }
         CabinTelemetry.initialize(this)
+        com.cabin.quality.StartupMeasurements.mark("telemetry setup")
     }
 }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">Aucune appli dans cette vue. Choisissez un autre filtre ou affichez toutes les applis.</string>
+    <string name="ux_launcher_show_all">Afficher toutes les applis</string>
+    <string name="ux_launcher_clear_pins_note">Retirer toutes les applis épinglées de ce conducteur ? Les applis restent installées. Annuler les modifications des applis restaure les raccourcis.</string>
+    <string name="ux_launcher_choose_media">Choisir la source multimédia</string>
+    <string name="ux_launcher_media_ready">Prêt pour la musique</string>
+    <string name="ux_launcher_media_hint">Lancez la lecture sur le téléphone ou choisissez une source multimédia ci-dessus.</string>
+    <string name="ux_launcher_track_unavailable">Informations sur le morceau indisponibles</string>
+    <string name="ux_launcher_media_idle">Sans musique</string>
+</resources>

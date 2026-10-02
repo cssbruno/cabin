@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_metered_wait">In attesa di una rete senza limiti. Riprova dopo la connessione o consenti questo download.</string>
+    <string name="ux_low_space">Spazio insufficiente. Libera spazio e riprova; l’APK verificato viene conservato.</string>
+    <string name="ux_unmetered">Scarica solo su reti senza limiti</string>
+    <string name="ux_channel">Canale aggiornamenti</string>
+    <string name="ux_stable">Stabile</string>
+    <string name="ux_preview">Anteprima</string>
+    <string name="ux_skipped">Versione ignorata: %1$s</string>
+    <string name="ux_show_skipped">Mostra di nuovo</string>
+    <string name="ux_release_notes">Note di versione</string>
+    <string name="ux_no_notes">Nessuna nota di versione disponibile.</string>
+    <string name="ux_download_anyway">Consenti questo download</string>
+    <string name="ux_skip">Ignora questa versione</string>
+    <string name="ux_backup_title">Salva impostazioni prima di aggiornare</string>
+    <string name="ux_backup_detail">Salva una copia portatile delle impostazioni. Ripristinala da Impostazioni veicolo → Backup. Le copie locali sono in Registri → Esportazioni incomplete.</string>
+    <string name="ux_save_backup">Salva backup</string>
+    <string name="ux_backup_saved">Backup salvato.</string>
+    <string name="ux_backup_local">È salvata una copia locale recuperabile. Completa l’esportazione da Registri se necessario.</string>
+    <string name="ux_backup_failed">Backup non riuscito. Riprova o scegli di continuare senza backup.</string>
+    <string name="ux_without_backup">Continua senza backup</string>
+</resources>

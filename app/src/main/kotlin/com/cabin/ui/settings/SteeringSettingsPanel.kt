@@ -70,7 +70,7 @@ internal fun SteeringSettingsPanel(moving: Boolean = false, onParkedAction: (() 
     DisposableEffect(router) { onDispose { router?.cancelPressedKeys() } }
     SettingsDisclosure(stringResource(R.string.teyes_steering_shortcuts),
         androidx.compose.ui.res.pluralStringResource(R.plurals.teyes_learned_buttons, codes.size, codes.size),
-        onCollapse = { stopLearning(); chooser = false; reset = false }) {
+        onCollapse = { stopLearning(); chooser = false; reset = false }, searchLabels = emptySet()) {
         Text(stringResource(R.string.steering_scope))
         if (status.isNotEmpty()) SettingsNotice(status)
         if (router == null) SettingsNotice(stringResource(R.string.teyes_steering_unavailable))

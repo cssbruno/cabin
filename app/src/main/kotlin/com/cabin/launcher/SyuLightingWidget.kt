@@ -38,7 +38,8 @@ internal fun SyuLightingWidget(vehicle: TeyesClimateState, moving: Boolean,
                 }
             }
         }
-        val scope = rememberCoroutineScope()
-        PageDots(pager.currentPage, pager.pageCount, { page -> scope.launch { pager.animateScrollToPage(page) } })
+        val reducedMotion = com.cabin.ui.settings.LocalReducedMotion.current
+    val scope = rememberCoroutineScope()
+        PageDots(pager.currentPage, pager.pageCount, { page -> scope.launch { if (reducedMotion) pager.scrollToPage(page) else pager.animateScrollToPage(page) } })
     }
 }

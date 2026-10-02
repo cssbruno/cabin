@@ -37,6 +37,13 @@ internal class LogFilesStore(private val manager: FileLogManager) {
         readLogPage(file, offset)
     }
 
+    suspend fun search(file: File, query: LogQuery): LogSearchResult = withContext(Dispatchers.IO) {
+        mutex.withLock {
+            manager.flush()
+            searchLogFile(file, query)
+        }
+    }
+
     suspend fun prepareExport(file: File): Boolean = onIo {
         manager.flush()
         file.isFile

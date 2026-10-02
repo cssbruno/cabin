@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxc_delete_preset">Supprimer le préréglage audio « %1$s » ?</string>
+    <string name="uxc_delete_preset_detail">Seul ce préréglage enregistré sera supprimé. Les niveaux audio actuels restent inchangés.</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Scadenza · AAAA-MM-GG</string>
+    <string name="uxvf_odometer_date">Data della lettura · AAAA-MM-GG</string>
+    <string name="uxvf_service_date">Data del servizio · AAAA-MM-GG</string>
+    <string name="uxvf_date_error">Inserisci una data valida nel formato AAAA-MM-GG.</string>
+    <string name="uxvf_name_error">Inserisci un nome per questo intervento di manutenzione.</string>
+    <string name="uxvf_interval_error">Inserisci un intervallo da 1 a 3650 giorni.</string>
+    <string name="uxvf_decimal_error">Inserisci un numero da 0 a 10 milioni, senza separatori delle migliaia.</string>
+    <string name="uxvf_distance_error">Inserisci una distanza superiore a 0 km. La prossima lettura prevista deve essere al massimo di 10 milioni di km.</string>
+    <string name="uxvf_odometer_needed">Salva una lettura del contachilometri prima di aggiungere un intervallo di distanza.</string>
+    <string name="uxvf_odometer_order">La lettura non può essere inferiore al valore salvato del contachilometri.</string>
+    <string name="uxvf_future_reading">La data della lettura non può essere futura.</string>
+    <string name="uxvf_reading_date_order">La data della lettura non può precedere la lettura salvata.</string>
+    <string name="uxvf_decimal_hint">Usa la virgola o il punto decimale, senza separatori delle migliaia.</string>
+    <string name="uxvf_record_missing">Questo elemento o registro è stato rimosso. Chiudi l’editor e scegli un elemento esistente.</string>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goal_accessibility">Accessibilité</string>
+    <string name="goal_all_folders">Tous les dossiers</string>
+    <string name="goal_app_disabled">Cette application est désactivée. Ouvrez ses informations pour la réactiver. Le raccourci est conservé.</string>
+    <string name="goal_app_failed">Android ne peut pas ouvrir cette application. Vérifiez ses autorisations ou réessayez. Le raccourci est conservé.</string>
+    <string name="goal_app_removed">Cette application ou activité est absente. Réinstallez-la pour utiliser le raccourci.</string>
+    <string name="goal_bulk_preview">Appliquer aux %1$d applications sélectionnées. Annuler rétablit tout le changement.</string>
+    <string name="goal_compact_tiles">Tuiles compactes</string>
+    <string name="goal_days">%1$d jours</string>
+    <string name="goal_draft_note">Brouillon : les changements prennent effet après enregistrement. Annulez ou fermez pour les abandonner.</string>
+    <string name="goal_drag_reorder">Maintenez et faites glisser une ligne, puis enregistrez. Les flèches permettent aussi de réordonner.</string>
+    <string name="goal_duplicate_excluded">non copié : ajoutez à nouveau avec autorisation ou déplacez la projection existante</string>
+    <string name="goal_duplicate_page">Dupliquer la page</string>
+    <string name="goal_duplicate_preview">Ces tuiles seront copiées sur une nouvelle page. Les widgets Android et la projection unique restent sur leur page.</string>
+    <string name="goal_folder_name">Nom du dossier</string>
+    <string name="goal_folders">Gérer les dossiers</string>
+    <string name="goal_help">Aide</string>
+    <string name="goal_help_recovery">Pour rétablir, restaurez la valeur précédente de ce réglage. Un changement de connexion peut nécessiter de reconnecter le téléphone.</string>
+    <string name="goal_help_requirements">Modifiez les réglages à l’arrêt. Leur disponibilité dépend du système choisi et des capacités de l’appareil. Cette aide est accessible hors ligne.</string>
+    <string name="goal_high_contrast">Contraste élevé</string>
+    <string name="goal_high_contrast_detail">Utilisez un fort contraste dans Cabin. Les sélections conservent leurs libellés et coches.</string>
+    <string name="goal_move_folder">Déplacer vers un dossier</string>
+    <string name="goal_no_folder">Aucun dossier</string>
+    <string name="goal_page_name">Nom de la page</string>
+    <string name="goal_page_tools">Gérer les pages du tableau de bord</string>
+    <string name="goal_recent_installed">Installations récentes</string>
+    <string name="goal_recent_period">Installées depuis</string>
+    <string name="goal_reduce_motion">Réduire les animations</string>
+    <string name="goal_reduce_motion_detail">Supprimez les transitions décoratives. La progression et la connexion restent visibles.</string>
+    <string name="goal_reinstall">Trouver l’application à réinstaller</string>
+    <string name="goal_remove_folder">Supprimer le dossier</string>
+    <string name="goal_reorder_pins">Réordonner les applications épinglées</string>
+    <string name="goal_search_settings">Rechercher un réglage</string>
+    <string name="goal_select_apps">Sélectionner plusieurs applications</string>
+    <string name="goal_selected_apps">%1$d sélectionnées</string>
+    <string name="goal_settings_empty">Aucun réglage trouvé. Essayez un mot plus court ou un nom de section.</string>
+    <string name="goal_shortcut_unavailable">Raccourci indisponible</string>
+    <string name="goal_undo_library">Annuler les changements des applications</string>
+    <string name="goal_wider">Augmenter la largeur</string>
+    <string name="goal_narrower">Réduire la largeur</string>
+    <string name="goal_taller">Augmenter la hauteur</string>
+    <string name="goal_shorter">Réduire la hauteur</string>
+</resources>

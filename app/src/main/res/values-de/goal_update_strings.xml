@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_metered_wait">Warten auf ein ungetaktetes Netzwerk. Nach Verbindung erneut versuchen oder diesen Download erlauben.</string>
+    <string name="ux_low_space">Nicht genug Speicher. Speicher freigeben und erneut versuchen; die geprüfte APK bleibt erhalten.</string>
+    <string name="ux_unmetered">Nur in ungetakteten Netzwerken herunterladen</string>
+    <string name="ux_channel">Updatekanal</string>
+    <string name="ux_stable">Stabil</string>
+    <string name="ux_preview">Vorschau</string>
+    <string name="ux_skipped">Übersprungene Version: %1$s</string>
+    <string name="ux_show_skipped">Wieder anzeigen</string>
+    <string name="ux_release_notes">Versionshinweise</string>
+    <string name="ux_no_notes">Keine Versionshinweise vorhanden.</string>
+    <string name="ux_download_anyway">Diesen Download erlauben</string>
+    <string name="ux_skip">Diese Version überspringen</string>
+    <string name="ux_backup_title">Einstellungen vor dem Update sichern</string>
+    <string name="ux_backup_detail">Portable Einstellungskopie speichern. Wiederherstellung unter Fahrzeugeinstellungen → Sicherung. Lokale Kopien stehen unter Protokolle → Unfertige Exporte bereit.</string>
+    <string name="ux_save_backup">Sicherung speichern</string>
+    <string name="ux_backup_saved">Sicherung gespeichert.</string>
+    <string name="ux_backup_local">Eine wiederherstellbare lokale Kopie wurde gespeichert. Export bei Bedarf unter Protokolle abschließen.</string>
+    <string name="ux_backup_failed">Sicherung fehlgeschlagen. Erneut versuchen oder ausdrücklich ohne Sicherung fortfahren.</string>
+    <string name="ux_without_backup">Ohne Sicherung fortfahren</string>
+</resources>

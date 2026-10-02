@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_folder_capacity">Tutte le %1$d cartelle sono in uso. Rimuovi una cartella per crearne un’altra oppure rinomina una cartella esistente. La bozza viene conservata.</string>
+    <string name="ux_launcher_pin_capacity">Restano solo %1$d posti per fissare app. Seleziona meno app nuove o rimuovi un’app fissata prima di confermare.</string>
+    <string name="ux_launcher_move_up">Sposta %1$s in alto</string>
+    <string name="ux_launcher_move_down">Sposta %1$s in basso</string>
+    <string name="ux_launcher_rename_folder">Rinomina cartella %1$s</string>
+</resources>

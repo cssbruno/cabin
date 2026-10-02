@@ -1,0 +1,134 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/home/bruno/.gradle/wrapper/dists/gradle-9.4.0-bin/lcvyxq3t37f6mx9miaydrrgs/gradle-9.4.0/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.4.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :diagnostics:preBuild UP-TO-DATE
+> Task :diagnostics:preDebugBuild UP-TO-DATE
+> Task :diagnostics:processDebugNavigationResources UP-TO-DATE
+> Task :diagnostics:generateDebugResources UP-TO-DATE
+> Task :diagnostics:packageDebugResources UP-TO-DATE
+
+> Task :app:verifyCarlinkLibraries
+Carlink imported library hashes verified
+
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :diagnostics:parseDebugLocalResources UP-TO-DATE
+> Task :diagnostics:generateDebugRFile UP-TO-DATE
+> Task :diagnostics:compileDebugKotlin NO-SOURCE
+> Task :diagnostics:javaPreCompileDebug UP-TO-DATE
+> Task :diagnostics:compileDebugJavaWithJavac UP-TO-DATE
+> Task :diagnostics:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :diagnostics:writeDebugAarMetadata UP-TO-DATE
+> Task :diagnostics:extractDeepLinksDebug UP-TO-DATE
+> Task :diagnostics:processDebugManifest UP-TO-DATE
+> Task :diagnostics:compileDebugLibraryResources UP-TO-DATE
+> Task :diagnostics:generateDebugAssets UP-TO-DATE
+> Task :diagnostics:mergeDebugAssets UP-TO-DATE
+> Task :diagnostics:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :diagnostics:processDebugJavaRes NO-SOURCE
+> Task :diagnostics:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:compileDebugAidl UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :diagnostics:checkDebugUnitTestAarMetadata UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :diagnostics:mapDebugUnitTestSourceSetPaths UP-TO-DATE
+> Task :diagnostics:generateDebugUnitTestResources UP-TO-DATE
+> Task :diagnostics:mergeDebugUnitTestResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :diagnostics:processDebugUnitTestManifest UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :diagnostics:processDebugUnitTestResources UP-TO-DATE
+> Task :diagnostics:compileDebugUnitTestKotlin NO-SOURCE
+> Task :diagnostics:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :diagnostics:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :diagnostics:generateDebugUnitTestAssets UP-TO-DATE
+> Task :diagnostics:mergeDebugUnitTestAssets UP-TO-DATE
+> Task :diagnostics:packageDebugUnitTestForUnitTest UP-TO-DATE
+> Task :diagnostics:generateDebugUnitTestConfig UP-TO-DATE
+> Task :diagnostics:processDebugUnitTestJavaRes NO-SOURCE
+> Task :diagnostics:testDebugUnitTest UP-TO-DATE
+> Task :diagnostics:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+
+> Task :diagnostics:configureCMakeDebug[arm64-v8a]
+[CXX5304] This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+[CXX5304] This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+[CXX5304] Observed package id 'cmdline-tools;latest' in inconsistent location '/home/bruno/Android/Sdk/cmdline-tools.bak.20260121-175800/latest-3' (Expected '/home/bruno/Android/Sdk/cmdline-tools/latest')
+[CXX5304] Observed package id 'cmdline-tools;latest' in inconsistent location '/home/bruno/Android/Sdk/cmdline-tools.bak.20260121-175800/latest-3' (Expected '/home/bruno/Android/Sdk/cmdline-tools/latest')
+
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :diagnostics:buildCMakeDebug[arm64-v8a]
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :diagnostics:configureCMakeDebug[armeabi-v7a]
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :diagnostics:buildCMakeDebug[armeabi-v7a]
+> Task :diagnostics:configureCMakeDebug[x86_64]
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :diagnostics:buildCMakeDebug[x86_64]
+> Task :diagnostics:mergeDebugJniLibFolders UP-TO-DATE
+> Task :diagnostics:mergeDebugNativeLibs UP-TO-DATE
+> Task :diagnostics:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:preDebugUnitTestBuild
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:packageDebugUnitTestForUnitTest UP-TO-DATE
+> Task :app:processDebugUnitTestManifest UP-TO-DATE
+> Task :app:generateDebugUnitTestConfig UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:configureCMakeDebug[arm64-v8a]
+> Task :app:buildCMakeDebug[arm64-v8a]
+> Task :app:configureCMakeDebug[armeabi-v7a]
+> Task :app:buildCMakeDebug[armeabi-v7a]
+> Task :app:configureCMakeDebug[x86_64]
+> Task :app:buildCMakeDebug[x86_64]
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:mergeProjectDexDebug
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest
+
+[Incubating] Problems report is available at: file:///home/bruno/Documentos/ChatGPT/R/cabin/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.4.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 27s
+92 actionable tasks: 22 executed, 70 up-to-date

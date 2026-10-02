@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Clear search</string>
+    <string name="app_library_options">App library options</string>
+    <string name="app_library_sort">Sort apps</string>
+    <string name="app_library_all">All</string>
+    <string name="app_library_pinned">Pinned</string>
+    <string name="app_library_recent">Recent</string>
+    <string name="app_library_hidden">Hidden</string>
+    <string name="app_library_sort_pinned">Pinned first</string>
+    <string name="app_library_sort_name">Name: A–Z</string>
+    <string name="app_library_sort_name_desc">Name: Z–A</string>
+    <string name="app_library_sort_recent">Last opened</string>
+    <string name="app_library_sort_frequent">Most opened</string>
+    <string name="app_library_packages">Show package names</string>
+    <string name="app_library_history">Remember app launches</string>
+    <string name="app_library_history_note">Counts only successful opens from Cabin Apps and pinned apps. History stays on this device and is separate for each driver.</string>
+    <string name="app_library_no_recent">No recorded app launches. Enable launch history in app library options, then open an app from Cabin.</string>
+    <string name="app_library_clear_history">Clear app launch history</string>
+    <string name="app_library_clear_history_note">Remove recent apps and launch counts for this driver? Pinned apps and custom names are kept.</string>
+    <string name="app_library_disable_history">Stop remembering app launches?</string>
+    <string name="app_library_disable_history_note">This also deletes the existing recent-app list and launch counts for this driver.</string>
+    <string name="app_library_pin_count">%1$d / %2$d pinned apps</string>
+    <string name="app_library_missing">Review missing pinned apps (%1$d)</string>
+    <string name="app_library_missing_title">Remove missing pinned apps?</string>
+    <string name="app_library_missing_note">These saved activities were not found in the current app scan. Refresh first if an installation is in progress. Remove their pins?</string>
+    <string name="app_library_clear_pins">Clear all pinned apps</string>
+    <string name="app_library_clear_pins_note">Remove every pinned app for this driver? Apps stay installed. This cannot be undone.</string>
+    <string name="app_library_move_first">Move to first position</string>
+    <string name="app_library_move_last">Move to last position</string>
+    <string name="app_library_pins_full">All %1$d pin slots are used. Unpin an app to make room.</string>
+    <string name="app_library_rename">Rename in Cabin</string>
+    <string name="app_library_custom_name">Custom app name</string>
+    <string name="app_library_rename_note">Applies to this driver’s app list and pinned apps. Leave blank to use the installed app name.</string>
+    <string name="app_library_hide">Hide from app list</string>
+    <string name="app_library_restore">Restore to app list</string>
+    <string name="app_library_hide_note">Hidden apps remain installed and pinned shortcuts still work. Find them under Hidden to restore them.</string>
+    <string name="app_library_save">Save</string>
+    <string name="app_library_cancel">Cancel</string>
+    <string name="app_library_confirm">Confirm</string>
+</resources>

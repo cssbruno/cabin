@@ -397,6 +397,7 @@ class UsbDeviceWrapper(
         )
 
         fun onError(error: String)
+        fun onFailure(reason: com.cabin.platform.ConnectionFailure, error: String) = onError(error)
     }
 
     /**
@@ -480,7 +481,7 @@ class UsbDeviceWrapper(
                                                 "${INITIAL_RESPONSE_TIMEOUT_MS / 1000}s of connection — " +
                                                 "USB IN endpoint may be dead",
                                         )
-                                        callback.onError("USB read timeout — no initial response from adapter")
+                                        callback.onFailure(com.cabin.platform.ConnectionFailure.ADAPTER_TIMEOUT, "USB read timeout — no initial response from adapter")
                                         break@readLoop
                                     }
                                 } else {
@@ -491,7 +492,7 @@ class UsbDeviceWrapper(
                                             "Adapter silent: $consecutiveTimeouts consecutive timeouts " +
                                                 "(${consecutiveTimeouts * timeout / 1000}s) after data was flowing",
                                         )
-                                        callback.onError("USB read timeout — adapter not responding")
+                                        callback.onFailure(com.cabin.platform.ConnectionFailure.ADAPTER_TIMEOUT, "USB read timeout — adapter not responding")
                                         break@readLoop
                                     }
                                 }
@@ -504,7 +505,7 @@ class UsbDeviceWrapper(
                                     "USB header read failed: result=$headerResult"
                                 }
                             log(reason)
-                            callback.onError(reason)
+                            callback.onFailure(com.cabin.platform.ConnectionFailure.USB_DETACHED, reason)
                         }
                         break@readLoop
                     }
@@ -527,7 +528,7 @@ class UsbDeviceWrapper(
                                 "Header parse error: ${e.message} raw=[$hex]",
                                 tag = com.cabin.logging.Logger.Tags.PROTO_UNKNOWN,
                             )
-                            callback.onError("USB protocol header corrupt — reconnecting")
+                            callback.onFailure(com.cabin.platform.ConnectionFailure.CORRUPT_PACKET, "USB protocol header corrupt — reconnecting")
                             break@readLoop
                         }
 
@@ -538,7 +539,7 @@ class UsbDeviceWrapper(
                             "Corrupted header: invalid length=${header.length} raw=[$hex]",
                             tag = com.cabin.logging.Logger.Tags.PROTO_UNKNOWN,
                         )
-                        callback.onError("USB payload length corrupt — reconnecting")
+                        callback.onFailure(com.cabin.platform.ConnectionFailure.CORRUPT_PACKET, "USB payload length corrupt — reconnecting")
                         break@readLoop
                     }
 
@@ -640,7 +641,7 @@ class UsbDeviceWrapper(
                                         "USB partial video frame: got=$totalRead/${header.length} " +
                                             "attempts=$readAttempts result=$lastChunkResult"
                                     logWarn(reason, tag = Logger.Tags.VIDEO_USB)
-                                    callback.onError("$reason — reconnecting")
+                                    callback.onFailure(com.cabin.platform.ConnectionFailure.CORRUPT_PACKET, "$reason — reconnecting")
                                     break@readLoop
                                 }
 
@@ -706,7 +707,7 @@ class UsbDeviceWrapper(
                                         "got=$totalRead/${header.length}B — reconnecting",
                                     tag = com.cabin.logging.Logger.Tags.PROTO_UNKNOWN,
                                 )
-                                callback.onError("USB partial payload — reconnecting")
+                                callback.onFailure(com.cabin.platform.ConnectionFailure.CORRUPT_PACKET, "USB partial payload — reconnecting")
                                 break@readLoop
                             }
                         } else {
@@ -723,7 +724,7 @@ class UsbDeviceWrapper(
             } catch (e: Exception) {
                 if (_isReadingLoopActive.get()) {
                     log("Reading loop error: ${e.message}")
-                    callback.onError(e.message ?: "Unknown error")
+                    callback.onFailure(com.cabin.platform.ConnectionFailure.UNKNOWN, e.message ?: "Unknown error")
                 }
             } finally {
                 _isReadingLoopActive.set(false)

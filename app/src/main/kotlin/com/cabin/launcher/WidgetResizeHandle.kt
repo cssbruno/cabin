@@ -1,6 +1,12 @@
 package com.cabin.launcher
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.stateDescription
+import com.cabin.ui.settings.settingsFocusRing
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -35,9 +41,35 @@ internal fun WidgetResizeHandle(tile: DashboardTile, cellWidth: Dp, cellHeight: 
     val cell = with(density) { Offset(cellWidth.toPx(), cellHeight.toPx()) }
     var preview by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     val description = stringResource(R.string.widget_drag_resize)
+    val wider = stringResource(R.string.goal_wider)
+    val narrower = stringResource(R.string.goal_narrower)
+    val taller = stringResource(R.string.goal_taller)
+    val shorter = stringResource(R.string.goal_shorter)
+    fun change(dw: Int, dh: Int): Boolean {
+        val nextWidth = (currentTile.width + dw).coerceIn(1, columns - currentTile.x)
+        val nextHeight = (currentTile.height + dh).coerceIn(1, rows - currentTile.y)
+        if (nextWidth == currentTile.width && nextHeight == currentTile.height) return false
+        commit(nextWidth, nextHeight); return true
+    }
     Box(modifier.size(56.dp).testTag("resize-${tile.id}")
         .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(topStart = 16.dp))
-        .semantics { contentDescription = description }
+        .settingsFocusRing().onKeyEvent { event ->
+            if (event.type != KeyEventType.KeyUp) false else when (event.key) {
+                Key.DirectionLeft -> change(-1, 0)
+                Key.DirectionRight -> change(1, 0)
+                Key.DirectionUp -> change(0, -1)
+                Key.DirectionDown -> change(0, 1)
+                else -> false
+            }
+        }.focusable()
+        .semantics {
+            contentDescription = description
+            stateDescription = "${tile.width} × ${tile.height}"
+            customActions = listOf(
+                CustomAccessibilityAction(wider) { change(1, 0) }, CustomAccessibilityAction(narrower) { change(-1, 0) },
+                CustomAccessibilityAction(taller) { change(0, 1) }, CustomAccessibilityAction(shorter) { change(0, -1) },
+            )
+        }
         .pointerInput(tile.id, cell, columns, rows) {
             var start = currentTile
             var delta = Offset.Zero

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Data de vencimento · AAAA-MM-DD</string>
+    <string name="uxvf_odometer_date">Data da leitura · AAAA-MM-DD</string>
+    <string name="uxvf_service_date">Data do serviço · AAAA-MM-DD</string>
+    <string name="uxvf_date_error">Introduza uma data válida no formato AAAA-MM-DD.</string>
+    <string name="uxvf_name_error">Introduza um nome para este item de manutenção.</string>
+    <string name="uxvf_interval_error">Introduza um intervalo de 1 a 3650 dias.</string>
+    <string name="uxvf_decimal_error">Introduza um número de 0 a 10 milhões, sem separadores de milhares.</string>
+    <string name="uxvf_distance_error">Introduza uma distância superior a 0 km. A próxima leitura prevista deve ser no máximo de 10 milhões de km.</string>
+    <string name="uxvf_odometer_needed">Guarde uma leitura do conta-quilómetros antes de adicionar um intervalo de distância.</string>
+    <string name="uxvf_odometer_order">A leitura não pode ser inferior ao valor guardado do conta-quilómetros.</string>
+    <string name="uxvf_future_reading">A data da leitura não pode ser futura.</string>
+    <string name="uxvf_reading_date_order">A data da leitura não pode ser anterior à leitura guardada.</string>
+    <string name="uxvf_decimal_hint">Use vírgula ou ponto decimal, sem separadores de milhares.</string>
+    <string name="uxvf_record_missing">Este item ou registo foi removido. Feche este editor e escolha um item existente.</string>
+</resources>

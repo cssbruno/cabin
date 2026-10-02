@@ -33,11 +33,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DisplaySettings
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
@@ -45,6 +48,7 @@ import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.PhoneDisabled
 import androidx.compose.material.icons.filled.PowerOff
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SettingsInputComponent
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Usb
@@ -59,6 +63,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -73,12 +78,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.PackageInfoCompat
@@ -96,6 +104,8 @@ import com.cabin.ui.settings.DisplayModePreference
 import com.cabin.ui.settings.LogsTabContent
 import com.cabin.ui.settings.PhonesTabContent
 import com.cabin.ui.settings.ProjectionPreferencesSection
+import com.cabin.ui.settings.settingsSearchAnchor
+import com.cabin.ui.settings.settingsFocusRing
 import com.cabin.ui.settings.SettingsNotice
 import com.cabin.ui.settings.SettingsTab
 import com.cabin.ui.settings.canResetAndroidClusterHost
@@ -124,8 +134,19 @@ fun SettingsScreen(
     onParkedAction: ((() -> Unit) -> Unit) = {},
     onOpenClimate: (() -> Unit)? = null,
 ) {
-    var selectedTab by rememberSaveable { mutableStateOf((if (initialCarPlayConnection && initialTab == SettingsTab.PHONES) SettingsTab.CCPA else initialTab).takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES) }
     val context = LocalContext.current
+    val driver by com.cabin.platform.TeyesFeaturePreferences.get(context).profile.collectAsStateWithLifecycle()
+    val navigationKey = "${driver.slot}.${vehicleState.profileId}.${vehicleState.vehicleDataLayout.name}"
+    val navigationPrefs = remember(context) { context.getSharedPreferences("cabin_settings_navigation_v1", 0) }
+    var selectedTab by rememberSaveable(navigationKey) { mutableStateOf(
+        (navigationPrefs.all["$navigationKey.tab"] as? String)?.let { saved -> SettingsTab.visible.firstOrNull { it.name == saved } }
+            ?: (if (initialCarPlayConnection && initialTab == SettingsTab.PHONES) SettingsTab.CCPA else initialTab).takeIf { it in SettingsTab.visible } ?: SettingsTab.PHONES
+    ) }
+    val screenState = androidx.compose.runtime.saveable.rememberSaveableStateHolder()
+    var searchOpen by rememberSaveable { mutableStateOf(false) }
+    var searchTarget by rememberSaveable(navigationKey) { mutableStateOf("") }
+    LaunchedEffect(selectedTab, navigationKey) { navigationPrefs.edit().putString("$navigationKey.tab", selectedTab.name).apply() }
+    if (searchOpen) com.cabin.ui.settings.SettingsSearchDialog(vehicle = vehicleState, onDismiss = { searchOpen = false }, onSelect = { tab, label -> selectedTab = tab; searchTarget = label; searchOpen = false })
     val resources = androidx.compose.ui.platform.LocalResources.current
     val colorScheme = MaterialTheme.colorScheme
     val scope = rememberCoroutineScope()
@@ -172,32 +193,32 @@ fun SettingsScreen(
                     .fillMaxSize()
                     .then(if (embedded) Modifier else Modifier.windowInsetsPadding(WindowInsets.safeDrawing)),
         ) {
-            val horizontalNavigation = useHorizontalSettingsNavigation(maxWidth.value)
+            val largeText = LocalDensity.current.fontScale > 1.3f
+            val viewportWidth = maxWidth
+            val viewportHeight = maxHeight
+            val horizontalNavigation = useHorizontalSettingsNavigation(maxWidth.value) || (largeText && maxHeight < 320.dp)
             val navigateBack = {
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 onNavigateBack()
             }
             val selectTab: (SettingsTab) -> Unit = { tab ->
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                searchTarget = ""
                 selectedTab = tab
             }
             val content: @Composable () -> Unit = {
+                androidx.compose.runtime.CompositionLocalProvider(com.cabin.ui.settings.LocalSettingsNavigationKey provides "$navigationKey.${selectedTab.name}",
+                    com.cabin.ui.settings.LocalSettingsSearchTarget provides searchTarget) {
+                screenState.SaveableStateProvider("$navigationKey.${selectedTab.name}") {
                 when (selectedTab) {
                     SettingsTab.CONTROL -> ControlTabContent(cabinManager, onResetCluster, onReinitForDisplayMode)
                     SettingsTab.CCPA -> com.cabin.ui.settings.DongleCarPlaySettings(cabinManager, initialCarPlayConnection, onReinitForDisplayMode)
                     SettingsTab.PHONES -> com.cabin.ui.settings.CarPlaySettingsContent(cabinManager)
                     SettingsTab.LOGS -> LogsTabContent(context, fileLogManager)
                     SettingsTab.CAR -> com.cabin.ui.settings.CarSettingsScreen(vehicleState, moving, carActions, onParkedAction, onOpenClimate)
-                    SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager, vehicleState,
-                        onSyuChoice = carActions.onSyuChoice?.let { send ->
-                            { profile, choice, value -> onParkedAction { send(profile, choice, value) } }
-                        },
-                        onSyuAction = carActions.onSyuAction?.let { send ->
-                            { profile, action -> onParkedAction { send(profile, action) } }
-                        },
-                        onSyuVehicleOption = carActions.onSyuVehicleOption?.let { send ->
-                            { profile, field, value -> onParkedAction { send(profile, field, value) } }
-                        })
+                    SettingsTab.TEYES -> com.cabin.ui.settings.TeyesFeaturesScreen(cabinManager)
+                }
+                }
                 }
             }
             if (horizontalNavigation) {
@@ -206,20 +227,34 @@ fun SettingsScreen(
                         FilledTonalIconButton(onClick = navigateBack, modifier = Modifier.size(56.dp)) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.settings_back_cabin))
                         }
-                        Text(stringResource(R.string.action_settings), Modifier.weight(1f).padding(horizontal = 12.dp), style = MaterialTheme.typography.titleLarge)
-                        TextButton(onClick = { showCloseConfirm = true }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.settings_exit_app), color = colorScheme.error) }
+                        Text(stringResource(R.string.action_settings), Modifier.weight(1f).padding(horizontal = 8.dp),
+                            style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+                        IconButton({ searchTarget = ""; searchOpen = true }, Modifier.size(56.dp)) {
+                            Icon(Icons.Default.Search, stringResource(R.string.goal_search_settings))
+                        }
+                        IconButton(onClick = { showCloseConfirm = true }, modifier = Modifier.size(56.dp)) {
+                            Icon(Icons.Default.PowerOff, stringResource(R.string.settings_exit_app), tint = colorScheme.error)
+                        }
                     }
                     Row(
                         Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         SettingsTab.visible.forEach { tab ->
+                            val selected = selectedTab == tab
+                            val selectedRequester = remember { BringIntoViewRequester() }
+                            LaunchedEffect(selected, navigationKey, viewportWidth, largeText) {
+                                if (selected) {
+                                    androidx.compose.runtime.withFrameNanos { }
+                                    selectedRequester.bringIntoView()
+                                }
+                            }
                             FilterChip(
-                                selected = selectedTab == tab,
+                                selected = selected,
                                 onClick = { selectTab(tab) },
                                 label = { Text(stringResource(tab.title)) },
                                 leadingIcon = { Icon(tab.icon, null, Modifier.size(20.dp)) },
-                                modifier = Modifier.heightIn(min = 56.dp),
+                                modifier = Modifier.bringIntoViewRequester(selectedRequester).heightIn(min = 56.dp),
                             )
                         }
                     }
@@ -229,44 +264,83 @@ fun SettingsScreen(
                 Row(Modifier.fillMaxSize()) {
                     Surface(color = colorScheme.surfaceContainerLow, shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp), modifier = Modifier.width(152.dp).fillMaxHeight().padding(8.dp)) {
                         Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            FilledTonalButton(onClick = navigateBack, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                            if (largeText) {
+                                FilledTonalIconButton(onClick = navigateBack, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                                    Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.settings_back_cabin))
+                                }
+                            } else {
+                            val backLabel = stringResource(R.string.settings_back_cabin)
+                            FilledTonalButton(onClick = navigateBack, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { contentDescription = backLabel }) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
                                 Text(stringResource(R.string.action_back), Modifier.padding(start = 10.dp))
                             }
+                            }
+                            val navigationScroll = com.cabin.ui.settings.rememberSettingsScrollState()
                             Column(
-                                Modifier.weight(1f).verticalScroll(rememberScrollState()),
+                                Modifier.weight(1f).drawWithContent {
+                                    drawContent()
+                                    if (navigationScroll.maxValue > 0) {
+                                        val thumbHeight = (size.height * size.height / (size.height + navigationScroll.maxValue)).coerceAtLeast(24.dp.toPx()).coerceAtMost(size.height)
+                                        val top = (size.height - thumbHeight) * navigationScroll.value / navigationScroll.maxValue
+                                        drawRoundRect(colorScheme.onSurfaceVariant.copy(alpha = 0.65f),
+                                            topLeft = androidx.compose.ui.geometry.Offset(size.width - 3.dp.toPx(), top),
+                                            size = androidx.compose.ui.geometry.Size(3.dp.toPx(), thumbHeight),
+                                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx()))
+                                    }
+                                }.verticalScroll(navigationScroll),
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                             ) {
-                                Text(
+                                if (largeText) {
+                                    IconButton({ searchTarget = ""; searchOpen = true }, Modifier.fillMaxWidth().height(56.dp)) {
+                                        Icon(Icons.Default.Search, stringResource(R.string.goal_search_settings))
+                                    }
+                                } else {
+                                    TextButton({ searchTarget = ""; searchOpen = true }, Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.goal_search_settings)) }
+                                    Text(
                                     stringResource(R.string.settings_heading),
                                     Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = colorScheme.onSurfaceVariant,
                                 )
+                                }
                                 SettingsTab.visible.forEach { tab ->
                                     val selected = selectedTab == tab
+                                    val selectedRequester = remember { BringIntoViewRequester() }
+                                    LaunchedEffect(selected, navigationKey, viewportHeight, largeText) {
+                                        if (selected) {
+                                            androidx.compose.runtime.withFrameNanos { }
+                                            selectedRequester.bringIntoView()
+                                        }
+                                    }
                                     Surface(
                                         shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
                                         color = if (selected) colorScheme.primaryContainer else colorScheme.surfaceContainerLow,
                                         contentColor = if (selected) colorScheme.onPrimaryContainer else colorScheme.onSurfaceVariant,
                                     ) {
                                         Column(
-                                            Modifier.fillMaxWidth().selectable(selected, role = Role.Tab, onClick = { selectTab(tab) }).heightIn(min = 72.dp).padding(8.dp),
+                                            Modifier.fillMaxWidth().bringIntoViewRequester(selectedRequester).settingsFocusRing().selectable(selected, role = Role.Tab, onClick = { selectTab(tab) }).heightIn(min = 72.dp).padding(8.dp),
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
                                         ) {
-                                            Icon(tab.icon, null, Modifier.size(24.dp))
+                                            Icon(if (selected) androidx.compose.material.icons.Icons.Default.Check else tab.icon, null, Modifier.size(24.dp))
                                             Text(stringResource(tab.title), style = MaterialTheme.typography.labelLarge,
                                                 maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                                         }
                                     }
                                 }
                             }
+                            if (largeText) {
+                                IconButton(onClick = { showCloseConfirm = true }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                                    Icon(Icons.Default.PowerOff, stringResource(R.string.settings_exit_app), tint = colorScheme.error)
+                                }
+                            } else {
                             TextButton(onClick = { showCloseConfirm = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                                 Icon(Icons.Default.Close, null, tint = colorScheme.error)
                                 Text(stringResource(R.string.settings_exit_app), Modifier.padding(start = 10.dp), color = colorScheme.error)
                             }
-                            Text("v$appVersion", Modifier.fillMaxWidth(), style = MaterialTheme.typography.labelSmall, color = colorScheme.onSurfaceVariant)
+                            }
+                            Text("v$appVersion", Modifier.fillMaxWidth(), style = MaterialTheme.typography.labelSmall, color = colorScheme.onSurfaceVariant,
+                                maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                         }
                     }
                     Box(Modifier.fillMaxHeight().weight(1f)) { content() }
@@ -325,8 +399,8 @@ private fun ControlTabContent(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val colorScheme = MaterialTheme.colorScheme
-    var showResetClusterDialog by remember { mutableStateOf(false) }
-    var showClusterNavOffDialog by remember { mutableStateOf(false) }
+    var showResetClusterDialog by rememberSaveable { mutableStateOf(false) }
+    var showClusterNavOffDialog by rememberSaveable { mutableStateOf(false) }
     val clusterHostAvailable =
         remember(context) {
             canResetAndroidClusterHost(
@@ -343,7 +417,7 @@ private fun ControlTabContent(
     val currentDisplayMode by displayModePreference.displayModeFlow.collectAsStateWithLifecycle(
         initialValue = displayModeInitial,
     )
-    var showDisplayModeDialog by remember { mutableStateOf(false) }
+    var showDisplayModeDialog by rememberSaveable { mutableStateOf(false) }
 
     val adapterConfigPreference = remember { AdapterConfigPreference.getInstance(context) }
     val clusterNavigationEnabled by adapterConfigPreference.clusterNavigationFlow.collectAsStateWithLifecycle(
@@ -360,10 +434,11 @@ private fun ControlTabContent(
                 Modifier
                     .widthIn(max = 1200.dp)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(com.cabin.ui.settings.rememberSettingsScrollState())
                     .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            com.cabin.ui.settings.AccessibilitySettingsSection()
             com.cabin.updates.UpdateSettingsSection()
             com.cabin.ui.settings.LanguageSettingsSection()
             com.cabin.ui.settings.MeasurementSettingsSection()
@@ -545,7 +620,7 @@ private fun ControlCard(
     val colorScheme = MaterialTheme.colorScheme
 
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().settingsSearchAnchor(title),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -606,6 +681,7 @@ private fun ControlButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val reducedMotion = com.cabin.ui.settings.LocalReducedMotion.current
     val colorScheme = MaterialTheme.colorScheme
 
     when (severity) {
@@ -630,7 +706,7 @@ private fun ControlButton(
                 AnimatedContent(
                     targetState = isProcessing,
                     transitionSpec = {
-                        (fadeIn() + scaleIn()).togetherWith(fadeOut() + scaleOut())
+                        if (reducedMotion) fadeIn(androidx.compose.animation.core.snap()).togetherWith(fadeOut(androidx.compose.animation.core.snap())) else (fadeIn() + scaleIn()).togetherWith(fadeOut() + scaleOut())
                     },
                     label = "iconTransition",
                 ) { processing ->
@@ -675,7 +751,7 @@ private fun ControlButton(
                 AnimatedContent(
                     targetState = isProcessing,
                     transitionSpec = {
-                        (fadeIn() + scaleIn()).togetherWith(fadeOut() + scaleOut())
+                        if (reducedMotion) fadeIn(androidx.compose.animation.core.snap()).togetherWith(fadeOut(androidx.compose.animation.core.snap())) else (fadeIn() + scaleIn()).togetherWith(fadeOut() + scaleOut())
                     },
                     label = "iconTransition",
                 ) { processing ->
@@ -712,7 +788,9 @@ internal fun DongleAdapterSettings(cabinManager: CabinManager, onReinitForDispla
     var processingAction by remember { mutableStateOf<String?>(null) }
     val isProcessing = processingAction != null
     var actionStatus by remember { mutableStateOf("") }
-    var showAdapterConfigDialog by remember { mutableStateOf(false) }
+    var showAdapterConfigDialog by rememberSaveable { mutableStateOf(false) }
+    val searchTarget = com.cabin.ui.settings.LocalSettingsSearchTarget.current
+    LaunchedEffect(searchTarget) { if (com.cabin.ui.settings.adapterSearchTab(resources, searchTarget) != null) showAdapterConfigDialog = true }
     val adapterConfigPreference = remember { AdapterConfigPreference.getInstance(context) }
     val displayModePreference = remember { DisplayModePreference.getInstance(context) }
     val currentDisplayMode by displayModePreference.displayModeFlow.collectAsStateWithLifecycle(

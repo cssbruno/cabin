@@ -1,0 +1,53 @@
+name: Android release quality
+on:
+  workflow_call:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  device-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - api: 27
+            target: default
+          - api: 35
+            target: google_apis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Build minified test APKs
+        run: ./gradlew :app:assembleReleaseCheck :app:assembleReleaseCheckAndroidTest -Pcabin.testBuildType=releaseCheck --no-daemon --no-configuration-cache --console=plain
+      - name: Smoke, resource soak and startup budget
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          target: ${{ matrix.target }}
+          profile: pixel_2
+          disable-animations: true
+          script: |
+            python3 tools/quality/device_checks.py --apk app/build/outputs/apk/releaseCheck/app-releaseCheck.apk --test-apk app/build/outputs/apk/androidTest/releaseCheck/app-releaseCheck-androidTest.apk --output app/build/reports/device-quality
+            python3 tools/quality/startup_benchmark.py --apk app/build/outputs/apk/releaseCheck/app-releaseCheck.apk --output app/build/reports/device-quality/startup.json
+      - name: Save device evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-quality-api-${{ matrix.api }}
+          path: |
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
+            app/build/reports/device-quality/

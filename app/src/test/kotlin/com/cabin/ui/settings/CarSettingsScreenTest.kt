@@ -30,6 +30,31 @@ import java.io.File
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class CarSettingsScreenTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
+    @Test fun `native locking option lives under doors and retains its guarded command`() {
+        val writes = mutableListOf<Triple<Int, Int, Int>>()
+        var pending: (() -> Unit)? = null
+        val vehicle = TeyesClimateState(connected = true, profileId = 393514,
+            fytSyuReadings = listOf(FytSyuReading("honda_0298", 68, setOf(68),
+                text = "Vehicle speed", label = "Automatic locking",
+                options = mapOf(0 to "Vehicle speed", 1 to "Shift from P", 2 to "Off"))))
+        compose.setContent { CabinTheme {
+            CarSettingsScreen(vehicle, false, ClimateWidgetActions(onSyuVehicleOption = { profile, field, value ->
+                writes += Triple(profile, field, value)
+            }), { pending = it }, null)
+        } }
+        compose.onNodeWithText("Factory vehicle options").assertDoesNotExist()
+        compose.onNodeWithText("Automatic locking").assertDoesNotExist()
+        compose.onNodeWithText("Doors, locks & windows").performScrollTo().performClick()
+        compose.onNodeWithText("Automatic locking").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Vehicle speed").performScrollTo().performClick()
+        compose.onNodeWithText("Shift from P").performClick()
+        compose.runOnIdle {
+            assertEquals(emptyList<Triple<Int, Int, Int>>(), writes)
+            checkNotNull(pending).invoke()
+            assertEquals(listOf(Triple(393514, 68, 1)), writes)
+        }
+    }
+
     @Test fun `replacement service and diagnostics belong to Cabin package`() {
         val context = org.robolectric.RuntimeEnvironment.getApplication()
         val service = context.packageManager.getServiceInfo(
@@ -65,7 +90,7 @@ class CarSettingsScreenTest {
                 ClimateWidgetActions(onFactoryControl = { control, value -> writes += control to value }),
                 { pending = it }, null) }
         }
-        compose.onNodeWithText("Honda instrument panel").performScrollTo().performClick()
+        compose.onNodeWithText("Instruments & units").performScrollTo().performClick()
         compose.onNodeWithText("Type 1").performScrollTo().performClick()
         compose.onNodeWithText("Type 3").performClick()
         compose.runOnIdle {
@@ -87,7 +112,7 @@ class CarSettingsScreenTest {
         compose.setContent { CabinTheme { CarSettingsScreen(vehicle, false,
             ClimateWidgetActions(onFactoryControl = { control, value -> writes += control to value }),
             { pending = it }, null) } }
-        compose.onNodeWithText("Honda instrument panel").performScrollTo().performClick()
+        compose.onNodeWithText("Instruments & units").performScrollTo().performClick()
         compose.onNodeWithText("km/h · km").performScrollTo().performClick()
         compose.onNodeWithText("mph · miles").performClick()
         compose.runOnIdle {
@@ -146,15 +171,15 @@ class CarSettingsScreenTest {
         compose.runOnIdle { checkNotNull(pending).invoke(); assertEquals(0, writes) }
     }
 
-    @Test fun `unknown profile shows limitation and retains personal settings on narrow screens`() {
+    @Test fun `unknown profile shows limitation and diagnostics on narrow screens`() {
         compose.setContent {
             CabinTheme { Box(Modifier.width(360.dp).height(480.dp)) {
                 CarSettingsScreen(TeyesClimateState(), false, ClimateWidgetActions(), {}, null)
             } }
         }
-        openCamera()
-        compose.onNodeWithText("No verified mapping").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("My car").performScrollTo().performClick()
+        compose.onNodeWithText("Parking & camera").assertDoesNotExist()
+        compose.onNodeWithText("My car").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("CAN-bus & diagnostics").performScrollTo().performClick()
         compose.onNodeWithText("Vehicle compatibility").performScrollTo().assertIsDisplayed()
     }
 

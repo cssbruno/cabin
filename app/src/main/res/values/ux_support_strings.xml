@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Build %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">No file picker is available. Your backup is saved locally; export it later from Logs.</string>
+    <string name="ux_review_logs_waiting">Waiting for matching log entries…</string>
+    <string name="ux_review_logs_no_files">No log files yet. Start logging, then reopen this workspace.</string>
+    <string name="ux_review_logs_start">Select log files and choose Search selected files to see results.</string>
+    <string name="ux_review_logs_page_empty">No matches on this page. Continue search to check the next page.</string>
+    <string name="ux_review_logs_empty">No matches on this page for the current search.</string>
+</resources>

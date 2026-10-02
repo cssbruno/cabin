@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lxg_workspace">Pesquisar nos logs</string>
+    <string name="lxg_pending_exports">Exportações pendentes — escolha onde salvar para continuar</string>
+    <string name="lxg_resume">Continuar exportação</string>
+    <string name="lxg_discard">Descartar</string>
+    <string name="lxg_files">Arquivos (%1$d selecionados)</string>
+    <string name="lxg_bookmarks">Favoritos</string>
+    <string name="lxg_bookmark">Marcar linha</string>
+    <string name="lxg_remove_bookmark">Remover favorito</string>
+    <string name="lxg_remove">Remover</string>
+    <string name="lxg_follow_rotation">Acompanhar sessão de log atual</string>
+    <string name="lxg_select_all">Selecionar / limpar tudo</string>
+    <string name="lxg_time_zone">Fuso horário: %1$s</string>
+    <string name="lxg_from">De (inclusive)</string>
+    <string name="lxg_until">Até (inclusive)</string>
+    <string name="lxg_range_format">Opcional: 2026-09-30T14:30. Horários desconhecidos ou ambíguos são excluídos do filtro por horário.</string>
+    <string name="lxg_search">Pesquisar arquivos selecionados</string>
+    <string name="lxg_continue">Continuar pesquisa — próxima página</string>
+    <string name="lxg_scan_scope">Verificadas: %1$d linhas. Horário desconhecido/ambíguo: %2$d. Contagens apenas das linhas verificadas.</string>
+    <string name="lxg_export_scope">A exportação verifica todos os arquivos selecionados com os últimos filtros aplicados. Inclui registros completos e nomes dos arquivos, sem contexto. Metadados omitem registros sem estrutura.</string>
+    <string name="lxg_export_all">Exportar todos os registros correspondentes</string>
+    <string name="lxg_context">Linhas originais próximas</string>
+    <string name="lxg_context_not_exported">Somente prévia de contexto; estas linhas extras não entram na exportação filtrada.</string>
+    <string name="lxg_preview_shortened">Prévia reduzida; a exportação completa mantém todo o registro.</string>
+    <string name="lxg_source_changed">Uma fonte mudou ou foi excluída. Inicie outra pesquisa.</string>
+    <string name="lxg_invalid_range">Verifique os arquivos e horários. O fim deve ser após o início; horários ambíguos não são aceitos.</string>
+    <string name="lxg_compare_reports">Comparar relatórios de diagnóstico salvos</string>
+    <string name="lxg_first_report">Escolher primeiro relatório</string>
+    <string name="lxg_second_report">Escolher segundo relatório</string>
+    <string name="lxg_replace_first">Trocar primeiro relatório</string>
+    <string name="lxg_replace_second">Trocar segundo relatório</string>
+    <string name="lxg_report_invalid">Use relatórios JSON de diagnóstico do Cabin válidos, de até 1 MiB, com a mesma versão compatível (1 ou 2).</string>
+    <string name="lxg_changed">Alterados</string>
+    <string name="lxg_missing">Adicionados / ausentes</string>
+    <string name="lxg_unchanged">Sem alteração</string>
+    <string name="lxg_before">Antes: %1$s</string>
+    <string name="lxg_after">Depois: %1$s</string>
+    <string name="lxg_scan_limits">Cada página para ao atingir 250 registros correspondentes ou 2 MiB lidos. O último registro é lido por completo, portanto o limite de bytes pode ser ultrapassado.</string>
+    <string name="lxg_preparation_interrupted">A preparação da exportação foi interrompida. Nenhuma cópia completa está disponível; descarte esta entrada e inicie uma nova exportação.</string>
+</resources>

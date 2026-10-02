@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_metered_wait">Esperando una red sin límite de datos. Reintenta al conectar o permite esta descarga.</string>
+    <string name="ux_low_space">No hay espacio suficiente. Libera espacio y reintenta; el APK verificado se conserva.</string>
+    <string name="ux_unmetered">Descargar solo en redes sin límite de datos</string>
+    <string name="ux_channel">Canal de actualización</string>
+    <string name="ux_stable">Estable</string>
+    <string name="ux_preview">Preliminar</string>
+    <string name="ux_skipped">Versión omitida: %1$s</string>
+    <string name="ux_show_skipped">Mostrar de nuevo</string>
+    <string name="ux_release_notes">Notas de la versión</string>
+    <string name="ux_no_notes">No hay notas de la versión.</string>
+    <string name="ux_download_anyway">Permitir esta descarga</string>
+    <string name="ux_skip">Omitir esta versión</string>
+    <string name="ux_backup_title">Guardar ajustes antes de actualizar</string>
+    <string name="ux_backup_detail">Guarda una copia portátil de los ajustes. Restáurala en Ajustes del coche → Copia de seguridad. Las copias locales pendientes están en Registros → Exportaciones pendientes.</string>
+    <string name="ux_save_backup">Guardar copia</string>
+    <string name="ux_backup_saved">Copia guardada correctamente.</string>
+    <string name="ux_backup_local">Se guardó una copia local recuperable. Completa la exportación desde Registros si lo necesitas.</string>
+    <string name="ux_backup_failed">Falló la copia. Reintenta o elige continuar sin copia.</string>
+    <string name="ux_without_backup">Continuar sin copia</string>
+</resources>

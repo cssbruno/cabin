@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_folder_capacity">As %1$d pastas estão em uso. Remova uma pasta para criar outra ou renomeie uma existente. Seu rascunho será mantido.</string>
+    <string name="ux_launcher_pin_capacity">Restam apenas %1$d espaços para fixar apps. Selecione menos apps novos ou desafixe um app antes de confirmar.</string>
+    <string name="ux_launcher_move_up">Mover %1$s para cima</string>
+    <string name="ux_launcher_move_down">Mover %1$s para baixo</string>
+    <string name="ux_launcher_rename_folder">Renomear pasta %1$s</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_support_picker_unavailable">The file picker could not open. Try again when document access is available.</string>
+    <string name="ux_support_discard_title">Discard saved export?</string>
+    <string name="ux_support_discard_message">Discard “%1$s”? This deletes only the saved export copy. Original logs, reports, and settings stay on this device.</string>
+    <string name="ux_support_clear_reports">Clear selected reports</string>
+    <string name="ux_support_no_category_rows">No fields in this category. Choose another category to review the reports.</string>
+    <string name="ux_support_show_comparison">Show comparison</string>
+</resources>

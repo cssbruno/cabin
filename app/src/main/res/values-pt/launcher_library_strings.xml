@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Limpar busca</string>
+    <string name="app_library_options">Opções da lista de apps</string>
+    <string name="app_library_sort">Ordenar apps</string>
+    <string name="app_library_all">Todos</string>
+    <string name="app_library_pinned">Fixados</string>
+    <string name="app_library_recent">Recentes</string>
+    <string name="app_library_hidden">Ocultos</string>
+    <string name="app_library_sort_pinned">Fixados primeiro</string>
+    <string name="app_library_sort_name">Nome: A–Z</string>
+    <string name="app_library_sort_name_desc">Nome: Z–A</string>
+    <string name="app_library_sort_recent">Abertos recentemente</string>
+    <string name="app_library_sort_frequent">Mais abertos</string>
+    <string name="app_library_packages">Mostrar nomes dos pacotes</string>
+    <string name="app_library_history">Lembrar apps abertos</string>
+    <string name="app_library_history_note">Conta apenas aberturas bem-sucedidas pela lista e pelos apps fixados do Cabin. O histórico fica neste aparelho e é separado por motorista.</string>
+    <string name="app_library_no_recent">Nenhuma abertura registrada. Ative o histórico nas opções e abra um app pelo Cabin.</string>
+    <string name="app_library_clear_history">Limpar histórico de apps</string>
+    <string name="app_library_clear_history_note">Remover apps recentes e contagens deste motorista? Apps fixados e nomes personalizados serão mantidos.</string>
+    <string name="app_library_disable_history">Parar de registrar aberturas?</string>
+    <string name="app_library_disable_history_note">Isso também apaga os apps recentes e as contagens já registradas deste motorista.</string>
+    <string name="app_library_pin_count">%1$d / %2$d apps fixados</string>
+    <string name="app_library_missing">Revisar apps fixados ausentes (%1$d)</string>
+    <string name="app_library_missing_title">Remover apps fixados ausentes?</string>
+    <string name="app_library_missing_note">Estas atividades salvas não foram encontradas na busca atual. Atualize antes se houver uma instalação em andamento. Remover os atalhos fixados?</string>
+    <string name="app_library_clear_pins">Remover todos os apps fixados</string>
+    <string name="app_library_clear_pins_note">Remover todos os apps fixados deste motorista? Eles continuarão instalados. Não é possível desfazer.</string>
+    <string name="app_library_move_first">Mover para o início</string>
+    <string name="app_library_move_last">Mover para o fim</string>
+    <string name="app_library_pins_full">Os %1$d espaços estão ocupados. Desafixe um app para liberar espaço.</string>
+    <string name="app_library_rename">Renomear no Cabin</string>
+    <string name="app_library_custom_name">Nome personalizado do app</string>
+    <string name="app_library_rename_note">Vale para a lista e os apps fixados deste motorista. Deixe em branco para usar o nome original.</string>
+    <string name="app_library_hide">Ocultar da lista de apps</string>
+    <string name="app_library_restore">Restaurar na lista de apps</string>
+    <string name="app_library_hide_note">Apps ocultos continuam instalados e os atalhos fixados funcionam. Use Ocultos para restaurá-los.</string>
+    <string name="app_library_save">Salvar</string>
+    <string name="app_library_cancel">Cancelar</string>
+    <string name="app_library_confirm">Confirmar</string>
+</resources>

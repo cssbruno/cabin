@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Fecha de vencimiento · AAAA-MM-DD</string>
+    <string name="uxvf_odometer_date">Fecha de lectura · AAAA-MM-DD</string>
+    <string name="uxvf_service_date">Fecha de servicio · AAAA-MM-DD</string>
+    <string name="uxvf_date_error">Introduce una fecha válida como AAAA-MM-DD.</string>
+    <string name="uxvf_name_error">Introduce un nombre para esta tarea de mantenimiento.</string>
+    <string name="uxvf_interval_error">Introduce un intervalo de 1 a 3650 días.</string>
+    <string name="uxvf_decimal_error">Introduce un número de 0 a 10 millones, sin separadores de miles.</string>
+    <string name="uxvf_distance_error">Introduce una distancia mayor que 0 km. La próxima lectura de vencimiento debe ser como máximo de 10 millones de km.</string>
+    <string name="uxvf_odometer_needed">Guarda una lectura del odómetro antes de añadir un intervalo de distancia.</string>
+    <string name="uxvf_odometer_order">La lectura no puede ser menor que el valor guardado del odómetro.</string>
+    <string name="uxvf_future_reading">La fecha de lectura no puede ser futura.</string>
+    <string name="uxvf_reading_date_order">La fecha de lectura no puede ser anterior a la lectura guardada.</string>
+    <string name="uxvf_decimal_hint">Usa coma o punto decimal, sin separadores de miles.</string>
+    <string name="uxvf_record_missing">Se eliminó esta tarea o registro. Cierra el editor y elige una tarea existente.</string>
+</resources>

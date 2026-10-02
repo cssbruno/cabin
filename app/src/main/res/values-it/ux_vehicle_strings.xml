@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxv_document_picker_missing">Nessun selettore di documenti disponibile. Attiva un’app File su questo dispositivo e riprova.</string>
+    <string name="uxv_backup_rejected">Impossibile aprire questo backup. Controlla il file e, se crittografato, la password. Non è stato modificato nulla.</string>
+    <string name="uxv_delete_maintenance">Eliminare «%1$s» dal programma di manutenzione? I registri degli interventi completati vengono conservati. L’azione è irreversibile.</string>
+    <string name="uxv_maintenance_empty">Nessun intervento programmato. Aggiungi un nome e una scadenza qui sotto.</string>
+    <string name="uxv_service_export_saved">Cronologia degli interventi salvata in CSV</string>
+    <string name="uxv_select_trip">Seleziona viaggio del %1$s</string>
+    <string name="uxv_map_unavailable">Nessuna app di mappe ha potuto aprire questa posizione di parcheggio. Attivane una e riprova.</string>
+    <string name="uxv_forget_parking">Eliminare posizione di parcheggio, nota e promemoria di questo veicolo? L’azione è irreversibile.</string>
+    <string name="uxv_favorite_limit">Scegli fino a 6 preferiti · %1$d selezionati</string>
+    <string name="uxv_move_favorite">Sposta %1$s prima</string>
+    <string name="uxv_notification_settings">Impostazioni notifiche</string>
+    <string name="uxv_service_history">Cronologia degli interventi</string>
+    <string name="uxv_prepared_exports">Esportazioni per assistenza preparate</string>
+    <string name="uxv_stop_connection_history">Smettere di conservare i riepiloghi delle connessioni?</string>
+    <string name="uxv_stop_connection_history_detail">Verranno eliminati anche i riepiloghi delle connessioni esistenti di tutti i conducenti.</string>
+    <string name="uxv_delete_category">Eliminare %1$s?</string>
+</resources>

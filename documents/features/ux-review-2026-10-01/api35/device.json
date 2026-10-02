@@ -1,0 +1,9 @@
+{
+  "apk_sha256": "32c9bc56acde9bc207c8bf3b48a40e8b38be9fee04364a0af51b272bec856ba3",
+  "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+  "sdk": "35",
+  "device": "sdk_gphone64_x86_64",
+  "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "instrumentation_passed": true,
+  "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Effacer la recherche</string>
+    <string name="app_library_options">Options des applications</string>
+    <string name="app_library_sort">Trier les applications</string>
+    <string name="app_library_all">Toutes</string>
+    <string name="app_library_pinned">Épinglées</string>
+    <string name="app_library_recent">Récentes</string>
+    <string name="app_library_hidden">Masquées</string>
+    <string name="app_library_sort_pinned">Épinglées en premier</string>
+    <string name="app_library_sort_name">Nom : A–Z</string>
+    <string name="app_library_sort_name_desc">Nom : Z–A</string>
+    <string name="app_library_sort_recent">Dernières ouvertures</string>
+    <string name="app_library_sort_frequent">Les plus ouvertes</string>
+    <string name="app_library_packages">Afficher les noms des paquets</string>
+    <string name="app_library_history">Mémoriser les ouvertures</string>
+    <string name="app_library_history_note">Compte uniquement les ouvertures réussies depuis les applications et les favoris Cabin. Historique conservé sur cet appareil, séparément pour chaque conducteur.</string>
+    <string name="app_library_no_recent">Aucune ouverture enregistrée. Activez l’historique dans les options, puis ouvrez une application depuis Cabin.</string>
+    <string name="app_library_clear_history">Effacer l’historique des ouvertures</string>
+    <string name="app_library_clear_history_note">Effacer les applications récentes et les compteurs de ce conducteur ? Les favoris et noms personnalisés sont conservés.</string>
+    <string name="app_library_disable_history">Ne plus mémoriser les ouvertures ?</string>
+    <string name="app_library_disable_history_note">Cela efface aussi les applications récentes et les compteurs existants de ce conducteur.</string>
+    <string name="app_library_pin_count">%1$d / %2$d applications épinglées</string>
+    <string name="app_library_missing">Vérifier les favoris introuvables (%1$d)</string>
+    <string name="app_library_missing_title">Retirer les favoris introuvables ?</string>
+    <string name="app_library_missing_note">Ces activités enregistrées sont absentes de la recherche actuelle. Actualisez si une installation est en cours. Retirer leurs favoris ?</string>
+    <string name="app_library_clear_pins">Retirer toutes les applications épinglées</string>
+    <string name="app_library_clear_pins_note">Retirer tous les favoris de ce conducteur ? Les applications restent installées. Cette action est irréversible.</string>
+    <string name="app_library_move_first">Placer en premier</string>
+    <string name="app_library_move_last">Placer en dernier</string>
+    <string name="app_library_pins_full">Les %1$d emplacements sont occupés. Retirez un favori pour libérer une place.</string>
+    <string name="app_library_rename">Renommer dans Cabin</string>
+    <string name="app_library_custom_name">Nom personnalisé</string>
+    <string name="app_library_rename_note">S’applique à la liste et aux favoris de ce conducteur. Laissez vide pour utiliser le nom d’origine.</string>
+    <string name="app_library_hide">Masquer dans la liste</string>
+    <string name="app_library_restore">Rétablir dans la liste</string>
+    <string name="app_library_hide_note">Les applications masquées restent installées et les favoris fonctionnent. Retrouvez-les dans Masquées pour les rétablir.</string>
+    <string name="app_library_save">Enregistrer</string>
+    <string name="app_library_cancel">Annuler</string>
+    <string name="app_library_confirm">Confirmer</string>
+</resources>

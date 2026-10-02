@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,6 +45,28 @@ class SettingsInteractionTest {
         compose.onNodeWithText("Button setup").performClick()
         compose.onNodeWithText("Learn button").assertDoesNotExist()
         compose.runOnIdle { assertEquals(1, cancellations) }
+    }
+
+    @Test
+    fun `search opens matching disclosure ancestors without expanding unrelated sections`() {
+        compose.setContent {
+            MaterialTheme {
+                CompositionLocalProvider(LocalSettingsSearchTarget provides "Child control") {
+                    Column {
+                        SettingsDisclosure("Vehicle", "Outer section", searchLabels = setOf("Child control")) {
+                            SettingsDisclosure("Audio", "Inner section", searchLabels = setOf("Child control")) {
+                                Text("Child control")
+                            }
+                        }
+                        SettingsDisclosure("Unrelated", "Other section", searchLabels = emptySet()) {
+                            Text("Unrelated control")
+                        }
+                    }
+                }
+            }
+        }
+        compose.onNodeWithText("Child control").assertExists()
+        compose.onNodeWithText("Unrelated control").assertDoesNotExist()
     }
 
     @Test

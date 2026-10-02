@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_empty_view">Keine Apps in dieser Ansicht. Wähle einen anderen Filter oder zeige alle Apps.</string>
+    <string name="ux_launcher_show_all">Alle Apps anzeigen</string>
+    <string name="ux_launcher_clear_pins_note">Alle angehefteten Apps dieses Fahrers entfernen? Die Apps bleiben installiert. Mit „App-Änderungen rückgängig“ stellst du die Verknüpfungen wieder her.</string>
+    <string name="ux_launcher_choose_media">Medienquelle wählen</string>
+    <string name="ux_launcher_media_ready">Bereit für Musik</string>
+    <string name="ux_launcher_media_hint">Starte die Wiedergabe am Telefon oder wähle oben eine Medienquelle.</string>
+    <string name="ux_launcher_track_unavailable">Titelinformationen nicht verfügbar</string>
+    <string name="ux_launcher_media_idle">Keine Musik</string>
+</resources>

@@ -34,10 +34,11 @@ data class DashboardLayout(val pages: Int = 2, val tiles: List<DashboardTile> = 
     DashboardTile(5, DashboardModule.OIL, 1, 2, 0, 2, 1),
     DashboardTile(6, DashboardModule.SERVICE, 1, 0, 1, 2, 1),
     DashboardTile(7, DashboardModule.NAVIGATION, 1, 2, 1, 2, 1),
-).map { it.finerGrid() })
+).map { it.finerGrid() }, val pageNames: Map<Int, String> = emptyMap(), val selectedPage: Int = 0)
 
 /** Eight columns by four rows. Reject overlap, overflow and duplicate live projection surfaces. */
 internal fun validDashboard(layout: DashboardLayout): Boolean {
+    if (layout.pageNames.any { (page, name) -> page !in 0 until layout.pages || name.length > 60 || name.isBlank() } || layout.selectedPage !in 0 until layout.pages) return false
     if (layout.pages !in 1..6 || layout.tiles.size > 32 || layout.tiles.map { it.id }.distinct().size != layout.tiles.size ||
         layout.tiles.count { it.module == DashboardModule.PROJECTION } > 1) return false
     val widgetIds = layout.tiles.filter { it.module == DashboardModule.WIDGET }.map { it.widgetId }
@@ -119,6 +120,7 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
     private fun updateHistory() {
         mutableHistory.value = DashboardHistory(undoLayouts.isNotEmpty(), redoLayouts.isNotEmpty())
     }
+    fun refresh() { mutable.value = read(); undoLayouts.clear(); redoLayouts.clear(); updateHistory() }
     fun undo(): Boolean {
         val previous = undoLayouts.removeLastOrNull() ?: return false
         redoLayouts.addLast(state.value)
@@ -164,11 +166,21 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
             put("id", t.id); put("kind", t.module.name); put("page", t.page); put("x", t.x); put("y", t.y)
             put("w", t.width); put("h", t.height); put("widget", t.widgetId)
         }) } }
-        prefs.edit().putString(key, JSONObject().put("gridVersion", 2).put("pages", layout.pages).put("tiles", tiles).toString()).apply()
+        prefs.edit().putString(key, JSONObject().put("gridVersion", 2).put("pages", layout.pages).put("tiles", tiles).put("pageNames", JSONObject(layout.pageNames.mapKeys { it.key.toString() })).put("selectedPage", layout.selectedPage).toString()).apply()
         mutable.value = layout
         updateHistory()
         return true
     }
+    fun selectPage(page: Int) {
+        if (page in 0 until state.value.pages && page != state.value.selectedPage) save(state.value.copy(selectedPage = page), record = false)
+    }
+    fun renamePage(page: Int, name: String): Boolean {
+        if (page !in 0 until state.value.pages) return false
+        val clean = name.filterNot(Char::isISOControl).trim().take(60)
+        return save(state.value.copy(pageNames = if (clean.isEmpty()) state.value.pageNames - page else state.value.pageNames + (page to clean)))
+    }
+    fun reorderPage(page: Int, target: Int): Boolean = dashboardReorderPage(state.value, page, target)?.let { save(it) } ?: false
+    fun duplicatePage(page: Int): Boolean = dashboardDuplicatePage(state.value, page)?.let { save(it) } ?: false
     fun addPage(): Boolean = save(state.value.copy(pages = state.value.pages + 1))
     fun remove(id: Int) = save(state.value.copy(tiles = state.value.tiles.filterNot { it.id == id }))
     fun move(id: Int, dx: Int, dy: Int): Boolean = save(state.value.copy(tiles = state.value.tiles.map { if (it.id == id) it.copy(x = it.x + dx, y = it.y + dy) else it }))
@@ -217,7 +229,24 @@ class DashboardPreferences(context: Context, driver: Int, vehicle: Int, dialect:
                 val t = array.getJSONObject(i)
                 if (t.getString("kind") == "SPEED") return@mapNotNull null
                 DashboardTile(t.getInt("id"), DashboardModule.valueOf(t.getString("kind")), t.getInt("page"), t.getInt("x"), t.getInt("y"), t.getInt("w"), t.getInt("h"), t.optInt("widget", 0)).let { if (json.optInt("gridVersion", 1) == 1) it.finerGrid() else it }
-            }).takeIf(::validDashboard) ?: DashboardLayout()
+            }, pageNames = json.optJSONObject("pageNames")?.let { names -> names.keys().asSequence().mapNotNull { raw -> raw.toIntOrNull()?.let { it to names.optString(raw).filterNot(Char::isISOControl).trim().take(60) } }.filter { it.second.isNotBlank() }.toMap() } ?: emptyMap(),
+                selectedPage = json.optInt("selectedPage", 0).coerceIn(0, (json.getInt("pages") - 1).coerceAtLeast(0))).takeIf(::validDashboard) ?: DashboardLayout()
         }
     } catch (_: Exception) { DashboardLayout() }
+}
+
+internal fun dashboardReorderPage(layout: DashboardLayout, page: Int, target: Int): DashboardLayout? {
+    if (page !in 0 until layout.pages || target !in 0 until layout.pages) return null
+    val order = (0 until layout.pages).toMutableList().apply { removeAt(page); add(target, page) }
+    fun remap(old: Int) = order.indexOf(old)
+    return layout.copy(tiles = layout.tiles.map { it.copy(page = remap(it.page)) }, pageNames = layout.pageNames.mapKeys { remap(it.key) }, selectedPage = remap(layout.selectedPage)).takeIf(::validDashboard)
+}
+internal fun dashboardDuplicatePage(layout: DashboardLayout, page: Int): DashboardLayout? {
+    if (page !in 0 until layout.pages || layout.pages >= 6) return null
+    val firstId = (layout.tiles.maxOfOrNull { it.id } ?: 0) + 1
+    val copied = layout.tiles.filter { it.page == page && it.module !in setOf(DashboardModule.PROJECTION, DashboardModule.WIDGET) }
+        .mapIndexed { index, tile -> tile.copy(id = firstId + index, page = layout.pages, widgetId = 0) }
+    return layout.copy(pages = layout.pages + 1, tiles = layout.tiles + copied,
+        pageNames = layout.pageNames[page]?.let { layout.pageNames + (layout.pages to it) } ?: layout.pageNames,
+        selectedPage = layout.pages).takeIf(::validDashboard)
 }

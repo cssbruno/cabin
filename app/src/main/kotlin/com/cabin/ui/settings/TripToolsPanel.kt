@@ -1,54 +1,45 @@
 package com.cabin.ui.settings
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.KeyboardType
 import com.cabin.R
 import com.cabin.platform.*
-import java.time.LocalDate
-import java.text.DateFormat
-import java.text.NumberFormat
-import java.util.Date
 
 @Composable
 internal fun TripToolsPanel(vehicle: TeyesClimateState) {
     val context = LocalContext.current
-    val history = remember { TripHistory(context) }
+    val history = remember(context) { TripHistory(context) }
     val values = rememberAutomationValues("cabin_trips")
-    SettingsDisclosure(stringResource(R.string.tools_trips), stringResource(R.string.tools_trip_detail)) {
-        for ((key, label) in listOf("fuelRate" to R.string.tools_fuel_rate, "fuelPrice" to R.string.tools_fuel_price)) {
-            var text by remember { mutableStateOf(values[key] as? String ?: "") }
-            val number = text.replace(',', '.').toDoubleOrNull()
-            val valid = number != null && number.isFinite() && number > 0 && number <= if (key == "fuelRate") 100 else 10000
-            OutlinedTextField(text, onValueChange = {
-                text = it.take(12)
-                val value = text.replace(',', '.').toDoubleOrNull()
-                if (value != null && value.isFinite() && value > 0 && value <= if (key == "fuelRate") 100 else 10000)
-                    history.prefs.edit().putString(key, text.replace(',', '.')).apply()
-                else history.prefs.edit().remove(key).apply()
-            }, singleLine = true, isError = text.isNotEmpty() && !valid, label = { Text(stringResource(label)) })
+    val profile = vehicle.profileId
+    SettingsDisclosure(stringResource(R.string.tools_trips), stringResource(R.string.tools_trip_detail), searchLabels = emptySet()) {
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Switch(history.recording(profile), { history.setRecording(profile, it) }, enabled = profile > 0, modifier = Modifier.semantics { contentDescription = context.getString(R.string.gv_record_trips) })
+            Text(stringResource(R.string.gv_record_trips))
         }
-        val trips = remember(values["trips.${vehicle.profileId}"]) { history.read(vehicle.profileId) }
-        trips.takeLast(10).reversed().forEach { trip ->
-            Text(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(trip.start)))
-            Text(stringResource(R.string.tools_trip_row, NumberFormat.getNumberInstance().apply { maximumFractionDigits = 2 }.format(trip.kilometers), trip.seconds / 60))
-            trip.estimatedCost?.let { Text(stringResource(R.string.tools_cost_row, NumberFormat.getNumberInstance().apply { maximumFractionDigits = 2 }.format(it))) }
+        Text(stringResource(R.string.gv_record_detail))
+        var rate by rememberSaveable(profile) { mutableStateOf(history.fuelValue(profile, "fuelRate").orEmpty()) }
+        var price by rememberSaveable(profile) { mutableStateOf(history.fuelValue(profile, "fuelPrice").orEmpty()) }
+        var currency by rememberSaveable(profile) { mutableStateOf(history.fuelValue(profile, "fuelCurrency").orEmpty()) }
+        val valid = tripFuelEstimate(1.0, rate, price) != null && runCatching { java.util.Currency.getInstance(currency) }.isSuccess
+        OutlinedTextField(rate, { rate = it.take(12) }, label = { Text(stringResource(R.string.tools_fuel_rate)) }, singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(price, { price = it.take(12) }, label = { Text(stringResource(R.string.tools_fuel_price)) }, singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(currency, { currency = it.take(3).uppercase() }, label = { Text(stringResource(R.string.gv_currency)) }, singleLine = true)
+        Row {
+            TextButton(onClick = { history.prefs.edit().putString("fuelRate.$profile", rate.replace(',', '.')).putString("fuelPrice.$profile", price.replace(',', '.')).putString("fuelCurrency.$profile", currency).apply() }, enabled = valid && profile > 0) { Text(stringResource(R.string.action_apply)) }
+            TextButton(onClick = { rate = history.fuelValue(profile, "fuelRate").orEmpty(); price = history.fuelValue(profile, "fuelPrice").orEmpty(); currency = history.fuelValue(profile, "fuelCurrency").orEmpty() }) { Text(stringResource(R.string.action_cancel)) }
         }
-        if (trips.isEmpty()) Text(stringResource(R.string.tools_no_trips))
-        TextButton(onClick = { history.prefs.edit().remove("trips.${vehicle.profileId}").apply() }) { Text(stringResource(R.string.tools_clear_trips)) }
+        key(profile) { TripHistoryBrowser(history, profile, values) }
     }
-    SettingsDisclosure(stringResource(R.string.tools_maintenance), stringResource(R.string.tools_date_detail)) {
-        val key = "maintenance.${vehicle.profileId}"
-        var date by remember(vehicle.profileId) { mutableStateOf(values[key] as? String ?: "") }
-        val parsed = try { LocalDate.parse(date) } catch (_: Exception) { null }
-        OutlinedTextField(date, onValueChange = {
-            date = it.take(10)
-            try { LocalDate.parse(date); history.prefs.edit().putString(key, date).apply() } catch (_: Exception) { }
-        }, label = { Text("YYYY-MM-DD") }, isError = date.isNotEmpty() && parsed == null, singleLine = true)
-        if (parsed != null) Text(stringResource(if (parsed <= LocalDate.now()) R.string.alert_service_due else R.string.tools_scheduled))
-        TextButton(onClick = { date = ""; history.prefs.edit().remove(key).apply() }) { Text(stringResource(R.string.tools_clear_reminder)) }
-    }
+    MaintenanceItemsPanel(profile, history, values)
 }

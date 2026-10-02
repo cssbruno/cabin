@@ -187,6 +187,7 @@ internal fun AudioControlWidget(moving: Boolean = false, onParkedAction: (() -> 
 internal fun PinnedAppsWidget(preferences: LauncherPreferences, moving: Boolean, onParkedAction: (() -> Unit) -> Unit) {
     val context = LocalContext.current
     val layout by preferences.state.collectAsStateWithLifecycle()
+    val library by preferences.library.state.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var apps by remember { mutableStateOf<List<TeyesLaunchableApp>>(emptyList()) }
     var more by remember { mutableStateOf(false) }
@@ -198,9 +199,13 @@ internal fun PinnedAppsWidget(preferences: LauncherPreferences, moving: Boolean,
         }
     }
     LaunchedEffect(moving) { if (moving) more = false }
-    val pinned = layout.favorites.mapNotNull { id -> apps.firstOrNull { it.component == id } }
+    val pinned = layout.favorites.mapNotNull { id -> apps.firstOrNull { it.component == id }?.let { it.copy(label = library.label(it)) } }
     fun launch(app: TeyesLaunchableApp) {
-        if (!moving) onParkedAction { failed = !TeyesAppShortcuts.launch(context, app.component); more = false }
+        if (!moving) onParkedAction {
+            failed = !TeyesAppShortcuts.launch(context, app.component)
+            if (!failed) preferences.library.recordLaunch(app.component)
+            more = false
+        }
     }
     BoxWithConstraints(Modifier.fillMaxSize().padding(8.dp).testTag("widget-PINNED_APPS")) {
         val columns = (maxWidth.value / 160).toInt().coerceAtLeast(1)

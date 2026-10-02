@@ -16,32 +16,61 @@ data class ProjectionPreferencesState(
     val climateNoticeMode: ClimateNoticeMode = ClimateNoticeMode.SUMMARY,
     val returnWhenReady: Boolean = true,
     val controlSide: ProjectionControlSide = ProjectionControlSide.RIGHT,
+    val controlHideSeconds: Int = 0,
+    val blackoutMinutes: Int = 0,
+    val toolOrder: List<String> = listOf("phone", "settings", "blackout"),
+    val bezelPercent: Int = 0,
 )
 
-/** App-wide presentation choices, stored separately from driver profiles and included in schema-2 backups. */
+/** Presentation is scoped to the active driver, with legacy app-wide values as migration defaults. */
 class ProjectionPreferences internal constructor(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val drivers = context.applicationContext.getSharedPreferences("teyes_features_v1", Context.MODE_PRIVATE)
+    private var activeSlot = (drivers.all["active"] as? Int ?: 0).coerceIn(0, 2)
+    private val driverListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "active" || key == null) {
+            activeSlot = (drivers.all["active"] as? Int ?: 0).coerceIn(0, 2)
+            mutableState.value = readState()
+        }
+    }
     private val mutableState = MutableStateFlow(readState())
+    private val restoreListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> mutableState.value = readState() }
+    init {
+        drivers.registerOnSharedPreferenceChangeListener(driverListener)
+        preferences.registerOnSharedPreferenceChangeListener(restoreListener)
+    }
     val state: StateFlow<ProjectionPreferencesState> = mutableState.asStateFlow()
 
+    fun setControlHideSeconds(value: Int) { update { putInt(key("hide_seconds"), value.takeIf { it in listOf(0, 5, 10, 20) } ?: 0) } }
+    fun setBlackoutMinutes(value: Int) { update { putInt(key("blackout_minutes"), value.takeIf { it in listOf(0, 1, 5, 15, 30) } ?: 0) } }
+    fun setToolOrder(value: List<String>) { update { putString(key("tool_order"), value.filter { it in listOf("phone", "settings", "blackout") }.distinct().take(3).joinToString(",")) } }
+    internal val driverSlot: Int get() = (drivers.all["active"] as? Int ?: 0).coerceIn(0, 2)
+    internal fun restoreBezelForDriver(slot: Int, value: Int): Boolean {
+        val saved = preferences.edit().putInt("driver.${slot.coerceIn(0, 2)}.bezel", value.coerceIn(0, 10)).commit()
+        mutableState.value = readState()
+        return saved
+    }
+    fun setBezelPercent(value: Int) { update { putInt(key("bezel"), value.coerceIn(0, 10)) } }
+    private fun key(value: String) = "driver.$activeSlot.$value"
+
     fun setFocusControls(value: Boolean) {
-        update { putBoolean(KEY_FOCUS_CONTROLS, value) }
+        update { putBoolean(key(KEY_FOCUS_CONTROLS), value) }
     }
 
     fun setVehicleHud(value: Boolean) {
-        update { putBoolean(KEY_VEHICLE_HUD, value) }
+        update { putBoolean(key(KEY_VEHICLE_HUD), value) }
     }
 
     fun setClimateNoticeMode(mode: ClimateNoticeMode) {
-        update { putString(KEY_CLIMATE_NOTICE_MODE, mode.name) }
+        update { putString(key(KEY_CLIMATE_NOTICE_MODE), mode.name) }
     }
 
     fun setReturnWhenReady(value: Boolean) {
-        update { putBoolean(KEY_RETURN_WHEN_READY, value) }
+        update { putBoolean(key(KEY_RETURN_WHEN_READY), value) }
     }
 
     fun setControlSide(side: ProjectionControlSide) {
-        update { putString(KEY_CONTROL_SIDE, side.name) }
+        update { putString(key(KEY_CONTROL_SIDE), side.name) }
     }
 
     /** Persist one coherent presentation state after the backup has been validated and confirmed. */
@@ -49,11 +78,15 @@ class ProjectionPreferences internal constructor(context: Context) {
     internal fun replace(state: ProjectionPreferencesState): Boolean {
         val persisted =
             preferences.edit()
-                .putBoolean(KEY_FOCUS_CONTROLS, state.focusControls)
-                .putBoolean(KEY_VEHICLE_HUD, state.vehicleHud)
-                .putString(KEY_CLIMATE_NOTICE_MODE, state.climateNoticeMode.name)
-                .putBoolean(KEY_RETURN_WHEN_READY, state.returnWhenReady)
-                .putString(KEY_CONTROL_SIDE, state.controlSide.name)
+                .putBoolean(key(KEY_FOCUS_CONTROLS), state.focusControls)
+                .putBoolean(key(KEY_VEHICLE_HUD), state.vehicleHud)
+                .putString(key(KEY_CLIMATE_NOTICE_MODE), state.climateNoticeMode.name)
+                .putBoolean(key(KEY_RETURN_WHEN_READY), state.returnWhenReady)
+                .putString(key(KEY_CONTROL_SIDE), state.controlSide.name)
+                .putInt(key("hide_seconds"), state.controlHideSeconds)
+                .putInt(key("blackout_minutes"), state.blackoutMinutes)
+                .putString(key("tool_order"), state.toolOrder.joinToString(","))
+                .putInt(key("bezel"), state.bezelPercent.coerceIn(0, 10))
                 .commit()
         mutableState.value = readState()
         return persisted
@@ -70,8 +103,14 @@ class ProjectionPreferences internal constructor(context: Context) {
     private fun readState(): ProjectionPreferencesState {
         // Typed getters throw on corrupt/older values. Unknown types or modes retain
         // the quiet default presentation rather than inventing a migration.
-        val values = preferences.all
+        val all = preferences.all
+        val values = all.toMutableMap()
+        all.filterKeys { it.startsWith("driver.$activeSlot.") }.forEach { (key, value) -> values[key.removePrefix("driver.$activeSlot.")] = value }
         return ProjectionPreferencesState(
+            controlHideSeconds = (values["hide_seconds"] as? Int)?.takeIf { it in listOf(0, 5, 10, 20) } ?: 0,
+            blackoutMinutes = (values["blackout_minutes"] as? Int)?.takeIf { it in listOf(0, 1, 5, 15, 30) } ?: 0,
+            toolOrder = (values["tool_order"] as? String)?.split(",")?.filter { it in listOf("phone", "settings", "blackout") }?.distinct() ?: listOf("phone", "settings", "blackout"),
+            bezelPercent = (values["bezel"] as? Int ?: 0).coerceIn(0, 10),
             focusControls = values[KEY_FOCUS_CONTROLS] as? Boolean ?: true,
             vehicleHud = values[KEY_VEHICLE_HUD] as? Boolean ?: false,
             climateNoticeMode =

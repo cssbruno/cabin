@@ -188,7 +188,7 @@ class CabinLauncherTest {
     fun `Portuguese Home remains operable with enlarged text`() {
         compose.setContent {
             val density = LocalDensity.current
-            CompositionLocalProvider(LocalDensity provides Density(density.density, 1.5f)) {
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
                 CabinTheme(darkTheme = true) {
                     Box(Modifier.width(800.dp).height(480.dp)) {
                         CabinLauncher(manager, TeyesClimateState(), false, {}, {}, null, {}, { it() })
@@ -318,6 +318,8 @@ class CabinLauncherTest {
             else if (view is android.view.ViewGroup) (0 until view.childCount).flatMap { surfaces(view.getChildAt(it)) } else emptyList()
         compose.waitForIdle()
         val initial = surfaces(compose.activity.window.decorView).single()
+        // Loading controls consume gestures while connecting; native input begins with a stream.
+        compose.runOnIdle { setProjectionConnection(CabinManager.State.STREAMING) }
         val before = compose.onNodeWithTag("persistent-projection-frame").fetchSemanticsNode().boundsInRoot
         val opening = compose.onNodeWithTag("module-PROJECTION-1").fetchSemanticsNode().boundsInRoot
         assertEquals(opening.width, before.width, 1f)
@@ -341,7 +343,11 @@ class CabinLauncherTest {
         )
         compose.onNodeWithTag("module-PROJECTION-1").performTouchInput { click(point) }
         screenshot("launcher-modular-default")
-        compose.runOnIdle { assertTrue("Touches must reach the actual SurfaceView", nativeTouches > 0); initial.callback = originalCallback }
+        compose.runOnIdle {
+            assertTrue("Touches must reach the actual SurfaceView", nativeTouches > 0)
+            initial.callback = originalCallback
+            setProjectionConnection(CabinManager.State.DISCONNECTED)
+        }
         compose.onNodeWithText("No phone media playing").assertDoesNotExist()
         compose.onNodeWithText("No fresh reading").assertDoesNotExist()
         compose.onNodeWithText("Edit layout").assertDoesNotExist()
@@ -398,6 +404,36 @@ class CabinLauncherTest {
         compose.onNodeWithTag("module-PROJECTION-1").assertDoesNotExist()
         compose.onNodeWithTag("page-dot-0").performClick()
         assertSame(initial, surfaces(compose.activity.window.decorView).single())
+    }
+
+    @Test fun `narrow dashboard keeps fixed actions full size while page navigation scrolls at enlarged fonts`() {
+        val fontScale = androidx.compose.runtime.mutableFloatStateOf(1f)
+        val moving = androidx.compose.runtime.mutableStateOf(false)
+        var settings = 0
+        var parkedRequests = 0
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale.floatValue)) {
+                CabinTheme { Box(Modifier.width(352.dp).height(640.dp)) {
+                    CabinLauncher(manager, TeyesClimateState(), moving.value, {}, {}, null, { settings++ },
+                        { action -> parkedRequests++; action() })
+                } }
+            }
+        }
+        for (scale in listOf(1f, 2f)) {
+            compose.runOnIdle { fontScale.floatValue = scale }
+            for (label in listOf("Quick controls", "Edit layout")) {
+                compose.onNodeWithContentDescription(label).assertIsDisplayed().assertWidthIsAtLeast(56.dp).assertHeightIsAtLeast(56.dp)
+            }
+            compose.onNodeWithTag("dashboard-settings").assertIsDisplayed().assertWidthIsAtLeast(56.dp).assertHeightIsAtLeast(56.dp).performClick()
+            // The third compact page begins the second stored page; it must remain reachable.
+            compose.onNodeWithTag("page-dot-2").performScrollTo().assertIsDisplayed()
+                .assertWidthIsAtLeast(56.dp).assertHeightIsAtLeast(56.dp).performClick()
+            compose.onNodeWithTag("module-RPM-4").assertIsDisplayed()
+        }
+        compose.runOnIdle { assertEquals(2, settings); assertEquals(2, parkedRequests); moving.value = true }
+        compose.onNodeWithTag("dashboard-settings").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Edit layout").assertIsNotEnabled()
     }
 
     @Test fun `short dashboards paginate individual modules without vertical scrolling`() {

@@ -19,9 +19,12 @@ internal fun VehicleCompatibilityPanel(vehicle: TeyesClimateState) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val profile = vehicle.profileId
+    val snapshotPrefs = remember { vehicleToolsPreferences(context) }
+    val snapshotValues = rememberAutomationValues("cabin_vehicle_tools")
+    var comparison by remember(profile) { mutableStateOf<List<CompatibilityChange>?>(null) }
     var cleared by remember(profile) { mutableStateOf(false) }
     val data = vehicle.syuVehicle
-    SettingsDisclosure(stringResource(R.string.compat_title), profile.toString()) {
+    SettingsDisclosure(stringResource(R.string.compat_title), profile.toString(), searchLabels = emptySet()) {
         val groups = listOf(
             Triple(R.string.honda_panel_title, profile in SyuHondaPanelProtocol.profiles, data.factoryControls.keys.any { it.group == SyuFactoryGroup.HONDA_PANEL }),
             Triple(R.string.energy_seat_preset, profile == SyuFactoryProtocol.SEAT_PRESET_PROFILE, data.factoryControls.containsKey(SyuFactoryControl.SEAT_PRESET)),
@@ -54,6 +57,12 @@ internal fun VehicleCompatibilityPanel(vehicle: TeyesClimateState) {
                     cleared = true
                 }
             }) { Text(stringResource(if (cleared) R.string.history_cleared else R.string.history_clear)) }
+        }
+        TextButton(onClick = { snapshotPrefs.edit().putString("snapshot.$profile", compatibilitySnapshot(vehicle)).apply() }, enabled = vehicle.connected) { Text(stringResource(R.string.gv_save_snapshot)) }
+        TextButton(onClick = { comparison = runCatching { compareCompatibility(snapshotValues["snapshot.$profile"] as? String ?: "", compatibilitySnapshot(vehicle)) }.getOrNull() }, enabled = snapshotValues["snapshot.$profile"] is String) { Text(stringResource(R.string.gv_compare_snapshot)) }
+        comparison?.groupBy { it.kind }?.forEach { (kind, changes) ->
+            Text(stringResource(when(kind) { CompatibilityChangeKind.ADDED -> R.string.gv_added; CompatibilityChangeKind.MISSING -> R.string.gv_missing; CompatibilityChangeKind.CHANGED -> R.string.gv_changed; CompatibilityChangeKind.UNCHANGED -> R.string.gv_unchanged; CompatibilityChangeKind.FEEDBACK -> R.string.gv_feedback_only }), style = MaterialTheme.typography.titleSmall)
+            changes.forEach { change -> Text("${change.field}: ${change.before ?: "—"} → ${change.after ?: "—"}") }
         }
         VehicleDiagnosticExport(vehicle)
         vehicle.syuAir?.let { air ->

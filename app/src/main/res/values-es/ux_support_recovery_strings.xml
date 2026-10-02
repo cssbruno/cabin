@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_support_picker_unavailable">No se pudo abrir el selector de archivos. Inténtalo de nuevo cuando el acceso a documentos esté disponible.</string>
+    <string name="ux_support_discard_title">¿Descartar la exportación guardada?</string>
+    <string name="ux_support_discard_message">¿Descartar “%1$s”? Solo se elimina la copia guardada de la exportación. Los registros, informes y ajustes originales siguen en este dispositivo.</string>
+    <string name="ux_support_clear_reports">Borrar informes seleccionados</string>
+    <string name="ux_support_no_category_rows">No hay campos en esta categoría. Elige otra categoría para revisar los informes.</string>
+    <string name="ux_support_show_comparison">Mostrar comparación</string>
+</resources>

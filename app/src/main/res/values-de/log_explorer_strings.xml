@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Protokolltext suchen</string>
+    <string name="logx_filters">Filter und Anzeige</string>
+    <string name="logx_follow">Diese Datei live verfolgen</string>
+    <string name="logx_tag">Subsystem-Kennung</string>
+    <string name="logx_newest">Neueste zuerst</string>
+    <string name="logx_numbers">Zeilennummern</string>
+    <string name="logx_wrap">Zeilenumbruch</string>
+    <string name="logx_smaller">Kleinere Schrift</string>
+    <string name="logx_larger">Größere Schrift</string>
+    <string name="logx_export_scope">Exportiert werden nur angezeigte Treffer. Text enthält Originalmeldungen; Metadaten enthalten nur Zeitstempel, Schweregrad und Zeilennummern.</string>
+    <string name="logx_metadata_export">Nur Metadaten exportieren</string>
+    <string name="logx_export">Gefilterten Text exportieren</string>
+    <string name="logx_export_done">Export gespeichert</string>
+    <string name="logx_export_failed">Export konnte nicht gespeichert werden</string>
+    <string name="logx_count">%1$d angezeigt · %2$d Treffer · %3$d Zeilen durchsucht</string>
+    <string name="logx_limited">Begrenzte Ansicht: bis zu 1.000 Treffer, 16 MiB durchsucht und 4 KiB je Zeile. Filter eingrenzen oder Originaldatei exportieren.</string>
+    <string name="logx_no_matches">Keine Treffer</string>
+    <string name="logx_all">Alle Stufen</string>
+    <string name="logx_errors">Fehler</string>
+    <string name="logx_warnings">Warnungen</string>
+    <string name="logx_info">Informationen</string>
+    <string name="logx_debug">Debug</string>
+    <string name="logx_verbose">Ausführlich</string>
+    <string name="logx_file_search">Protokolldateien suchen</string>
+    <string name="logx_oldest">Älteste zuerst</string>
+    <string name="logx_largest">Größte zuerst</string>
+    <string name="logx_name">Dateiname</string>
+    <string name="logx_original">Originalseiten durchsuchen</string>
+</resources>

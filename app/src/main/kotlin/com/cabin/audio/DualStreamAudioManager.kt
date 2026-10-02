@@ -72,7 +72,7 @@ object AudioStreamType {
 class DualStreamAudioManager(
     private val context: Context,
     private val logCallback: LogCallback,
-    private val audioConfig: AudioConfig = AudioConfig.DEFAULT,
+    private var audioConfig: AudioConfig = AudioConfig.DEFAULT,
 ) {
     private val systemAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -103,6 +103,62 @@ class DualStreamAudioManager(
     private val focusListeners = mutableMapOf<StreamPurpose, AudioManager.OnAudioFocusChangeListener>()
     private val focusHandler = Handler(Looper.getMainLooper())
     private val navCompletionRunnable = Runnable { stopNavTrack() }
+    private val platformAudioConfig = audioConfig
+    private var duckRamp: Runnable? = null
+    private val focusStatus = mutableMapOf<StreamPurpose, String>()
+    private val requestedPurposes = mutableSetOf<StreamPurpose>()
+    private var routeCallback: android.media.AudioDeviceCallback? = null
+    private var routeRecovery: Runnable? = null
+    private var outputDeviceIds = emptySet<Int>()
+    private fun installRouteObserver() {
+        if (routeCallback != null) return
+        outputDeviceIds = systemAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).map { it.id }.toSet()
+        val callback = object : android.media.AudioDeviceCallback() {
+            override fun onAudioDevicesAdded(added: Array<out android.media.AudioDeviceInfo>) { if (added.any { it.isSink }) scheduleRouteRecovery() }
+            override fun onAudioDevicesRemoved(removed: Array<out android.media.AudioDeviceInfo>) { if (removed.any { it.isSink }) scheduleRouteRecovery() }
+        }
+        routeCallback = callback
+        systemAudioManager.registerAudioDeviceCallback(callback, focusHandler)
+    }
+    private fun scheduleRouteRecovery() = synchronized(lock) {
+        if (!isRunning.get() || releasing) return@synchronized
+        val currentIds = systemAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).map { it.id }.toSet()
+        if (currentIds == outputDeviceIds) return@synchronized
+        outputDeviceIds = currentIds
+        if (routeRecovery != null) return@synchronized
+        val task = Runnable {
+            synchronized(lock) {
+                routeRecovery = null
+                if (!isRunning.get() || releasing) return@synchronized
+                listOfNotNull(mediaSlot, siriSlot, phoneCallSlot, alertSlot).forEach { slot ->
+                    runCatching { slot.track?.release() }
+                    slot.track = null
+                    slot.buffer.clear()
+                    slot.residualCount = 0
+                    slot.started = false
+                    slot.pendingPlay = false
+                }
+                runCatching { navTrack?.release() }
+                navTrack = null; navFormat = null; navBuffer?.clear()
+                navStarted = false; navPendingPlay = false
+                playbackThread?.clearNavResidual()
+            }
+        }
+        routeRecovery = task
+        focusHandler.postDelayed(task, 500)
+    }
+    fun health(): AudioHealth = synchronized(lock) {
+        val streams = listOfNotNull(mediaSlot, siriSlot, phoneCallSlot, alertSlot).map {
+            AudioStreamHealth(it.purpose.name, it.buffer.fillLevelMs(), it.underruns, it.buffer.overflowCount, focusStatus[it.purpose] ?: "IDLE")
+        } + listOfNotNull(navBuffer?.let { AudioStreamHealth("NAVIGATION", it.fillLevelMs(), navUnderruns, it.overflowCount, focusStatus[StreamPurpose.NAVIGATION] ?: "IDLE") })
+        AudioHealth(streams, listOfNotNull(mediaSlot?.track, navTrack, phoneCallSlot?.track, siriSlot?.track)
+            .firstNotNullOfOrNull { runCatching { it.routedDevice?.productName?.toString() }.getOrNull() })
+    }
+    /** A retry cannot override a later focus-loss callback or an ended purpose. */
+    fun retryDeniedFocus() = synchronized(lock) {
+        if (!isRunning.get() || releasing) return@synchronized
+        requestedPurposes.filter { focusStatus[it] == "DENIED" || focusStatus[it] == "DELAYED" }.toList().forEach(::onPurposeChanged)
+    }
 
     // Keep losses per purpose: navigation/assistant/calls must also respect another
     // application's focus. All access is serialized with playback/track teardown.
@@ -122,6 +178,11 @@ class DualStreamAudioManager(
                             else -> null
                         }
                         if (level != null) {
+                            focusStatus[purpose] = when (change) {
+                                AudioManager.AUDIOFOCUS_GAIN -> "GRANTED"
+                                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> "DUCKED"
+                                else -> "LOST"
+                            }
                             setFocusLevel(purpose, level)
                             logDebug("[AUDIO_FOCUS] FocusChange($purpose): $change")
                         }
@@ -246,7 +307,9 @@ class DualStreamAudioManager(
             }
 
             try {
+                audioConfig = AudioExperience(context).buffering.apply(platformAudioConfig)
                 isRunning.set(true)
+                installRouteObserver()
 
                 // Pre-allocate per-purpose audio slots
                 mediaSlot = createPurposeSlot(StreamPurpose.MEDIA, AudioFormats.FORMAT_4)
@@ -275,6 +338,10 @@ class DualStreamAudioManager(
             } catch (e: Exception) {
                 log("[AUDIO] ERROR: Failed to initialize: ${e.message}")
                 isRunning.set(false)
+                routeCallback?.let { runCatching { systemAudioManager.unregisterAudioDeviceCallback(it) } }; routeCallback = null
+                routeRecovery?.let(focusHandler::removeCallbacks); routeRecovery = null
+                listOfNotNull(mediaSlot, siriSlot, phoneCallSlot, alertSlot).forEach { releaseSlot(it) }
+                mediaSlot = null; siriSlot = null; phoneCallSlot = null; alertSlot = null
                 return false
             }
         }
@@ -497,19 +564,31 @@ class DualStreamAudioManager(
         }
     }
 
-    /** Set media ducking (Len=16 volume packets from adapter). */
-    fun setDucking(targetVolume: Float) {
+    /** Wire volumeDuration is seconds. Clamp malformed/long ramps to five seconds. */
+    @JvmOverloads
+    fun setDucking(targetVolume: Float, durationSeconds: Float = 0f) {
         synchronized(lock) {
-            isDucked = targetVolume < 1.0f
-            duckLevel = targetVolume.coerceIn(0.0f, 1.0f)
-
-            applyEffectiveVolume()
-
-            if (isDucked) {
-                log("[AUDIO] Media ducked to ${(duckLevel * 100).toInt()}%")
-            } else {
-                log("[AUDIO] Media volume restored to ${(mediaVolume * 100).toInt()}%")
+            duckRamp?.let(focusHandler::removeCallbacks)
+            duckRamp = null
+            val target = targetVolume.takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: 1f
+            val duration = (durationSeconds.takeIf { it.isFinite() }?.coerceIn(0f, 5f)?.times(1000))?.toLong() ?: 0L
+            val start = if (isDucked) duckLevel else 1f
+            val startedAt = android.os.SystemClock.elapsedRealtime()
+            if (duration == 0L || !isRunning.get()) {
+                isDucked = target < 1f; duckLevel = target; applyEffectiveVolume(); return
             }
+            val task = object : Runnable {
+                override fun run() = synchronized(lock) {
+                    if (duckRamp !== this || !isRunning.get()) return@synchronized
+                    val elapsed = android.os.SystemClock.elapsedRealtime() - startedAt
+                    duckLevel = interpolatedGain(start, target, elapsed, duration)
+                    isDucked = duckLevel < 1f
+                    applyEffectiveVolume()
+                    if (elapsed < duration) focusHandler.postDelayed(this, 16) else duckRamp = null
+                }
+            }
+            duckRamp = task
+            focusHandler.post(task)
         }
     }
 
@@ -534,6 +613,7 @@ class DualStreamAudioManager(
     /** Request AudioFocus for a stream purpose. */
     fun onPurposeChanged(purpose: StreamPurpose) {
         synchronized(lock) {
+            requestedPurposes.add(purpose)
             // A repeated START can re-request focus without a STOP. Retire the
             // previous identity before abandonment so its queued losses cannot
             // silence a newly granted request.
@@ -574,6 +654,11 @@ class DualStreamAudioManager(
                 activeFocusRequests.remove(purpose)?.let { systemAudioManager.abandonAudioFocusRequest(it) }
                 focusListeners.remove(purpose)
             }
+            focusStatus[purpose] = when (result) {
+                AudioManager.AUDIOFOCUS_REQUEST_GRANTED -> "GRANTED"
+                AudioManager.AUDIOFOCUS_REQUEST_DELAYED -> "DELAYED"
+                else -> "DENIED"
+            }
             // A denied/delayed request is not permission to play over radio or a call.
             setFocusLevel(purpose, if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) 1f else 0f)
 
@@ -598,6 +683,8 @@ class DualStreamAudioManager(
     /** Abandon AudioFocus for a stream purpose. */
     fun onPurposeEnded(purpose: StreamPurpose) {
         synchronized(lock) {
+            requestedPurposes.remove(purpose)
+            focusStatus.remove(purpose)
             activeFocusRequests.remove(purpose)?.let { request ->
                 systemAudioManager.abandonAudioFocusRequest(request)
                 logDebug("[AUDIO_FOCUS] Abandon $purpose")
@@ -800,6 +887,10 @@ class DualStreamAudioManager(
             releasing = true
             log("[AUDIO] Releasing DualStreamAudioManager")
             focusHandler.removeCallbacks(navCompletionRunnable)
+            duckRamp?.let(focusHandler::removeCallbacks); duckRamp = null
+            routeRecovery?.let(focusHandler::removeCallbacks); routeRecovery = null
+            routeCallback?.let { systemAudioManager.unregisterAudioDeviceCallback(it) }; routeCallback = null
+            requestedPurposes.clear(); focusStatus.clear()
             isRunning.set(false)
             playbackThread
         }
@@ -1658,6 +1749,7 @@ class DualStreamAudioManager(
                             slot.started = false
                             slot.pendingPlay = false
                             slot.residualCount = 0
+                            slot.buffer.clear()
                         } else {
                             // NAV path
                             when (streamType) {

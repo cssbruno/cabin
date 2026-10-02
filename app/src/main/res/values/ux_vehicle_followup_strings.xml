@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Due date · YYYY-MM-DD</string>
+    <string name="uxvf_odometer_date">Reading date · YYYY-MM-DD</string>
+    <string name="uxvf_service_date">Service date · YYYY-MM-DD</string>
+    <string name="uxvf_date_error">Enter a valid date as YYYY-MM-DD.</string>
+    <string name="uxvf_name_error">Enter a name for this maintenance item.</string>
+    <string name="uxvf_interval_error">Enter an interval from 1 to 3650 days.</string>
+    <string name="uxvf_decimal_error">Enter a number from 0 to 10 million, without thousands separators.</string>
+    <string name="uxvf_distance_error">Enter a distance above 0 km. The next due reading must be at most 10 million km.</string>
+    <string name="uxvf_odometer_needed">Save an odometer reading before adding a distance interval.</string>
+    <string name="uxvf_odometer_order">The reading cannot be lower than the saved odometer.</string>
+    <string name="uxvf_future_reading">The reading date cannot be in the future.</string>
+    <string name="uxvf_reading_date_order">The reading date cannot be before the saved reading.</string>
+    <string name="uxvf_decimal_hint">Use a decimal comma or point, without thousands separators.</string>
+    <string name="uxvf_record_missing">This item or record was removed. Close this editor and choose an existing item.</string>
+</resources>

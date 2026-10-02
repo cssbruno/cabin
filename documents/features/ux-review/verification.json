@@ -1,0 +1,1298 @@
+{
+  "review_date": "2026-09-30",
+  "recorded_at": "2026-10-01T01:38:25.241228+00:00",
+  "new_regression_tests": 37,
+  "software_suites": {
+    "app": {
+      "tests": 1066,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 1065,
+      "classes": {
+        "com.cabin.CabinLifecycleRecoveryTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.audio.AudioRingFrameTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ActivityInstanceOwnerTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherUxReviewTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.CabinConnectionRecoveryTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.CabinMicrophoneRecoveryTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.CabinPhoneDisconnectTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.CabinProjectionActionTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.audio.AudioGainRampTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.background.CabinExplicitPhoneConnectTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.background.CabinProjectionExitTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.background.CabinProjectionServiceTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.carlink.CarlinkSettingsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.diagnostics.ProjectionDiagnosticsTest": {
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.gnss.GnssPermissionContractTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.carlink.CarlinkEngineServiceTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingDisplayConfigurationTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingFactoryBluetoothTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingNativeListenerTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingCarPlayServiceTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingNativeProtocolTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.DashboardLayoutTest": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherImprovementTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherAppLibraryTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.DefaultHomeTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherAppDrawerTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherGoalsUiTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherPreferencesTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.AdditionalDashboardWidgetTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.QuickControlsTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.UsageScreenshotsTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.UtilityWidgetsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.VehicleComfortWidgetTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.VehicleGaugeWidgetsTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.localization.AppLanguageTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.localization.LanguageSettingsSectionTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.localization.LocalizedResourceContractTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.localization.PortugueseLocalizationTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.logging.FileLogManagerLifecycleTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.logging.SupportExportQueueTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingVideoConnectionTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.media.MediaSessionArtworkTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.media.CabinMediaNotificationTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.navigation.DistanceFormatterTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.navigation.NavigationReceptionHealthTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.navigation.compose.ManeuverIconDebugDumperTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.navigation.NavigationRouteLifecycleTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.CabinSyuProtocolTest": {
+          "tests": 50,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.CarPlayBackendsTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.CarToolsTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ConnectionExperienceTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytCodeDetectorTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytFirmwareTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytProtocolExportTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        },
+        "com.cabin.platform.FytRawSampleTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytStockMetricsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytSyuClientCatalogTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytSyuReadProgramTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.FytToolkitServiceTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.JoyingCarPlayTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.MeasurementPreferencesTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.MeasurementFormatterTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ProjectionHealthStoreTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ProjectionPreferencesTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ProjectionReadinessSnapshotTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.CabinLauncherTest": {
+          "tests": 43,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ProjectionReadinessTest": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.launcher.LauncherDisplayPolicyTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.ProjectionSetupPreferencesTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.StreamingStabilityTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SteeringAppMappingTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuAudioSourceMonitorTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuAirRegistryTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuBinderTransportTest": {
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuFactoryProtocolTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuFrameworkProbeTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuHondaPanelProtocolTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuModuleReadbackTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuRadioControllerTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuRadioProtocolTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuSoundControllerTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuSoundProtocolTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuSteeringControllerTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.SyuVehicleProtocolTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesAppShortcutsTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesClimateBinderIntegrationTest": {
+          "tests": 45,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesClusterMediaBridgeTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesConfigurationBackupTest": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesDrivingRecoveryTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesEcosystemTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesTelemetryReliabilityTest": {
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesVideoOverlayLifecycleTest": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesWakeRecoveryTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.VehicleAppearancePreferencesTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.VehicleGoalsTest": {
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.VehicleHistoryTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.VehicleSettingCategoryTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.VehicleUtilitiesTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.obd.ObdControllerTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.obd.ObdProtocolTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.obd.ObdReplyReaderTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.protocol.MessageParserTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.protocol.OrderedTouchSenderTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.protocol.PhoneConnectionProtocolTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.CabinUiRenderingTest": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.telemetry.CabinTelemetryTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ClimateCloseTimerTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.CoreAccessibilityFlowsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionClimateSummaryTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionConnectionHelpTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionExtensionsTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionPresentationTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionReturnPolicyTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionSetupTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionToolsTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionTouchGeometryTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.ProjectionTouchStateTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.platform.TeyesFeaturesTest": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.SetupDiagnosticsRenderingTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.SystemBarRecoveryTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.SyuRadioScreenTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.SyuSoundScreenTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.TeyesDashboardPresentationTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.TeyesVehicleUiTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.VideoSurfaceLifecycleTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.ConnectionGoalsAcceptanceUiTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.CarSettingsScreenTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogExplorerTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogExplorerUiTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogFilesStoreTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogPageTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogWorkspaceTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.LogWorkspaceUiTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.NativeCarPlaySettingsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.ProjectionPreferencesUiTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SettingsAccessibilityGoalsTest": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SettingsInteractionTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SettingsNavigationTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SettingsPresentationTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SteeringHardwareScreenTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SettingsRecoveryActionsTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SteeringSettingsPanelTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SupportWorkflowTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SupportWorkspaceAcceptanceUiTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.TeyesVehicleSettingsUiTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.SyuVehicleOptionsTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.VehicleAcceptanceGoalsUiTest": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.VehicleUtilitiesUiTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.VehicleUxReviewTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.settings.VideoSettingsTrialTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.ui.theme.CabinThemeTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateImprovementsTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.GitHubReleaseTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateInstallTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateJobTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateSettingsGoalsUiTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateSigningTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.updates.UpdateValidationTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.widget.CabinWidgetInteractionTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.widget.CabinWidgetLayoutTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.widget.CabinWidgetProviderTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.audio.AudioFocusIntegrationTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.audio.NavigationPlaybackTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.audio.PurposePlaybackTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.joying.JoyingAudioFocusTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.video.H264RendererTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "diagnostics": {
+      "tests": 155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 155,
+      "classes": {
+        "com.cabin.hardware.HardwareInventoryTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.FirmwareBundleTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.FytMcuCodecTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.LiveCanReceiverTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.McuCaptureAnalyzerTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.LabActivityTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.ReplacementServiceTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.ToolkitBridgeTest": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.AmplifierMuteTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604AudioSessionTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604ChannelsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604EqualizerTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604SoundModuleTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604RoutingTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604ReadbackTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604GainTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604ProgramTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604StartupTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604SourceRoutingTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604VolumeEndpointTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.RadioFeedbackDecoderTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.RadioCommandPlannerTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.LiveReplacementSessionTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.ModuleToolkitBridgeTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.RadioMcuTransportTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.ReplacementProtocolTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.ReplacementRuntimeTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.SoundVolumeCommandTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.SoundVolumeMemoryTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.SoundVolumePreferencesTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.reports.LiveDebugMenuTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.reports.ReportExportTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "com.cabin.hardware.replacement.C7604VolumeCurveTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "physical_acceptance": "Not performed; 35 physical-device items in the 100-goal tracker remain pending.",
+  "debug_apk": {
+    "path": "app/build/outputs/apk/debug/app-debug.apk",
+    "sha256": "81c6e75008651537cf406ae292d4a0db0f6aa9d7871ff1c0be82f930ad0d3301",
+    "size_bytes": 37481857
+  },
+  "minified_apk": {
+    "path": "app/build/outputs/apk/releaseCheck/app-releaseCheck.apk",
+    "sha256": "4d0719041f5d1e7751051146dad4b5b6ea2917699ed258df3e35eb9753b15d34",
+    "size_bytes": 13032106
+  },
+  "instrumentation_apk": {
+    "path": "app/build/outputs/apk/androidTest/releaseCheck/app-releaseCheck-androidTest.apk",
+    "sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+    "size_bytes": 432188
+  },
+  "release_vital_lint": "passed as part of assembleReleaseCheck",
+  "status": "passed",
+  "completed_at": "2026-10-01T01:52:25.592546+00:00",
+  "devices": {
+    "api27": {
+      "device": {
+        "apk_sha256": "4d0719041f5d1e7751051146dad4b5b6ea2917699ed258df3e35eb9753b15d34",
+        "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+        "sdk": "27",
+        "device": "Android SDK built for x86_64",
+        "fingerprint": "Android/sdk_phone_x86_64/generic_x86_64:8.1.0/OSM1.180201.023/4931629:userdebug/test-keys",
+        "instrumentation_passed": true,
+        "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+      },
+      "instrumentation_tests_passed": 2,
+      "measured_resource_cycles": 30,
+      "resource_growth_last5_minus_first5": {
+        "threads": 0,
+        "fds": 0,
+        "heapBytes": 74523.19999999925
+      },
+      "startup_medians_ms": {
+        "cold": 240,
+        "warm": 39
+      },
+      "startup_budgets_ms": {
+        "cold_median_ms": 2500,
+        "warm_median_ms": 500
+      },
+      "evidence_directory": "documents/features/ux-review/api27"
+    },
+    "api35": {
+      "device": {
+        "apk_sha256": "4d0719041f5d1e7751051146dad4b5b6ea2917699ed258df3e35eb9753b15d34",
+        "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+        "sdk": "35",
+        "device": "sdk_gphone64_x86_64",
+        "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+        "instrumentation_passed": true,
+        "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+      },
+      "instrumentation_tests_passed": 2,
+      "measured_resource_cycles": 30,
+      "resource_growth_last5_minus_first5": {
+        "threads": 3,
+        "fds": 0,
+        "heapBytes": -167878.40000000037
+      },
+      "startup_medians_ms": {
+        "cold": 468,
+        "warm": 39
+      },
+      "startup_budgets_ms": {
+        "cold_median_ms": 2500,
+        "warm_median_ms": 500
+      },
+      "evidence_directory": "documents/features/ux-review/api35"
+    }
+  },
+  "measurement_notes": [
+    "API27 initial startup sample reported TotalTime=79858ms while ThisTime=646ms and WaitTime=666ms. Preserved in api27/startup-first-run.json; a confirming identical seven-cold/seven-warm run had no such inconsistency. Final startup.json contains the confirming run.",
+    "Startup measurements are emulator Android launch timings, not projection readiness or physical head-unit performance."
+  ]
+}

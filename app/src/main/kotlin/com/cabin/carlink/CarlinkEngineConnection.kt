@@ -45,7 +45,8 @@ internal class CarlinkEngineConnection private constructor(private val context: 
 
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
-        if (bound) context.unbindService(connection)
+        ready.completeExceptionally(java.util.concurrent.CancellationException("Carlink session closed"))
+        if (bound) runCatching { context.unbindService(connection) }
         // Prevent a retry from binding to the retiring process before it has exited.
         if (host != null && Looper.myLooper() != Looper.getMainLooper()) dead.await(5, TimeUnit.SECONDS)
         host?.let { runCatching { it.unlinkToDeath(death, 0) } }
@@ -61,7 +62,14 @@ internal class CarlinkEngineConnection private constructor(private val context: 
                     Intent(session.context, CarlinkEngineService::class.java), session.connection, Context.BIND_AUTO_CREATE)
                 check(session.bound) { "Cannot bind Cabin's Carlink engine" }
                 val host = session.ready.get(10, TimeUnit.SECONDS)
-                session.engine = initializer.submit<IBinder> { create(host) }.get(15, TimeUnit.SECONDS)
+                val creation = initializer.submit<IBinder> { create(host) }
+                try {
+                    session.engine = creation.get(15, TimeUnit.SECONDS)
+                    check(!session.closed.get() && host.isBinderAlive && session.engine.isBinderAlive) { "Carlink engine stopped during startup" }
+                } catch (error: Exception) {
+                    creation.cancel(true)
+                    throw error
+                }
                 return session
             } catch (error: Exception) {
                 session.close()

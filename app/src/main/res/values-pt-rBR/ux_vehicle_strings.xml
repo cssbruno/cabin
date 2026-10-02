@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxv_document_picker_missing">Nenhum seletor de documentos disponível. Ative um app de arquivos neste dispositivo e tente novamente.</string>
+    <string name="uxv_backup_rejected">Não foi possível abrir este backup. Verifique o arquivo e, se estiver criptografado, a senha. Nada foi alterado.</string>
+    <string name="uxv_delete_maintenance">Excluir “%1$s” do plano de manutenção? Os registros de serviços concluídos são mantidos. Esta ação não pode ser desfeita.</string>
+    <string name="uxv_maintenance_empty">Ainda não há itens de manutenção. Adicione um nome e uma data de vencimento abaixo.</string>
+    <string name="uxv_service_export_saved">Histórico de serviços salvo em CSV</string>
+    <string name="uxv_select_trip">Selecionar viagem de %1$s</string>
+    <string name="uxv_map_unavailable">Nenhum app de mapas conseguiu abrir esta posição de estacionamento. Ative um e tente novamente.</string>
+    <string name="uxv_forget_parking">Excluir a posição de estacionamento, a anotação e o lembrete deste veículo? Esta ação não pode ser desfeita.</string>
+    <string name="uxv_favorite_limit">Escolha até 6 favoritos · %1$d selecionados</string>
+    <string name="uxv_move_favorite">Mover %1$s para antes</string>
+    <string name="uxv_notification_settings">Configurações de notificações</string>
+    <string name="uxv_service_history">Histórico de serviços</string>
+    <string name="uxv_prepared_exports">Exportações de suporte preparadas</string>
+    <string name="uxv_stop_connection_history">Parar de salvar resumos de conexão?</string>
+    <string name="uxv_stop_connection_history_detail">Isso também exclui os resumos de conexão existentes de todos os motoristas.</string>
+    <string name="uxv_delete_category">Excluir %1$s?</string>
+</resources>

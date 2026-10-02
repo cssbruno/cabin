@@ -8,7 +8,10 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  android-quality:
+    uses: ./.github/workflows/android-quality.yml
   release:
+    needs: android-quality
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

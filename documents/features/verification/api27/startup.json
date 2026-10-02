@@ -1,0 +1,130 @@
+{
+  "sdk": "27",
+  "device": "Android SDK built for x86_64",
+  "fingerprint": "Android/sdk_phone_x86_64/generic_x86_64:8.1.0/OSM1.180201.023/4931629:userdebug/test-keys",
+  "apk_sha256": "d1c1ea7df73f455cf06ed9b1e582c1ff88e7e74601f9c70537490bf2809c9689",
+  "samples_ms": {
+    "cold": [
+      66646,
+      496,
+      594,
+      630,
+      382,
+      232,
+      138
+    ],
+    "warm": [
+      117,
+      54,
+      7,
+      35,
+      29,
+      9,
+      11
+    ]
+  },
+  "medians_ms": {
+    "cold": 496,
+    "warm": 29
+  },
+  "android_timings": [
+    {
+      "mode": "cold",
+      "ThisTime": 275,
+      "TotalTime": 66646,
+      "WaitTime": 320
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 496,
+      "TotalTime": 496,
+      "WaitTime": 499
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 594,
+      "TotalTime": 594,
+      "WaitTime": 769
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 630,
+      "TotalTime": 630,
+      "WaitTime": 689
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 382,
+      "TotalTime": 382,
+      "WaitTime": 484
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 232,
+      "TotalTime": 232,
+      "WaitTime": 328
+    },
+    {
+      "mode": "cold",
+      "ThisTime": 138,
+      "TotalTime": 138,
+      "WaitTime": 303
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 117,
+      "TotalTime": 117,
+      "WaitTime": 119
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 54,
+      "TotalTime": 54,
+      "WaitTime": 120
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 7,
+      "TotalTime": 7,
+      "WaitTime": 56
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 35,
+      "TotalTime": 35,
+      "WaitTime": 150
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 29,
+      "TotalTime": 29,
+      "WaitTime": 80
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 9,
+      "TotalTime": 9,
+      "WaitTime": 31
+    },
+    {
+      "mode": "warm",
+      "ThisTime": 11,
+      "TotalTime": 11,
+      "WaitTime": 30
+    }
+  ],
+  "largest_launch_cost": "cold",
+  "budgets_ms": {
+    "cold_median_ms": 2500,
+    "warm_median_ms": 500
+  },
+  "startup_phases_ms": {
+    "configuration recovery": 0,
+    "parking scheduling": 0,
+    "telemetry setup": 0,
+    "activity dispatch": 12,
+    "activity creation to first draw": 105
+  },
+  "largest_measured_phase": "activity creation to first draw",
+  "measurement": "Android am start -W; cold force-stop versus warm foreground return. Not a rendered-frame or head-unit measurement."
+}

@@ -1,0 +1,641 @@
+INSTRUMENTATION_STATUS: class=com.cabin.quality.ReleaseSmokeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.cabin.quality.ReleaseSmokeTest:
+INSTRUMENTATION_STATUS: test=firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.cabin.quality.ReleaseSmokeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Checking for updates…/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:154)
+
+INSTRUMENTATION_STATUS: stream=
+Error in firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport(com.cabin.quality.ReleaseSmokeTest):
+java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Checking for updates…/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:154)
+
+INSTRUMENTATION_STATUS: test=firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.cabin.quality.ReleaseSmokeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=longSessionResourceBudget
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.cabin.quality.ReleaseSmokeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Update available/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.longSessionResourceBudget(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:10)
+
+INSTRUMENTATION_STATUS: stream=
+Error in longSessionResourceBudget(com.cabin.quality.ReleaseSmokeTest):
+java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Update available/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.longSessionResourceBudget(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:10)
+
+INSTRUMENTATION_STATUS: test=longSessionResourceBudget
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 62.001
+There were 2 failures:
+1) firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport(com.cabin.quality.ReleaseSmokeTest)
+java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Checking for updates…/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:154)
+2) longSessionResourceBudget(com.cabin.quality.ReleaseSmokeTest)
+java.lang.AssertionError: Timed out: Settings opened
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Back/null
+null/null
+null/null
+null/null
+Search settings/null
+null/null
+SETTINGS/null
+null/null
+null/null
+CarPlay/null
+null/null
+null/null
+null/null
+CCPA adapter/null
+null/null
+null/null
+null/null
+Launcher/null
+null/null
+null/null
+null/null
+Car Settings/null
+null/null
+null/null
+null/null
+FYT/null
+null/null
+null/null
+null/null
+null/null
+null/null
+Exit app/null
+null/null
+v0.1.10+1021/null
+null/null
+null/null
+Accessibility/null
+null/null
+Reduce motion/null
+Remove decorative transitions. Progress and connection status remain visible./null
+null/null
+null/null
+null/null
+null/null
+High contrast/null
+Use strong text and surface contrast throughout Cabin. Selection still uses labels and check marks./null
+null/null
+null/null
+null/null
+null/null
+Updates/null
+Cabin 0.1.10/null
+null/null
+Check automatically each day/null
+null/null
+null/null
+null/null
+Download only on unmetered networks/null
+null/null
+null/null
+Update channel/null
+null/null
+Stable/null
+null/null
+null/null
+Preview/null
+null/null
+Update available/null
+0.1.10/null
+Build 1021 → 2000152/null
+null/null
+Release notes/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+null/null
+
+	at org.junit.Assert.fail(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:11)
+	at com.cabin.quality.ReleaseSmokeTest.await(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:117)
+	at com.cabin.quality.ReleaseSmokeTest.await$default(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:7)
+	at com.cabin.quality.ReleaseSmokeTest.openSettings(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:23)
+	at com.cabin.quality.ReleaseSmokeTest.longSessionResourceBudget(r8-map-id-33e005f1140febc4b0e8051840cbcac52105687c37f27af61ab6c74f9d429d4a:10)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

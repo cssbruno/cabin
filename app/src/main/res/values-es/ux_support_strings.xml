@@ -1,0 +1,9 @@
+<resources>
+    <string name="ux_review_build_change">Compilación %1$d → %2$d</string>
+    <string name="ux_review_backup_picker_missing">No hay un selector de archivos disponible. La copia está guardada localmente; expórtala después desde Registros.</string>
+    <string name="ux_review_logs_waiting">Esperando entradas de registro coincidentes…</string>
+    <string name="ux_review_logs_no_files">Aún no hay archivos de registro. Activa el registro y vuelve a abrir este espacio.</string>
+    <string name="ux_review_logs_start">Selecciona archivos de registro y pulsa Buscar en archivos seleccionados.</string>
+    <string name="ux_review_logs_page_empty">No hay coincidencias en esta página. Continúa la búsqueda en la siguiente.</string>
+    <string name="ux_review_logs_empty">No hay coincidencias en esta página para la búsqueda actual.</string>
+</resources>

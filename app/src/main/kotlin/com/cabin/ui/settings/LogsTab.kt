@@ -1,5 +1,7 @@
 package com.cabin.ui.settings
 
+import kotlinx.coroutines.ensureActive
+import androidx.compose.material3.OutlinedButton
 import com.cabin.R
 import androidx.compose.ui.res.stringResource
 import android.content.pm.PackageManager
@@ -105,40 +107,32 @@ internal fun LogsTabContent(
     val filesStore = remember(fileLogManager) { fileLogManager?.let(::LogFilesStore) }
     var filesSnapshot by remember(fileLogManager) { mutableStateOf(LogFilesSnapshot()) }
     val logFiles = filesSnapshot.files
-    var viewingFile by remember { mutableStateOf<File?>(null) }
+    var fileQuery by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf("") }
+    var fileOrder by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(LogFileOrder.NEWEST) }
+    val visibleLogFiles = remember(logFiles, fileQuery, fileOrder) { arrangeLogFiles(logFiles, fileQuery, fileOrder) }
+    var workspaceOpen by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    var viewingPath by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     var showDeleteDialog by remember { mutableStateOf<LogFileSnapshot?>(null) }
     var showLogLevelDialog by remember { mutableStateOf(false) }
     var showDebugWarningDialog by remember { mutableStateOf(false) }
     val colorScheme = MaterialTheme.colorScheme
 
-    var pendingExportFile by remember { mutableStateOf<File?>(null) }
+    val exportQueue = remember(context) { com.cabin.logging.SupportExportQueue(context) }
+    var pendingExportId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
+    var exportRecoveryRevision by remember { mutableStateOf(0) }
     var isExporting by remember { mutableStateOf(false) }
-
-    val createDocumentLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.CreateDocument("text/plain"),
-        ) { uri: Uri? ->
-            val fileToExport = pendingExportFile
-            if (uri != null && fileToExport != null) {
-                scope.launch {
-                    val result = FileExportService.writeFileToUri(context, uri, fileToExport)
-                    result
-                        // TODO(cleanup): bytesWritten is unused — rename to `_` in a future cleanup.
-                        .onSuccess { bytesWritten ->
-                            Toast.makeText(context, resources.getString(R.string.logs_exported, fileToExport.name), Toast.LENGTH_SHORT).show()
-                        }.onFailure { error ->
-                            logError("[FILE_EXPORT] Export failed: ${error.message}", tag = "FILE_LOG")
-                            Toast.makeText(context, resources.getString(R.string.logs_export_failed, error.message.orEmpty()), Toast.LENGTH_SHORT).show()
-                        }
-                    pendingExportFile = null
-                    isExporting = false
+    val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri ->
+        scope.launch {
+            try {
+                val pending = exportQueue.pending().firstOrNull { it.id == pendingExportId }
+                if (uri != null && pending != null) {
+                    val result = FileExportService.writeFileToUri(context, uri, pending.file)
+                    if (result.isSuccess) exportQueue.discard(pending.id)
+                    Toast.makeText(context, resources.getString(if (result.isSuccess) R.string.logx_export_done else R.string.logx_export_failed), Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                logInfo("[FILE_EXPORT] User cancelled document picker", tag = "FILE_LOG")
-                pendingExportFile = null
-                isExporting = false
-            }
+            } finally { pendingExportId = null; isExporting = false; exportRecoveryRevision++ }
         }
+    }
 
     val loggingPreferences = remember { LoggingPreferences.getInstance(context) }
     val isLoggingEnabled by loggingPreferences.loggingEnabledFlow.collectAsStateWithLifecycle(initialValue = false)
@@ -185,8 +179,10 @@ internal fun LogsTabContent(
         return
     }
 
-    viewingFile?.let { file ->
-        LogFileViewer(file, filesStore, onClose = { viewingFile = null })
+    if (workspaceOpen) LogWorkspaceDialog(filesStore, isLoggingEnabled, onClose = { workspaceOpen = false })
+
+    viewingPath?.let { path ->
+        LogFileViewer(File(path), filesStore, onClose = { viewingPath = null })
     }
 
     // Responsive max width - 75% of container width, clamped between 400dp and 1200dp
@@ -208,6 +204,9 @@ internal fun LogsTabContent(
                     .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
+            OutlinedButton(onClick = { workspaceOpen = true }, modifier = Modifier.settingsSearchAnchor(stringResource(R.string.lxg_workspace))) { Text(stringResource(R.string.lxg_workspace)) }
+            SupportExportRecovery(exportRecoveryRevision)
+            HealthReportComparisonPanel()
             com.cabin.telemetry.ReportingSettings()
             LoggingControlCard(
                 title = stringResource(R.string.logs_logging),
@@ -347,25 +346,38 @@ internal fun LogsTabContent(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        logFiles.forEach { file ->
+                        LogLibraryControls(fileQuery, { fileQuery = it }, fileOrder, { fileOrder = it })
+                        if (visibleLogFiles.isEmpty()) Text(stringResource(R.string.logx_no_matches))
+                        visibleLogFiles.forEach { file ->
                             LogFileItem(
                                 file = file,
                                 dateFormat = dateFormat,
                                 isExportEnabled = !isExporting,
-                                onView = { viewingFile = file.file },
+                                onView = { viewingPath = file.file.path },
                                 onDelete = { showDeleteDialog = file },
                                 onExport = {
                                     if (isExporting) return@LogFileItem
-                                    pendingExportFile = file.file
                                     isExporting = true
                                     scope.launch {
                                         try {
                                             if (filesStore.prepareExport(file.file)) {
-                                                createDocumentLauncher.launch(file.file.name)
+                                                val frozen = exportQueue.enqueue(file.file.name.take(160), "text/plain") { out ->
+                                                    file.file.inputStream().use { input ->
+                                                        val buffer = ByteArray(8192)
+                                                        while (true) {
+                                                            kotlinx.coroutines.currentCoroutineContext().ensureActive()
+                                                            val count = input.read(buffer); if (count < 0) break
+                                                            out.write(buffer, 0, count)
+                                                        }
+                                                    }
+                                                }
+                                                pendingExportId = frozen.id
+                                                exportRecoveryRevision++
+                                                createDocumentLauncher.launch(frozen.name)
                                             } else {
                                                 Toast.makeText(context, resources.getString(R.string.logs_missing), Toast.LENGTH_SHORT).show()
                                                 filesSnapshot = filesStore.snapshot()
-                                                pendingExportFile = null
+                                                pendingExportId = null
                                                 isExporting = false
                                             }
                                         } catch (e: Exception) {
@@ -374,7 +386,7 @@ internal fun LogsTabContent(
                                                 tag = "FILE_LOG",
                                             )
                                             Toast.makeText(context, resources.getString(R.string.logs_picker_unavailable), Toast.LENGTH_SHORT).show()
-                                            pendingExportFile = null
+                                            pendingExportId = null
                                             isExporting = false
                                         }
                                     }

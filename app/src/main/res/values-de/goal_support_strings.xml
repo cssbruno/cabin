@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lxg_workspace">Protokolle durchsuchen</string>
+    <string name="lxg_pending_exports">Unfertige Exporte – Ziel zum Fortsetzen wählen</string>
+    <string name="lxg_resume">Export fortsetzen</string>
+    <string name="lxg_discard">Verwerfen</string>
+    <string name="lxg_files">Dateien (%1$d ausgewählt)</string>
+    <string name="lxg_bookmarks">Lesezeichen</string>
+    <string name="lxg_bookmark">Zeile merken</string>
+    <string name="lxg_remove_bookmark">Lesezeichen entfernen</string>
+    <string name="lxg_remove">Entfernen</string>
+    <string name="lxg_follow_rotation">Aktuelle Protokollsitzung verfolgen</string>
+    <string name="lxg_select_all">Alle auswählen / abwählen</string>
+    <string name="lxg_time_zone">Zeitzone: %1$s</string>
+    <string name="lxg_from">Von (einschließlich)</string>
+    <string name="lxg_until">Bis (einschließlich)</string>
+    <string name="lxg_range_format">Optional: 2026-09-30T14:30. Unbekannte oder mehrdeutige Zeitangaben werden beim Zeitfilter ausgeschlossen.</string>
+    <string name="lxg_search">Ausgewählte Dateien durchsuchen</string>
+    <string name="lxg_continue">Suche fortsetzen – nächste Seite</string>
+    <string name="lxg_scan_scope">Geprüft: %1$d Zeilen. Unbekannte/mehrdeutige Zeit: %2$d. Zählung nur für geprüfte Zeilen.</string>
+    <string name="lxg_export_scope">Der Export durchsucht alle gewählten Dateien mit den zuletzt angewandten Filtern. Vollständige Treffer und Dateinamen werden ohne Kontext exportiert. Metadaten lassen unstrukturierte Zeilen aus.</string>
+    <string name="lxg_export_all">Alle passenden Einträge exportieren</string>
+    <string name="lxg_context">Benachbarte Originalzeilen</string>
+    <string name="lxg_context_not_exported">Nur Kontextvorschau; diese zusätzlichen Zeilen sind nicht im gefilterten Export enthalten.</string>
+    <string name="lxg_preview_shortened">Vorschau gekürzt; der vollständige Export behält den ganzen Eintrag.</string>
+    <string name="lxg_source_changed">Eine Quelle wurde geändert oder gelöscht. Neue Suche starten.</string>
+    <string name="lxg_invalid_range">Dateien und Zeiten prüfen. Das Ende muss nach dem Anfang liegen; mehrdeutige Zeiten sind ungültig.</string>
+    <string name="lxg_compare_reports">Gespeicherte Diagnoseberichte vergleichen</string>
+    <string name="lxg_first_report">Ersten Bericht wählen</string>
+    <string name="lxg_second_report">Zweiten Bericht wählen</string>
+    <string name="lxg_replace_first">Ersten Bericht ersetzen</string>
+    <string name="lxg_replace_second">Zweiten Bericht ersetzen</string>
+    <string name="lxg_report_invalid">Berichte müssen gültige Cabin-Diagnose-JSON-Dateien bis 1 MiB mit demselben unterstützten Schema (1 oder 2) sein.</string>
+    <string name="lxg_changed">Geändert</string>
+    <string name="lxg_missing">Neu / fehlend</string>
+    <string name="lxg_unchanged">Unverändert</string>
+    <string name="lxg_before">Vorher: %1$s</string>
+    <string name="lxg_after">Nachher: %1$s</string>
+    <string name="lxg_scan_limits">Jede Seite endet nach 250 passenden Einträgen oder 2 MiB gelesenen Daten. Der letzte Eintrag wird vollständig gelesen; dadurch kann die Byte-Grenze überschritten werden.</string>
+    <string name="lxg_preparation_interrupted">Die Vorbereitung des Exports wurde unterbrochen. Es ist kein vollständiger Datenstand verfügbar. Verwirf diesen Eintrag und starte einen neuen Export.</string>
+</resources>

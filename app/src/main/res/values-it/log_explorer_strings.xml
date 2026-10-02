@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Cerca nel registro</string>
+    <string name="logx_filters">Filtri e visualizzazione</string>
+    <string name="logx_follow">Segui questo file in tempo reale</string>
+    <string name="logx_tag">Etichetta sottosistema</string>
+    <string name="logx_newest">Più recenti prima</string>
+    <string name="logx_numbers">Numeri di riga</string>
+    <string name="logx_wrap">A capo automatico</string>
+    <string name="logx_smaller">Testo più piccolo</string>
+    <string name="logx_larger">Testo più grande</string>
+    <string name="logx_export_scope">Vengono esportati solo i risultati visualizzati. Il testo include i messaggi originali; i metadati solo date, livelli e numeri di riga.</string>
+    <string name="logx_metadata_export">Esporta solo metadati</string>
+    <string name="logx_export">Esporta testo filtrato</string>
+    <string name="logx_export_done">Esportazione salvata</string>
+    <string name="logx_export_failed">Impossibile salvare questa esportazione</string>
+    <string name="logx_count">%1$d visibili · %2$d risultati · %3$d righe analizzate</string>
+    <string name="logx_limited">Vista limitata: fino a 1.000 risultati, 16 MiB analizzati e 4 KiB per riga. Restringi i filtri o esporta il file originale.</string>
+    <string name="logx_no_matches">Nessun risultato</string>
+    <string name="logx_all">Tutti i livelli</string>
+    <string name="logx_errors">Errori</string>
+    <string name="logx_warnings">Avvisi</string>
+    <string name="logx_info">Informazioni</string>
+    <string name="logx_debug">Debug</string>
+    <string name="logx_verbose">Dettagliato</string>
+    <string name="logx_file_search">Cerca file di registro</string>
+    <string name="logx_oldest">Meno recenti prima</string>
+    <string name="logx_largest">Più grandi prima</string>
+    <string name="logx_name">Nome file</string>
+    <string name="logx_original">Sfoglia pagine originali</string>
+</resources>

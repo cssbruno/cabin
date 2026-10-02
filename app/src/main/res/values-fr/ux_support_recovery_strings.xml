@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_support_picker_unavailable">Impossible d’ouvrir le sélecteur de fichiers. Réessayez lorsque l’accès aux documents sera disponible.</string>
+    <string name="ux_support_discard_title">Supprimer l’export enregistré ?</string>
+    <string name="ux_support_discard_message">Supprimer « %1$s » ? Seule la copie d’export enregistrée sera supprimée. Les journaux, rapports et réglages originaux restent sur cet appareil.</string>
+    <string name="ux_support_clear_reports">Effacer les rapports sélectionnés</string>
+    <string name="ux_support_no_category_rows">Aucun champ dans cette catégorie. Choisissez une autre catégorie pour examiner les rapports.</string>
+    <string name="ux_support_show_comparison">Afficher la comparaison</string>
+</resources>

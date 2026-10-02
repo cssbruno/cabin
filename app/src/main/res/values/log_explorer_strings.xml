@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Search log text</string>
+    <string name="logx_filters">Filters and display</string>
+    <string name="logx_follow">Follow this file live</string>
+    <string name="logx_tag">Subsystem tag</string>
+    <string name="logx_newest">Newest first</string>
+    <string name="logx_numbers">Line numbers</string>
+    <string name="logx_wrap">Wrap lines</string>
+    <string name="logx_smaller">Smaller text</string>
+    <string name="logx_larger">Larger text</string>
+    <string name="logx_export_scope">Export saves displayed matches only. Text includes original messages; metadata includes only timestamps, severity and line numbers.</string>
+    <string name="logx_metadata_export">Export metadata only</string>
+    <string name="logx_export">Export matching text</string>
+    <string name="logx_export_done">Export saved</string>
+    <string name="logx_export_failed">Could not save the export</string>
+    <string name="logx_count">%1$d shown · %2$d matches · %3$d lines scanned</string>
+    <string name="logx_limited">Limited view: up to 1,000 matches, 16 MiB scanned and 4 KiB per line. Narrow the filters or export the original file.</string>
+    <string name="logx_no_matches">No matching results</string>
+    <string name="logx_all">All levels</string>
+    <string name="logx_errors">Errors</string>
+    <string name="logx_warnings">Warnings</string>
+    <string name="logx_info">Information</string>
+    <string name="logx_debug">Debug</string>
+    <string name="logx_verbose">Verbose</string>
+    <string name="logx_file_search">Find log files</string>
+    <string name="logx_oldest">Oldest first</string>
+    <string name="logx_largest">Largest first</string>
+    <string name="logx_name">File name</string>
+    <string name="logx_original">Browse original pages</string>
+</resources>

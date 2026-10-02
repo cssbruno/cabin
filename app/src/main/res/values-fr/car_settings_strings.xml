@@ -16,4 +16,17 @@
     <string name="car_settings_audio_detail">Amplificateur constructeur et raccourcis des boutons</string>
     <string name="car_settings_my_car">Mon véhicule</string>
     <string name="car_settings_my_car_detail">Apparence, trajets, entretien et compatibilité</string>
+    <string name="car_settings_can">CAN-bus et diagnostic</string>
+    <string name="car_settings_can_detail">Profil du véhicule, connexion et données en direct</string>
+    <string name="car_settings_doors">Portes, verrouillage et vitres</string>
+    <string name="car_settings_doors_detail">Clés, verrouillage, coffre et ouverture à distance</string>
+    <string name="car_settings_assistance">Aides à la conduite</string>
+    <string name="car_settings_assistance_detail">Avertissements et systèmes d’assistance</string>
+    <string name="car_settings_instruments">Instruments et unités</string>
+    <string name="car_settings_instruments_detail">Affichage, langue, boussole et unités de mesure</string>
+    <string name="car_settings_maintenance">Trajets et entretien</string>
+    <string name="car_settings_maintenance_detail">Remise à zéro des trajets, étalonnage des pneus et entretien</string>
+    <string name="car_settings_other">Autres options du véhicule</string>
+    <string name="car_settings_other_detail">Options sans catégorie fonctionnelle attribuée</string>
+    <string name="car_settings_actions">Actions</string>
 </resources>

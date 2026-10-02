@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goal_accessibility">Acessibilidade</string>
+    <string name="goal_all_folders">Todas as pastas</string>
+    <string name="goal_app_disabled">Este app está desativado. Abra as informações para ativá-lo. O atalho será mantido.</string>
+    <string name="goal_app_failed">O Android não conseguiu abrir este app. Confira as permissões ou tente novamente. O atalho será mantido.</string>
+    <string name="goal_app_removed">Este app ou atividade não está mais instalado. Reinstale para usar o atalho salvo.</string>
+    <string name="goal_bulk_preview">Aplicar aos %1$d apps selecionados. Um Desfazer reverte toda a alteração.</string>
+    <string name="goal_compact_tiles">Blocos de apps compactos</string>
+    <string name="goal_days">%1$d dias</string>
+    <string name="goal_draft_note">Rascunho: as alterações só valem ao salvar. Cancele ou feche para descartar.</string>
+    <string name="goal_drag_reorder">Segure e arraste uma linha para cima ou para baixo e salve. As setas também reordenam.</string>
+    <string name="goal_duplicate_excluded">não copiado: adicione novamente com autorização ou mova a projeção existente</string>
+    <string name="goal_duplicate_page">Duplicar página</string>
+    <string name="goal_duplicate_preview">Estes blocos serão copiados para uma nova página. Widgets Android e a projeção única ficam na página original.</string>
+    <string name="goal_folder_name">Nome da pasta</string>
+    <string name="goal_folders">Gerenciar pastas</string>
+    <string name="goal_help">Ajuda</string>
+    <string name="goal_help_recovery">Para recuperar, volte a esta configuração e restaure o valor anterior. Mudanças de conexão podem exigir reconectar o telefone.</string>
+    <string name="goal_help_requirements">Altere configurações com o veículo parado. A disponibilidade depende do sistema selecionado e dos recursos informados pelo dispositivo. Esta ajuda funciona offline.</string>
+    <string name="goal_high_contrast">Alto contraste</string>
+    <string name="goal_high_contrast_detail">Use alto contraste entre texto e fundo no Cabin. As seleções continuam usando rótulos e marcas.</string>
+    <string name="goal_move_folder">Mover para pasta</string>
+    <string name="goal_no_folder">Sem pasta</string>
+    <string name="goal_page_name">Nome da página</string>
+    <string name="goal_page_tools">Gerenciar páginas do painel</string>
+    <string name="goal_recent_installed">Instalados recentemente</string>
+    <string name="goal_recent_period">Instalados nos últimos</string>
+    <string name="goal_reduce_motion">Reduzir movimento</string>
+    <string name="goal_reduce_motion_detail">Remova transições decorativas. O progresso e o estado da conexão continuam visíveis.</string>
+    <string name="goal_reinstall">Encontrar app para reinstalar</string>
+    <string name="goal_remove_folder">Remover pasta</string>
+    <string name="goal_reorder_pins">Reordenar apps fixados</string>
+    <string name="goal_search_settings">Buscar configurações</string>
+    <string name="goal_select_apps">Selecionar vários apps</string>
+    <string name="goal_selected_apps">%1$d selecionados</string>
+    <string name="goal_settings_empty">Nenhuma configuração encontrada. Tente uma palavra menor ou o nome da seção.</string>
+    <string name="goal_shortcut_unavailable">Atalho de app indisponível</string>
+    <string name="goal_undo_library">Desfazer alterações nos apps</string>
+    <string name="goal_wider">Aumentar largura</string>
+    <string name="goal_narrower">Diminuir largura</string>
+    <string name="goal_taller">Aumentar altura</string>
+    <string name="goal_shorter">Diminuir altura</string>
+</resources>

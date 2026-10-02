@@ -94,16 +94,18 @@ internal fun rememberCarAutomation(vehicle: TeyesClimateState, systemDark: Boole
             }.collect { location = it }
         }
     }
+    LaunchedEffect(now, vehicle.profileId, values["parkingRetention.${vehicle.profileId}"]) { expireParking(prefs, now) }
     LaunchedEffect(location, values["saveParking"], parked, vehicle.profileId, now) {
         val requestedAt = values["saveParkingTime"] as? Long
         if (values.containsKey("saveParking") && (!parked || values["saveParking"] != vehicle.profileId || requestedAt == null || System.currentTimeMillis() - requestedAt !in 0..120_000)) {
-            prefs.edit().remove("saveParking").remove("saveParkingTime").apply()
+            val requestedProfile = values["saveParking"] as? Int
+            prefs.edit().apply { if(requestedProfile != null) putString("parkingCapture.$requestedProfile", "timeout") }.remove("saveParking").remove("saveParkingTime").apply()
             return@LaunchedEffect
         }
         if (parked && values["saveParking"] == vehicle.profileId) {
             location?.takeIf { it.hasAccuracy() && it.accuracy <= 100 && android.os.SystemClock.elapsedRealtimeNanos() - it.elapsedRealtimeNanos in 0..60_000_000_000L }?.let {
                 prefs.edit().putString("parking.${vehicle.profileId}", "${it.latitude},${it.longitude}")
-                    .putLong("parkingTime.${vehicle.profileId}", System.currentTimeMillis()).remove("saveParking").remove("saveParkingTime").apply()
+                    .putLong("parkingTime.${vehicle.profileId}", System.currentTimeMillis()).putFloat("parkingAccuracy.${vehicle.profileId}", it.accuracy).putString("parkingCapture.${vehicle.profileId}", "success").remove("saveParking").remove("saveParkingTime").apply()
             }
         }
     }

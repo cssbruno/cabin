@@ -1,0 +1,110 @@
+{
+  "sdk": "35",
+  "device": "sdk_gphone64_x86_64",
+  "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "apk_sha256": "4d0719041f5d1e7751051146dad4b5b6ea2917699ed258df3e35eb9753b15d34",
+  "samples_ms": {
+    "cold": [
+      603,
+      483,
+      468,
+      426,
+      518,
+      408,
+      423
+    ],
+    "warm": [
+      288,
+      21,
+      19,
+      33,
+      39,
+      48,
+      48
+    ]
+  },
+  "medians_ms": {
+    "cold": 468,
+    "warm": 39
+  },
+  "android_timings": [
+    {
+      "mode": "cold",
+      "TotalTime": 603,
+      "WaitTime": 626
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 483,
+      "WaitTime": 528
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 468,
+      "WaitTime": 475
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 426,
+      "WaitTime": 429
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 518,
+      "WaitTime": 523
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 408,
+      "WaitTime": 412
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 423,
+      "WaitTime": 436
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 288
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 21
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 19
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 33
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 39
+    },
+    {
+      "mode": "warm",
+      "TotalTime": 48,
+      "WaitTime": 67
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 48
+    }
+  ],
+  "largest_launch_cost": "cold",
+  "budgets_ms": {
+    "cold_median_ms": 2500,
+    "warm_median_ms": 500
+  },
+  "startup_phases_ms": {
+    "configuration recovery": 0,
+    "parking scheduling": 1,
+    "telemetry setup": 0,
+    "activity dispatch": 13,
+    "activity creation to first draw": 45
+  },
+  "largest_measured_phase": "activity creation to first draw",
+  "measurement": "Android am start -W; cold force-stop versus warm foreground return. Not a rendered-frame or head-unit measurement."
+}

@@ -32,9 +32,40 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
     /** Changes to profiles, shortcuts and learned keys, including imported configuration. */
     val revision = mutableRevision.asStateFlow()
 
+    private val mutableGuest = MutableStateFlow(false)
+    val guestActive = mutableGuest.asStateFlow()
+    fun profiles(): List<TeyesDriverProfile> = (0..2).map(::readProfile)
+    @Synchronized fun refresh() {
+        mutableGuest.value = false
+        mutableProfile.value = readProfile((prefs.all["active"] as? Int ?: 0).coerceIn(0, 2))
+        mutableRevision.value++
+    }
+    @Synchronized fun beginGuest() { mutableGuest.value = true; mutableRevision.value++ }
+    @Synchronized fun endGuest() { refresh() }
+    @Synchronized fun copyComfort(source: Int, target: Int, fields: Set<String>) {
+        require(source in 0..2 && target in 0..2 && source != target)
+        val from = readProfile(source); val to = readProfile(target)
+        val next = to.copy(
+            appearance = if ("appearance" in fields) from.appearance else to.appearance,
+            nightBrightness = if ("brightness" in fields) from.nightBrightness else to.nightBrightness,
+            mediaGain = if ("audio" in fields) from.mediaGain else to.mediaGain,
+            navigationGain = if ("audio" in fields) from.navigationGain else to.navigationGain,
+            resumeOnWake = if ("wake" in fields) from.resumeOnWake else to.resumeOnWake,
+            recoverOverlays = if ("wake" in fields) from.recoverOverlays else to.recoverOverlays,
+            compactOnLaunch = if ("wake" in fields) from.compactOnLaunch else to.compactOnLaunch)
+        prefs.edit { putProfile(next) }; refresh()
+    }
+    @Synchronized fun resetComfort(slot: Int) {
+        require(slot in 0..2)
+        val previous = readProfile(slot)
+        prefs.edit { putProfile(TeyesDriverProfile(slot = slot, name = previous.name, preferredPhone = previous.preferredPhone)) }
+        refresh()
+    }
+
     @Synchronized
     fun select(slot: Int) {
         require(slot in 0..2)
+        mutableGuest.value = false
         prefs.edit { putInt("active", slot) }
         mutableProfile.value = readProfile(slot)
         mutableRevision.value++
@@ -44,7 +75,7 @@ class TeyesFeaturePreferences internal constructor(context: Context) {
     fun update(transform: (TeyesDriverProfile) -> TeyesDriverProfile) {
         val current = mutableProfile.value
         val next = transform(current).copy(slot = current.slot).normalized()
-        prefs.edit { putProfile(next) }
+        if (!mutableGuest.value) prefs.edit { putProfile(next) }
         mutableProfile.value = next
         mutableRevision.value++
     }

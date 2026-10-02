@@ -1,0 +1,330 @@
+{
+  "scope": "G081–G100",
+  "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed. Live projection hardware acceptance for G099 remains open.",
+  "goals": [
+    {
+      "id": "G081",
+      "status": "complete",
+      "implementation": "Bounded multi-file search with progress, cancellation and file provenance.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "LogWorkspaceUiTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G082",
+      "status": "complete",
+      "implementation": "Explicit time-zone and inclusive date bounds; missing or ambiguous dates are counted and excluded from time-filtered results.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G083",
+      "status": "complete",
+      "implementation": "Original numbered context around each matching record, with highlighted match and explicit export scope.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G084",
+      "status": "complete",
+      "implementation": "Bounded continuation cursors detect changed or replaced sources and reject invalid offsets.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "LogWorkspaceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G085",
+      "status": "complete",
+      "implementation": "Frozen streaming export scans every selected matching record, preserves full long lines and supports metadata-only mode and cancellation.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt",
+        "app/src/main/kotlin/com/cabin/logging/SupportExportQueue.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "LogWorkspaceUiTest",
+        "SupportExportQueueTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G086",
+      "status": "complete",
+      "implementation": "Visible-session follow polls complete records, follows rotation, labels boundaries and stops with visibility or logging.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G087",
+      "status": "complete",
+      "implementation": "Bounded persistent bookmarks retain file identity and line positions; missing/changed sources explain failure.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogBookmarks.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G088",
+      "status": "complete",
+      "implementation": "Scanned-scope severity counts serve as filters and never describe unscanned records.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspace.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogWorkspaceDialog.kt"
+      ],
+      "tests": [
+        "LogWorkspaceTest",
+        "LogWorkspaceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G089",
+      "status": "complete",
+      "implementation": "Preparation is journaled before freezing data. Complete frozen payloads survive restart with Resume/Discard and a new document picker. Interrupted preparation exposes an explanatory Discard action; partial records are never exported.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/logging/SupportExportQueue.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/SupportExportRecovery.kt",
+        "app/src/main/kotlin/com/cabin/ui/HealthReportPreview.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogFileViewer.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/LogsTab.kt"
+      ],
+      "tests": [
+        "SupportWorkflowTest",
+        "SupportExportQueueTest",
+        "ReleaseSmokeTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G090",
+      "status": "complete",
+      "implementation": "Bounded local report validation and comparison separate changed/missing/unchanged fields and reject incompatible schemas.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/ui/settings/HealthReportComparison.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/HealthReportComparisonPanel.kt"
+      ],
+      "tests": [
+        "SupportWorkflowTest",
+        "SupportWorkspaceAcceptanceUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G091",
+      "status": "complete",
+      "implementation": "Bounded notes cache and localized release-note dialog handle empty notes without blocking updates.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/GitHubRelease.kt",
+        "app/src/main/kotlin/com/cabin/updates/UpdateSettingsSection.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G092",
+      "status": "complete",
+      "implementation": "Saved unmetered preference gates initial/ongoing downloads; waiting state provides explicit override.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/GitHubUpdater.kt",
+        "app/src/main/kotlin/com/cabin/updates/ResumableUpdateDownload.kt",
+        "app/src/main/kotlin/com/cabin/updates/UpdateSettingsSection.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G093",
+      "status": "complete",
+      "implementation": "Only validated strong ETags and exact Content-Range permit resume; changed entities restart and integrity/signature validation stays mandatory.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/ResumableUpdateDownload.kt",
+        "app/src/main/kotlin/com/cabin/updates/GitHubUpdater.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G094",
+      "status": "complete",
+      "implementation": "Storage budget includes remaining download, full installer copy and reserve; verified APK is replaced atomically only after new verification.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/ResumableUpdateDownload.kt",
+        "app/src/main/kotlin/com/cabin/updates/GitHubUpdater.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G095",
+      "status": "complete",
+      "implementation": "Installation first offers a queued portable settings backup, displays saved/retained/failed status and permits explicit continuation.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/UpdateSettingsSection.kt",
+        "app/src/main/kotlin/com/cabin/logging/SupportExportQueue.kt",
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationBackup.kt"
+      ],
+      "tests": [
+        "SupportWorkflowTest",
+        "VehicleGoalsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G096",
+      "status": "complete",
+      "implementation": "Skipped release identity is persisted, visible and reversible; explicit revisit clears the skip state.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/GitHubUpdater.kt",
+        "app/src/main/kotlin/com/cabin/updates/UpdateSettingsSection.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G097",
+      "status": "complete",
+      "implementation": "Stable is default; preview choice persists, filters metadata/cache and retains version and signature validation.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/updates/GitHubRelease.kt",
+        "app/src/main/kotlin/com/cabin/updates/GitHubUpdater.kt",
+        "app/src/main/kotlin/com/cabin/updates/UpdateSettingsSection.kt"
+      ],
+      "tests": [
+        "UpdateImprovementsTest",
+        "UpdateSettingsGoalsUiTest"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G098",
+      "status": "complete",
+      "implementation": "Repeatable cold/warm launch sampler, fixed startup stages, APK/device fingerprint and CI budget checks.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/quality/StartupMeasurements.kt",
+        "app/src/androidTest/kotlin/com/cabin/quality/ReleaseSmokeTest.kt",
+        ".github/workflows/android-quality.yml",
+        "tools/quality/startup_benchmark.py",
+        "tools/quality/startup_budgets.json",
+        "tools/quality/README.md",
+        "documents/features/verification/api27/startup.json",
+        "documents/features/verification/api35/startup.json"
+      ],
+      "tests": [
+        "tools/quality/test_startup_benchmark.py"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    },
+    {
+      "id": "G099",
+      "status": "in_progress",
+      "implementation": "Instrumented repeated connect/stop, driver changes, settings navigation and recreation with thread/fd/retained-heap growth limits.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/quality/StartupMeasurements.kt",
+        "app/src/androidTest/kotlin/com/cabin/quality/ReleaseSmokeTest.kt",
+        ".github/workflows/android-quality.yml",
+        "tools/quality/startup_benchmark.py",
+        "documents/features/verification/api27/soak.json",
+        "documents/features/verification/api35/soak.json"
+      ],
+      "tests": [
+        "ReleaseSmokeTest.longSessionResourceBudget"
+      ],
+      "remaining": [
+        "Exercise sustained live phone projection/reconnects on a compatible adapter/head unit and record thread, file-descriptor and retained-memory growth. The automated no-adapter lifecycle soak does not cover decoder/audio/native allocator retention."
+      ]
+    },
+    {
+      "id": "G100",
+      "status": "complete",
+      "implementation": "Minified non-debuggable releaseCheck build and API27/35 CI gate cover startup, denied permissions, settings and real document export.",
+      "evidence": [
+        "app/src/main/kotlin/com/cabin/quality/StartupMeasurements.kt",
+        "app/src/androidTest/kotlin/com/cabin/quality/ReleaseSmokeTest.kt",
+        ".github/workflows/android-quality.yml",
+        "tools/quality/startup_benchmark.py",
+        "tools/quality/device_checks.py",
+        "app/proguard-release-check.pro",
+        "documents/features/verification/api27/device.json",
+        "documents/features/verification/api35/device.json"
+      ],
+      "tests": [
+        "ReleaseSmokeTest.firstLaunchDashboardSettingsDeniedPermissionsAndDocumentExport"
+      ],
+      "remaining": [],
+      "verification": "Final combined run: 1,183 unit and Compose UI tests passed, zero failures, 1 existing skip; debug assembly and both minified emulator suites passed."
+    }
+  ]
+}

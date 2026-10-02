@@ -35,7 +35,7 @@
     <string name="vehicle_status_fresh">Warte auf aktuelle Klimadaten</string>
     <string name="vehicle_status_unverified">Steuerschnittstelle für Profil %1$d ungeprüft</string>
     <string name="app_status_park_title">Vor dem Fortfahren parken</string>
-    <string name="app_status_park_message">Bestätige, dass das Fahrzeug sicher geparkt ist. Cabins Geschwindigkeitsdaten können fehlen und sind keine Parksperre.</string>
+    <string name="app_status_park_message">Fahre erst fort, wenn das Fahrzeug sicher geparkt ist. Cabin kann dies nicht für dich bestätigen.</string>
     <string name="app_status_park_confirm">Ich habe geparkt</string>
     <string name="app_status_cancel">Abbrechen</string>
     <string name="app_status_connect_failed">Verbindung konnte nicht gestartet werden. App-Berechtigungen prüfen.</string>

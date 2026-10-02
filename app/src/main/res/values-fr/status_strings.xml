@@ -35,7 +35,7 @@
     <string name="vehicle_status_fresh">En attente de données climatiques récentes</string>
     <string name="vehicle_status_unverified">Interface de commande non vérifiée pour le profil %1$d</string>
     <string name="app_status_park_title">Garez-vous avant de continuer</string>
-    <string name="app_status_park_message">Confirmez que le véhicule est garé en sécurité. La vitesse Cabin peut être indisponible et ne constitue pas un verrouillage de stationnement.</string>
+    <string name="app_status_park_message">Continuez uniquement lorsque le véhicule est garé en sécurité. Cabin ne peut pas le vérifier pour vous.</string>
     <string name="app_status_park_confirm">Je suis garé</string>
     <string name="app_status_cancel">Annuler</string>
     <string name="app_status_connect_failed">Impossible de lancer la connexion. Vérifiez les autorisations de l’application.</string>

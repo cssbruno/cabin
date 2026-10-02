@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_launcher_folder_capacity">Les %1$d dossiers sont utilisés. Supprimez un dossier pour en créer un autre ou renommez un dossier existant. Votre brouillon est conservé.</string>
+    <string name="ux_launcher_pin_capacity">Il ne reste que %1$d places pour épingler des applis. Sélectionnez moins de nouvelles applis ou détachez une appli avant de confirmer.</string>
+    <string name="ux_launcher_move_up">Déplacer %1$s vers le haut</string>
+    <string name="ux_launcher_move_down">Déplacer %1$s vers le bas</string>
+    <string name="ux_launcher_rename_folder">Renommer le dossier %1$s</string>
+</resources>

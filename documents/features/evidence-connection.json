@@ -1,0 +1,712 @@
+{
+  "scope": "G001–G030",
+  "test_files": [
+    "app/src/test/kotlin/com/cabin/audio/AudioRingFrameTest.kt",
+    "app/src/test/kotlin/com/cabin/audio/AudioGainRampTest.kt",
+    "app/src/test/kotlin/com/cabin/platform/ConnectionExperienceTest.kt",
+    "app/src/test/kotlin/com/cabin/platform/StreamingStabilityTest.kt",
+    "app/src/test/kotlin/com/cabin/CabinConnectionRecoveryTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/settings/VideoSettingsTrialTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/ProjectionConnectionHelpTest.kt",
+    "app/src/test/kotlin/com/cabin/CabinMicrophoneRecoveryTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/settings/ConnectionGoalsAcceptanceUiTest.kt"
+  ],
+  "localization": "105 new strings in all six languages; Brazilian Portuguese resource alias included.",
+  "goals": [
+    {
+      "id": "G001",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Typed transport/permission failures originate at USB and protocol call sites, propagate to ConnectionProgress and localized recovery UI. String matching was removed from manager error classification.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/ConnectionExperience.kt",
+        "app/src/main/kotlin/com/cabin/usb/UsbDeviceWrapper.kt",
+        "app/src/main/kotlin/com/cabin/protocol/AdapterDriver.kt",
+        "app/src/main/kotlin/com/cabin/CabinManager.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed ConnectionGoalsAcceptanceUiTest: typedFailuresRenderTheirSpecificRecoveryAndPermissionAction. XML timestamp 2026-09-30T23:41:22.936Z.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G002",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Bounded discovery/permission/init/phone/picture stage deadlines with elapsed UI and Stop cancellation.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed.",
+        "regression": "Regression test added in CabinConnectionRecoveryTest, VideoSettingsTrialTest, or ProjectionConnectionHelpTest; execution pending parent combined suite."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Each waiting stage shows elapsed time and a bounded timeout; a stalled stage exits with its actual reason, and Stop cancels its timer."
+      ]
+    },
+    {
+      "id": "G003",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Countdown and pause/resume controls act on pending retries independently of persisted phone intent.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed ConnectionGoalsAcceptanceUiTest: retryCountdownPausesAndResumesWithoutChangingPhoneSettings. XML timestamp 2026-09-30T23:41:22.936Z.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G004",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Explicit multi-adapter selection; remembered identity requires unique vendor/product/serial after permission; missing or ambiguous identity never falls back silently.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: With multiple known adapters attached, users can remember a distinguishable adapter; unavailable or ambiguous identities lead to an explicit choice instead of silent first-device selection."
+      ]
+    },
+    {
+      "id": "G005",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Per-phone automatic/manual/preferred controls in the device picker; constrained discovery suppresses unrestricted scans and selects an eligible known phone; explicit selection remains authoritative.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/ProjectionDevicePicker.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Each known phone can be marked manual-only or preferred for Cabin-initiated connections; explicit phone selection overrides the preference and an unavailable preferred phone produces a clear fallback choice."
+      ]
+    },
+    {
+      "id": "G006",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Permission denial/revocation latches a non-retrying state; only explicit retry/select/connect clears it; an approved request resumes discovery.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/usb/UsbDeviceWrapper.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Denial or revocation enters a stable permission-needed state without repeated prompts; a user action requests permission again and approval resumes the intended connection."
+      ]
+    },
+    {
+      "id": "G007",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Retains existing 10s bind/15s create deadlines and capped service retries; cancels creation futures, rejects dead binders and closes late-created native engines after session Stop.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/carlink/CarlinkEngineConnection.kt",
+        "app/src/main/kotlin/com/cabin/joying/JoyingEmbeddedSession.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Native-engine binding has a deadline and capped recovery policy; null binding, process death and late callbacks cannot leave an indefinite spinner or revive a stopped session."
+      ]
+    },
+    {
+      "id": "G008",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Opt-in local summaries retain at most100 sanitized durations, enum reasons and recovery times; 1/7/30/90-day retention, deletion, restart persistence and automatic removal of expired entries.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/ConnectionExperience.kt",
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed ConnectionGoalsAcceptanceUiTest: historyUiProvidesOptInRetentionDeletionAndDisableClearsStorage. XML timestamp 2026-09-30T23:41:22.936Z.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G009",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Only 30 uninterrupted seconds of fresh video clear retry escalation; stopped phone/session intent gates retries and wake recovery.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/platform/ConnectionExperience.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: A documented interval of healthy streaming clears prior short-session escalation; repeated brief reconnects remain rate-limited and user-requested disconnect never restarts automatically."
+      ]
+    },
+    {
+      "id": "G010",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Wake reconciliation checks requested intent, current USB attachment, permission and ownership under the lifecycle mutex; transport generation guards reject stale callbacks.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/background/CabinProjectionService.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed.",
+        "regression": "Regression test added in CabinConnectionRecoveryTest, VideoSettingsTrialTest, or ProjectionConnectionHelpTest; execution pending parent combined suite."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: On head-unit wake, Cabin reconciles USB ownership, permissions and requested-session state before resuming; unchanged live connections stay intact and stale callbacks cannot open duplicate sessions."
+      ]
+    },
+    {
+      "id": "G011",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "USB resolution/FPS trial has a45-second Keep/Revert timer, durable rollback journal, startup sync-cache/DataStore recovery, active/headless reconfiguration and a new-renderer rendered-frame guard for Keep.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/settings/VideoSettingsTrial.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/AdapterConfigPreference.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/AdapterConfigurationDialog.kt",
+        "app/src/main/kotlin/com/cabin/MainActivity.kt",
+        "app/src/main/kotlin/com/cabin/background/CabinProjectionService.kt",
+        "app/src/main/kotlin/com/cabin/ui/MainScreen.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed.",
+        "regression": "Regression test added in CabinConnectionRecoveryTest, VideoSettingsTrialTest, or ProjectionConnectionHelpTest; execution pending parent combined suite."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Resolution and frame-rate changes offer a Keep/Revert countdown; failure to confirm or obtain a usable picture restores the previous configuration, including after process restart."
+      ]
+    },
+    {
+      "id": "G012",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Apply commits the preview latch before dismissal; cancellation restores the latest saved mode; saveable draft persists through recreation and reduced-motion preference is respected.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/settings/DisplayModeDialog.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Applying a previewed display mode never briefly restores the previous system-bar state; cancelling restores the saved state exactly."
+      ]
+    },
+    {
+      "id": "G013",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Projection presentation stores values under driver0–2 keys, falls back predictably to legacy globals and refreshes on driver changes or externally restored preferences.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/ProjectionPreferences.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed driverSwitchRestoresSavedPresentationThroughRealPreferenceControls after isolating preference singletons per Robolectric application and draining asynchronous preference notifications; all five stored presentation fields restore per driver. Existing preference UI reachability and migration tests also pass.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G014",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Always-visible or5/10/20-second strip hiding; active gestures/panels suspend hiding; reveal gestures are consumed and an accessible reveal button remains available.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/MainScreen.kt",
+        "app/src/main/kotlin/com/cabin/platform/ProjectionPreferences.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: The projection strip supports always-visible and selected auto-hide intervals; active gestures and open panels prevent hiding, and the first reveal gesture does not reach the phone."
+      ]
+    },
+    {
+      "id": "G015",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Selectable ordered phone/settings/blackout actions persist per driver; unavailable callbacks are omitted, Settings remains an escape action and Reset restores defaults.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/ProjectionTools.kt",
+        "app/src/main/kotlin/com/cabin/ui/ProjectionDevicePicker.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed ConnectionGoalsAcceptanceUiTest: toolsCanBeReorderedDeselectedAndResetWhileSupportedGainsStayEnabled and nativeBackendExplainsUnavailableFeaturesAndExcludesUsbTools. XML timestamp 2026-09-30T23:41:22.936Z.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G016",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Off/1/5/15/30-minute blackout timer retains the existing mounted projection surface/audio; interaction resets idle time and the wake gesture is consumed.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/MainScreen.kt",
+        "app/src/main/kotlin/com/cabin/ui/ProjectionBlackout.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: An optional timer covers projection after a chosen interval without disconnecting audio; interaction resets it and waking consumes the gesture before restoring touch forwarding."
+      ]
+    },
+    {
+      "id": "G017",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Opt-in health panel reads receive/decode counters and real MediaCodec rendered callbacks once per second; unsupported rendered measurements are explicit.",
+      "files": [
+        "app/src/main/java/com/cabin/video/H264Renderer.java",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: An optional panel distinguishes received video, decoder output and rendered-frame progress using measured counters, identifies unsupported measurements and remains bounded in memory."
+      ]
+    },
+    {
+      "id": "G018",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Parked bounded0–10% symmetric bezel insets resize the video container used for both layout and touch mapping; trial journal restores prior inset values.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/MainScreen.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VideoSettingsTrial.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed.",
+        "regression": "Regression test added in CabinConnectionRecoveryTest, VideoSettingsTrialTest, or ProjectionConnectionHelpTest; execution pending parent combined suite."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: A parked preview allows bounded safe-area insets for obscured edges; saved insets affect video placement and touch mapping coherently and can be reverted through the timed trial."
+      ]
+    },
+    {
+      "id": "G019",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Local continuous-drag mode keeps a bounded128-point trail, counts cancellations/pointer loss and includes a real overlaid clear-trail target; no projection content is retained.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/ProjectionTouchDiagnostics.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: The existing touch tests gain a continuous drag across edges and overlays, showing unexpected cancellation or pointer loss without recording projection content or claiming Android calibration."
+      ]
+    },
+    {
+      "id": "G020",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "USB/native capability explanations appear in each backend settings view; adapter-owned Bluetooth output disables Cabin gain/buffering controls with an explanation.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/NativeCarPlaySettings.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Passed ConnectionGoalsAcceptanceUiTest: nativeBackendExplainsUnavailableFeaturesAndExcludesUsbTools and bluetoothTransferExplainsOwnershipAndDisablesCabinGainControls; supported gain controls exercised by Tools case. XML timestamp 2026-09-30T23:41:22.936Z.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G021",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Monotonic16ms gain ramps honor bounded adapter duration; newer commands replace callbacks and focus changes continue to gate effective volume immediately.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+        "app/src/main/kotlin/com/cabin/audio/AudioExperience.kt",
+        "app/src/main/kotlin/com/cabin/CabinManager.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Adapter ducking uses its supported duration to ramp gain smoothly; newer commands replace pending ramps and focus loss still silences the affected stream immediately."
+      ]
+    },
+    {
+      "id": "G022",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Up to eight named per-driver gain presets with save/edit/rename/delete/apply; gains clamp to0–1 and only media/navigation gains change.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/AudioExperience.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Drivers can save, rename and apply bounded media/navigation gain presets; values remain within existing limits while calls, assistants and alerts retain their routing."
+      ]
+    },
+    {
+      "id": "G023",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Playback ownership explanation and observed AudioTrack routed-device output shown in live health; unavailable measurements are labeled.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Audio settings identify whether Cabin or adapter transfer owns playback, show the observable Android output route and explain unavailable gain controls."
+      ]
+    },
+    {
+      "id": "G024",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Android output-device changes are coalesced over500ms, invalidate tracks and discard stale PCM while retaining purpose/focus; release cancels recovery and unregisters observers.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Android-reported route loss or replacement triggers bounded track reconciliation while preserving stream purpose and focus; stopped sessions stay stopped and stale PCM is discarded."
+      ]
+    },
+    {
+      "id": "G025",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Capture recovery is capped at three attempts, guarded by voice/session generation, live requested intent and permission; unsupported microphone formats cannot start or recover.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/CabinManager.kt",
+        "app/src/main/kotlin/com/cabin/audio/MicrophoneCaptureManager.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Recoverable capture failures permit a capped restart only while the same call or assistant session requests capture; permission revocation and session stop cancel recovery and release resources."
+      ]
+    },
+    {
+      "id": "G026",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Android-exposed microphone inputs can be selected for the next capture; actual routed input and visible fallback are reported without introducing formats beyond supported8/16kHz mono.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/MicrophoneCaptureManager.kt",
+        "app/src/main/kotlin/com/cabin/audio/AudioExperience.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Where Android exposes supported inputs, users can choose a preferred microphone and see the actual routed input; failed routing falls back visibly without enabling undocumented formats."
+      ]
+    },
+    {
+      "id": "G027",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Optional once-per-second per-purpose buffer/focus/counter deltas, microphone bytes/route and picture counters; bounded snapshots retain no PCM.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: An optional card shows per-stream buffer fill, underrun/overflow deltas, focus state and microphone progress at a bounded refresh rate without retaining PCM."
+      ]
+    },
+    {
+      "id": "G028",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Platform/responsive/balanced/resilient profiles explain prefill latency and apply allocation changes only when audio initializes at a new session boundary.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/AudioExperience.kt",
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: Supported backends offer responsive, balanced and resilient buffering profiles with clear latency tradeoffs; changes apply at a safe session boundary and reset to the platform default."
+      ]
+    },
+    {
+      "id": "G029",
+      "implementation": "implemented",
+      "status": "complete",
+      "summary": "Frame-based capacity uses ceiling arithmetic for fractional rates; fully usable ring capacity, aligned reads/discards, newest-frame overflow retention and invalid partial-input rejection.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/AudioRingBuffer.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Not applicable: internal PCM ring behavior is verified directly by whole-frame boundary, fractional-rate, wraparound, overflow and 2,000-operation reference-queue tests.",
+        "hardware": "Not required by goal"
+      },
+      "remaining": []
+    },
+    {
+      "id": "G030",
+      "implementation": "implemented",
+      "status": "in_progress",
+      "summary": "Per-purpose focus states show denial/delay reasons; safe retry only re-requests still-requested denied/delayed streams while the session runs, never LOST or ended purposes.",
+      "files": [
+        "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt"
+      ],
+      "verification": {
+        "automated": "Passed parent final software run: debug assemble and complete unit/Compose suite. Relevant per-suite results are recorded under validation.relevant_test_results.",
+        "ui": "Software regression coverage is recorded in validation. Remaining acceptance must exercise the goal-specific behavior with an actual adapter/head unit.",
+        "hardware": "Pending head-unit acceptance; no physical-device validation claimed."
+      },
+      "remaining": [
+        "Physical head-unit acceptance: When playback is silent because focus was denied or delayed, Cabin explains why and offers a safe retry only for the still-requested session, without overriding a stop or active focus loss."
+      ]
+    }
+  ],
+  "review_fixes": [
+    "Video trial restores the original driver slot after profile changes; restoration commits before clearing the trial journal.",
+    "Video trial expires by elapsedRealtime deadline including suspension; Keep rejects an expired trial.",
+    "Queued transport errors retain their originating generation and recheck it after taking the lifecycle mutex.",
+    "Connection progress and navigation share scroll content in compact/fullscreen and embedded loading views.",
+    "MainScreen consumes the existing dashboard connection StateFlow directly, so renderer reattachment cannot leave a stale disconnected loading overlay.",
+    "Guest mode cannot save, rename or delete driver audio presets through UI or persistence APIs; applying gains remains temporary."
+  ],
+  "validation": {
+    "debug_app_compile": "Passed in parent combined verification4 run.",
+    "relevant_test_results": [
+      {
+        "name": "com.cabin.ui.settings.VideoSettingsTrialTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:59.472Z"
+      },
+      {
+        "name": "com.cabin.ui.ProjectionConnectionHelpTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:51.632Z"
+      },
+      {
+        "name": "com.cabin.platform.StreamingStabilityTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:37.292Z"
+      },
+      {
+        "name": "com.cabin.platform.ConnectionExperienceTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:25.935Z"
+      },
+      {
+        "name": "com.cabin.audio.AudioRingFrameTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:01.083Z"
+      },
+      {
+        "name": "com.cabin.CabinConnectionRecoveryTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:25:59.365Z"
+      },
+      {
+        "name": "com.cabin.CabinMicrophoneRecoveryTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:00.822Z"
+      },
+      {
+        "name": "com.cabin.audio.AudioGainRampTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:01.082Z"
+      },
+      {
+        "name": "com.cabin.platform.ProjectionPreferencesTest",
+        "tests": "9",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:36.580Z"
+      },
+      {
+        "name": "com.cabin.ui.settings.ProjectionPreferencesUiTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-09-30T23:26:57.016Z"
+      }
+    ],
+    "combined_suite": {
+      "result": "passed",
+      "source": "/tmp/cabin-goals-final-software.log",
+      "totals": {
+        "tests": 1002,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      "note": "Parent-run debug production build and full unit/Compose suite passed, including guest persistence and permission-gated microphone recovery fixes."
+    },
+    "ui_scope": "Compact progress/navigation and existing projection help/preferences Compose regressions passed; full per-goal physical UI acceptance remains pending.",
+    "localization": "Parsed all seven XML resource files; 105 identical keys in each.",
+    "hardware": "Not performed. Hardware-required goals remain in_progress.",
+    "acceptance_ui": "All 7 real-UI acceptance tests passed in /tmp/cabin-connection-acceptance-final.log, covering all six user-visible non-hardware connection goals. G029 is verified by frame-boundary/randomized algorithm tests.",
+    "acceptance_regression_note": "The initial coupled driver-switch fixture retained preference singletons from a preceding Robolectric application. Resetting those singleton test fixtures and using applicationContext resolved the failure; production persistence was unchanged.",
+    "acceptance_result": {
+      "name": "com.cabin.ui.settings.ConnectionGoalsAcceptanceUiTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-09-30T23:50:59.674Z"
+    }
+  },
+  "changed_files": [
+    "app/src/main/java/com/cabin/video/H264Renderer.java",
+    "app/src/main/kotlin/com/cabin/CabinManager.kt",
+    "app/src/main/kotlin/com/cabin/MainActivity.kt",
+    "app/src/main/kotlin/com/cabin/audio/AudioExperience.kt",
+    "app/src/main/kotlin/com/cabin/audio/AudioRingBuffer.kt",
+    "app/src/main/kotlin/com/cabin/audio/DualStreamAudioManager.kt",
+    "app/src/main/kotlin/com/cabin/audio/MicrophoneCaptureManager.kt",
+    "app/src/main/kotlin/com/cabin/background/CabinProjectionService.kt",
+    "app/src/main/kotlin/com/cabin/carlink/CarlinkEngineConnection.kt",
+    "app/src/main/kotlin/com/cabin/joying/JoyingEmbeddedSession.kt",
+    "app/src/main/kotlin/com/cabin/platform/ConnectionExperience.kt",
+    "app/src/main/kotlin/com/cabin/platform/ProjectionPreferences.kt",
+    "app/src/main/kotlin/com/cabin/protocol/AdapterDriver.kt",
+    "app/src/main/kotlin/com/cabin/ui/MainScreen.kt",
+    "app/src/main/kotlin/com/cabin/ui/ProjectionBlackout.kt",
+    "app/src/main/kotlin/com/cabin/ui/ProjectionDevicePicker.kt",
+    "app/src/main/kotlin/com/cabin/ui/ProjectionTools.kt",
+    "app/src/main/kotlin/com/cabin/ui/ProjectionTouchDiagnostics.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/AdapterConfigPreference.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/AdapterConfigurationDialog.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/ConnectionExperienceSection.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/DisplayModeDialog.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/NativeCarPlaySettings.kt",
+    "app/src/main/kotlin/com/cabin/ui/settings/VideoSettingsTrial.kt",
+    "app/src/main/kotlin/com/cabin/usb/UsbDeviceWrapper.kt",
+    "app/src/main/res/values-de/goal_connection_strings.xml",
+    "app/src/main/res/values-es/goal_connection_strings.xml",
+    "app/src/main/res/values-fr/goal_connection_strings.xml",
+    "app/src/main/res/values-it/goal_connection_strings.xml",
+    "app/src/main/res/values-pt-rBR/goal_connection_strings.xml",
+    "app/src/main/res/values-pt/goal_connection_strings.xml",
+    "app/src/main/res/values/goal_connection_strings.xml",
+    "app/src/test/kotlin/com/cabin/CabinConnectionRecoveryTest.kt",
+    "app/src/test/kotlin/com/cabin/CabinMicrophoneRecoveryTest.kt",
+    "app/src/test/kotlin/com/cabin/audio/AudioGainRampTest.kt",
+    "app/src/test/kotlin/com/cabin/audio/AudioRingFrameTest.kt",
+    "app/src/test/kotlin/com/cabin/platform/ConnectionExperienceTest.kt",
+    "app/src/test/kotlin/com/cabin/platform/StreamingStabilityTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/ProjectionConnectionHelpTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/settings/ConnectionGoalsAcceptanceUiTest.kt",
+    "app/src/test/kotlin/com/cabin/ui/settings/VideoSettingsTrialTest.kt"
+  ],
+  "additional_parent_integration_work": {
+    "files": [
+      "app/src/androidTest/kotlin/com/cabin/quality/ReleaseSmokeTest.kt",
+      "app/proguard-release-check.pro",
+      "app/build.gradle.kts"
+    ],
+    "description": "Converted parent release smoke tests to platform accessibility/actions and public component intents; removed instrumentation Compose dependencies; exact releaseCheck-only runtime API keeps avoid stripped shared runner classes. Main production release rules remain unchanged.",
+    "measured_results": "API 27 emulator: first-launch/denied-permission/document-export smoke and no-adapter soak passed in device27-run2. API 35: first-launch/denied-permission/document-export smoke passed; soak failure diagnosis remains with parent. These are emulator checks, not physical projection/audio acceptance."
+  }
+}

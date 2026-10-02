@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uxvf_due_date">Fällig am · JJJJ-MM-TT</string>
+    <string name="uxvf_odometer_date">Ablesedatum · JJJJ-MM-TT</string>
+    <string name="uxvf_service_date">Wartungsdatum · JJJJ-MM-TT</string>
+    <string name="uxvf_date_error">Gib ein gültiges Datum als JJJJ-MM-TT ein.</string>
+    <string name="uxvf_name_error">Gib einen Namen für diesen Wartungseintrag ein.</string>
+    <string name="uxvf_interval_error">Gib ein Intervall von 1 bis 3650 Tagen ein.</string>
+    <string name="uxvf_decimal_error">Gib eine Zahl von 0 bis 10 Millionen ohne Tausendertrennzeichen ein.</string>
+    <string name="uxvf_distance_error">Gib eine Strecke über 0 km ein. Der nächste fällige Kilometerstand darf höchstens 10 Millionen km betragen.</string>
+    <string name="uxvf_odometer_needed">Speichere zuerst einen Kilometerstand, bevor du ein Streckenintervall hinzufügst.</string>
+    <string name="uxvf_odometer_order">Der Kilometerstand darf nicht unter dem gespeicherten Wert liegen.</string>
+    <string name="uxvf_future_reading">Das Ablesedatum darf nicht in der Zukunft liegen.</string>
+    <string name="uxvf_reading_date_order">Das Ablesedatum darf nicht vor der gespeicherten Ablesung liegen.</string>
+    <string name="uxvf_decimal_hint">Verwende Dezimalkomma oder Dezimalpunkt, ohne Tausendertrennzeichen.</string>
+    <string name="uxvf_record_missing">Dieser Eintrag wurde entfernt. Schließe den Editor und wähle einen vorhandenen Eintrag.</string>
+</resources>

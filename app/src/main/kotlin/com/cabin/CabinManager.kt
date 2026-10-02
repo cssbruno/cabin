@@ -24,6 +24,10 @@ import com.cabin.logging.logWarn
 import com.cabin.media.CabinMediaBrowserService
 import com.cabin.media.MediaSessionManager
 import com.cabin.navigation.NavigationStateManager
+import com.cabin.platform.ConnectionFailure
+import com.cabin.platform.ConnectionStage
+import com.cabin.platform.ConnectionProgress
+import com.cabin.platform.PhoneConnectionPreference
 import com.cabin.platform.AudioConfig
 import com.cabin.platform.PlatformDetector
 import com.cabin.platform.ProjectionReadinessSnapshot
@@ -302,6 +306,20 @@ class CabinManager(
     private fun notifyDeviceListeners(devices: List<DeviceInfo> = _deviceList) {
         val listeners = synchronized(deviceListeners) { deviceListeners.toList() }
         listeners.forEach { it.onDeviceListChanged(devices) }
+        if (devices.isNotEmpty() && shouldBeRunning.get() && phoneAutoConnectEnabled.get() &&
+            state == State.CONNECTING && !phonePreferenceAllowsScan() && lastConnectTargetMac == null) {
+            val target = devices.firstOrNull { phonePreference(it.btMac) == PhoneConnectionPreference.PREFERRED }
+                ?: devices.firstOrNull { phonePreference(it.btMac) == PhoneConnectionPreference.AUTOMATIC }
+            if (target != null) {
+                lastConnectTargetMac = target.btMac
+                val token = transportGeneration.get()
+                scope.launch(Dispatchers.IO) {
+                    if (transportGeneration.get() == token && shouldBeRunning.get() && phoneAutoConnectEnabled.get()) {
+                        adapterDriver?.overrideAutoConnectWithTarget(target.btMac)
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -350,6 +368,7 @@ class CabinManager(
     val projectionSessionRequested: Boolean get() = shouldBeRunning.get()
     private val restartPending = AtomicBoolean(false)
     private val errorRecoveryPending = AtomicBoolean(false)
+    private val transportGeneration = java.util.concurrent.atomic.AtomicLong(0)
     private val negotiationResetPending = AtomicBoolean(false)
 
     // Current state
@@ -357,6 +376,81 @@ class CabinManager(
     val state: State get() = currentState.get()
     private val projectionHealth = com.cabin.platform.ProjectionHealthStore(android.os.SystemClock::elapsedRealtime)
     val dashboardState = projectionHealth.state
+    private val mutableProgress = kotlinx.coroutines.flow.MutableStateFlow(ConnectionProgress())
+    val connectionProgress: kotlinx.coroutines.flow.StateFlow<ConnectionProgress> = mutableProgress
+    val connectionHistory = com.cabin.platform.ConnectionHistory(context)
+    private var stageJob: Job? = null
+    private var healthySessionJob: Job? = null
+    private var historyStreamStarted = 0L
+    private var historyDisconnectedAt = 0L
+    private var historyRecoveryMs: Long? = null
+    @Volatile private var selectedAdapterName: String? = null
+    @Volatile private var rememberSelectedAdapter = false
+    @Volatile private var permissionBlocked = false
+    private val adapterChoices = context.getSharedPreferences("adapter_choice_v1", Context.MODE_PRIVATE)
+    data class UsbAdapterChoice(val name: String, val label: String, val identity: String?)
+    fun attachedAdapters(): List<UsbAdapterChoice> = UsbDeviceWrapper.findDevices(usbManager).map { device ->
+        val serial = runCatching { device.serialNumber }.getOrNull()?.takeIf { it.isNotBlank() }
+        UsbAdapterChoice(device.deviceName, "${device.productName ?: "USB"} · ${device.deviceName}",
+            serial?.let { "${device.vendorId}:${device.productId}:$it" })
+    }
+    fun selectAdapter(name: String, remember: Boolean) {
+        val choices = attachedAdapters()
+        val choice = choices.firstOrNull { it.name == name } ?: return
+        selectedAdapterName = name
+        rememberSelectedAdapter = remember
+        val identity = choice.identity?.takeIf { id -> choices.count { it.identity == id } == 1 }
+        adapterChoices.edit().apply { if (remember && identity != null) putString("preferred", identity) else remove("preferred") }.apply()
+        requestPermissionAgain()
+    }
+    fun requestPermissionAgain() {
+        permissionBlocked = false
+        mutableProgress.value = mutableProgress.value.copy(failure = ConnectionFailure.NONE, retriesPaused = false)
+        scope.launch { start() }
+    }
+    fun pauseRetries(paused: Boolean) {
+        mutableProgress.value = mutableProgress.value.copy(retriesPaused = paused, retryAtMs = 0)
+        reconnectJob?.cancel(); reconnectJob = null
+        if (!paused && shouldBeRunning.get() && state == State.DISCONNECTED && !permissionBlocked) scheduleReconnect()
+    }
+    fun phonePreference(mac: String): PhoneConnectionPreference = PhoneConnectionPreference.entries.firstOrNull {
+        it.name == phoneConnectionPreferences.all["phone.$mac"]
+    } ?: PhoneConnectionPreference.AUTOMATIC
+    fun setPhonePreference(mac: String, value: PhoneConnectionPreference) {
+        if (pairedDevices.none { it.btMac == mac }) return
+        phoneConnectionPreferences.edit {
+            if (value == PhoneConnectionPreference.PREFERRED) phoneConnectionPreferences.all.keys.filter { it.startsWith("phone.") }
+                .forEach { key -> if (phoneConnectionPreferences.all[key] == PhoneConnectionPreference.PREFERRED.name) putString(key, PhoneConnectionPreference.AUTOMATIC.name) }
+            putString("phone.$mac", value.name)
+        }
+        if (value == PhoneConnectionPreference.MANUAL) adapterDriver?.cancelAutoConnect()
+    }
+    private fun setFailure(reason: ConnectionFailure) {
+        mutableProgress.value = mutableProgress.value.copy(failure = reason)
+        if (reason != ConnectionFailure.NONE) setStatusText(context.localizedString(reason.message))
+    }
+    private fun stage(value: ConnectionStage) {
+        stageJob?.cancel(); stageJob = null
+        val started = android.os.SystemClock.elapsedRealtime()
+        mutableProgress.value = mutableProgress.value.copy(stage = value, startedAtMs = started, retryAtMs = 0)
+        if (value.timeoutMs > 0) stageJob = scope.launch {
+            delay(value.timeoutMs)
+            if (mutableProgress.value.stage != value || mutableProgress.value.startedAtMs != started || !shouldBeRunning.get()) return@launch
+            val reason = when (value) {
+                ConnectionStage.PERMISSION -> ConnectionFailure.PERMISSION_NEEDED
+                ConnectionStage.PHONE, ConnectionStage.PICTURE -> ConnectionFailure.PHONE_TIMEOUT
+                ConnectionStage.DISCOVERY -> ConnectionFailure.ADAPTER_MISSING
+                else -> ConnectionFailure.ADAPTER_TIMEOUT
+            }
+            if (reason == ConnectionFailure.PERMISSION_NEEDED) permissionBlocked = true
+            handleError("Connection stage deadline: $value", reason)
+        }
+    }
+    fun audioHealth(): com.cabin.audio.AudioHealth = audioManager?.health() ?: com.cabin.audio.AudioHealth()
+    fun microphoneHealth(): Map<String, Any> = microphoneManager?.getStats() ?: emptyMap()
+    fun retryAudioFocus() { if (shouldBeRunning.get() && state == State.STREAMING) audioManager?.retryDeniedFocus() }
+    fun pictureDelivery(): LongArray = h264Renderer?.pictureDeliverySnapshot() ?: longArrayOf(0, 0, -1)
+
 
     /** Read-only on-demand checks. Never requests permissions, opens USB, or changes user intent. */
     fun projectionReadinessSnapshot(): ProjectionReadinessSnapshot {
@@ -593,6 +687,7 @@ class CabinManager(
 
     private var micRecoveryJob: Job? = null
     private var micRecoveryAttempts = 0
+    private val micRequestGeneration = java.util.concurrent.atomic.AtomicLong(0)
     private var micCaptureStartedAtMs = 0L
 
     // Surface update debouncing - prevents repeated codec recreation during rapid surface size changes
@@ -1033,7 +1128,7 @@ class CabinManager(
         if (audioManager == null) {
             audioManager = DualStreamAudioManager(context, logCallback, audioConfig)
         }
-        if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) applyTeyesAudioProfile()
+        applyTeyesAudioProfile()
         if (microphoneManager == null) {
             microphoneManager = MicrophoneCaptureManager(context, logCallback)
         }
@@ -1094,7 +1189,22 @@ class CabinManager(
 
     /** Automatic wake recovery uses the existing user-intent latch, never public start(). */
     suspend fun resumeRequestedSession() {
-        startIfDesired()
+        withContext(Dispatchers.IO) {
+            lifecycleMutex.lock()
+            try {
+                if (released.get() || !shouldBeRunning.get()) return@withContext
+                val owned = usbDevice
+                if (owned != null) {
+                    val present = usbManager.deviceList.containsKey(owned.deviceName)
+                    if (!present || !owned.hasPermission() || !owned.isOpened) {
+                        val reason = if (present && !owned.hasPermission()) ConnectionFailure.PERMISSION_NEEDED else ConnectionFailure.USB_DETACHED
+                        if (reason == ConnectionFailure.PERMISSION_NEEDED) permissionBlocked = true
+                        handleErrorLocked("USB ownership changed during sleep", reason)
+                    }
+                }
+            } finally { lifecycleMutex.unlock() }
+        }
+        if (!permissionBlocked) startIfDesired()
     }
 
     /** Internal start path. Unlike [start], this never resurrects a user-stopped session. */
@@ -1103,7 +1213,7 @@ class CabinManager(
         withContext(Dispatchers.IO) {
             lifecycleMutex.lock()
             try {
-                if (released.get() || !shouldBeRunning.get()) {
+                if (released.get() || !shouldBeRunning.get() || permissionBlocked || mutableProgress.value.retriesPaused) {
                     logWarn("Ignoring start() on released manager", tag = Logger.Tags.ADAPTR)
                     return@withContext
                 }
@@ -1130,7 +1240,7 @@ class CabinManager(
                     throw cancelled
                 } catch (error: Exception) {
                     logError("Connection start failed: ${error.message}", tag = Logger.Tags.USB)
-                    handleErrorLocked("USB connection start failed: ${error.message ?: error.javaClass.simpleName}")
+                    handleErrorLocked("USB connection start failed: ${error.message ?: error.javaClass.simpleName}", if (error is SecurityException) ConnectionFailure.PERMISSION_NEEDED else ConnectionFailure.OPEN_FAILED)
                 }
             } finally {
                 lifecycleMutex.unlock()
@@ -1158,7 +1268,9 @@ class CabinManager(
 
         if (!shouldBeRunning.get() || released.get()) return
 
+        setFailure(ConnectionFailure.NONE)
         setState(State.CONNECTING)
+        stage(ConnectionStage.DISCOVERY)
         setStatusText(context.localizedString(R.string.connection_status_searching))
         resetUnknownCounters()
 
@@ -1190,11 +1302,12 @@ class CabinManager(
             }
             logError("Failed to find Carlinkit device", tag = Logger.Tags.USB)
             setState(State.DISCONNECTED)
-            setStatusText(context.localizedString(R.string.connection_status_waiting_retry))
-            scheduleReconnect()
+            if (mutableProgress.value.failure == ConnectionFailure.NONE) setFailure(ConnectionFailure.ADAPTER_MISSING)
+            if (mutableProgress.value.failure.retryable) scheduleReconnect()
             return
         }
 
+        stage(ConnectionStage.INITIALIZATION)
         log("Device found and opened")
         usbDevice = device
         setStatusText(context.localizedString(R.string.connection_status_opened))
@@ -1239,7 +1352,7 @@ class CabinManager(
             device.close()
             usbDevice = null
             setState(State.DISCONNECTED)
-            setStatusText(context.localizedString(R.string.connection_status_write_failed))
+            setFailure(ConnectionFailure.WRITE_FAILED)
             scheduleReconnect()
             return
         }
@@ -1259,14 +1372,16 @@ class CabinManager(
         val videoProcessor = createVideoProcessor()
 
         // Create and start adapter driver
+        val transportToken = transportGeneration.incrementAndGet()
         adapterDriver =
             AdapterDriver(
                 usbDevice = device,
-                messageHandler = ::handleMessage,
-                errorHandler = ::handleError,
+                messageHandler = { if (transportGeneration.get() == transportToken) handleMessage(it) },
+                errorHandler = { if (transportGeneration.get() == transportToken) handleError(it, expectedTransportGeneration = transportToken) },
+                failureHandler = { reason, message -> if (transportGeneration.get() == transportToken) handleError(message, reason, transportToken) },
                 logCallback = ::log,
                 videoProcessor = videoProcessor,
-                phoneConnectionAllowed = { phoneAutoConnectEnabled.get() },
+                phoneConnectionAllowed = { phoneAutoConnectEnabled.get() && (lastConnectTargetMac != null || phonePreferenceAllowsScan()) },
             )
 
         // Determine initialization mode based on first-run state and pending changes
@@ -1302,7 +1417,7 @@ class CabinManager(
                 fps = userConfig.fps.fps,
                 handDriveMode = userConfig.handDrive.value,
                 gpsForwarding = userConfig.gpsForwarding && sensitiveBackgroundCapabilitiesAvailable,
-                autoConnectPhone = phoneAutoConnectEnabled.get(),
+                autoConnectPhone = phoneAutoConnectEnabled.get() && phonePreferenceAllowsScan(),
             )
         config = refreshedConfig // Update stored config for other uses
 
@@ -1316,13 +1431,14 @@ class CabinManager(
         // override the adapter's wifiConnect auto-connect timer with the target MAC.
         val targetMac = phoneConnectTarget()
         if (targetMac != null) {
+            lastConnectTargetMac = targetMac
             pendingConnectTarget = null
             targetConnectTimeoutJob?.cancel()
             targetConnectTimeoutJob = null
             logInfo("[DEVICE_MGMT] Overriding auto-connect with targeted connect: $targetMac", tag = Logger.Tags.ADAPTR)
             adapterDriver?.overrideAutoConnectWithTarget(targetMac)
             setStatusText(context.localizedString(R.string.connection_status_connecting_device))
-        } else if (!phoneAutoConnectEnabled.get()) {
+        } else if (!phoneAutoConnectEnabled.get() || !phonePreferenceAllowsScan()) {
             setStatusText(context.localizedString(R.string.connection_status_phone_paused))
         } else {
             setStatusText(context.localizedString(R.string.connection_status_waiting_phone))
@@ -1351,9 +1467,11 @@ class CabinManager(
         if (!initSuccess) {
             // A partial init sequence can leave the adapter expecting the remainder of a
             // protocol frame. Do not sit in "Waiting for phone" with a poisoned session.
-            handleError("USB initialization transfer failed")
+            handleError("USB initialization transfer failed", ConnectionFailure.WRITE_FAILED)
             return
         }
+
+        if (phoneAutoConnectEnabled.get()) stage(ConnectionStage.PHONE) else stage(ConnectionStage.IDLE)
 
         // Start pair timeout
         clearPairTimeout()
@@ -1399,6 +1517,9 @@ class CabinManager(
     }
 
     private fun stopLocked(reboot: Boolean = false) {
+        transportGeneration.incrementAndGet()
+        stage(ConnectionStage.IDLE)
+        healthySessionJob?.cancel(); healthySessionJob = null
         touchSender.clear()
         logDebug("[LIFECYCLE] stop() called - clearing keyframe schedule and phoneType", tag = Logger.Tags.VIDEO)
         clearPairTimeout()
@@ -1461,6 +1582,7 @@ class CabinManager(
      * Reinitialize with autoConn disabled so firmware and host recovery both stay idle.
      */
     fun disconnectPhone(): Job {
+        mutableProgress.value = mutableProgress.value.copy(failure = ConnectionFailure.USER_STOP)
         projectionHealth.event(com.cabin.platform.ProjectionEventKind.USER_DISCONNECT)
         phoneAutoConnectEnabled.set(false)
         phoneConnectionPreferences.edit { putBoolean("auto_connect", false) }
@@ -1488,9 +1610,15 @@ class CabinManager(
 
     // ==================== Device Management ====================
 
+    private fun phonePreferenceAllowsScan(): Boolean = pendingConnectTarget != null ||
+        phoneConnectionPreferences.all.filterKeys { it.startsWith("phone.") }.values.none { it == PhoneConnectionPreference.MANUAL.name || it == PhoneConnectionPreference.PREFERRED.name }
+
     private fun phoneConnectTarget(): String? {
         if (!phoneAutoConnectEnabled.get()) return null
-        return pendingConnectTarget ?: if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
+        pendingConnectTarget?.let { return it }
+        val preferred = phoneConnectionPreferences.all.entries.firstOrNull { it.key.startsWith("phone.") && it.value == PhoneConnectionPreference.PREFERRED.name }?.key?.removePrefix("phone.")
+        if (preferred != null) return preferred
+        return if (BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) {
             com.cabin.platform.TeyesFeaturePreferences.get(context).profile.value.preferredPhone.ifEmpty { null }
         } else null
     }
@@ -1531,6 +1659,8 @@ class CabinManager(
         phoneConnectionPreferences.edit { putBoolean("auto_connect", true) }
         val request = Any().also(phoneConnectionRequest::set)
         shouldBeRunning.set(true)
+        permissionBlocked = false
+        mutableProgress.value = mutableProgress.value.copy(retriesPaused = false, failure = ConnectionFailure.NONE)
 
         // Set the pending target BEFORE disconnecting so the UNPLUGGED → restart cycle
         // sends AutoConnect_By_BtAddress instead of WIFI_CONNECT (1002).
@@ -1687,8 +1817,11 @@ class CabinManager(
 
     val supportsProjectionGain: Boolean get() = !config.audioTransferMode
 
+    fun applyUserAudioGains(media: Float, navigation: Float) {
+        if (!config.audioTransferMode) audioManager?.setUserGains(media, navigation)
+    }
+
     fun applyTeyesAudioProfile() {
-        if (!BuildConfig.TEYES_CLUSTER_MEDIA_BRIDGE) return
         val profile = com.cabin.platform.TeyesFeaturePreferences.get(context).profile.value
         audioManager?.setUserGains(profile.mediaGain, profile.navigationGain)
     }
@@ -1917,10 +2050,11 @@ class CabinManager(
         }
 
         projectionHealth.event(com.cabin.platform.ProjectionEventKind.USB_DETACHED)
+        selectedAdapterName = null
 
         // Trigger recovery through the error handler path
         // This ensures consistent recovery behavior
-        handleError("USB device physically disconnected")
+        handleError("USB device physically disconnected", ConnectionFailure.USB_DETACHED)
     }
 
     /** Match broadcasts to the exact adapter path currently owned by this manager. */
@@ -1938,6 +2072,7 @@ class CabinManager(
     /** Serialize Stop admission against manual recovery before asynchronous USB teardown. */
     @Synchronized
     private fun markProjectionStopped() {
+        mutableProgress.value = mutableProgress.value.copy(failure = ConnectionFailure.USER_STOP)
         shouldBeRunning.set(false)
         pendingUserVideoReset.set(false)
     }
@@ -2194,6 +2329,32 @@ class CabinManager(
         // lifecycle calls and reconnect jobs can otherwise publish states out of order.
         val oldState = currentState.getAndSet(newState)
         if (oldState != newState) {
+            val now = android.os.SystemClock.elapsedRealtime()
+            if (oldState == State.STREAMING && historyStreamStarted > 0) {
+                connectionHistory.append(com.cabin.platform.ConnectionSessionSummary(System.currentTimeMillis(), now - historyStreamStarted,
+                    mutableProgress.value.failure, historyRecoveryMs))
+                historyStreamStarted = 0; historyDisconnectedAt = now
+            }
+            if (newState == State.DEVICE_CONNECTED) stage(ConnectionStage.PICTURE)
+            if (newState == State.STREAMING) {
+                stage(ConnectionStage.STREAMING)
+                setFailure(ConnectionFailure.NONE)
+                historyStreamStarted = now
+                historyRecoveryMs = historyDisconnectedAt.takeIf { it > 0 }?.let { now - it }
+                healthySessionJob?.cancel()
+                healthySessionJob = scope.launch {
+                    val stability = com.cabin.platform.StreamingStability()
+                    while (state == State.STREAMING && historyStreamStarted == now && shouldBeRunning.get()) {
+                        val framesFresh = lastVideoFrameReceivedMs > 0 && System.currentTimeMillis() - lastVideoFrameReceivedMs in 0..3000
+                        if (stability.observe(android.os.SystemClock.elapsedRealtime(), framesFresh)) {
+                            shortLivedStreamingCount = 0; consecutiveNoResponse = 0; reconnectAttempts = 0
+                            break
+                        }
+                        delay(1000)
+                    }
+                }
+            }
+            if (newState == State.DISCONNECTED) stage(ConnectionStage.IDLE)
             projectionHealth.connection(newState)
             if (newState == State.STREAMING) syncTeyesAppearance()
             callback?.onStateChanged(newState)
@@ -2355,31 +2516,42 @@ class CabinManager(
     }
 
     private suspend fun findDevice(): UsbDeviceWrapper? {
-        var attempts = 0
-
-        while (attempts < 10 && shouldBeRunning.get() && !released.get()) {
+        repeat(10) { attempt ->
+            if (!shouldBeRunning.get() || released.get() || permissionBlocked) return null
             val candidates = UsbDeviceWrapper.findAll(context, usbManager) { log(it) }
-            for (candidate in candidates) {
-                if (!shouldBeRunning.get() || released.get()) return null
-                setStatusText(context.localizedString(R.string.connection_status_found))
+            if (candidates.isNotEmpty()) {
+                val choices = attachedAdapters()
+                val preferred = adapterChoices.all["preferred"] as? String
+                val preferredMatches = choices.filter { it.identity != null && it.identity == preferred }
+                val selected = selectedAdapterName?.let { name -> candidates.firstOrNull { it.deviceName == name } }
+                    ?: if (preferred != null) preferredMatches.singleOrNull()?.let { match -> candidates.firstOrNull { it.deviceName == match.name } }
+                    else candidates.singleOrNull()
+                if (selected == null) { setFailure(ConnectionFailure.ADAPTER_CHOICE); return null }
                 var retained = false
                 try {
-                    if (candidate.openWithPermission()) {
-                        log("Carlinkit device found!")
-                        retained = true
-                        return candidate
+                    if (!selected.hasPermission()) {
+                        stage(ConnectionStage.PERMISSION)
+                        if (!selected.requestPermission()) {
+                            permissionBlocked = true
+                            setFailure(ConnectionFailure.PERMISSION_NEEDED)
+                            return null
+                        }
                     }
-                } finally {
-                    if (!retained) candidate.close()
-                }
-                logWarn("Unable to open one attached adapter; trying the next", tag = Logger.Tags.USB)
+                    if (!shouldBeRunning.get() || released.get()) return null
+                    if (rememberSelectedAdapter && selected.deviceName == selectedAdapterName) {
+                        val nowChoices = attachedAdapters()
+                        val identity = nowChoices.firstOrNull { it.name == selected.deviceName }?.identity
+                        if (identity != null && nowChoices.count { it.identity == identity } == 1) adapterChoices.edit().putString("preferred", identity).apply()
+                    }
+                    stage(ConnectionStage.INITIALIZATION)
+                    if (selected.open()) { retained = true; return selected }
+                    setFailure(ConnectionFailure.OPEN_FAILED)
+                    return null
+                } finally { if (!retained) selected.close() }
             }
-
-            attempts++
-            if (attempts < 10 && shouldBeRunning.get() && !released.get()) {
-                delay(USB_WAIT_PERIOD_MS)
-            }
+            if (attempt < 9) delay(USB_WAIT_PERIOD_MS)
         }
+        setFailure(ConnectionFailure.ADAPTER_MISSING)
         return null
     }
 
@@ -2414,7 +2586,7 @@ class CabinManager(
                 cancelDelayedKeyframe() // Stop any existing timer (clean slate)
 
                 // Reset reconnect attempts and escalation on successful connection
-                reconnectAttempts = 0
+                // Reset retry escalation only after sustained streaming.
                 consecutiveNoResponse = 0
                 shortLivedStreamingCount = 0
                 hadPriorSession = true
@@ -2895,7 +3067,7 @@ class CabinManager(
     private fun processAudioData(message: AudioDataMessage) {
         // Handle volume ducking
         message.volumeDuration?.let {
-            audioManager?.setDucking(message.volume)
+            audioManager?.setDucking(message.volume, it)
             return
         }
 
@@ -3116,6 +3288,7 @@ class CabinManager(
     ) {
         if (!sensitiveBackgroundCapabilitiesAvailable) return
         if (!recoveryAttempt) {
+            micRequestGeneration.incrementAndGet()
             micRecoveryJob?.cancel()
             micRecoveryJob = null
             micRecoveryAttempts = 0
@@ -3165,6 +3338,7 @@ class CabinManager(
     }
 
     private fun stopMicrophoneCapture() {
+        micRequestGeneration.incrementAndGet()
         micRecoveryJob?.cancel()
         micRecoveryJob = null
         micSendTimer?.cancel()
@@ -3202,14 +3376,18 @@ class CabinManager(
     }
 
     private fun scheduleMicrophoneRecovery() {
-        if (activeVoiceMode == VoiceMode.NONE || released.get()) return
+        if (activeVoiceMode == VoiceMode.NONE || released.get() || !shouldBeRunning.get() ||
+            microphoneManager?.hasPermission() != true || currentMicDecodeType !in listOf(3, 5)) return
         if (micRecoveryJob?.isActive == true) return
 
-        val livedMs = System.currentTimeMillis() - micCaptureStartedAtMs
+        val livedMs = if (micCaptureStartedAtMs > 0) System.currentTimeMillis() - micCaptureStartedAtMs else 0L
         if (livedMs >= MIC_STABLE_WINDOW_MS) {
             micRecoveryAttempts = 0
             micCaptureStartedAtMs = System.currentTimeMillis()
         }
+        if (micRecoveryAttempts >= 3) return
+        val requestGeneration = micRequestGeneration.get()
+        val voice = activeVoiceMode
         val exponent = micRecoveryAttempts.coerceAtMost(5)
         val delayMs = (500L shl exponent).coerceAtMost(MIC_RECOVERY_MAX_DELAY_MS)
         micRecoveryAttempts++
@@ -3217,7 +3395,8 @@ class CabinManager(
             scope.launch {
                 delay(delayMs)
                 micRecoveryJob = null
-                if (activeVoiceMode != VoiceMode.NONE && !isMicrophoneCapturing && !released.get()) {
+                if (activeVoiceMode == voice && voice != VoiceMode.NONE && micRequestGeneration.get() == requestGeneration &&
+                    !isMicrophoneCapturing && !released.get() && shouldBeRunning.get() && microphoneManager?.hasPermission() == true) {
                     logInfo("[MIC] Recovery attempt $micRecoveryAttempts after ${delayMs}ms", tag = Logger.Tags.MIC)
                     startMicrophoneCapture(currentMicDecodeType, currentMicAudioType, recoveryAttempt = true)
                 }
@@ -3514,12 +3693,12 @@ class CabinManager(
      *
      * For USB disconnects, schedules auto-reconnect with exponential backoff.
      */
-    private fun handleError(error: String) {
+    private fun handleError(error: String, reason: ConnectionFailure = ConnectionFailure.UNKNOWN, expectedTransportGeneration: Long = transportGeneration.get()) {
         if (!errorRecoveryPending.compareAndSet(false, true)) return
         scope.launch(Dispatchers.IO) {
             lifecycleMutex.lock()
             try {
-                if (!released.get()) handleErrorLocked(error)
+                if (!released.get() && shouldBeRunning.get() && transportGeneration.get() == expectedTransportGeneration) handleErrorLocked(error, reason)
             } finally {
                 lifecycleMutex.unlock()
                 errorRecoveryPending.set(false)
@@ -3527,7 +3706,12 @@ class CabinManager(
         }
     }
 
-    private fun handleErrorLocked(error: String) {
+    private fun handleErrorLocked(error: String, reason: ConnectionFailure = ConnectionFailure.UNKNOWN) {
+        transportGeneration.incrementAndGet()
+        setFailure(reason)
+        stage(ConnectionStage.IDLE)
+        healthySessionJob?.cancel(); healthySessionJob = null
+        if (reason == ConnectionFailure.PERMISSION_NEEDED) permissionBlocked = true
         touchSender.clear()
         // NOTE: `hadPriorSession` is intentionally NOT reset here (it's only reset in
         // stop()). This preserves escalation context across mid-session failures so that
@@ -3573,7 +3757,7 @@ class CabinManager(
 
         // Pattern A: track consecutive "no initial response" errors (adapter USB write dead)
         // Pattern C: track short-lived STREAMING sessions (unstable adapter)
-        val isNoResponse = error.contains("no initial response")
+        val isNoResponse = reason == ConnectionFailure.ADAPTER_TIMEOUT
         if (isNoResponse) {
             consecutiveNoResponse++
         } else {
@@ -3591,7 +3775,7 @@ class CabinManager(
         setState(State.DISCONNECTED)
 
         // Schedule auto-reconnect for USB disconnect errors
-        if (isUsbDisconnectError(error)) {
+        if (reason.retryable) {
             // Escalate status based on observed patterns
             if (consecutiveNoResponse >= 2) {
                 // Pattern A: adapter USB write dead — retrying won't help
@@ -3609,17 +3793,6 @@ class CabinManager(
     }
 
     /**
-     * Checks if an error indicates USB disconnect (physical or transfer failure).
-     */
-    private fun isUsbDisconnectError(error: String): Boolean {
-        val lowerError = error.lowercase()
-        return lowerError.contains("disconnect") ||
-            lowerError.contains("detach") ||
-            lowerError.contains("transfer") ||
-            lowerError.contains("usb")
-    }
-
-    /**
      * Schedule an auto-reconnect attempt with exponential backoff.
      *
      * After USB disconnect, attempts to reconnect automatically:
@@ -3634,7 +3807,7 @@ class CabinManager(
     private fun scheduleReconnect() {
         // Cancel any existing reconnect attempt
         reconnectJob?.cancel()
-        if (!shouldBeRunning.get() || released.get()) return
+        if (!shouldBeRunning.get() || !phoneAutoConnectEnabled.get() || released.get() || permissionBlocked || mutableProgress.value.retriesPaused) return
 
         if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
             logWarn(
@@ -3678,6 +3851,7 @@ class CabinManager(
 
         setStatusText(context.localizedString(R.string.connection_status_retry_count, reconnectAttempts, MAX_RECONNECT_ATTEMPTS))
 
+        mutableProgress.value = mutableProgress.value.copy(retryAtMs = android.os.SystemClock.elapsedRealtime() + delay)
         reconnectJob =
             scope.launch {
                 delay(delay)
@@ -3704,6 +3878,7 @@ class CabinManager(
     private fun cancelReconnect() {
         reconnectJob?.cancel()
         reconnectJob = null
+        mutableProgress.value = mutableProgress.value.copy(retryAtMs = 0)
         reconnectAttempts = 0
     }
 

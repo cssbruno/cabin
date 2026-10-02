@@ -8,6 +8,10 @@ and is packaged in the Cabin APK.
 
 A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto projection, and compatible FYT vehicle integration.
 
+The [50-feature delivery checklist](documents/features/50-FEATURE-DELIVERY.md) covers the expanded app library, trip and maintenance tools, projection setup tests, and log explorer, with verification status and limits.
+
+The [100-improvement delivery](documents/features/100-IMPROVEMENT-DELIVERY.md) adds connection recovery, driver-specific controls, launcher organization, accessibility, vehicle utilities, privacy and backups, support workflows, and release checks. The [goal tracker](documents/features/100-IMPROVEMENT-GOALS.md) separates verified completion from required physical-device acceptance.
+
 - Android 8.1+ · English, Portuguese, Spanish, French, German and Italian.
 - Carlink imports its engine libraries into Cabin and runs them in a private app process. This engine targets ARM64 Android 10 and still needs compatible platform libraries and hardware access. See [Carlink integration](documents/research/CARLINK-INDEPENDENT-ENGINE.md).
 - Vehicle readings and A/C controls depend on the head unit, firmware and CAN profile.
@@ -19,7 +23,7 @@ A fullscreen Android car launcher with resizable widgets, CarPlay/Android Auto p
 
 Release builds may require uninstalling an earlier debug build. Updates: Settings → Launcher → Updates. Automatic daily checks; download and Android install approval are manual. Versions use plain numbers such as 0.1.
 
-Push a `v*` tag to build and publish a signed APK and `cabin-oem-integration.zip`, with SHA-256 checksums. CI requires app, diagnostics and native transport tests to pass before signing and publishing. The ZIP is an additive firmware-integration bundle, **not a self-installing FYT USB update**.
+Push a `v*` tag to build and publish a signed APK and `cabin-oem-integration.zip`, with SHA-256 checksums. CI requires app, diagnostics and native transport tests plus Android 8.1/15 smoke, resource and startup checks to pass before signing and publishing. The ZIP is an additive firmware-integration bundle, **not a self-installing FYT USB update**.
 
 Based on [Carlink](https://github.com/lvalen91/carlink). See [LICENSE.txt](LICENSE.txt).
 

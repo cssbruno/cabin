@@ -29,6 +29,8 @@ internal fun CarPlaySettingsContent(manager: CabinManager) {
 internal fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boolean, onReinitForDisplayMode: (DisplayMode) -> Unit) {
     val backends = com.cabin.ui.rememberCarPlayBackends()
     var controls by rememberSaveable(initialConnection) { mutableStateOf(!initialConnection) }
+    val searchTarget = LocalSettingsSearchTarget.current
+    LaunchedEffect(searchTarget) { if (searchTarget.isNotEmpty()) controls = true }
     Column(Modifier.fillMaxSize().testTag("carplay-settings")) {
         if (backends.available.size > 1 || backends.selected !in backends.available)
             com.cabin.ui.CarPlayBackendPicker(manager, backends)
@@ -38,10 +40,11 @@ internal fun DongleCarPlaySettings(manager: CabinManager, initialConnection: Boo
             FilterChip(selected = controls, onClick = { controls = true }, modifier = Modifier.heightIn(min = 56.dp),
                 label = { Text(stringResource(R.string.settings_carplay_controls)) }, leadingIcon = { Icon(Icons.Default.Tune, null, Modifier.size(20.dp)) })
         }
-        if (controls) Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
+        if (controls) Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberSettingsScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             com.cabin.ui.DongleAdapterSettings(manager, onReinitForDisplayMode)
             ProjectionPreferencesSection(showMeasurements = false)
+            ConnectionExperienceSection(manager)
         } else Box(Modifier.weight(1f)) { PhonesTabContent(manager) }
     }
 }

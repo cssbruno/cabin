@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logx_search">Rechercher dans le journal</string>
+    <string name="logx_filters">Filtres et affichage</string>
+    <string name="logx_follow">Suivre ce fichier en direct</string>
+    <string name="logx_tag">Étiquette du sous-système</string>
+    <string name="logx_newest">Plus récents en premier</string>
+    <string name="logx_numbers">Numéros de ligne</string>
+    <string name="logx_wrap">Retour à la ligne</string>
+    <string name="logx_smaller">Texte plus petit</string>
+    <string name="logx_larger">Texte plus grand</string>
+    <string name="logx_export_scope">Seuls les résultats affichés sont exportés. Le texte inclut les messages originaux ; les métadonnées incluent uniquement les dates, niveaux et numéros de ligne.</string>
+    <string name="logx_metadata_export">Exporter les métadonnées seules</string>
+    <string name="logx_export">Exporter le texte filtré</string>
+    <string name="logx_export_done">Export enregistré</string>
+    <string name="logx_export_failed">Impossible de sauvegarder cet export</string>
+    <string name="logx_count">%1$d affichés · %2$d résultats · %3$d lignes analysées</string>
+    <string name="logx_limited">Vue limitée : 1 000 résultats, 16 Mio analysés et 4 Kio par ligne. Affinez les filtres ou exportez le fichier original.</string>
+    <string name="logx_no_matches">Aucun résultat</string>
+    <string name="logx_all">Tous les niveaux</string>
+    <string name="logx_errors">Erreurs</string>
+    <string name="logx_warnings">Avertissements</string>
+    <string name="logx_info">Informations</string>
+    <string name="logx_debug">Débogage</string>
+    <string name="logx_verbose">Détaillé</string>
+    <string name="logx_file_search">Rechercher des fichiers journaux</string>
+    <string name="logx_oldest">Plus anciens en premier</string>
+    <string name="logx_largest">Plus volumineux en premier</string>
+    <string name="logx_name">Nom du fichier</string>
+    <string name="logx_original">Parcourir les pages originales</string>
+</resources>

@@ -1,20 +1,13 @@
 package com.cabin.launcher
 
 import android.content.ComponentName
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.SystemClock
-import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -25,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.cabin.ui.settings.settingsFocusRing
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -36,7 +31,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.cabin.CabinManager
 import com.cabin.R
 import com.cabin.background.CabinProjectionService
-import com.cabin.navigation.NavigationStateManager
 import com.cabin.platform.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -64,11 +58,10 @@ fun CabinLauncher(
     val home = rememberDefaultHomeState()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val health by manager.dashboardState.collectAsStateWithLifecycle()
-    val navigation by NavigationStateManager.state.collectAsStateWithLifecycle()
     val profile by TeyesFeaturePreferences.get(context).profile.collectAsStateWithLifecycle()
-    val units by MeasurementPreferences.get(context).unit.collectAsStateWithLifecycle()
+    val profileRevision by TeyesFeaturePreferences.get(context).revision.collectAsStateWithLifecycle()
     val preferences = remember(profile.slot, vehicle.profileId, vehicle.vehicleDataLayout) { LauncherPreferences(context, profile.slot, vehicle.profileId, vehicle.vehicleDataLayout) }
-    val layout by preferences.state.collectAsStateWithLifecycle()
+    LaunchedEffect(profileRevision, preferences) { preferences.discardUndoHistory() }
     var apps by remember { mutableStateOf<List<TeyesLaunchableApp>>(emptyList()) }
     var refresh by remember { mutableIntStateOf(0) }
     var localPage by rememberSaveable { mutableIntStateOf(1) }
@@ -84,14 +77,14 @@ fun CabinLauncher(
         }
         if (target in 2..3) onParkedAction(action) else action()
     }
-    var search by rememberSaveable { mutableStateOf("") }
-    var selected by remember { mutableStateOf<TeyesLaunchableApp?>(null) }
     var failure by remember { mutableStateOf(false) }
+    var failedApp by rememberSaveable { mutableStateOf<String?>(null) }
+    ObserveLauncherPackages(context) { refresh++ }
     var now by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
     var clockText by remember { mutableStateOf("") }
     val streaming = health.connection == CabinManager.State.STREAMING
     val active = streaming || health.connection == CabinManager.State.DEVICE_CONNECTED
-    LaunchedEffect(lifecycle, refresh, profile.slot) {
+    LaunchedEffect(lifecycle, refresh, preferences, profileRevision) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             apps = withContext(Dispatchers.IO) { TeyesAppShortcuts.available(context) }
             preferences.refresh()
@@ -102,18 +95,29 @@ fun CabinLauncher(
             }
         }
     }
-    DisposableEffect(lifecycle) {
-        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) { selected = null }
-        }
-        lifecycle.addObserver(observer)
-        onDispose { lifecycle.removeObserver(observer) }
-    }
-    LaunchedEffect(moving) { if (moving) { if (currentPage in 2..3) goPage(1); selected = null; search = "" } }
-    BackHandler { if (selected != null) selected = null else { goPage(1); search = "" } }
+    LaunchedEffect(moving) { if (moving && currentPage in 2..3) goPage(1) }
+    BackHandler { goPage(1) }
     fun launch(app: TeyesLaunchableApp) {
         if (moving) return
-        if (!TeyesAppShortcuts.launch(context, app.component)) { failure = true; refresh++ }
+        if (!TeyesAppShortcuts.launch(context, app.component)) { failedApp = app.component; refresh++ }
+        else preferences.library.recordLaunch(app.component)
+    }
+    failedApp?.let { component ->
+        val availability = shortcutAvailability(context, component)
+        AlertDialog(onDismissRequest = { failedApp = null }, title = { Text(stringResource(R.string.goal_shortcut_unavailable)) },
+            text = { Text(stringResource(when (availability) {
+                ShortcutAvailability.REMOVED -> R.string.goal_app_removed
+                ShortcutAvailability.DISABLED -> R.string.goal_app_disabled
+                else -> R.string.goal_app_failed
+            })) }, confirmButton = { TextButton({
+                try {
+                    val intent = if (availability == ShortcutAvailability.REMOVED) android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("market://details?id=${component.substringBefore('/')}"))
+                        else android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.fromParts("package", component.substringBefore('/'), null))
+                    context.startActivity(intent)
+                } catch (_: RuntimeException) { failure = true }
+                failedApp = null
+            }) { Text(stringResource(if (availability == ShortcutAvailability.REMOVED) R.string.goal_reinstall else R.string.launcher_app_info)) } },
+            dismissButton = { TextButton({ failedApp = null }) { Text(stringResource(R.string.launcher_close)) } })
     }
     val colors = MaterialTheme.colorScheme
     CompositionLocalProvider(LocalContentColor provides colors.onBackground) {
@@ -130,14 +134,10 @@ fun CabinLauncher(
                 if (home.unavailable) Text(stringResource(R.string.headunit_unavailable))
                 if (failure) TextButton({ failure = false }) { Text(stringResource(R.string.launcher_action_failed)) }
                 if (drawer && !moving) {
-                    val visibleApps = remember(apps, search, layout.favorites) {
-                        filterLauncherApps(apps, search).sortedBy { app -> layout.favorites.indexOf(app.component).takeIf { it >= 0 } ?: Int.MAX_VALUE }
+                    key(preferences) {
+                        LauncherAppDrawer(apps, preferences, onRefresh = { refresh++ }, onLaunch = ::launch,
+                            onFailure = { failure = true }, modifier = Modifier.weight(1f))
                     }
-                    PagedLauncherItems(visibleApps, Modifier.weight(1f), header = {
-                        OutlinedTextField(search, { search = it.take(100) }, label = { Text(stringResource(R.string.launcher_search)) },
-                            modifier = Modifier.weight(1f), singleLine = true)
-                    }) { app -> LauncherAppTile(app, onOpen = { launch(app) }, onManage = { selected = app }) }
-                    if (visibleApps.isEmpty()) Text(stringResource(R.string.launcher_no_apps))
                 } else if (currentPage == 4) {
                     Box(Modifier.weight(1f)) { VehicleWidgetsPage(preferences, vehicle, moving, onParkedAction) }
                 } else if (editing && !moving) {
@@ -168,24 +168,6 @@ fun CabinLauncher(
         if (page == null) Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd) {
             LauncherPageSwitcher(currentPage, moving, ::goPage, Modifier.padding(4.dp))
         }
-        selected?.takeUnless { moving }?.let { app ->
-            AlertDialog(onDismissRequest = { selected = null }, title = { Text(app.label) }, text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (app.component in layout.favorites) {
-                        TextButton({ preferences.unpin(app.component); selected = null }) { Text(stringResource(R.string.launcher_unpin)) }
-                        TextButton({ preferences.move(app.component, -1) }, enabled = layout.favorites.indexOf(app.component) > 0) { Text(stringResource(R.string.launcher_move_left)) }
-                        TextButton({ preferences.move(app.component, 1) }, enabled = layout.favorites.indexOf(app.component) < layout.favorites.lastIndex) { Text(stringResource(R.string.launcher_move_right)) }
-                    } else TextButton({ preferences.pin(app.component); selected = null }, enabled = layout.favorites.size < LauncherPreferences.MAX_FAVORITES) {
-                        Text(stringResource(R.string.launcher_pin))
-                    }
-                    TextButton({
-                        try { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(android.net.Uri.fromParts("package", ComponentName.unflattenFromString(app.component)?.packageName, null))) }
-                        catch (_: RuntimeException) { failure = true }
-                        selected = null
-                    }) { Text(stringResource(R.string.launcher_app_info)) }
-                }
-            }, confirmButton = { TextButton({ selected = null }) { Text(stringResource(R.string.launcher_close)) } })
-        }
     }
     }
 }
@@ -208,7 +190,7 @@ private fun LauncherTransportButton(icon: androidx.compose.ui.graphics.vector.Im
 }
 
 @Composable
-private fun LauncherAppTile(app: TeyesLaunchableApp, enabled: Boolean = true, onOpen: () -> Unit, onManage: (() -> Unit)?) {
+internal fun LauncherAppTile(app: TeyesLaunchableApp, enabled: Boolean = true, showPackage: Boolean = false, onOpen: () -> Unit, onManage: (() -> Unit)?, query: String = "") {
     val context = LocalContext.current
     val icon by produceState<Bitmap?>(null, app.component) {
         value = withContext(Dispatchers.IO) {
@@ -217,17 +199,17 @@ private fun LauncherAppTile(app: TeyesLaunchableApp, enabled: Boolean = true, on
         }
     }
     Card(Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable(enabled = enabled, onClick = onOpen).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).settingsFocusRing().clickable(enabled = enabled, onClick = onOpen).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
             icon?.let { Image(it.asImageBitmap(), null, Modifier.size(36.dp)) } ?: Icon(Icons.Default.Apps, null, Modifier.size(36.dp))
-            Text(app.label, Modifier.weight(1f).padding(horizontal = 8.dp), maxLines = 2, overflow = TextOverflow.Ellipsis)
-            onManage?.let { action -> IconButton(action, enabled = enabled) { Icon(Icons.Default.MoreVert, stringResource(R.string.launcher_manage)) } }
+            Column(Modifier.weight(1f).padding(horizontal = 8.dp)) {
+                Text(highlightedLauncherText(app.label, query, MaterialTheme.colorScheme.tertiaryContainer, MaterialTheme.colorScheme.onTertiaryContainer), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                if (showPackage) Text(app.component.substringBefore('/'), style = MaterialTheme.typography.labelSmall,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            onManage?.let { action -> IconButton(action, enabled = enabled, modifier = Modifier.size(56.dp).semantics { stateDescription = app.label }) { Icon(Icons.Default.MoreVert, stringResource(R.string.launcher_manage)) } }
         }
     }
 
-}
-
-internal fun filterLauncherApps(apps: List<TeyesLaunchableApp>, query: String): List<TeyesLaunchableApp> = apps.filter {
-    it.label.contains(query.trim(), ignoreCase = true) || it.component.substringBefore('/').contains(query.trim(), ignoreCase = true)
 }
 
 internal fun launcherGuidanceFresh(streaming: Boolean, active: Boolean, updated: Long?, now: Long): Boolean =

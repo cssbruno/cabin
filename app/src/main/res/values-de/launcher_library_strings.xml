@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Suche löschen</string>
+    <string name="app_library_options">App-Optionen</string>
+    <string name="app_library_sort">Apps sortieren</string>
+    <string name="app_library_all">Alle</string>
+    <string name="app_library_pinned">Angeheftet</string>
+    <string name="app_library_recent">Zuletzt</string>
+    <string name="app_library_hidden">Ausgeblendet</string>
+    <string name="app_library_sort_pinned">Angeheftete zuerst</string>
+    <string name="app_library_sort_name">Name: A–Z</string>
+    <string name="app_library_sort_name_desc">Name: Z–A</string>
+    <string name="app_library_sort_recent">Zuletzt geöffnet</string>
+    <string name="app_library_sort_frequent">Am häufigsten geöffnet</string>
+    <string name="app_library_packages">Paketnamen anzeigen</string>
+    <string name="app_library_history">App-Starts merken</string>
+    <string name="app_library_history_note">Zählt nur erfolgreiche Starts über Cabin-Apps und angeheftete Apps. Der Verlauf bleibt auf diesem Gerät und ist je Fahrer getrennt.</string>
+    <string name="app_library_no_recent">Keine App-Starts gespeichert. Aktivieren Sie den Verlauf in den App-Optionen und öffnen Sie eine App über Cabin.</string>
+    <string name="app_library_clear_history">App-Verlauf löschen</string>
+    <string name="app_library_clear_history_note">Letzte Apps und Startzähler dieses Fahrers entfernen? Angeheftete Apps und eigene Namen bleiben erhalten.</string>
+    <string name="app_library_disable_history">App-Starts nicht mehr merken?</string>
+    <string name="app_library_disable_history_note">Dies löscht auch die bisherigen letzten Apps und Startzähler dieses Fahrers.</string>
+    <string name="app_library_pin_count">%1$d / %2$d angeheftete Apps</string>
+    <string name="app_library_missing">Fehlende angeheftete Apps prüfen (%1$d)</string>
+    <string name="app_library_missing_title">Fehlende angeheftete Apps entfernen?</string>
+    <string name="app_library_missing_note">Diese gespeicherten Aktivitäten wurden beim aktuellen Suchlauf nicht gefunden. Bei laufender Installation zuerst aktualisieren. Anheftungen entfernen?</string>
+    <string name="app_library_clear_pins">Alle angehefteten Apps entfernen</string>
+    <string name="app_library_clear_pins_note">Alle angehefteten Apps dieses Fahrers entfernen? Die Apps bleiben installiert. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="app_library_move_first">An erste Position verschieben</string>
+    <string name="app_library_move_last">An letzte Position verschieben</string>
+    <string name="app_library_pins_full">Alle %1$d Plätze sind belegt. Entfernen Sie eine Anheftung, um Platz zu schaffen.</string>
+    <string name="app_library_rename">In Cabin umbenennen</string>
+    <string name="app_library_custom_name">Eigener App-Name</string>
+    <string name="app_library_rename_note">Gilt für die App-Liste und angeheftete Apps dieses Fahrers. Leer lassen, um den ursprünglichen Namen zu verwenden.</string>
+    <string name="app_library_hide">Aus App-Liste ausblenden</string>
+    <string name="app_library_restore">In App-Liste wieder anzeigen</string>
+    <string name="app_library_hide_note">Ausgeblendete Apps bleiben installiert und angeheftete Verknüpfungen funktionieren weiter. Unter Ausgeblendet lassen sie sich wieder anzeigen.</string>
+    <string name="app_library_save">Speichern</string>
+    <string name="app_library_cancel">Abbrechen</string>
+    <string name="app_library_confirm">Bestätigen</string>
+</resources>

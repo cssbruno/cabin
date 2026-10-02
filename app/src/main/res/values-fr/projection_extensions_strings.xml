@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="px_restart_title">Recommencer le guide de configuration ?</string>
+    <string name="px_restart_detail">La progression et vos vérifications manuelles seront effacées. Les réglages audio et du téléphone seront conservés.</string>
+    <string name="px_restart">Recommencer le guide</string>
+    <string name="px_checklist_title">Vérifiez une session réelle du téléphone</string>
+    <string name="px_checklist_detail">Cochez uniquement les éléments testés à l’arrêt. Les vérifications sont mémorisées ; vous pouvez terminer même avec des éléments non cochés.</string>
+    <string name="px_check_audio">J’ai entendu le son du téléphone sur les haut-parleurs du véhicule</string>
+    <string name="px_check_microphone">Mon interlocuteur a entendu ma voix clairement</string>
+    <string name="px_check_touch">Les commandes du téléphone ont répondu à mes gestes</string>
+    <string name="px_check_progress">%1$d vérifications confirmées sur %2$d</string>
+    <string name="px_refresh_phones">Actualiser les téléphones associés</string>
+    <string name="px_hide_phone_filters">Masquer recherche et filtres</string>
+    <string name="px_find_phones">Rechercher et trier les téléphones</string>
+    <string name="px_search_phones">Rechercher un nom ou une plateforme</string>
+    <string name="px_all_platforms">Toutes les plateformes</string>
+    <string name="px_sort_phones">Trier les noms de A à Z</string>
+    <string name="px_no_phone_matches">Aucun téléphone ne correspond à ces filtres.</string>
+    <string name="px_clear_filters">Effacer les filtres</string>
+    <string name="px_touch_test">Cibles tactiles</string>
+    <string name="px_multitouch_test">Test multitactile</string>
+    <string name="px_touch_canvas">Cinq cibles de test tactile</string>
+    <string name="px_multitouch_canvas">Zone de test multitactile</string>
+    <string name="px_touch_instruction">Touchez chacun des cinq cercles pour vérifier la réponse tactile de cet écran.</string>
+    <string name="px_multitouch_instruction">Posez au moins deux doigts dans la zone de test en même temps.</string>
+    <string name="px_touch_local">Ce test vérifie uniquement l’autoradio. Il ne modifie pas l’étalonnage et ne teste pas la connexion du téléphone.</string>
+    <string name="px_multitouch_count">Doigts actuels : %1$d · Maximum détecté : %2$d</string>
+    <string name="px_multitouch_pass">Au moins deux contacts simultanés détectés.</string>
+    <string name="px_touch_progress">Cibles atteintes : %1$d sur %2$d</string>
+    <string name="px_touch_pass">Les cinq cibles ont répondu.</string>
+    <string name="px_touch_reset">Réinitialiser les résultats du test</string>
+    <string name="px_report_filter_detail">Les filtres modifient uniquement cet aperçu. Copier et enregistrer incluent toujours le rapport complet.</string>
+    <string name="px_report_search">Rechercher dans le rapport</string>
+    <string name="px_report_all_sections">Toutes les sections</string>
+    <string name="px_report_copy">Copier le rapport complet</string>
+    <string name="px_report_copied">Rapport complet copié</string>
+    <string name="px_report_matches">Lignes correspondantes : %1$d</string>
+    <string name="px_report_no_matches">Aucune ligne ne correspond à votre recherche.</string>
+</resources>

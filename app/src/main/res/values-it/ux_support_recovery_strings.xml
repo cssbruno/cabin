@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_support_picker_unavailable">Impossibile aprire il selettore di file. Riprova quando sarà disponibile l’accesso ai documenti.</string>
+    <string name="ux_support_discard_title">Eliminare l’esportazione salvata?</string>
+    <string name="ux_support_discard_message">Eliminare “%1$s”? Verrà eliminata solo la copia di esportazione salvata. I registri, i rapporti e le impostazioni originali restano su questo dispositivo.</string>
+    <string name="ux_support_clear_reports">Cancella rapporti selezionati</string>
+    <string name="ux_support_no_category_rows">Nessun campo in questa categoria. Scegli un’altra categoria per esaminare i rapporti.</string>
+    <string name="ux_support_show_comparison">Mostra confronto</string>
+</resources>

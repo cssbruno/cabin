@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goal_accessibility">Barrierefreiheit</string>
+    <string name="goal_all_folders">Alle Ordner</string>
+    <string name="goal_app_disabled">Diese App ist deaktiviert. In den App-Infos aktivieren. Die Verknüpfung bleibt erhalten.</string>
+    <string name="goal_app_failed">Android konnte diese App nicht öffnen. Berechtigungen prüfen oder erneut versuchen. Die Verknüpfung bleibt erhalten.</string>
+    <string name="goal_app_removed">Diese App oder Aktivität ist nicht mehr installiert. Zum Verwenden der gespeicherten Verknüpfung neu installieren.</string>
+    <string name="goal_bulk_preview">Auf %1$d ausgewählte Apps anwenden. Rückgängig stellt die gesamte Änderung wieder her.</string>
+    <string name="goal_compact_tiles">Kompakte App-Kacheln</string>
+    <string name="goal_days">%1$d Tage</string>
+    <string name="goal_draft_note">Entwurf: Änderungen gelten erst nach dem Speichern. Zum Verwerfen abbrechen oder schließen.</string>
+    <string name="goal_drag_reorder">Zeile halten und nach oben oder unten ziehen, dann speichern. Auch die Pfeile ändern die Reihenfolge.</string>
+    <string name="goal_duplicate_excluded">nicht kopiert: erneut mit Zustimmung hinzufügen oder vorhandene Projektion verschieben</string>
+    <string name="goal_duplicate_page">Seite duplizieren</string>
+    <string name="goal_duplicate_preview">Diese Kacheln werden auf eine neue Seite kopiert. Android-Widgets und die einzige Projektionsfläche bleiben auf ihrer ursprünglichen Seite.</string>
+    <string name="goal_folder_name">Ordnername</string>
+    <string name="goal_folders">Ordner verwalten</string>
+    <string name="goal_help">Hilfe</string>
+    <string name="goal_help_recovery">Zur Wiederherstellung den vorherigen Wert dieser Einstellung wählen. Verbindungsänderungen können erneutes Verbinden des Telefons erfordern.</string>
+    <string name="goal_help_requirements">Einstellungen im Stand ändern. Die Verfügbarkeit hängt vom gewählten System und den gemeldeten Gerätefunktionen ab. Diese Hilfe funktioniert offline.</string>
+    <string name="goal_high_contrast">Hoher Kontrast</string>
+    <string name="goal_high_contrast_detail">Starken Text- und Flächenkontrast in Cabin verwenden. Auswahl bleibt durch Beschriftungen und Häkchen erkennbar.</string>
+    <string name="goal_move_folder">In Ordner verschieben</string>
+    <string name="goal_no_folder">Kein Ordner</string>
+    <string name="goal_page_name">Seitenname</string>
+    <string name="goal_page_tools">Dashboard-Seiten verwalten</string>
+    <string name="goal_recent_installed">Neu installiert</string>
+    <string name="goal_recent_period">Installiert innerhalb von</string>
+    <string name="goal_reduce_motion">Bewegung reduzieren</string>
+    <string name="goal_reduce_motion_detail">Dekorative Übergänge entfernen. Fortschritt und Verbindungsstatus bleiben sichtbar.</string>
+    <string name="goal_reinstall">App zur Neuinstallation suchen</string>
+    <string name="goal_remove_folder">Ordner entfernen</string>
+    <string name="goal_reorder_pins">Angeheftete Apps sortieren</string>
+    <string name="goal_search_settings">Einstellungen suchen</string>
+    <string name="goal_select_apps">Mehrere Apps auswählen</string>
+    <string name="goal_selected_apps">%1$d ausgewählt</string>
+    <string name="goal_settings_empty">Keine passenden Einstellungen. Ein kürzeres Wort oder einen Abschnittsnamen versuchen.</string>
+    <string name="goal_shortcut_unavailable">App-Verknüpfung nicht verfügbar</string>
+    <string name="goal_undo_library">App-Änderungen rückgängig</string>
+    <string name="goal_wider">Breite vergrößern</string>
+    <string name="goal_narrower">Breite verkleinern</string>
+    <string name="goal_taller">Höhe vergrößern</string>
+    <string name="goal_shorter">Höhe verkleinern</string>
+</resources>

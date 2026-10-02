@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
@@ -22,6 +24,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,9 +50,12 @@ internal fun SettingsSection(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+    Card(modifier.fillMaxWidth().settingsSearchAnchor(title), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).semantics { heading() })
+                description?.let { OfflineSettingsHelp(title, it) }
+            }
             description?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
             content()
         }
@@ -62,11 +68,16 @@ internal fun SettingsDisclosure(
     summary: String,
     modifier: Modifier = Modifier,
     onCollapse: () -> Unit = {},
+    searchLabels: Set<String>? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val searchTarget = LocalSettingsSearchTarget.current
+    LaunchedEffect(searchTarget, title, searchLabels) {
+        if (searchTarget.isNotEmpty() && (searchLabels == null || searchTarget == title || searchTarget in searchLabels)) expanded = true
+    }
     val expansionState = stringResource(if (expanded) R.string.settings_expanded else R.string.settings_collapsed)
-    Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+    Card(modifier.fillMaxWidth().settingsSearchAnchor(title), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
         Row(
             Modifier.fillMaxWidth().semantics { stateDescription = expansionState }
                 .toggleable(value = expanded, role = Role.Button, onValueChange = {
@@ -84,6 +95,7 @@ internal fun SettingsDisclosure(
             Icon(if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore, stringResource(if (expanded) R.string.settings_collapse_section else R.string.settings_expand_section, title))
         }
         if (expanded) {
+            OfflineSettingsHelp(title, summary)
             Column(Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
         }
     }
@@ -114,7 +126,7 @@ internal fun SettingsChoice(
     detail: String? = null,
 ) {
     Row(
-        Modifier.fillMaxWidth().selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onClick)
+        Modifier.fillMaxWidth().settingsSearchAnchor(label).selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onClick)
             .heightIn(min = 56.dp).padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -135,15 +147,27 @@ internal fun SettingsToggle(
     onChange: (Boolean) -> Unit,
 ) {
     Row(
-        Modifier.fillMaxWidth().toggleable(value = checked, role = Role.Switch, onValueChange = onChange)
+        Modifier.fillMaxWidth().settingsSearchAnchor(label).toggleable(value = checked, role = Role.Switch, onValueChange = onChange)
             .heightIn(min = 64.dp).padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(label, style = MaterialTheme.typography.titleMedium)
-            Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (description.isNotBlank()) Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Switch(checked = checked, onCheckedChange = null)
     }
+}
+
+@Composable private fun OfflineSettingsHelp(title: String, description: String) {
+    var open by rememberSaveable { mutableStateOf(false) }
+    androidx.compose.material3.TextButton({ open = true }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.goal_help)) }
+    if (open) androidx.compose.material3.AlertDialog(onDismissRequest = { open = false }, title = { Text(title) }, text = {
+        Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(description)
+            Text(stringResource(R.string.goal_help_requirements))
+            Text(stringResource(R.string.goal_help_recovery))
+        }
+    }, confirmButton = { androidx.compose.material3.TextButton({ open = false }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.launcher_close)) } })
 }

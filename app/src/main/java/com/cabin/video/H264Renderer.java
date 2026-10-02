@@ -116,6 +116,14 @@ public class H264Renderer {
     // Watchdog: non-resettable session counters (avoid logStats reset interference)
     private final AtomicLong sessionFramesReceived = new AtomicLong(0);
     private final AtomicLong sessionFramesDecoded = new AtomicLong(0);
+    private final AtomicLong sessionFramesRendered = new AtomicLong(0);
+    private volatile boolean renderedMeasurementSupported;
+
+    /** Monotonic measured counters; rendered=-1 means this codec does not expose callbacks. */
+    public long[] pictureDeliverySnapshot() {
+        return new long[] { sessionFramesReceived.get(), sessionFramesDecoded.get(),
+            renderedMeasurementSupported ? sessionFramesRendered.get() : -1L };
+    }
 
     // Watchdog executor and state
     private ScheduledExecutorService watchdogExecutor;
@@ -251,6 +259,7 @@ public class H264Renderer {
         totalFramesDecoded.set(0);
         sessionFramesReceived.set(0);
         sessionFramesDecoded.set(0);
+        sessionFramesRendered.set(0);
         frameCnt.set(0);
         startDecodeTime = 0;
         lastLifecycleEventTime = System.currentTimeMillis();
@@ -602,6 +611,14 @@ public class H264Renderer {
 
         // NO setCallback — sync mode uses dequeueInputBuffer/dequeueOutputBuffer
         mCodec.configure(mediaformat, surface, null, 0);
+        try {
+            codec.setOnFrameRenderedListener((source, presentationTimeUs, nanoTime) -> {
+                if (source == mCodec) sessionFramesRendered.incrementAndGet();
+            }, new android.os.Handler(android.os.Looper.getMainLooper()));
+            renderedMeasurementSupported = true;
+        } catch (RuntimeException unsupported) {
+            renderedMeasurementSupported = false;
+        }
 
         // AA: crop-scale to fit letterboxed content (removes black bars at codec level)
         if (androidAutoMode) {

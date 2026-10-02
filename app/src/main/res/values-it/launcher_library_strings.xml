@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Cancella ricerca</string>
+    <string name="app_library_options">Opzioni applicazioni</string>
+    <string name="app_library_sort">Ordina applicazioni</string>
+    <string name="app_library_all">Tutte</string>
+    <string name="app_library_pinned">Fissate</string>
+    <string name="app_library_recent">Recenti</string>
+    <string name="app_library_hidden">Nascoste</string>
+    <string name="app_library_sort_pinned">Fissate per prime</string>
+    <string name="app_library_sort_name">Nome: A–Z</string>
+    <string name="app_library_sort_name_desc">Nome: Z–A</string>
+    <string name="app_library_sort_recent">Ultima apertura</string>
+    <string name="app_library_sort_frequent">Più aperte</string>
+    <string name="app_library_packages">Mostra nomi dei pacchetti</string>
+    <string name="app_library_history">Memorizza aperture delle app</string>
+    <string name="app_library_history_note">Conta solo le aperture riuscite dalle app e dalle app fissate di Cabin. La cronologia resta sul dispositivo ed è separata per conducente.</string>
+    <string name="app_library_no_recent">Nessuna apertura registrata. Attiva la cronologia nelle opzioni e apri un’app da Cabin.</string>
+    <string name="app_library_clear_history">Cancella cronologia aperture</string>
+    <string name="app_library_clear_history_note">Rimuovere app recenti e conteggi di questo conducente? App fissate e nomi personalizzati vengono mantenuti.</string>
+    <string name="app_library_disable_history">Non memorizzare più le aperture?</string>
+    <string name="app_library_disable_history_note">Verranno eliminate anche le app recenti e i conteggi esistenti di questo conducente.</string>
+    <string name="app_library_pin_count">%1$d / %2$d app fissate</string>
+    <string name="app_library_missing">Controlla app fissate mancanti (%1$d)</string>
+    <string name="app_library_missing_title">Rimuovere app fissate mancanti?</string>
+    <string name="app_library_missing_note">Queste attività salvate non sono state trovate nella scansione attuale. Aggiorna prima se è in corso un’installazione. Rimuovere i collegamenti fissati?</string>
+    <string name="app_library_clear_pins">Rimuovi tutte le app fissate</string>
+    <string name="app_library_clear_pins_note">Rimuovere tutte le app fissate di questo conducente? Le app restano installate. L’azione non può essere annullata.</string>
+    <string name="app_library_move_first">Sposta al primo posto</string>
+    <string name="app_library_move_last">Sposta all’ultimo posto</string>
+    <string name="app_library_pins_full">Tutti i %1$d posti sono occupati. Rimuovi un’app fissata per liberare spazio.</string>
+    <string name="app_library_rename">Rinomina in Cabin</string>
+    <string name="app_library_custom_name">Nome personalizzato</string>
+    <string name="app_library_rename_note">Si applica alla lista e alle app fissate di questo conducente. Lascia vuoto per usare il nome originale.</string>
+    <string name="app_library_hide">Nascondi dalla lista</string>
+    <string name="app_library_restore">Ripristina nella lista</string>
+    <string name="app_library_hide_note">Le app nascoste restano installate e i collegamenti fissati funzionano. Trovale in Nascoste per ripristinarle.</string>
+    <string name="app_library_save">Salva</string>
+    <string name="app_library_cancel">Annulla</string>
+    <string name="app_library_confirm">Conferma</string>
+</resources>

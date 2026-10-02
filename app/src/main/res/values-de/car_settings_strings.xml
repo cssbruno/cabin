@@ -16,4 +16,17 @@
     <string name="car_settings_audio_detail">Werksverstärker und Tastenkürzel</string>
     <string name="car_settings_my_car">Mein Fahrzeug</string>
     <string name="car_settings_my_car_detail">Aussehen, Fahrten, Wartung und Kompatibilität</string>
+    <string name="car_settings_can">CAN-Bus und Diagnose</string>
+    <string name="car_settings_can_detail">Fahrzeugprofil, Verbindungsstatus und Live-Werte</string>
+    <string name="car_settings_doors">Türen, Schlösser und Fenster</string>
+    <string name="car_settings_doors_detail">Schlüssel, Verriegelung, Heckklappe und Fernöffnung</string>
+    <string name="car_settings_assistance">Fahrerassistenz</string>
+    <string name="car_settings_assistance_detail">Fahrwarnungen und Assistenzsysteme</string>
+    <string name="car_settings_instruments">Instrumente und Einheiten</string>
+    <string name="car_settings_instruments_detail">Anzeige, Sprache, Kompass und Maßeinheiten</string>
+    <string name="car_settings_maintenance">Fahrten und Wartung</string>
+    <string name="car_settings_maintenance_detail">Fahrten zurücksetzen, Reifenkalibrierung und Wartung</string>
+    <string name="car_settings_other">Weitere Fahrzeugoptionen</string>
+    <string name="car_settings_other_detail">Optionen ohne zugeordnete Funktionskategorie</string>
+    <string name="car_settings_actions">Aktionen</string>
 </resources>

@@ -28,8 +28,8 @@ android {
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
         minSdk = 27
         targetSdk = 36
-        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1021
-        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.10"
+        versionCode = providers.environmentVariable("CABIN_VERSION_CODE").orNull?.toInt() ?: 1022
+        versionName = providers.environmentVariable("CABIN_VERSION_NAME").orNull ?: "0.1.11"
         buildConfigField("boolean", "TEYES_CLUSTER_MEDIA_BRIDGE", "true")
         val sentryDsn = providers.environmentVariable("CABIN_SENTRY_DSN").orElse("").get()
         require(sentryDsn.isEmpty() || sentryDsn.matches(Regex("https://[A-Za-z0-9._~:/@%-]+"))) { "Invalid CABIN_SENTRY_DSN" }
@@ -69,6 +69,8 @@ android {
         }
     }
 
+    testBuildType = providers.gradleProperty("cabin.testBuildType").getOrElse("debug")
+
     buildTypes {
         release {
             ndk { debugSymbolLevel = "FULL" }
@@ -79,6 +81,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    buildTypes.create("releaseCheck") {
+        initWith(buildTypes.getByName("release"))
+        signingConfig = signingConfigs.getByName("debug")
+        matchingFallbacks += "release"
+        isDebuggable = false
+        proguardFile("proguard-release-check.pro")
     }
 
     compileOptions {
@@ -197,8 +207,6 @@ dependencies {
     testImplementation("androidx.test.espresso:espresso-core:3.7.0")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2026.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

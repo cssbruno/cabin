@@ -146,6 +146,7 @@ fun ProjectionDiagnosticPanel(
                 )
             }
             if (status != null) Text(status, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+            ProjectionTouchDiagnostics(enabled = allowed && !running)
         }
     }
 }

@@ -60,6 +60,22 @@ class ProjectionSetupTest {
     }
 
     @Test
+    fun `next step returns to the beginning instead of inheriting bottom scroll`() {
+        compose.setContent {
+            var step by remember { mutableStateOf(ProjectionSetupStep.USB) }
+            Box(Modifier.width(480.dp).height(320.dp)) { Content(step, onStep = { step = it }) }
+        }
+        repeat(4) { index ->
+            compose.onNodeWithText("Next step").performScrollTo().performClick()
+            val context = ApplicationProvider.getApplicationContext<Context>()
+            compose.onNodeWithText(context.getString(com.cabin.R.string.setup_step, index + 2, 5)).assertIsDisplayed()
+        }
+        compose.onNodeWithText("Previous step").performScrollTo().performClick()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        compose.onNodeWithText(context.getString(com.cabin.R.string.setup_step, 4, 5)).assertIsDisplayed()
+    }
+
+    @Test
     fun `audio changes need parked confirmation and a separate explicit save`() {
         var saves = 0
         var route = AudioSourceConfig.ADAPTER

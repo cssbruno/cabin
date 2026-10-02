@@ -1,0 +1,9 @@
+{
+  "apk_sha256": "32c9bc56acde9bc207c8bf3b48a40e8b38be9fee04364a0af51b272bec856ba3",
+  "test_apk_sha256": "6503800cfc7d833503f2625bcdbc4fddd13cd421a7f48c878e94946d72d6d118",
+  "sdk": "27",
+  "device": "Android SDK built for x86_64",
+  "fingerprint": "Android/sdk_phone_x86_64/generic_x86_64:8.1.0/OSM1.180201.023/4931629:userdebug/test-keys",
+  "instrumentation_passed": true,
+  "scope": "Minified first launch/document export and no-adapter lifecycle resource soak. No physical projection certification."
+}

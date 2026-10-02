@@ -13,6 +13,8 @@ class MeasurementPreferences internal constructor(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val mutableUnit = MutableStateFlow(read())
     val unit = mutableUnit.asStateFlow()
+    private val restoreListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> mutableUnit.value = read() }
+    init { preferences.registerOnSharedPreferenceChangeListener(restoreListener) }
 
     fun select(value: MeasurementUnit) {
         preferences.edit().putString(KEY_UNIT, value.name).apply()

@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
@@ -49,6 +51,7 @@ import com.cabin.CabinManager
 import com.cabin.R
 import com.cabin.background.CabinProjectionService
 import com.cabin.platform.ProjectionReadinessSnapshot
+import com.cabin.platform.ProjectionSetupCheck
 import com.cabin.platform.ProjectionSetupPreferences
 import com.cabin.platform.ProjectionSetupStep
 import com.cabin.platform.ProjectionUsbAccess
@@ -72,6 +75,7 @@ internal fun ProjectionSetupFlow(
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val view = LocalView.current
     val progress = remember(context) { ProjectionSetupPreferences.get(context) }
+    val guideProgress by progress.progress.collectAsStateWithLifecycle()
     val audioPreferences = remember(context) { AdapterConfigPreference.getInstance(context) }
     val health by manager.dashboardState.collectAsStateWithLifecycle()
     var step by rememberSaveable { mutableStateOf(progress.progress.value.step) }
@@ -104,6 +108,9 @@ internal fun ProjectionSetupFlow(
     BackHandler { onClose() }
     ProjectionSetupScreen(
         step = step,
+        verified = guideProgress.verified,
+        onVerify = progress::verify,
+        onRestart = { progress.restart(); step = ProjectionSetupStep.USB; saved = false },
         snapshot = snapshot,
         parked = parked,
         audio = audio,
@@ -174,15 +181,37 @@ internal fun ProjectionSetupScreen(
     onClose: () -> Unit,
     onComplete: () -> Unit,
     modifier: Modifier = Modifier,
+    verified: Set<ProjectionSetupCheck> = emptySet(),
+    onVerify: (ProjectionSetupCheck, Boolean) -> Unit = { _, _ -> },
+    onRestart: () -> Unit = {},
 ) {
+    var restartConfirmation by rememberSaveable { mutableStateOf(false) }
+    val stepScroll = rememberScrollState()
+    // Each step starts with its instructions, even when Next was reached at the bottom.
+    LaunchedEffect(step) { stepScroll.scrollTo(0) }
+    if (restartConfirmation) {
+        AlertDialog(
+            onDismissRequest = { restartConfirmation = false },
+            title = { Text(stringResource(R.string.px_restart_title)) },
+            text = { Text(stringResource(R.string.px_restart_detail)) },
+            confirmButton = { TextButton(onClick = { restartConfirmation = false; onRestart() }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.px_restart)) } },
+            dismissButton = { TextButton(onClick = { restartConfirmation = false }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.action_cancel)) } },
+        )
+    }
     val title = stringResource(R.string.setup_guide)
     Surface(modifier.fillMaxSize().semantics { paneTitle = title }, color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             // Exit remains outside the scroll area on compact head units and with large text.
             OutlinedButton(onClick = onClose, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.setup_close)) }
-            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(stepScroll), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 Text(stringResource(R.string.setup_step, step.ordinal + 1, ProjectionSetupStep.entries.size))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ProjectionSetupStep.entries.forEach { destination ->
+                        FilterChip(selected = step == destination, onClick = { onStep(destination) }, enabled = !saving,
+                            label = { Text(stringResource(destination.titleResource())) }, modifier = Modifier.heightIn(min = 56.dp))
+                    }
+                }
                 Text(stringResource(step.titleResource()), style = MaterialTheme.typography.headlineSmall)
                 if (step != ProjectionSetupStep.COMPLETE) {
                     ProjectionParkedAcknowledgment(parked, onParked)
@@ -228,8 +257,27 @@ internal fun ProjectionSetupScreen(
                     }
                     ProjectionSetupStep.COMPLETE -> {
                         Text(stringResource(R.string.setup_done_body))
+                        Text(stringResource(R.string.px_checklist_title), style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.px_checklist_detail))
+                        ProjectionParkedAcknowledgment(parked, onParked)
+                        ProjectionSetupCheck.entries.forEach { check ->
+                            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp)
+                                .toggleable(check in verified, enabled = parked, role = Role.Checkbox,
+                                    onValueChange = { onVerify(check, it) }), verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(checked = check in verified, onCheckedChange = null, enabled = parked)
+                                Text(stringResource(when (check) {
+                                    ProjectionSetupCheck.AUDIO -> R.string.px_check_audio
+                                    ProjectionSetupCheck.MICROPHONE -> R.string.px_check_microphone
+                                    ProjectionSetupCheck.TOUCH -> R.string.px_check_touch
+                                }), Modifier.padding(start = 8.dp))
+                            }
+                        }
+                        Text(stringResource(R.string.px_check_progress, verified.size, ProjectionSetupCheck.entries.size))
                         Text(stringResource(if (snapshot.state == CabinManager.State.STREAMING) R.string.setup_phone_ready else R.string.setup_done_unconnected))
                     }
+                }
+                OutlinedButton(onClick = { restartConfirmation = true }, enabled = !saving, modifier = Modifier.heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.px_restart))
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (step != ProjectionSetupStep.USB) {

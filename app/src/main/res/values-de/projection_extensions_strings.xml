@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="px_restart_title">Einrichtungsanleitung neu starten?</string>
+    <string name="px_restart_detail">Der Fortschritt und manuelle Prüfungen werden gelöscht. Audio- und Telefoneinstellungen bleiben erhalten.</string>
+    <string name="px_restart">Anleitung neu starten</string>
+    <string name="px_checklist_title">Echte Telefonsitzung prüfen</string>
+    <string name="px_checklist_detail">Nur im Stand tatsächlich geprüfte Punkte markieren. Die Prüfungen werden gespeichert; die Anleitung kann auch mit offenen Punkten beendet werden.</string>
+    <string name="px_check_audio">Telefonton über die Fahrzeuglautsprecher gehört</string>
+    <string name="px_check_microphone">Die andere Person hat meine Stimme klar gehört</string>
+    <string name="px_check_touch">Telefonbedienelemente haben auf Berührungen reagiert</string>
+    <string name="px_check_progress">%1$d von %2$d Prüfungen bestätigt</string>
+    <string name="px_refresh_phones">Gekoppelte Telefone aktualisieren</string>
+    <string name="px_hide_phone_filters">Suche und Filter ausblenden</string>
+    <string name="px_find_phones">Telefone suchen und sortieren</string>
+    <string name="px_search_phones">Name oder Plattform suchen</string>
+    <string name="px_all_platforms">Alle Plattformen</string>
+    <string name="px_sort_phones">Namen von A bis Z sortieren</string>
+    <string name="px_no_phone_matches">Keine Telefone entsprechen diesen Filtern.</string>
+    <string name="px_clear_filters">Filter löschen</string>
+    <string name="px_touch_test">Berührungsziele</string>
+    <string name="px_multitouch_test">Mehrfingertest</string>
+    <string name="px_touch_canvas">Fünf Touchscreen-Testziele</string>
+    <string name="px_multitouch_canvas">Mehrfinger-Testbereich</string>
+    <string name="px_touch_instruction">Jeden der fünf Kreise einmal antippen, um die Berührungsreaktion dieses Bildschirms zu prüfen.</string>
+    <string name="px_multitouch_instruction">Zwei oder mehr Finger gleichzeitig in den Testbereich legen.</string>
+    <string name="px_touch_local">Dies prüft nur das Fahrzeuggerät. Kalibrierung und Telefonverbindung werden nicht verändert oder geprüft.</string>
+    <string name="px_multitouch_count">Finger jetzt: %1$d · Maximum erkannt: %2$d</string>
+    <string name="px_multitouch_pass">Zwei oder mehr gleichzeitige Berührungen erkannt.</string>
+    <string name="px_touch_progress">Erreichte Ziele: %1$d von %2$d</string>
+    <string name="px_touch_pass">Alle fünf Ziele haben reagiert.</string>
+    <string name="px_touch_reset">Testergebnisse zurücksetzen</string>
+    <string name="px_report_filter_detail">Filter ändern nur diese Vorschau. Kopieren und Speichern enthalten immer den vollständigen Bericht.</string>
+    <string name="px_report_search">Bericht durchsuchen</string>
+    <string name="px_report_all_sections">Alle Berichtsabschnitte</string>
+    <string name="px_report_copy">Vollständigen Bericht kopieren</string>
+    <string name="px_report_copied">Vollständiger Bericht kopiert</string>
+    <string name="px_report_matches">Passende Zeilen: %1$d</string>
+    <string name="px_report_no_matches">Keine Berichtszeilen entsprechen der Suche.</string>
+</resources>

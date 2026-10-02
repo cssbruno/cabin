@@ -1,0 +1,109 @@
+{
+  "sdk": "35",
+  "device": "sdk_gphone64_x86_64",
+  "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "apk_sha256": "d1c1ea7df73f455cf06ed9b1e582c1ff88e7e74601f9c70537490bf2809c9689",
+  "samples_ms": {
+    "cold": [
+      952,
+      625,
+      490,
+      539,
+      630,
+      951,
+      491
+    ],
+    "warm": [
+      320,
+      29,
+      14,
+      50,
+      121,
+      26,
+      30
+    ]
+  },
+  "medians_ms": {
+    "cold": 625,
+    "warm": 30
+  },
+  "android_timings": [
+    {
+      "mode": "cold",
+      "TotalTime": 952,
+      "WaitTime": 954
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 625,
+      "WaitTime": 636
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 490,
+      "WaitTime": 492
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 539,
+      "WaitTime": 549
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 630,
+      "WaitTime": 632
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 951,
+      "WaitTime": 960
+    },
+    {
+      "mode": "cold",
+      "TotalTime": 491,
+      "WaitTime": 497
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 320
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 29
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 14
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 50
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 121
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 26
+    },
+    {
+      "mode": "warm",
+      "WaitTime": 30
+    }
+  ],
+  "largest_launch_cost": "cold",
+  "budgets_ms": {
+    "cold_median_ms": 2500,
+    "warm_median_ms": 500
+  },
+  "startup_phases_ms": {
+    "configuration recovery": 0,
+    "parking scheduling": 0,
+    "telemetry setup": 0,
+    "activity dispatch": 13,
+    "activity creation to first draw": 40
+  },
+  "largest_measured_phase": "activity creation to first draw",
+  "measurement": "Android am start -W; cold force-stop versus warm foreground return. Not a rendered-frame or head-unit measurement."
+}

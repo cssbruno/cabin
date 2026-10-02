@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_metered_wait">En attente d’un réseau non limité. Réessayez une fois connecté ou autorisez ce téléchargement.</string>
+    <string name="ux_low_space">Espace insuffisant. Libérez de l’espace et réessayez ; l’APK vérifié est conservé.</string>
+    <string name="ux_unmetered">Télécharger uniquement sur réseau non limité</string>
+    <string name="ux_channel">Canal de mise à jour</string>
+    <string name="ux_stable">Stable</string>
+    <string name="ux_preview">Préversion</string>
+    <string name="ux_skipped">Version ignorée : %1$s</string>
+    <string name="ux_show_skipped">Afficher à nouveau</string>
+    <string name="ux_release_notes">Notes de version</string>
+    <string name="ux_no_notes">Aucune note de version fournie.</string>
+    <string name="ux_download_anyway">Autoriser ce téléchargement</string>
+    <string name="ux_skip">Ignorer cette version</string>
+    <string name="ux_backup_title">Sauvegarder les réglages avant la mise à jour</string>
+    <string name="ux_backup_detail">Sauvegardez une copie portable des réglages. Restaurez-la dans Réglages du véhicule → Sauvegarde. Les copies locales en attente figurent dans Journaux → Exports inachevés.</string>
+    <string name="ux_save_backup">Sauvegarder</string>
+    <string name="ux_backup_saved">Sauvegarde enregistrée.</string>
+    <string name="ux_backup_local">Une copie locale récupérable est enregistrée. Terminez son export depuis Journaux si nécessaire.</string>
+    <string name="ux_backup_failed">Échec de la sauvegarde. Réessayez ou choisissez de continuer sans sauvegarde.</string>
+    <string name="ux_without_backup">Continuer sans sauvegarde</string>
+</resources>

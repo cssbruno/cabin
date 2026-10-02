@@ -168,10 +168,12 @@ internal class JoyingEmbeddedSession(
                 controls.submit {
                     if (!closed.get()) {
                         val ownedEngine = com.cabin.carlink.CarlinkEngineConnection.open(context)
-                        engineConnection = ownedEngine
+                        synchronized(this) {
+                            if (closed.get()) { ownedEngine.close(); return@submit }
+                            engineConnection = ownedEngine
+                            binder = ownedEngine.engine
+                        }
                         val remote = ownedEngine.engine
-                        binder = remote
-                        if (closed.get()) return@submit
                         com.cabin.reports.DebugJournal.record("CarPlay", "native_engine_ready", "App-owned receiver")
                         remote.linkToDeath(death, 0)
                         JoyingNativeProtocol.registerListener(remote, listener)

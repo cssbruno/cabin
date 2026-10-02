@@ -29,6 +29,7 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.cabin.BuildConfig
 import com.cabin.logging.logError
+import com.cabin.logging.logWarn
 import com.cabin.logging.logInfo
 import com.cabin.platform.PlatformDetector
 import kotlinx.coroutines.CoroutineScope
@@ -567,6 +568,22 @@ class AdapterConfigPreference private constructor(
         } catch (e: IOException) {
             logError("Failed to save media delay preference: $e", tag = "AdapterConfig")
             throw e
+        }
+    }
+
+    init {
+        val trial = VideoSettingsTrial.get(appContext)
+        val recovery = trial.recoverSynchronously()
+        if (recovery != null) CoroutineScope(Dispatchers.IO).launch {
+            try {
+                dataStore.edit { values ->
+                    values[KEY_VIDEO_RESOLUTION] = recovery.first
+                    values[KEY_FPS] = recovery.second
+                }
+                trial.finishStartupRecovery()
+            } catch (error: Exception) {
+                logWarn("Video trial durable repair pending: ${error.javaClass.simpleName}", tag = "VIDEO_TRIAL")
+            }
         }
     }
 

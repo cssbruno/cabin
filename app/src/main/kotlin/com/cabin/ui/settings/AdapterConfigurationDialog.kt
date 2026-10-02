@@ -60,6 +60,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -210,31 +211,19 @@ fun AdapterConfigurationDialog(
         }
 
     // Local state for editing - allows cancel without saving
-    var selectedAudioSource by remember { mutableStateOf(savedAudioSource) }
-    var selectedMicSource by remember { mutableStateOf(savedMicSource) }
-    var selectedWifiBand by remember { mutableStateOf(savedWifiBand) }
-    var selectedMediaDelay by remember { mutableStateOf(savedMediaDelay) }
-    var selectedVideoResolution by remember { mutableStateOf(savedVideoResolution) }
-    var selectedFps by remember { mutableStateOf(savedFps) }
-    var selectedHandDrive by remember { mutableStateOf(savedHandDrive) }
-    var selectedGpsForwarding by remember { mutableStateOf(savedGpsForwarding) }
-    var selectedClusterNavigation by remember { mutableStateOf(savedClusterNavigation) }
+    var selectedAudioSource by rememberSaveable { mutableStateOf(adapterConfigPreference.getAudioSourceSync()) }
+    var selectedMicSource by rememberSaveable { mutableStateOf(adapterConfigPreference.getMicSourceSync()) }
+    var selectedWifiBand by rememberSaveable { mutableStateOf(adapterConfigPreference.getWifiBandSync()) }
+    var selectedMediaDelay by rememberSaveable { mutableStateOf(adapterConfigPreference.getMediaDelaySync()) }
+    var selectedVideoResolution by rememberSaveable(stateSaver = androidx.compose.runtime.saveable.Saver(
+        save = { it.toStorageString() }, restore = { VideoResolutionConfig.fromStorageString(it) },
+    )) { mutableStateOf(adapterConfigPreference.getVideoResolutionSync()) }
+    var selectedFps by rememberSaveable { mutableStateOf(adapterConfigPreference.getFpsSync()) }
+    var selectedHandDrive by rememberSaveable { mutableStateOf(adapterConfigPreference.getHandDriveSync()) }
+    var selectedGpsForwarding by rememberSaveable { mutableStateOf(adapterConfigPreference.getGpsForwardingSync()) }
+    var selectedClusterNavigation by rememberSaveable { mutableStateOf(adapterConfigPreference.getClusterNavigationSync()) }
 
-    // Sync local state when saved value loads (for initial load).
-    // KNOWN THEORETICAL RACE (flow-shadow): any subsequent DataStore emission for one of these
-    // keys re-runs the LaunchedEffect and OVERWRITES the user's in-flight selectedXxx choice.
-    // Low probability in practice — DataStore only emits when something else writes — but a
-    // concurrent write from elsewhere (e.g. resetToDefaults, external setter) will clobber
-    // edits the user has made in the open dialog. Not fixed here; documented only.
-    LaunchedEffect(savedAudioSource) { selectedAudioSource = savedAudioSource }
-    LaunchedEffect(savedMicSource) { selectedMicSource = savedMicSource }
-    LaunchedEffect(savedWifiBand) { selectedWifiBand = savedWifiBand }
-    LaunchedEffect(savedMediaDelay) { selectedMediaDelay = savedMediaDelay }
-    LaunchedEffect(savedVideoResolution) { selectedVideoResolution = savedVideoResolution }
-    LaunchedEffect(savedFps) { selectedFps = savedFps }
-    LaunchedEffect(savedHandDrive) { selectedHandDrive = savedHandDrive }
-    LaunchedEffect(savedGpsForwarding) { selectedGpsForwarding = savedGpsForwarding }
-    LaunchedEffect(savedClusterNavigation) { selectedClusterNavigation = savedClusterNavigation }
+    // Saved drafts survive recreation and external preference emissions.
 
     // Track if any changes were made.
     // NOTE (stale): the old one-liner here claimed "All adapter configuration changes require
@@ -304,7 +293,9 @@ fun AdapterConfigurationDialog(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // Tab bar for configuration categories
-                var selectedTabIndex by remember { mutableIntStateOf(0) }
+                var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+                val searchTarget = LocalSettingsSearchTarget.current
+                LaunchedEffect(searchTarget) { adapterSearchTab(context.resources, searchTarget)?.let { selectedTabIndex = it } }
 
                 SecondaryTabRow(selectedTabIndex = selectedTabIndex) {
                     Tab(
@@ -331,7 +322,7 @@ fun AdapterConfigurationDialog(
                     modifier =
                         Modifier
                             .weight(1f, fill = false)
-                            .verticalScroll(rememberScrollState()),
+                            .verticalScroll(rememberSettingsScrollState()),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     when (selectedTabIndex) {
@@ -914,6 +905,8 @@ fun AdapterConfigurationDialog(
                             // the firmware-bug workaround as a literal. If the BoxSettings
                             // hardcode ever changes, this log will silently lie — keep in sync.
                             scope.launch {
+                                val videoChanged = selectedVideoResolution != savedVideoResolution || selectedFps != savedFps
+                                if (videoChanged && !VideoSettingsTrial.get(context).begin(adapterConfigPreference, cabinManager)) return@launch
                                 // Save all configuration
                                 adapterConfigPreference.setAudioSource(selectedAudioSource)
                                 adapterConfigPreference.setMicSource(selectedMicSource)
@@ -925,7 +918,7 @@ fun AdapterConfigurationDialog(
                                 adapterConfigPreference.setGpsForwarding(selectedGpsForwarding)
                                 adapterConfigPreference.setClusterNavigation(selectedClusterNavigation)
 
-                                if (miscChanged) {
+                                if (miscChanged && !videoChanged) {
                                     // Tier 3: Misc settings changed — always kills the app,
                                     // but ONLY GPS changes trigger an adapter reboot (see
                                     // `needsReboot` below). WiFi-band and cluster-nav changes
@@ -989,7 +982,7 @@ fun AdapterConfigurationDialog(
                             }
                         },
                         modifier = Modifier.weight(1.5f),
-                        enabled = hasChanges,
+                        enabled = hasChanges && !VideoSettingsTrial.get(context).state.value.active,
                     ) {
                         Icon(
                             imageVector = if (miscChanged) Icons.Default.RestartAlt else Icons.Default.Refresh,
@@ -1021,7 +1014,7 @@ internal fun ConfigurationOptionCard(
     val colorScheme = MaterialTheme.colorScheme
 
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().settingsSearchAnchor(title),
         shape = MaterialTheme.shapes.medium,
         color = colorScheme.surfaceContainerHighest,
     ) {
@@ -1082,22 +1075,27 @@ private fun AudioSourceButton(
 
     // Animated properties for smooth selection transitions
     val backgroundColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primaryContainer else colorScheme.surfaceContainer,
         label = "backgroundColor",
     )
     val borderWidth by animateDpAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) 2.dp else 1.dp,
         label = "borderWidth",
     )
     val borderColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.outline,
         label = "borderColor",
     )
     val contentColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.onSurfaceVariant,
         label = "contentColor",
     )
     val iconScale by animateFloatAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) 1.1f else 1f,
         label = "iconScale",
     )
@@ -1164,18 +1162,22 @@ private fun ResolutionButton(
     val colorScheme = MaterialTheme.colorScheme
 
     val backgroundColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primaryContainer else colorScheme.surfaceContainer,
         label = "backgroundColor",
     )
     val borderWidth by animateDpAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) 2.dp else 1.dp,
         label = "borderWidth",
     )
     val borderColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.outline,
         label = "borderColor",
     )
     val contentColor by animateColorAsState(
+        animationSpec = if (LocalReducedMotion.current) androidx.compose.animation.core.snap() else androidx.compose.animation.core.spring(),
         targetValue = if (isSelected) colorScheme.primary else colorScheme.onSurfaceVariant,
         label = "contentColor",
     )

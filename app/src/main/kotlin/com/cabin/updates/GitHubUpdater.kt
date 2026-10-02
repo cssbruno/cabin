@@ -21,41 +21,60 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 
-internal enum class UpdatePhase { IDLE, CHECKING, CURRENT, AVAILABLE, DOWNLOADING, READY, INSTALLING, FAILED }
+internal enum class UpdatePhase { IDLE, CHECKING, CURRENT, AVAILABLE, DOWNLOADING, READY, INSTALLING, WAITING_NETWORK, FAILED }
 internal data class UpdateStatus(val phase: UpdatePhase = UpdatePhase.IDLE, val release: UpdateRelease? = null, val progress: Int = 0, val errorRes: Int? = null)
 internal class GitHubUpdater private constructor(private val context: Context) {
     private val prefs = context.getSharedPreferences("github_updates_v2", Context.MODE_PRIVATE)
     private val lock = Mutex()
     private val readyFile get() = File(context.filesDir, "updates/update.apk")
     private val installed get() = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName, 0))
-    private val cached = cachedRelease(prefs.getString("release", null))?.takeIf { it.versionCode > installed }
-    private val mutable = MutableStateFlow(UpdateStatus(if (cached == null) UpdatePhase.IDLE else if (hasPendingInstall()) UpdatePhase.INSTALLING else if (readyFile.exists()) UpdatePhase.READY else UpdatePhase.AVAILABLE, cached))
+    private val cached = cachedRelease(prefs.getString("release", null))?.takeIf { it.versionCode > installed && it.versionCode != prefs.getLong("skipped_code", -1) && (!it.preview || prefs.getBoolean("previews", false)) }
+    private val mutable = MutableStateFlow(UpdateStatus(if (cached == null) UpdatePhase.IDLE else if (hasPendingInstall()) UpdatePhase.INSTALLING else if (readyFile.exists() && prefs.getString("ready_asset", cached.assetIdentity()) == cached.assetIdentity()) UpdatePhase.READY else UpdatePhase.AVAILABLE, cached))
     val state = mutable.asStateFlow()
     val automatic get() = prefs.getBoolean("automatic", true)
+    val previews get() = prefs.getBoolean("previews", false)
+    val unmeteredOnly get() = prefs.getBoolean("unmetered_only", false)
+    val skippedVersion get() = prefs.getString("skipped_name", null)
+    fun setUnmeteredOnly(value: Boolean) { prefs.edit().putBoolean("unmetered_only", value).apply() }
+    fun setPreviews(value: Boolean) {
+        prefs.edit().putBoolean("previews", value).apply()
+        if (!value && mutable.value.release?.preview == true && mutable.value.phase != UpdatePhase.INSTALLING) {
+            prefs.edit().remove("release").apply()
+            mutable.value = UpdateStatus()
+        }
+    }
+    fun skipCurrent() {
+        val release = mutable.value.release ?: return
+        prefs.edit().putLong("skipped_code", release.versionCode).putString("skipped_name", release.versionName).apply()
+        mutable.value = UpdateStatus(UpdatePhase.CURRENT)
+    }
+    fun clearSkipped() { prefs.edit().remove("skipped_code").remove("skipped_name").apply() }
+    private fun networkAllowed(overrideMetered: Boolean) = overrideMetered || !unmeteredOnly ||
+        !context.getSystemService(android.net.ConnectivityManager::class.java).isActiveNetworkMetered
     val lastCheck get() = prefs.getLong("last_check", 0)
     fun setAutomatic(enabled: Boolean) { prefs.edit().putBoolean("automatic", enabled).apply(); UpdateJobService.schedule(context) }
 
-    suspend fun check() = withContext(Dispatchers.IO) { lock.withLock {
+    suspend fun check(includeSkipped: Boolean = false) = withContext(Dispatchers.IO) { lock.withLock {
         if (mutable.value.phase == UpdatePhase.INSTALLING) return@withLock
         val old = mutable.value
         mutable.value = old.copy(phase = UpdatePhase.CHECKING, errorRes = null)
         try {
-            val assets = releaseAssets(readText("https://api.github.com/repos/$UPDATE_REPOSITORY/releases?per_page=20", 1_048_576), false)
+            val assets = releaseAssets(readText("https://api.github.com/repos/$UPDATE_REPOSITORY/releases?per_page=20", 1_048_576), previews)
             var malformed = false
             val candidates = assets.mapNotNull { asset ->
                 try { parseUpdateManifest(readText(asset.manifestUrl, 16_384), asset, installed) }
                 catch (e: CancellationException) { throw e }
                 catch (_: Exception) { malformed = true; null }
             }
-            val release = candidates.maxByOrNull { it.versionCode }
+            val release = candidates.filter { includeSkipped || it.versionCode != prefs.getLong("skipped_code", -1) }.maxByOrNull { it.versionCode }
+            if (includeSkipped && release?.versionCode == prefs.getLong("skipped_code", -1)) clearSkipped()
             if (release == null && malformed) error("Invalid release metadata")
             prefs.edit().putLong("last_check", System.currentTimeMillis()).apply()
             if (release == null) {
-                readyFile.delete(); prefs.edit().remove("release").apply()
+                prefs.edit().remove("release").apply()
                 mutable.value = UpdateStatus(UpdatePhase.CURRENT)
             } else {
-                val same = release == old.release
-                if (!same) readyFile.delete()
+                val same = release.assetIdentity() == prefs.getString("ready_asset", old.release?.assetIdentity())
                 prefs.edit().putString("release", release.json()).apply()
                 mutable.value = UpdateStatus(if (same && readyFile.exists()) UpdatePhase.READY else UpdatePhase.AVAILABLE, release)
             }
@@ -67,41 +86,36 @@ internal class GitHubUpdater private constructor(private val context: Context) {
         }
     } }
 
-    suspend fun download() = withContext(Dispatchers.IO) { lock.withLock {
+    suspend fun download(overrideMetered: Boolean = false) = withContext(Dispatchers.IO) { lock.withLock {
         if (mutable.value.phase == UpdatePhase.INSTALLING) return@withLock
         val release = mutable.value.release ?: return@withLock
         val partial = File(context.filesDir, "updates/download.tmp")
+        val metadata = File(context.filesDir, "updates/download.json")
         try {
             require(release.versionCode > installed)
             mutable.value = UpdateStatus(UpdatePhase.DOWNLOADING, release)
-            requireUpdate(partial.parentFile!!.isDirectory || partial.parentFile!!.mkdirs(), R.string.update_error_storage)
-            val connection = open(release.url)
+            downloadUpdateAsset(release, partial, metadata, ::open,
+                availableBytes = { context.filesDir.usableSpace },
+                networkAllowed = { networkAllowed(overrideMetered) },
+                progress = { mutable.value = UpdateStatus(UpdatePhase.DOWNLOADING, release, it) })
             val digest = MessageDigest.getInstance("SHA-256")
-            try {
-                requireUpdate(connection.responseCode == 200, R.string.update_error_server)
-                connection.inputStream.use { input -> partial.outputStream().use { output ->
-                    val buffer = ByteArray(64 * 1024); var total = 0L
-                    while (true) {
-                        currentCoroutineContext().ensureActive()
-                        val read = input.read(buffer); if (read < 0) break
-                        total += read; requireUpdate(total <= release.size && total <= MAX_APK_BYTES, R.string.update_error_integrity)
-                        digest.update(buffer, 0, read); output.write(buffer, 0, read)
-                        mutable.value = UpdateStatus(UpdatePhase.DOWNLOADING, release, (total * 100 / release.size).toInt())
-                    }
-                    requireUpdate(total == release.size, R.string.update_error_integrity)
-                } }
-            } finally { connection.disconnect() }
+            partial.inputStream().use { input ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) { currentCoroutineContext().ensureActive(); val count = input.read(buffer); if (count < 0) break; digest.update(buffer, 0, count) }
+            }
             requireUpdate(digest.digest().hex() == release.sha256, R.string.update_error_integrity)
             validateApk(partial, release)
-            readyFile.delete(); requireUpdate(partial.renameTo(readyFile), R.string.update_error_storage)
+            java.nio.file.Files.move(partial.toPath(), readyFile.toPath(), java.nio.file.StandardCopyOption.ATOMIC_MOVE, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            prefs.edit().putString("ready_asset", release.assetIdentity()).commit()
+            metadata.delete()
             mutable.value = UpdateStatus(UpdatePhase.READY, release, 100)
         } catch (e: CancellationException) { mutable.value = UpdateStatus(UpdatePhase.AVAILABLE, release); throw e }
         catch (e: Exception) {
-            com.cabin.telemetry.CabinTelemetry.log(com.cabin.logging.Logger.Level.WARN, e)
+            val resource = updateErrorResource(e)
+            if (resource in setOf(R.string.update_error_integrity, R.string.update_error_apk, R.string.update_error_signature)) { partial.delete(); metadata.delete() }
             Log.w("CabinUpdater", "Update download or validation failed", e)
-            mutable.value = UpdateStatus(UpdatePhase.FAILED, release, errorRes = updateErrorResource(e))
+            mutable.value = UpdateStatus(if (resource == R.string.ux_metered_wait) UpdatePhase.WAITING_NETWORK else UpdatePhase.FAILED, release, errorRes = resource)
         }
-        finally { partial.delete() }
     } }
 
     @Suppress("DEPRECATION")
@@ -116,6 +130,7 @@ internal class GitHubUpdater private constructor(private val context: Context) {
     }
     private suspend fun verifyReady() {
         val release = mutable.value.release ?: error("No update")
+        requireUpdate(context.filesDir.usableSpace >= release.size + 1024 * 1024, R.string.ux_low_space)
         requireUpdate(readyFile.length() == release.size, R.string.update_error_integrity)
         val digest = MessageDigest.getInstance("SHA-256")
         readyFile.inputStream().use { input ->
@@ -211,11 +226,12 @@ internal class GitHubUpdater private constructor(private val context: Context) {
         fun get(context: Context): GitHubUpdater = instance ?: synchronized(this) {
             instance ?: GitHubUpdater(context.applicationContext).also { instance = it }
         }
-        private fun open(start: String): HttpURLConnection {
+        private fun open(start: String, headers: Map<String, String> = emptyMap()): HttpURLConnection {
             var url = start
             repeat(5) {
                 require(trustedUpdateDownload(url))
                 val connection = URL(url).openConnection() as HttpURLConnection
+                headers.forEach { (name, value) -> connection.setRequestProperty(name, value) }
                 connection.instanceFollowRedirects = false
                 connection.connectTimeout = 15_000; connection.readTimeout = 30_000
                 connection.setRequestProperty("User-Agent", "Cabin-Updater/${BuildConfig.VERSION_NAME}")

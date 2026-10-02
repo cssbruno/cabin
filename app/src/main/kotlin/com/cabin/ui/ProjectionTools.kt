@@ -45,6 +45,7 @@ fun ProjectionToolsPanel(
     onScreenOff: (() -> Unit)? = null,
     onChangeDevice: (() -> Unit)? = null,
     connectedDeviceName: String? = null,
+    toolOrder: List<String> = listOf("phone", "settings", "blackout"),
 ) {
     Surface(
         modifier = modifier.widthIn(max = 360.dp).fillMaxWidth().testTag("projection_tools"),
@@ -54,31 +55,20 @@ fun ProjectionToolsPanel(
         shadowElevation = 6.dp,
     ) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            // Close stays outside the scroll area, including on short head-unit displays.
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ProjectionToolButton(
-                    label = stringResource(if (onChangeDevice != null) R.string.projection_change_device else R.string.action_settings),
-                    icon = if (onChangeDevice != null) Icons.Default.PhonelinkSetup else Icons.Default.Settings,
-                    onClick = onChangeDevice ?: onSettings,
-                    modifier = Modifier.weight(1f),
-                    detail = if (onChangeDevice != null) connectedDeviceName else null,
-                )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconButton(onClick = onClose, modifier = Modifier.size(56.dp)) {
                     Icon(Icons.Default.Close, contentDescription = stringResource(R.string.projection_tools_close))
                 }
             }
-            Column(
-                modifier = Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                if (onChangeDevice != null) {
-                    ProjectionToolButton(stringResource(R.string.action_settings), Icons.Default.Settings, onSettings)
+            Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                toolOrder.distinct().take(3).forEach { action ->
+                    when (action) {
+                        "phone" -> onChangeDevice?.let { ProjectionToolButton(stringResource(R.string.projection_change_device), Icons.Default.PhonelinkSetup, it, detail = connectedDeviceName) }
+                        "settings" -> ProjectionToolButton(stringResource(R.string.action_settings), Icons.Default.Settings, onSettings)
+                        "blackout" -> onScreenOff?.let { ProjectionToolButton(stringResource(R.string.projection_screen_off_short), Icons.Default.VisibilityOff, it, detail = stringResource(R.string.projection_audio_continues)) }
+                    }
                 }
-                onScreenOff?.let { screenOff ->
-                    ProjectionToolButton(stringResource(R.string.projection_screen_off_short), Icons.Default.VisibilityOff, screenOff,
-                        detail = stringResource(R.string.projection_audio_continues))
-                }
-
+                if ("settings" !in toolOrder) ProjectionToolButton(stringResource(R.string.action_settings), Icons.Default.Settings, onSettings)
             }
         }
     }

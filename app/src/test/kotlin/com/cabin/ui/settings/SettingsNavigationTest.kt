@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertWidthIsAtLeast
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -74,9 +77,10 @@ class SettingsNavigationTest {
         }
         compose.onNodeWithText("Launcher").performScrollTo().assertIsDisplayed().assertIsSelected()
         compose.onNodeWithText("Back").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Back to Cabin").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
         compose.onNodeWithText("Exit app").assertIsDisplayed()
         saveScreenshot("settings-short-landscape")
-        compose.onNodeWithText("Back").performClick()
+        compose.onNodeWithContentDescription("Back to Cabin").performClick()
         compose.runOnIdle { assertEquals(1, backs) }
     }
 
@@ -92,12 +96,65 @@ class SettingsNavigationTest {
         }
         compose.onNodeWithText("Launcher").assertIsDisplayed().assertIsSelected()
         compose.onNodeWithContentDescription("Back to Cabin").assertIsDisplayed()
-        compose.onNodeWithText("Exit app").assertIsDisplayed().performClick()
+        compose.onNodeWithContentDescription("Exit app").assertIsDisplayed().performClick()
         compose.onNodeWithText("Stop and exit").assertIsDisplayed()
         compose.onNodeWithText("Keep running").performClick()
         saveScreenshot("settings-narrow-light")
         compose.onNodeWithContentDescription("Back to Cabin").performClick()
         compose.runOnIdle { assertEquals(1, backs) }
+    }
+
+    @Test fun `portrait header keeps title and controls readable at double font size`() {
+        compose.setContent {
+            val density = androidx.compose.ui.platform.LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(density.density, 2f)) {
+                CabinTheme { Box(Modifier.width(411.dp).height(440.dp)) { SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL) } }
+            }
+        }
+        compose.onNodeWithText("Settings").assertIsDisplayed().performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.GetTextLayoutResult) { action ->
+            val layouts = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
+            org.junit.Assert.assertTrue(action(layouts)); assertEquals(1, layouts.single().lineCount)
+        }
+        listOf("Back to Cabin", "Search settings", "Exit app").forEach { label ->
+            compose.onNodeWithContentDescription(label).assertIsDisplayed().assertHeightIsAtLeast(56.dp).assertWidthIsAtLeast(56.dp)
+        }
+    }
+
+    @Test fun `short landscape at double font scale keeps navigation and exit usable`() {
+        compose.setContent {
+            val density = androidx.compose.ui.platform.LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(density.density, 2f)) {
+                CabinTheme { Box(Modifier.width(800.dp).height(240.dp)) { SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL) } }
+            }
+        }
+        compose.onNodeWithContentDescription("Back to Cabin").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithContentDescription("Exit app").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithText("FYT").performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(56.dp).performClick()
+        compose.onNodeWithText("FYT").assertIsSelected()
+        saveScreenshot("ux-settings-short-double-font")
+    }
+
+    @Test fun `large font rail keeps back and exit compact while categories scroll`() {
+        compose.setContent {
+            val density = androidx.compose.ui.platform.LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(density.density, 2f)) {
+                CabinTheme { Box(Modifier.width(644.dp).height(460.dp)) {
+                    SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL, embedded = true)
+                } }
+            }
+        }
+        compose.onNodeWithContentDescription("Back to Cabin").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        compose.onNodeWithContentDescription("Exit app").assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        val active = compose.onNodeWithText("Launcher").assertIsDisplayed().assertIsSelected().assertHeightIsAtLeast(72.dp).fetchSemanticsNode().boundsInRoot
+        val exit = compose.onNodeWithContentDescription("Exit app").fetchSemanticsNode().boundsInRoot
+        org.junit.Assert.assertTrue("Active tab must be fully visible above Exit: $active, exit=$exit", active.top >= 64f && active.bottom <= exit.top)
+        compose.onNodeWithContentDescription("Search settings").performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(56.dp)
+        // User scrolling upward must not be pulled back to the active tab.
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Search settings").assertIsDisplayed()
+        compose.onNodeWithText("FYT").performScrollTo().assertIsDisplayed().performClick()
+        compose.onNodeWithText("FYT").assertIsSelected()
+        saveScreenshot("ux-settings-rail-double-font")
     }
 
     @Test fun `CarPlay settings stay accessible without an adapter`() {
@@ -151,8 +208,9 @@ class SettingsNavigationTest {
             CabinTheme { SettingsScreen(manager, null, {}, {}, initialTab = SettingsTab.CONTROL) }
         }
         compose.onNodeWithText("Car Settings").performScrollTo().performClick()
-        compose.onNodeWithText("Lights").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Parking & camera").performScrollTo().assertIsDisplayed()
+        // Without connected vehicle capabilities, only universal settings are shown.
+        compose.onNodeWithText("Trips & maintenance").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("My car").performScrollTo().assertIsDisplayed()
     }
 
     private fun saveScreenshot(name: String) {

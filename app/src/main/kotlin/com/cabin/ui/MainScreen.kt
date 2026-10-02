@@ -1,5 +1,6 @@
 package com.cabin.ui
 
+import kotlinx.coroutines.delay
 import android.widget.Toast
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.AcUnit
@@ -163,7 +164,8 @@ fun MainScreen(
     // Key state on cabinManager identity — when manager is replaced (display mode reinit),
     // all session-scoped state resets automatically. This prevents stale callbacks, flags,
     // or touch state from the old manager leaking into the new session.
-    var connectionState by remember(cabinManager) { mutableStateOf(CabinManager.State.DISCONNECTED) }
+    // Connection progress is available before SurfaceHolder creation and survives renderer reattachment.
+    val connectionState = sessionHealth.connection
     var statusText by remember(cabinManager) { mutableStateOf(resources.getString(R.string.main_connect_adapter)) }
     var isResetting by remember(cabinManager) { mutableStateOf(false) }
     val surfaceState = rememberVideoSurfaceState(cabinManager)
@@ -180,11 +182,44 @@ fun MainScreen(
     var screenBlanked by remember(cabinManager) { mutableStateOf(false) }
     var helpVisible by remember(cabinManager) { mutableStateOf(false) }
     var setupVisible by remember(cabinManager) { mutableStateOf(false) }
+    var controlsShown by remember(cabinManager) { mutableStateOf(true) }
+    var lastInteraction by remember(cabinManager) { mutableLongStateOf(android.os.SystemClock.elapsedRealtime()) }
+    var gestureActive by remember(cabinManager) { mutableStateOf(false) }
+    var consumeRevealGesture by remember(cabinManager) { mutableStateOf(false) }
+    val trial = remember(context) { com.cabin.ui.settings.VideoSettingsTrial.get(context) }
+    val trialState by trial.state.collectAsStateWithLifecycle()
+    var pictureUsable by remember(cabinManager, trialState.active) { mutableStateOf(false) }
+    LaunchedEffect(cabinManager, trialState.active) {
+        if (trialState.active) while (true) {
+            pictureUsable = trial.pictureUsable(cabinManager)
+            delay(500)
+        }
+    }
+    LaunchedEffect(preferences.controlHideSeconds, preferences.blackoutMinutes, connectionState,
+        projectionUiVisible, windowFocused, toolsVisible, helpVisible, setupVisible, climateOverlayVisible, trialState.active) {
+        if (connectionState != CabinManager.State.STREAMING || !projectionUiVisible || !windowFocused) {
+            controlsShown = true
+            return@LaunchedEffect
+        }
+        while (true) {
+            delay(500)
+            val blocked = toolsVisible || helpVisible || setupVisible || climateOverlayVisible || trialState.active || gestureActive
+            val idleMs = android.os.SystemClock.elapsedRealtime() - lastInteraction
+            if (blocked) { controlsShown = true; lastInteraction = android.os.SystemClock.elapsedRealtime() }
+            else {
+                controlsShown = preferences.controlHideSeconds == 0 || idleMs < preferences.controlHideSeconds * 1000L
+                if (preferences.blackoutMinutes > 0 && idleMs >= preferences.blackoutMinutes * 60_000L) {
+                    touchState.cancel(); screenBlanked = true
+                }
+            }
+        }
+    }
     var readiness by remember(cabinManager) { mutableStateOf<ProjectionReadinessSnapshot?>(null) }
     var readinessRefresh by remember(cabinManager) { mutableIntStateOf(0) }
     val openTools: () -> Unit = {
         touchState.cancel()
         toolsVisible = true
+        controlsShown = true; lastInteraction = android.os.SystemClock.elapsedRealtime()
         helpVisible = false
     }
     val openHelp: () -> Unit = {
@@ -275,7 +310,6 @@ fun MainScreen(
                     object : CabinManager.Callback {
                         override fun onStateChanged(state: CabinManager.State) {
                             if (state != CabinManager.State.STREAMING) touchState.clear()
-                            connectionState = state
                         }
 
                         override fun onStatusTextChanged(text: String) {
@@ -376,10 +410,12 @@ fun MainScreen(
         // Reserve usable control height and a non-zero proportional projection area.
         val climateStripHeight = climatePanelHeightDp(maxHeight.value, climateOverlayVisible).dp
         val viewportHeight = maxHeight
+        val bezelHorizontal = maxWidth * (preferences.bezelPercent / 100f)
+        val bezelVertical = maxHeight * (preferences.bezelPercent / 100f)
 
         ProjectionVisibilityLayers(
             blanked = screenBlanked && projectionUiVisible && !isLoading,
-            onWake = { screenBlanked = false },
+            onWake = { screenBlanked = false; controlsShown = true; lastInteraction = android.os.SystemClock.elapsedRealtime() },
         ) {
             // For AA: SurfaceView oversized to tier AR (16:9), centered + clipped.
             // Black bars in the codec frame fall outside the clip → cropped visually.
@@ -392,6 +428,7 @@ fun MainScreen(
                     Modifier
                         .fillMaxSize()
                         .padding(bottom = climateStripHeight)
+                        .padding(horizontal = bezelHorizontal, vertical = bezelVertical)
                         .clipToBounds(),
             ) {
                 // Track container dimensions for BoxSettings AR calculation
@@ -478,12 +515,21 @@ fun MainScreen(
                             surfaceState.onSurfaceSizeChanged(width, height)
                         },
                         onTouchEvent = { event ->
+                            lastInteraction = android.os.SystemClock.elapsedRealtime()
+                            if (event.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
+                                gestureActive = true
+                                if (!controlsShown) { consumeRevealGesture = true; controlsShown = true; touchState.cancel() }
+                            }
+                            val skipReveal = consumeRevealGesture
+                            if (event.actionMasked == android.view.MotionEvent.ACTION_UP || event.actionMasked == android.view.MotionEvent.ACTION_CANCEL) {
+                                gestureActive = false; consumeRevealGesture = false
+                            }
                             // Read state directly through the Compose delegate — NOT via
                             // the pre-computed val `isUserInteractingWithProjection`.
                             // This lambda is captured once in AndroidView's factory block;
                             // a pre-computed val would snapshot DISCONNECTED permanently.
                             if (connectionState == CabinManager.State.STREAMING && projectionUiVisibleNow &&
-                                windowFocusedNow && !toolsVisible && !helpVisible && !setupVisible && !screenBlanked
+                                windowFocusedNow && !toolsVisible && !helpVisible && !setupVisible && !screenBlanked && !skipReveal
                             ) {
                                 if (BuildConfig.DEBUG) {
                                     val now = System.currentTimeMillis()
@@ -518,8 +564,11 @@ fun MainScreen(
                 val colors = MaterialTheme.colorScheme
                 BoxWithConstraints(Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Brush.linearGradient(
                     listOf(colors.surfaceContainerHigh, colors.surfaceContainerLowest))).padding(16.dp)) {
-                    if (maxHeight < 260.dp) {
-                        Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
+                    val viewportHeight = maxHeight
+                    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewportHeight),
+                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (viewportHeight < 260.dp) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Phonelink, null, Modifier.size(32.dp), tint = colors.primary)
                             Text(stringResource(R.string.launcher_page_carplay), style = MaterialTheme.typography.titleLarge, color = colors.onSurface)
                             androidx.compose.material3.FilledIconButton(connectPhone, Modifier.size(56.dp)) {
@@ -527,7 +576,7 @@ fun MainScreen(
                             }
                         }
                     } else {
-                        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                             Surface(color = colors.primary.copy(alpha = 0.10f), shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)) {
                                 Icon(Icons.Default.Phonelink, null, Modifier.padding(20.dp).size(40.dp), tint = colors.primary)
                             }
@@ -542,6 +591,10 @@ fun MainScreen(
                                 Icon(Icons.Default.ArrowForward, null, Modifier.size(20.dp))
                             }
                         }
+                    }
+                    if (projectionUiVisible && !helpVisible && !setupVisible) {
+                        com.cabin.ui.settings.ConnectionProgressPanel(cabinManager, Modifier.widthIn(max = 640.dp))
+                    }
                     }
                 }
             } else if (isLoading) {
@@ -560,6 +613,11 @@ fun MainScreen(
                     onRestart = restartConnection,
                     onSetup = openSetup,
                     firstTimeSetup = !setupProgress.completed,
+                    connectionProgress = {
+                        if (projectionUiVisible && !helpVisible && !setupVisible) {
+                            com.cabin.ui.settings.ConnectionProgressPanel(cabinManager)
+                        }
+                    },
                     modifier =
                         Modifier
                             .fillMaxSize()
@@ -635,7 +693,13 @@ fun MainScreen(
             }
 
             // Keep settings and return to launcher directly accessible over CarPlay.
-            if (!isLoading && !isCompactPanel) {
+            if (!isLoading && !controlsShown && projectionUiVisible) {
+                androidx.compose.material3.TextButton(
+                    onClick = { controlsShown = true; lastInteraction = android.os.SystemClock.elapsedRealtime(); touchState.cancel() },
+                    modifier = Modifier.align(Alignment.TopEnd).heightIn(min = 56.dp),
+                ) { Text(stringResource(R.string.gx_show_controls)) }
+            }
+            if (!isLoading && !isCompactPanel && controlsShown) {
                 Row(
                     modifier =
                         Modifier
@@ -772,6 +836,23 @@ fun MainScreen(
                     modifier = Modifier.fillMaxSize().padding(12.dp),
                 )
             }
+            if (trialState.active && projectionUiVisible) {
+                Surface(Modifier.align(Alignment.BottomCenter).padding(12.dp), shape = MaterialTheme.shapes.large,
+                    color = colorScheme.surfaceContainerHigh) {
+                    Column(Modifier.padding(12.dp)) {
+                        Text(stringResource(R.string.gx_trial_countdown, trialState.remainingSeconds))
+                        if (trialState.error) Text(stringResource(R.string.gx_trial_error), color = colorScheme.error)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(onClick = { trial.keep(pictureUsable) }, enabled = pictureUsable, modifier = Modifier.heightIn(min = 56.dp)) {
+                                Text(stringResource(R.string.gx_keep_picture))
+                            }
+                            androidx.compose.material3.OutlinedButton(onClick = trial::revert, modifier = Modifier.heightIn(min = 56.dp)) {
+                                Text(stringResource(R.string.gx_revert))
+                            }
+                        }
+                    }
+                }
+            }
             doorWarning?.let { warning ->
                 Text(
                     text = warning,
@@ -808,6 +889,7 @@ internal fun ProjectionConnectionScreen(
     onSetup: (() -> Unit)? = null,
     firstTimeSetup: Boolean = false,
     onHome: (() -> Unit)? = null,
+    connectionProgress: (@Composable () -> Unit)? = null,
 ) {
     val presentation = projectionConnectionPresentation(androidx.compose.ui.platform.LocalResources.current, state)
     val busy = presentation.busy || isResetting
@@ -860,6 +942,7 @@ internal fun ProjectionConnectionScreen(
                             stringResource(if (onHelp != null) R.string.help_title else R.string.action_settings))
                     }
                 }
+                connectionProgress?.invoke()
             }
         }
     }
@@ -934,8 +1017,10 @@ internal fun ClimatePanel(
     onSwitch: ((com.cabin.platform.TeyesClimateSwitch) -> Unit)? = null,
     onAirAction: ((String) -> Unit)? = null,
 ) {
+    val openedProfile = remember { state.profileId }
+    LaunchedEffect(state.profileId) { if(openedProfile != state.profileId) onClose?.invoke() }
     state.syuAir?.let { air ->
-        SyuAirPanel(air, onAirAction, modifier, onClose)
+        SyuAirPanel(air, onAirAction, modifier, onClose, state)
         return
     }
     val closeTimer = rememberClimateCloseTimer(onClose)
@@ -985,6 +1070,7 @@ internal fun ClimatePanel(
                         .then(if (scrollWholePanel) Modifier else Modifier.weight(1f).verticalScroll(rememberScrollState())),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                ClimateToolsPanel(state, onToggleAc, onSetFan, onSwitch)
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     Row(Modifier.widthIn(max = 640.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         com.cabin.platform.TeyesTemperatureZone.entries.forEach { zone ->

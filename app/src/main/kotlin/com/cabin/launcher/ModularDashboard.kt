@@ -26,6 +26,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -111,6 +112,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     onProjectionPlacement: (ProjectionModulePlacement?) -> Unit, clock: String = "", onVehicle: () -> Unit = {}, onSettings: () -> Unit = {}, climateActions: ClimateWidgetActions = ClimateWidgetActions()) {
     val context = LocalContext.current
     val driver by TeyesFeaturePreferences.get(context).profile.collectAsStateWithLifecycle()
+    val profileRevision by TeyesFeaturePreferences.get(context).revision.collectAsStateWithLifecycle()
     val prefs = remember(driver.slot, vehicle.profileId, vehicle.vehicleDataLayout) {
         DashboardPreferences(context, driver.slot, vehicle.profileId, vehicle.vehicleDataLayout)
     }
@@ -124,7 +126,9 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     )) else storedLayout
     val history by prefs.history.collectAsStateWithLifecycle()
     val launcher by launcherPreferences.state.collectAsStateWithLifecycle()
-    var page by rememberSaveable(driver.slot, vehicle.profileId, vehicle.vehicleDataLayout) { mutableIntStateOf(0) }
+    var page by rememberSaveable(driver.slot, vehicle.profileId, vehicle.vehicleDataLayout) { mutableIntStateOf(prefs.state.value.selectedPage) }
+    var pageTools by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(profileRevision, prefs) { prefs.refresh(); page = prefs.state.value.selectedPage }
     var compactIndex by rememberSaveable { mutableIntStateOf(0) }
     var editing by rememberSaveable { mutableStateOf(false) }
     var selected by remember { mutableStateOf<Int?>(null) }
@@ -133,6 +137,8 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     var draggedId by remember { mutableStateOf<Int?>(null) }
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
     var noRoom by remember { mutableStateOf(false) }
+    LaunchedEffect(page, prefs, glance) { if (!glance) prefs.selectPage(page) }
+    if (pageTools && !moving) DashboardPageTools(prefs, page, onPage = { page = it; compactIndex = 0 }, onDismiss = { pageTools = false })
     val onPlacement by rememberUpdatedState(onProjectionPlacement)
     val host = remember { AppWidgetHost(context.applicationContext, HOST_ID) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -225,7 +231,12 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(Modifier.fillMaxWidth().height(56.dp).padding(end = 60.dp).background(MaterialTheme.colorScheme.background)
             .launcherPageSwipe(page, { target -> page = target; compactIndex = 0 }), verticalAlignment = Alignment.CenterVertically) {
-            Spacer(Modifier.weight(1f))
+            // Reserve primary actions first. Only page navigation may scroll on narrow displays.
+            Box(Modifier.weight(1f)) {
+            Row(Modifier.align(Alignment.CenterEnd).horizontalScroll(rememberScrollState()).testTag("dashboard-page-navigation"),
+                verticalAlignment = Alignment.CenterVertically) {
+            if (!layout.pageNames[page].isNullOrEmpty()) Text(layout.pageNames.getValue(page),
+                Modifier.widthIn(max = 120.dp), maxLines = 1, overflow = TextOverflow.Ellipsis)
             PageDots(displayPage - 1, displayPages, { target ->
                 if (compact) {
                     var remaining = target
@@ -238,6 +249,8 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
                     compactIndex = remaining
                 } else { page = target; compactIndex = 0 }
             }, maxVisible = if (compact) 3 else 5)
+            }
+            }
             if (!editing) IconButton({ quick = true }, modifier = Modifier.size(56.dp)) {
                 Icon(Icons.Default.Bolt, stringResource(R.string.tools_quick))
             }
@@ -266,6 +279,7 @@ fun ModularDashboard(manager: CabinManager, vehicle: TeyesClimateState, moving: 
             if (editing && !moving) Box {
                 IconButton({ adding = true }, modifier = Modifier.size(56.dp)) { Icon(Icons.Default.Add, stringResource(R.string.module_add)) }
                 DropdownMenu(adding, { adding = false }) {
+                    DropdownMenuItem(text = { Text(stringResource(R.string.goal_page_tools)) }, onClick = { adding = false; pageTools = true })
                     DropdownMenuItem(text = { Text(stringResource(R.string.layout_undo)) }, enabled = history.canUndo,
                         leadingIcon = { Icon(Icons.Default.Undo, null) }, onClick = { adding = false; prefs.undo() })
                     DropdownMenuItem(text = { Text(stringResource(R.string.layout_redo)) }, enabled = history.canRedo,
@@ -646,6 +660,7 @@ internal fun rememberDashboardTilePosition(
     releasePosition: Offset?,
     onSettled: () -> Unit,
 ): State<Offset> {
+    val reducedMotion = com.cabin.ui.settings.LocalReducedMotion.current
     val animated = remember { Animatable(target, Offset.VectorConverter) }
     val settled by rememberUpdatedState(onSettled)
     LaunchedEffect(target, dragDelta, releasePosition) {
@@ -653,7 +668,7 @@ internal fun rememberDashboardTilePosition(
             animated.snapTo(target + dragDelta)
         } else {
             releasePosition?.let { animated.snapTo(it) }
-            animated.animateTo(target, tween(durationMillis = 220, easing = FastOutSlowInEasing))
+            if (reducedMotion) animated.snapTo(target) else animated.animateTo(target, tween(durationMillis = 220, easing = FastOutSlowInEasing))
             settled()
         }
     }

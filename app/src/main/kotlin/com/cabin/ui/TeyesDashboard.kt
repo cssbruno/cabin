@@ -208,16 +208,7 @@ fun TeyesDashboard(
             ),
     )
     previewReport?.let { report ->
-        HealthReportPreview(
-            report = report,
-            onSave = {
-                onParkedAction {
-                    previewReport = null
-                    com.cabin.reports.ReportExport.show(context, "cabin-health.json", report)
-                }
-            },
-            onCancel = { previewReport = null },
-        )
+        DurableHealthReportPreview(report = report, onClose = { previewReport = null }, onParkedAction = onParkedAction)
     }
 }
 

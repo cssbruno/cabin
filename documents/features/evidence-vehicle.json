@@ -1,0 +1,630 @@
+{
+  "goals": [
+    {
+      "id": "G051",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TeyesClimateController.kt",
+        "app/src/main/kotlin/com/cabin/platform/TeyesTelemetryFreshness.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleReadingsTools.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ObdSettingsSection.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/TeyesClimateBinderIntegrationTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/TeyesVehicleSettingsUiTest.kt"
+      ],
+      "verification": "Independent receipt times and expiration pass; Binder canonical/raw age isolation and disconnect clearing pass. Vehicle UI renders live readings and removes stale values.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Verify each freshness disclosure label/age and waiting state through UI.",
+        "Head-unit callback timing and disconnect evidence."
+      ]
+    },
+    {
+      "id": "G052",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/VehicleTools.kt",
+        "app/src/main/kotlin/com/cabin/platform/TeyesClimateController.kt",
+        "app/src/main/kotlin/com/cabin/ui/ClimateToolsPanel.kt",
+        "app/src/main/kotlin/com/cabin/ui/SyuAirPanel.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/TeyesClimateBinderIntegrationTest.kt"
+      ],
+      "verification": "Command tracker verifies fresh matching confirmation, stale-feedback rejection, timeout without success, and profile-change cancellation; existing guarded climate Binder command tests pass.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Exercise pending/confirmed/timed-out labels through the climate UI.",
+        "Head-unit command/feedback timing and absence of automatic repeats."
+      ]
+    },
+    {
+      "id": "G053",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/ClimateToolsPanel.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleReadingsTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/CabinUiRenderingTest.kt"
+      ],
+      "verification": "Existing unsupported/read-only climate rendering and disabled action tests pass.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Exercise every new disabled-control explanation, including saved read-only mode and missing-feedback cause.",
+        "Head-unit supported and unsupported control evidence."
+      ]
+    },
+    {
+      "id": "G054",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/ClimateCloseTimer.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleReadingsTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/ClimateCloseTimerTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Compose timer test passes: touch resets countdown, holding prevents dismissal, release resumes countdown, and close remains usable. Final targeted acceptance passes actual selection/persistence of 20 seconds, 30 seconds and Never, measured timeout boundaries, no dismissal during a 30-second lifecycle pause, and a complete restarted 10-second countdown after resume. Existing touch/hold/reset timer test also passes.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G055",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/ClimateToolsPanel.kt",
+        "app/src/main/kotlin/com/cabin/ui/SyuAirPanel.kt"
+      ],
+      "tests": [],
+      "verification": "Production compilation passed; ordered favorite storage and rendering were inspected in source.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "production_compile_passed_no_dedicated_test",
+      "remaining_verification": [
+        "Exercise selecting, ordering and persisting favorites through both supported climate panels.",
+        "Verify unavailable retained favorites after changing to an incompatible profile on a head unit."
+      ]
+    },
+    {
+      "id": "G056",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TeyesClimateController.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleReadingsTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/CabinUiRenderingTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/TeyesVehicleSettingsUiTest.kt"
+      ],
+      "verification": "Read-only climate presentation test and non-interactive telemetry assertions pass; local safety preference remains exposed.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Dedicated persisted read-only controller-boundary tests for every vehicle write API remain missing.",
+        "Toggle saved read-only mode and verify live readings continue with zero outgoing writes on a head unit."
+      ]
+    },
+    {
+      "id": "G057",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/VehicleTools.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleCompatibilityPanel.kt"
+      ],
+      "tests": [],
+      "verification": "Production compilation passed; dated capability snapshots and feedback/change classifications were inspected in source.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "production_compile_passed_no_dedicated_test",
+      "remaining_verification": [
+        "Save/reload/compare snapshots through UI and verify added, missing, changed and stale-feedback classifications.",
+        "Compare firmware capability snapshots on a head unit."
+      ]
+    },
+    {
+      "id": "G058",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/MainScreen.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/ObdSettingsSection.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/CarSettingsScreen.kt",
+        "app/src/main/kotlin/com/cabin/platform/TeyesClimateController.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/TeyesClimateBinderIntegrationTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/SyuVehicleOptionsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/CarSettingsScreenTest.kt"
+      ],
+      "verification": "Binder profile replacement clears obsolete callbacks and readings. UI tests confirm stale reset/language/option dialogs disappear without dispatch; a reopened picker sends only the current profile. Deferred Car Settings selection cannot cross profiles.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Verify profile-change banner and pending climate status are visible/cleared together.",
+        "Head-unit profile switching evidence."
+      ]
+    },
+    {
+      "id": "G059",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/settings/VehicleReadingsTools.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/MaintenanceItemsPanel.kt",
+        "app/src/main/kotlin/com/cabin/launcher/VehicleHistoryWidgets.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/settings/TeyesVehicleSettingsUiTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleUtilitiesUiTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt"
+      ],
+      "verification": "Telemetry, saved trip list and CSV preview UI suites pass; manual odometer and retained estimate-input model tests pass.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Verify all live/history/estimate/manual provenance labels in their detail views.",
+        "Head-unit live-data provenance evidence."
+      ]
+    },
+    {
+      "id": "G060",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/launcher/VehicleHistoryWidgets.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleHistoryTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/MeasurementFormatterTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Existing history tests preserve missing wheels and reject disconnected samples; unit-formatting tests pass. Acceptance-full: Actual four-series tire chart UI verifies shared start/end labels, all four pressures, metric-to-imperial conversion and raster evidence: FL endpoint markers remain, missing middle FL sample has no connecting line, while FR stays continuous on the same axis.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G061",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/VehicleUtilityModels.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleUtilitiesUiTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Inclusive range model rejects reversed dates and covers the whole end date over a 23-hour DST day. Existing trip period UI filters displayed records correctly. Acceptance-full: Custom date UI rejects reversed bounds, then applies an inclusive one-day range. Displayed count and saved CSV contain precisely that day; model DST and end-boundary tests also pass.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G062",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TripHistory.kt",
+        "app/src/main/kotlin/com/cabin/platform/VehicleUtilityModels.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Label/note persistence survives recorder updates; default CSV excludes notes and explicit inclusion neutralizes spreadsheet formulas. Acceptance-full: Actual note editor bounds 600 input characters to 500, applies a business label and saved note, filters personal/business records, excludes notes in default CSV, and includes them only after explicit export opt-in.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G063",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TripHistory.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleUtilitiesUiTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Selected batch deletion/undo model restores only chosen records, without resurrecting independently deleted records. Existing trip UI deletion/undo and CSV count preview pass. Acceptance-full: Actual multi-select UI reviews two selected trips for export/delete, cancellation preserves all records, confirmed batch deletion removes only selected records, and Undo does not resurrect an unrelated deleted record.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G064",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/VehicleUtilityModels.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Production compilation passed; monthly count/distance/duration/currency-grouped estimate comparison and retention notices were inspected in source. Acceptance-full: Two-month UI verifies count, distance and duration totals; USD and EUR costs remain separate, missing estimate coverage is reported, and retained-only warning is visible.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G065",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TripHistory.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripToolsPanel.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripHistoryBrowser.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Vehicle-specific fuel rate, price and currency persist; saved estimates retain original inputs and explicit recalculation updates them. Acceptance-full: Actual per-vehicle fuel form writes nothing before Apply, saves rate/price/currency, rejects invalid input, previews all affected trip costs, preserves values on Cancel and recalculates only the requested vehicle on Apply.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G066",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/MaintenanceLedger.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/MaintenanceItemsPanel.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Completing one item updates only that item and leaves another due date unchanged. Acceptance-full: Actual maintenance UI creates two named reminders with independent intervals, snoozes one without moving the other, completes one without changing another item or vehicle, and displays the expected manual distance target.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G067",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/MaintenanceLedger.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/MaintenanceItemsPanel.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Completion appends a dated note/cost record; correction updates the record and CSV includes its note. Acceptance-full: Actual maintenance completion dialog cancels without creating a record, then appends a note/cost record; correction changes the cost and document-provider CSV contains the corrected history.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G068",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/MaintenanceLedger.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/MaintenanceItemsPanel.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Manual odometer model rejects decreasing and backdated readings and preserves the valid reading. Acceptance-full: Actual manual odometer form saves a valid dated reading, rejects a decrease without changing saved mileage, creates a distance-based item and labels its 1,500 km target explicitly manual. Backdated rejection model test also passes.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G069",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/CarAutomation.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/CarAutomationPanel.kt"
+      ],
+      "tests": [],
+      "verification": "Production compilation passed; capture result enum, accuracy storage and failure preservation were inspected in source.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "production_compile_passed_no_dedicated_test",
+      "remaining_verification": [
+        "Controlled permission-denied/GPS-disabled/timeout/success capture tests and UI output.",
+        "Head-unit GPS accuracy and prior-position preservation evidence."
+      ]
+    },
+    {
+      "id": "G070",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/ParkingReminder.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/PrivacyInventory.kt"
+      ],
+      "tests": [],
+      "verification": "Production compilation and receiver registration passed; persisted deadline, restore/cancel paths and permission explanation were inspected in source.",
+      "hardware_validation": "android_device",
+      "hardware_evidence": null,
+      "automated_result": "production_compile_passed_no_dedicated_test",
+      "remaining_verification": [
+        "Robolectric alarm schedule/cancel/restart and permission-denial tests.",
+        "Android-device notification delivery, cancellation and restart evidence."
+      ]
+    },
+    {
+      "id": "G071",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TeyesFeaturePreferences.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Selected audio comfort copying changes only the target slot and does not copy the phone link by default. Acceptance-full: Actual comfort UI displays the before/after review, cancellation changes nothing, and confirmation copies appearance/brightness/audio/wake fields only to the selected target while preserving driver names and phone links.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G072",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TeyesFeaturePreferences.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Resetting the target slot restores its default audio gain while the original slot retains its gain. Acceptance-full: Actual reset preview can be cancelled; confirmed reset restores all comfort defaults for the active driver while preserving its name/phone, the copied other driver and vehicle read-only preference.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G073",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationBackup.kt",
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationValidation.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/TeyesConfigurationBackupTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Portable backup excludes trip/parking histories; selected restore preserves excluded locations. Launcher folder round-trip strips usage history. Malformed key/type/widget inputs reject before writes. Established backup versions and migrations pass. Acceptance-full: Populated values round-trip all 12 portable sections including dashboard page name/layout, app folders, audio presets, units, automation, appearance, vehicle controls and trip/maintenance config. Service notes and coordinates stay excluded. Backup UI encrypted export and import review also passed before the separately tracked G074 selector failure.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G074",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationBackup.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/platform/TeyesConfigurationBackupTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Selected-section restore changes only the requested automation section and preserves another driver value; malformed input does not write settings. Targeted acceptance rerun passes actual import diff display, cancel-without-write and checking only Automation before Apply; driver changes remain untouched. Restore checkboxes now have distinct translated spoken labels.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G075",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationBackup.kt",
+        "app/src/main/kotlin/com/cabin/telemetry/CabinTelemetry.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt"
+      ],
+      "verification": "Injected ordinary write failure rolls every selected store back. Simulated process interruption leaves a recovery journal; recoverPending restores the complete old configuration before readers refresh. Successful selected-section restoration also passes.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G076",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/PortableConfigurationBackup.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Authenticated encryption round-trips a valid snapshot and rejects both wrong password and modified ciphertext. Targeted acceptance rerun passes actual encrypted document export, wrong-password rejection without setting changes, valid decryption to import review, and explicit selected restore. Saved preference stores contain neither entered password; UI uses temporary unsaved password state. Model modified-ciphertext rejection also passes.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G077",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/ui/settings/PrivacyInventory.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Production compilation passed; inventory includes trips, tire history, parking, service records, driver/phone data, log bookmarks, queued exports, logs and opt-in connection summaries. Privacy UI verifies accurate trip and per-driver launch-history counts; trip deletion review/cancel affects only trips; launch-history recording disable removes only the current driver history; clear supports cancellation and preserves other drivers; switching drivers dismisses stale deletion confirmation. Inventory source audit covers recording, retention, export inclusion and deletion paths for trips, tires, parking, service records, profiles/phone links, launcher usage, bookmarks, prepared exports, diagnostic logs and connection summaries. All recording switches expose localized spoken labels.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G078",
+      "implementation_status": "implemented_pending_hardware_and_targeted_verification",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TripHistory.kt",
+        "app/src/main/kotlin/com/cabin/platform/TeyesClimateController.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TripToolsPanel.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt"
+      ],
+      "verification": "Disabling per-vehicle trip recording blocks future persistence while existing records remain retained.",
+      "hardware_validation": "head_unit",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": [
+        "Exercise disable-and-retain versus erase-existing choices through UI.",
+        "Head-unit active-trip transition and immediate persistence-stop evidence."
+      ]
+    },
+    {
+      "id": "G079",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/ParkingReminder.kt",
+        "app/src/main/kotlin/com/cabin/platform/CarAutomation.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/PrivacyInventory.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Expiry removes coordinates, timestamp, accuracy and note only for a due profile while preserving another profile. Acceptance-full: Actual retention UI persists 7-day/1-day/until-cleared choices and removes expired data. Fresh automation composition after downtime expires persisted coordinate/time/note while preserving another vehicle and retained preference.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    },
+    {
+      "id": "G080",
+      "implementation_status": "implemented_verified",
+      "files": [
+        "app/src/main/kotlin/com/cabin/platform/TeyesFeaturePreferences.kt",
+        "app/src/main/kotlin/com/cabin/ui/settings/TeyesConfigurationTools.kt"
+      ],
+      "tests": [
+        "app/src/test/kotlin/com/cabin/platform/VehicleGoalsTest.kt",
+        "app/src/test/kotlin/com/cabin/ui/settings/VehicleAcceptanceGoalsUiTest.kt"
+      ],
+      "verification": "Guest appearance/audio edits do not persist to saved driver preferences; ending guest mode restores saved driver gains. Acceptance-full: Actual guest entry/exit UI disables comfort copy/reset while active. Guest appearance and both projection gains remain session-only; independent saved preferences remain unchanged and End guest restores the exact prior driver. Audio owner separately added guest-preset persistence guard tests.",
+      "hardware_validation": "none",
+      "hardware_evidence": null,
+      "automated_result": "passed",
+      "remaining_verification": []
+    }
+  ],
+  "localizations": [
+    "app/src/main/res/values/goal_vehicle_strings.xml",
+    "app/src/main/res/values-pt/goal_vehicle_strings.xml",
+    "app/src/main/res/values-es/goal_vehicle_strings.xml",
+    "app/src/main/res/values-fr/goal_vehicle_strings.xml",
+    "app/src/main/res/values-de/goal_vehicle_strings.xml",
+    "app/src/main/res/values-it/goal_vehicle_strings.xml",
+    "app/src/main/res/values-pt-rBR/goal_vehicle_strings.xml"
+  ],
+  "notes": [
+    "No physical head unit or Android device is attached; hardware-gated goals are not complete.",
+    "Inexact parking alarm delivery depends on Android notification and power policies, explained in UI.",
+    "Widget host IDs, launcher usage history, trips, parking coordinates and service ledgers are excluded from portable configuration backups.",
+    "G077 now includes per-driver launcher usage controls; privacy category confirmations describe driver/global scope, and pending deletion closes on driver/vehicle changes. Six-language XML keys match."
+  ],
+  "verification_run": {
+    "run": "verification5",
+    "result_source": "app/build/test-results/testDebugUnitTest",
+    "production_compile": "passed",
+    "suites": [
+      {
+        "name": "VehicleGoalsTest",
+        "passed": 17,
+        "failed": 0
+      },
+      {
+        "name": "TeyesClimateBinderIntegrationTest",
+        "passed": 45,
+        "failed": 0,
+        "includes": "Changed canonical/raw field freshness assertions"
+      },
+      {
+        "name": "TeyesVehicleSettingsUiTest",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "name": "SyuVehicleOptionsTest",
+        "passed": 5,
+        "failed": 0
+      },
+      {
+        "name": "VehicleUtilitiesUiTest",
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "name": "CarSettingsScreenTest",
+        "passed": 11,
+        "failed": 0
+      },
+      {
+        "name": "ClimateCloseTimerTest",
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "name": "TeyesConfigurationBackupTest",
+        "passed": 13,
+        "failed": 0
+      }
+    ],
+    "updater_ui": "UpdateSettingsGoalsUiTest all 6 passed in final software suite reported by root; updater changes are outside vehicle-goal completion evidence.",
+    "physical_validation": "No physical device evidence. All globally hardware-gated goals remain pending; this file does not change canonical backlog status.",
+    "acceptance_full": {
+      "new_suite": "VehicleAcceptanceGoalsUiTest",
+      "passed": 10,
+      "failed": 3,
+      "failures": "Paused test clock had not rendered timeout popup; unlabelled section/privacy controls produced ambiguous sibling matches. Corrected, rerun pending.",
+      "source": "app/build/test-results/testDebugUnitTest/TEST-com.cabin.ui.settings.VehicleAcceptanceGoalsUiTest.xml"
+    },
+    "acceptance_targeted": {
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "log": "/tmp/cabin-vehicle-acceptance-final.log",
+      "command": "ANDROID_HOME=/home/bruno/Android/Sdk ./gradlew :app:testDebugUnitTest --tests 'com.cabin.ui.settings.VehicleAcceptanceGoalsUiTest' --offline --no-daemon --no-configuration-cache --console=plain",
+      "result": "BUILD SUCCESSFUL in 19s",
+      "scope": "All 19 non-hardware goals G051-G080 now have relevant passing model/UI evidence. All 11 hardware-gated goals in this group remain pending physical evidence."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_library_clear_search">Borrar búsqueda</string>
+    <string name="app_library_options">Opciones de aplicaciones</string>
+    <string name="app_library_sort">Ordenar aplicaciones</string>
+    <string name="app_library_all">Todas</string>
+    <string name="app_library_pinned">Fijadas</string>
+    <string name="app_library_recent">Recientes</string>
+    <string name="app_library_hidden">Ocultas</string>
+    <string name="app_library_sort_pinned">Fijadas primero</string>
+    <string name="app_library_sort_name">Nombre: A–Z</string>
+    <string name="app_library_sort_name_desc">Nombre: Z–A</string>
+    <string name="app_library_sort_recent">Abiertas recientemente</string>
+    <string name="app_library_sort_frequent">Más abiertas</string>
+    <string name="app_library_packages">Mostrar nombres de paquetes</string>
+    <string name="app_library_history">Recordar aperturas de aplicaciones</string>
+    <string name="app_library_history_note">Cuenta solo aperturas correctas desde Aplicaciones y aplicaciones fijadas de Cabin. El historial queda en este dispositivo, separado por conductor.</string>
+    <string name="app_library_no_recent">No hay aperturas registradas. Activa el historial en opciones y abre una aplicación desde Cabin.</string>
+    <string name="app_library_clear_history">Borrar historial de aperturas</string>
+    <string name="app_library_clear_history_note">¿Eliminar aplicaciones recientes y contadores de este conductor? Se conservan las aplicaciones fijadas y los nombres personalizados.</string>
+    <string name="app_library_disable_history">¿Dejar de recordar aperturas?</string>
+    <string name="app_library_disable_history_note">También elimina las aplicaciones recientes y los contadores guardados de este conductor.</string>
+    <string name="app_library_pin_count">%1$d / %2$d aplicaciones fijadas</string>
+    <string name="app_library_missing">Revisar aplicaciones fijadas ausentes (%1$d)</string>
+    <string name="app_library_missing_title">¿Eliminar aplicaciones fijadas ausentes?</string>
+    <string name="app_library_missing_note">Estas actividades guardadas no aparecen en la búsqueda actual. Actualiza antes si hay una instalación en curso. ¿Eliminar sus accesos fijados?</string>
+    <string name="app_library_clear_pins">Quitar todas las aplicaciones fijadas</string>
+    <string name="app_library_clear_pins_note">¿Quitar todas las aplicaciones fijadas de este conductor? Seguirán instaladas. No se puede deshacer.</string>
+    <string name="app_library_move_first">Mover al principio</string>
+    <string name="app_library_move_last">Mover al final</string>
+    <string name="app_library_pins_full">Los %1$d espacios están ocupados. Quita una aplicación fijada para hacer sitio.</string>
+    <string name="app_library_rename">Renombrar en Cabin</string>
+    <string name="app_library_custom_name">Nombre personalizado</string>
+    <string name="app_library_rename_note">Se aplica a la lista y aplicaciones fijadas de este conductor. Déjalo vacío para usar el nombre instalado.</string>
+    <string name="app_library_hide">Ocultar de la lista</string>
+    <string name="app_library_restore">Restaurar en la lista</string>
+    <string name="app_library_hide_note">Las aplicaciones ocultas siguen instaladas y sus accesos fijados funcionan. Puedes restaurarlas en Ocultas.</string>
+    <string name="app_library_save">Guardar</string>
+    <string name="app_library_cancel">Cancelar</string>
+    <string name="app_library_confirm">Confirmar</string>
+</resources>

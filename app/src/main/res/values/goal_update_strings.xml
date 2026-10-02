@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ux_metered_wait">Waiting for an unmetered network. Retry when connected, or allow this download.</string>
+    <string name="ux_low_space">Not enough storage for the update. Free space and retry; the verified APK is preserved.</string>
+    <string name="ux_unmetered">Download only on unmetered networks</string>
+    <string name="ux_channel">Update channel</string>
+    <string name="ux_stable">Stable</string>
+    <string name="ux_preview">Preview</string>
+    <string name="ux_skipped">Skipped version: %1$s</string>
+    <string name="ux_show_skipped">Show again</string>
+    <string name="ux_release_notes">Release notes</string>
+    <string name="ux_no_notes">No release notes were provided.</string>
+    <string name="ux_download_anyway">Allow this download</string>
+    <string name="ux_skip">Skip this version</string>
+    <string name="ux_backup_title">Back up settings before updating</string>
+    <string name="ux_backup_detail">Save a portable configuration snapshot. Restore it from Car Settings → Backup. Pending local copies are available in Logs → Unfinished exports.</string>
+    <string name="ux_save_backup">Save backup</string>
+    <string name="ux_backup_saved">Backup saved successfully.</string>
+    <string name="ux_backup_local">A recoverable local copy is saved. Finish exporting it from Logs if needed.</string>
+    <string name="ux_backup_failed">Backup failed. Retry or explicitly continue without a backup.</string>
+    <string name="ux_without_backup">Continue without backup</string>
+</resources>

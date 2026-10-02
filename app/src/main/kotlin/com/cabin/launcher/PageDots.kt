@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.cabin.R
+import com.cabin.ui.settings.settingsFocusRing
 
 /** Small visual indicators with full-size touch targets. The window follows selection. */
 @Composable
@@ -28,7 +29,7 @@ fun PageDots(page: Int, count: Int, onPage: (Int) -> Unit, modifier: Modifier = 
         repeat(visible) { offset ->
             val target = start + offset
             val label = stringResource(R.string.module_page, target + 1, total)
-            Box(Modifier.size(48.dp, 56.dp).testTag("page-dot-$target")
+            Box(Modifier.size(56.dp, 56.dp).settingsFocusRing().testTag("page-dot-$target")
                 .semantics { contentDescription = label }
                 .selectable(selected = target == current, role = Role.Tab, onClick = { onPage(target) }),
                 contentAlignment = Alignment.Center) {

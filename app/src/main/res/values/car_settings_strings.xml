@@ -16,4 +16,17 @@
     <string name="car_settings_audio_detail">Factory amplifier and button shortcuts</string>
     <string name="car_settings_my_car">My car</string>
     <string name="car_settings_my_car_detail">Appearance, trips, maintenance and compatibility</string>
+    <string name="car_settings_can">CAN-bus &amp; diagnostics</string>
+    <string name="car_settings_can_detail">Vehicle profile, connection status and live readings</string>
+    <string name="car_settings_doors">Doors, locks &amp; windows</string>
+    <string name="car_settings_doors_detail">Keys, locking, tailgate and remote opening</string>
+    <string name="car_settings_assistance">Driver assistance</string>
+    <string name="car_settings_assistance_detail">Driving warnings and assistance systems</string>
+    <string name="car_settings_instruments">Instruments &amp; units</string>
+    <string name="car_settings_instruments_detail">Dashboard display, language, compass and measurement units</string>
+    <string name="car_settings_maintenance">Trips &amp; maintenance</string>
+    <string name="car_settings_maintenance_detail">Trip reset behavior, tire calibration and service resets</string>
+    <string name="car_settings_other">Other vehicle options</string>
+    <string name="car_settings_other_detail">Options without an assigned functional category</string>
+    <string name="car_settings_actions">Actions</string>
 </resources>
